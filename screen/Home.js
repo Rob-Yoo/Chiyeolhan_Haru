@@ -11,9 +11,8 @@ import HomeContent from '../components/HomeContent';
 const ScheduleButton = styled.TouchableOpacity``;
 const ScheduleIcon = styled.Text``;
 
-//export default function Home({ navigation }) {
-export default function Home() {
-  //const goToScheduleToday = () => navigation.navigate('ScheduleToday');
+export default function Home({ navigation }) {
+  const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   //   const openAppSettings = () => {
   //     if (Platform.OS === 'ios') {
   //       Linking.openSettings();
@@ -60,7 +59,7 @@ export default function Home() {
         <Text>{`오늘도
 하루를 치열하게`}</Text>
         <ScheduleButton>
-          <ScheduleIcon>달력아이콘</ScheduleIcon>
+          <ScheduleIcon onPress={goToScheduleToday}>달력아이콘</ScheduleIcon>
         </ScheduleButton>
       </View>
       <Provider store={toDos}>
