@@ -63,14 +63,7 @@ function ScheduleTomorrowScreen({ navigation }) {
 }
 function HomeScreenDetail({ navigation }) {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerBackTitleVisible: false,
-        headerTitle: false,
-        headerShown: false,
-      }}
-      initialRouteName="ScheduleToday"
-    >
+    <Tab.Navigator initialRouteName="HomeDetai">
       <Tab.Screen name="ScheduleToday" component={ScheduleTodayScreen} />
       <Tab.Screen name="ScheduleTomorrow" component={ScheduleTomorrowScreen} />
       <Tab.Screen
@@ -98,13 +91,7 @@ function HomeStack() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerBackTitleVisible: false,
-          headerTitle: false,
-          headerShown: false,
-        }}
-      >
+      <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeStack} />
       </Stack.Navigator>
     </NavigationContainer>
