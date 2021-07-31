@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ScheduleToday from './screen/ScheduleToday';
 import ScheduleTomorrow from './screen/ScheduleTomorrow';
 import Home from './screen/Home';
+import Map from './screen/Map';
 function CustomHeader({ title, isHome, navigation }) {
   return (
     <View
@@ -61,6 +62,9 @@ function ScheduleTodayScreen({ navigation }) {
 function ScheduleTomorrowScreen({ navigation }) {
   return <ScheduleTomorrow />;
 }
+function MapScreen({ navigation }) {
+  return <Map />;
+}
 function HomeScreenDetail({ navigation }) {
   return (
     <Tab.Navigator
@@ -69,10 +73,10 @@ function HomeScreenDetail({ navigation }) {
         headerTitle: false,
         headerShown: false,
       }}
-      initialRouteName="ScheduleToday"
     >
       <Tab.Screen name="ScheduleToday" component={ScheduleTodayScreen} />
       <Tab.Screen name="ScheduleTomorrow" component={ScheduleTomorrowScreen} />
+      <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
