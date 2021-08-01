@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import ScheduleToday from './screen/ScheduleToday';
-import ScheduleTomorrow from './screen/ScheduleTomorrow';
-import Home from './screen/Home';
+import * as React from "react";
+import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import ScheduleToday from "./screen/ScheduleToday";
+import ScheduleTomorrow from "./screen/ScheduleTomorrow";
+import Home from "./screen/Home";
 function CustomHeader({ title, isHome, navigation }) {
   return (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: "row",
         height: 50,
       }}
     >
@@ -18,10 +18,10 @@ function CustomHeader({ title, isHome, navigation }) {
         <TouchableOpacity
           style={{
             flex: 1.5,
-            justifyContent: 'center',
+            justifyContent: "center",
           }}
         >
-          <Text style={{ textAlign: 'center' }}>
+          <Text style={{ textAlign: "center" }}>
             <Text>메뉴버튼</Text>
           </Text>
         </TouchableOpacity>
@@ -34,10 +34,10 @@ function CustomHeader({ title, isHome, navigation }) {
       <View
         style={{
           flex: 1.5,
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
       >
-        <Text style={{ textAlign: 'center' }}>
+        <Text style={{ textAlign: "center" }}>
           <Text>{title}</Text>
         </Text>
       </View>
