@@ -18,14 +18,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chiyeolhan.chiyeolhan"
+      "bundleIdentifier": "com.chiyeolhan.chiyeolhan",
+      "config": {
+        "googleMapsApiKey": "AIzaSyA0V8O7omJBpFXVIorBAVjbHZgAvc3yPxQ"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.chiyeolhan.chiyeolhan"
+      "package": "com.chiyeolhan.chiyeolhan",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBZTgzhxyyVZnzMQ8i8rp0l08IlxXFT3ss" }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
