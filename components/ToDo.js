@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
-import { TouchableOpacity, View, Text, Image } from 'react-native';
-import { useForm } from 'react-hook-form';
-import { connect } from 'react-redux';
-import { add, create } from '../store';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TextInput } from "react-native";
+import { TouchableOpacity, View, Text, Image } from "react-native";
+import DeviceInfo from "react-native-device-info";
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
+import { add, create } from "../store";
+import { dbService } from "../firebase";
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     right: 50,
     bottom: 50,
   },
@@ -15,25 +17,32 @@ const styles = StyleSheet.create({
 
 function ToDo({ toDos, createToDo, addToDo }) {
   const { register, handleSubmit, setValue } = useForm();
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState("");
 
   const taskSubmit = (data) => {
     const { todotask } = data;
     addToDo(todotask);
-    setTask('');
+    setTask("");
   };
-  const titleSubmit = (data) => {
+  const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
-
+    const id = Date.now();
+    const uid = DeviceInfo.getUniqueId();
+    await dbService.collection(`${uid}`).doc(`${id}`).set({
+      id,
+      startTime: todostarttime,
+      endTime: todofinishtime,
+      title: todotitle,
+    });
     const todo = [todostarttime, todofinishtime, todotitle];
     createToDo(todo);
   };
 
   useEffect(() => {
-    register('todostarttime'),
-      register('todofinishtime'),
-      register('todotitle'),
-      register('todotask');
+    register("todostarttime"),
+      register("todofinishtime"),
+      register("todotitle"),
+      register("todotask");
   }, [register]);
 
   return (
@@ -43,18 +52,18 @@ function ToDo({ toDos, createToDo, addToDo }) {
           <Text>취소</Text>
         </TouchableOpacity>
 
-        <View style={{ backgroundColor: 'red ' }}>
+        <View style={{ backgroundColor: "red " }}>
           <TextInput
             placeholder="시작시간:00:00"
-            onChangeText={(text) => setValue('todostarttime', text)}
+            onChangeText={(text) => setValue("todostarttime", text)}
           ></TextInput>
           <TextInput
             placeholder="마칠시간:00:00"
-            onChangeText={(text) => setValue('todofinishtime', text)}
+            onChangeText={(text) => setValue("todofinishtime", text)}
           ></TextInput>
           <TextInput
             placeholder="제목을 입력해 주세요"
-            onChangeText={(text) => setValue('todotitle', text)}
+            onChangeText={(text) => setValue("todotitle", text)}
           ></TextInput>
           <TouchableOpacity onPress={handleSubmit(titleSubmit)}>
             <Text>추가</Text>
@@ -63,7 +72,7 @@ function ToDo({ toDos, createToDo, addToDo }) {
             placeholder="수행리스트"
             onChangeText={(text) => {
               setTask(text);
-              setValue('todotask', text);
+              setValue("todotask", text);
             }}
             returnKeyType="done"
             value={task}
