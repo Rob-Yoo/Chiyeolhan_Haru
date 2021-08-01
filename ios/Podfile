@@ -23,4 +23,5 @@ target 'chiyeolhan' do
   # end
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'GoogleMaps', '3.5.0'
+  pod 'Google-Maps-iOS-Utils'
 end
