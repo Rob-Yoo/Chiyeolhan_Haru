@@ -1,17 +1,18 @@
-import * as React from "react";
-import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import ScheduleToday from "./screen/ScheduleToday";
-import ScheduleTomorrow from "./screen/ScheduleTomorrow";
-import Home from "./screen/Home";
-import Map from "./screen/Map";
+import React, { useEffect, useState, useCallback } from 'react';
+import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as SplashScreen from 'expo-splash-screen';
+import ScheduleToday from './screen/ScheduleToday';
+import ScheduleTomorrow from './screen/ScheduleTomorrow';
+import Home from './screen/Home';
+import Map from './screen/Map';
 function CustomHeader({ title, isHome, navigation }) {
   return (
     <View
       style={{
-        flexDirection: "row",
+        flexDirection: 'row',
         height: 50,
       }}
     >
@@ -19,10 +20,10 @@ function CustomHeader({ title, isHome, navigation }) {
         <TouchableOpacity
           style={{
             flex: 1.5,
-            justifyContent: "center",
+            justifyContent: 'center',
           }}
         >
-          <Text style={{ textAlign: "center" }}>
+          <Text style={{ textAlign: 'center' }}>
             <Text>메뉴버튼</Text>
           </Text>
         </TouchableOpacity>
@@ -35,10 +36,10 @@ function CustomHeader({ title, isHome, navigation }) {
       <View
         style={{
           flex: 1.5,
-          justifyContent: "center",
+          justifyContent: 'center',
         }}
       >
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: 'center' }}>
           <Text>{title}</Text>
         </Text>
       </View>
@@ -95,6 +96,29 @@ function HomeStack() {
 }
 
 export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        //keep the splash screen visible while we fetch resources
+        await SplashScreen.preventAutoHideAsync();
+        //Pre-load fonts, make any API calls you need to do here
+        console.log('here');
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        //Tell ther application to render
+        setAppIsReady(true);
+        await SplashScreen.hideAsync();
+      }
+    }
+    prepare();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator
