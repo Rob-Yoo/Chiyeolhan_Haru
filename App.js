@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import * as SplashScreen from 'expo-splash-screen';
