@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import firebase from 'firebase';
-import { StyleSheet, TextInput } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useForm } from 'react-hook-form';
@@ -12,15 +16,30 @@ const uid = DeviceInfo.getUniqueId();
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    right: 50,
-    bottom: 50,
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ECF5F471',
+  },
+  modaltopcontainer: {
+    width: '100%',
+    flex: 0.2,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#54BCB6',
+    borderRadius: 50,
+    padding: 30,
   },
 });
 
-function ToDo({ toDos, createToDo, addToDo }) {
+function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
+  const goToMap = () => navigation.navigate('Map');
   const { register, handleSubmit, setValue } = useForm();
   const [task, setTask] = useState('');
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
 
   const taskSubmit = async (data) => {
     const { todotask, todoid } = data;
@@ -57,12 +76,20 @@ function ToDo({ toDos, createToDo, addToDo }) {
 
   return (
     <>
-      <View>
-        <TouchableOpacity>
-          <Text>취소</Text>
-        </TouchableOpacity>
+      <View style={styles.container}>
+        <View style={styles.modaltopcontainer}>
+          <TouchableOpacity>
+            <Text>취소</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={goToMap}>
+            <Text>지도자리</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text>모달창닫기</Text>
+          </TouchableOpacity>
+        </View>
 
-        <View style={{ backgroundColor: 'red ' }}>
+        <View style={styles.modalinputcontainer}>
           <TextInput
             placeholder="시작시간:00:00"
             onChangeText={(text) => setValue('todostarttime', text)}
@@ -89,10 +116,6 @@ function ToDo({ toDos, createToDo, addToDo }) {
             onSubmitEditing={handleSubmit(taskSubmit)}
           ></TextInput>
         </View>
-
-        <TouchableOpacity>
-          <Text>모달창닫기</Text>
-        </TouchableOpacity>
       </View>
     </>
   );
@@ -107,4 +130,4 @@ function mapDispatchToProps(dispatch) {
     addToDo: (task) => dispatch(add(task)),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(ToDo);
+export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);

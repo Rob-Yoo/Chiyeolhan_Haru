@@ -1,17 +1,28 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import toDos from '../store';
-import ToDo from '../components/ToDo';
+import ToDoModal from '../components/ToDoModal';
 
-export default function ScheduleToday() {
+const styles = StyleSheet.create({
+  addToDoButton: {
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    bottom: 50,
+    right: 30,
+  },
+});
+export default function ScheduleToday({ navigation }) {
+  const openToDoModal = () => navigation.navigate('ModalStack');
   return (
     <>
       <View style={{ flex: 1 }}>
         <Text>Today</Text>
-        <Provider store={toDos}>
-          <ToDo />
-        </Provider>
+
+        <TouchableOpacity style={styles.addToDoButton} onPress={openToDoModal}>
+          <Text>플러스버튼</Text>
+        </TouchableOpacity>
       </View>
     </>
   );

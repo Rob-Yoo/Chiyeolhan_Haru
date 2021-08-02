@@ -5,6 +5,8 @@ import ScheduleToday from '../screen/ScheduleToday';
 import ScheduleTomorrow from '../screen/ScheduleTomorrow';
 import Home from '../screen/Home';
 import Map from '../screen/Map';
+import { View, Text } from 'react-native';
+import ToDoModal from '../components/ToDoModal';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -12,7 +14,7 @@ const navOptionHandler = () => ({
   headerShown: false,
 });
 
-function HomeScreenDetail({ navigation }) {
+function SchedullScreenDetail({ navigation }) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -31,22 +33,40 @@ function HomeScreenDetail({ navigation }) {
         component={ScheduleTomorrow}
         options={navOptionHandler}
       />
-      <Tab.Screen name="Map" component={Map} options={navOptionHandler} />
     </Tab.Navigator>
   );
 }
 
-function HomeStack() {
+function ModalStack({ navigation }) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TodoModal"
+        component={ToDoModal}
+        navigation={navigation}
+        options={navOptionHandler}
+      />
+      <Stack.Screen name="Map" component={Map} />
+    </Stack.Navigator>
+  );
+}
+
+function HomeStack({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={Home} options={navOptionHandler} />
-      <Stack.Screen name="ScheduleToday" component={HomeScreenDetail} />
+      <Stack.Screen
+        name="ScheduleToday"
+        navigation={navigation}
+        component={SchedullScreenDetail}
+      />
     </Stack.Navigator>
   );
 }
 export default function HomeNav() {
   return (
     <Stack.Navigator
+      mode="modal"
       screenOptions={{
         headerBackTitleVisible: false,
         headerTitle: false,
@@ -54,6 +74,7 @@ export default function HomeNav() {
       }}
     >
       <Stack.Screen name="Home" component={HomeStack} />
+      <Stack.Screen name="ModalStack" component={ModalStack} />
     </Stack.Navigator>
   );
 }

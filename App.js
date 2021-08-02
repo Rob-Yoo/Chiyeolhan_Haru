@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-
+import toDos from './store';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from './navigator/HomeNav';
+import { Provider } from 'react-redux';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -29,8 +30,10 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer>
-      <HomeNav />
-    </NavigationContainer>
+    <Provider store={toDos}>
+      <NavigationContainer>
+        <HomeNav />
+      </NavigationContainer>
+    </Provider>
   );
 }

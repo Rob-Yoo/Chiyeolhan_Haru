@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
-import toDos from '../store';
+
 import { View, Text, Platform, Linking } from 'react-native';
 import styled from 'styled-components/native';
-//import { dbService } from '../firebase';
-//import { Alert } from 'react-native';
-import { Provider } from 'react-redux';
-//import * as Location from 'expo-location';
 import HomeContent from '../components/HomeContent';
 
 const ScheduleButton = styled.TouchableOpacity``;
@@ -62,9 +58,8 @@ export default function Home({ navigation }) {
           <ScheduleIcon onPress={goToScheduleToday}>달력아이콘</ScheduleIcon>
         </ScheduleButton>
       </View>
-      <Provider store={toDos}>
-        <HomeContent />
-      </Provider>
+
+      <HomeContent />
     </>
   );
 }
