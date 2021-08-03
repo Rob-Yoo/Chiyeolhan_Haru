@@ -70,7 +70,6 @@ const Map = () => {
 
     appState.current = nextAppState;
     setStateVisible(appState.current);
-    console.log("AppState", appState.current);
   };
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
