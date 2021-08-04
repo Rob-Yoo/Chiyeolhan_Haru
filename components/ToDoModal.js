@@ -33,33 +33,52 @@ const styles = StyleSheet.create({
 function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
   const goToMap = () => navigation.navigate('Map');
   const { register, handleSubmit, setValue } = useForm();
+  const [taskList, setTaskList] = useState([]);
+  const [targetId, setTargetId] = useState('?');
   const [task, setTask] = useState('');
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
-  const taskSubmit = async (data) => {
-    const { todotask, todoid } = data;
-    console.log(data);
-    await dbService.collection(`${uid}`).doc(`${todoid}`).update({
-      todos: todotask,
-    });
-    addToDo(todotask);
-    setTask('');
-  };
+
   const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
     const id = Date.now();
+    const date = new Date();
+    let today =
+      (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
+      (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+
     setValue('todoid', id);
     await dbService.collection(`${uid}`).doc(`${id}`).set({
       id,
       startTime: todostarttime,
       endTime: todofinishtime,
       title: todotitle,
+      longitude: '경도',
+      latitude: '위도',
       todos: [],
+      date: today,
     });
-    const todo = [todostarttime, todofinishtime, todotitle];
+    const todo = [id, todostarttime, todofinishtime, todotitle, today];
     createToDo(todo);
   };
+  const taskSubmit = (data) => {
+    const { todotask, todoid } = data;
+    setTaskList((taskList) => [...taskList, todotask]);
+    setTargetId(todoid);
+    addToDo(todotask, todoid);
+    setTask('');
+  };
+  const completed = async () => {
+    await dbService
+      .collection(`${uid}`)
+      .doc(`${targetId}`)
+      .update({
+        todos: [...taskList],
+      });
+  };
+
   useEffect(() => {
     register('todostarttime'),
       register('todofinishtime'),
@@ -67,6 +86,7 @@ function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
       register('todoid');
     register('todotask');
   }, [register]);
+
   return (
     <>
       <View style={styles.container}>
@@ -77,8 +97,13 @@ function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
           <TouchableOpacity onPress={goToMap}>
             <Text>지도자리</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text>모달창닫기</Text>
+          <TouchableOpacity
+            onPress={() => {
+              completed();
+              navigation.goBack();
+            }}
+          >
+            <Text>완료</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.modalinputcontainer}>
@@ -118,7 +143,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     createToDo: (todo) => dispatch(create(todo)),
-    addToDo: (task) => dispatch(add(task)),
+    addToDo: (task, id) => dispatch(add({ task, id })),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);
