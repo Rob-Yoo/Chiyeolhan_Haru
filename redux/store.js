@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import reduxSaga from 'redux-saga';
 
 const toDos = createSlice({
   name: 'toDoReducer',
@@ -40,5 +41,6 @@ const toDos = createSlice({
   },
 });
 
+const store = configureStore({ reducer: toDos.reducer });
 export const { create, add } = toDos.actions;
-export default configureStore({ reducer: toDos.reducer });
+export default store;

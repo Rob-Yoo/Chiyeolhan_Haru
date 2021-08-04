@@ -1,18 +1,20 @@
-import React, { useEffect } from "react";
-import toDos from "../store";
-import { View, Text, Platform, Linking } from "react-native";
-import styled from "styled-components/native";
+import React, { useEffect } from 'react';
+import toDos from '../redux/store';
+import { View, Text, Platform, Linking } from 'react-native';
+import styled from 'styled-components/native';
+
 //import { dbService } from '../firebase';
 //import { Alert } from 'react-native';
-import { Provider } from "react-redux";
+import { connect, Provider } from 'react-redux';
 //import * as Location from 'expo-location';
-import HomeContent from "../components/HomeContent";
+import HomeContent from '../components/HomeContent';
+import { bindActionCreators } from 'redux';
 
 const ScheduleButton = styled.TouchableOpacity``;
 const ScheduleIcon = styled.Text``;
 
-export default function Home({ navigation }) {
-  const goToScheduleToday = () => navigation.navigate("ScheduleToday");
+function Home({ navigation, props }) {
+  const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   //   const openAppSettings = () => {
   //     if (Platform.OS === 'ios') {
   //       Linking.openSettings();
@@ -50,9 +52,9 @@ export default function Home({ navigation }) {
       <View
         style={{
           flex: 0.5,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           padding: 20,
         }}
       >
@@ -68,3 +70,5 @@ export default function Home({ navigation }) {
     </>
   );
 }
+
+export default Home;
