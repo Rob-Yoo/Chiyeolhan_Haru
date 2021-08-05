@@ -54,6 +54,7 @@ const Card = (props) => {
   );
 };
 const Task = (props) => {
+  //console.log(props);
   return (
     <View style={styles.item}>
       <Text style={styles.itemText}>{props.text}</Text>
@@ -62,17 +63,16 @@ const Task = (props) => {
 };
 
 const renderPagination = (index, total, context) => {
-  if (context.props.toDos.toDos[index] === undefined) {
+  if (context.props.toDos.length === 0) {
     //데이터가 아직 없을때
     console.log('no data');
     return;
   } else {
-    const list = context.props.toDos.toDos[index].todo;
-    // console.log(context.props.toDos);
+    const list = context.props.toDos[index].todo;
     return (
       <View style={styles.pagenationStyle}>
         <Text>수행 리스트</Text>
-        <Text>{index ? index + 1 : ''}</Text>
+
         {list.map((item, index) => {
           return <Task key={index} text={item} />;
         })}
@@ -82,13 +82,18 @@ const renderPagination = (index, total, context) => {
 };
 function HomeContent(toDos) {
   const { toDos: content } = toDos;
-
+  let todoArr = [];
+  for (key in content) todoArr.push(content[key]);
   return (
     <>
       <Text>Cards</Text>
       <Cards style={{ flex: 2 }}>
-        <Swiper toDos={toDos} renderPagination={renderPagination} loop={false}>
-          {content.map((item, index) => {
+        <Swiper
+          toDos={todoArr}
+          renderPagination={renderPagination}
+          loop={false}
+        >
+          {todoArr.map((item, index) => {
             return (
               <Card
                 key={index}
@@ -97,7 +102,7 @@ function HomeContent(toDos) {
                 starttime={item.starttime}
                 finishtime={item.finishtime}
                 location={item.location}
-                toDos={toDos}
+                toDos={todoArr}
               />
             );
           })}

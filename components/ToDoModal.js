@@ -1,73 +1,92 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Keyboard,
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
-} from "react-native";
-import { TouchableOpacity, View, Text, Image } from "react-native";
-import DeviceInfo from "react-native-device-info";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
-import { add, create } from "../store";
-import { dbService } from "../firebase";
+} from 'react-native';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import { useForm } from 'react-hook-form';
+import { connect } from 'react-redux';
+import { add, create } from '../redux/store';
+import { dbService } from '../firebase';
 const uid = DeviceInfo.getUniqueId();
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ECF5F471",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ECF5F471',
   },
   modaltopcontainer: {
-    width: "100%",
+    width: '100%',
     flex: 0.2,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "#54BCB6",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#54BCB6',
     borderRadius: 50,
     padding: 30,
   },
 });
 function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
-  const goToMap = () => navigation.navigate("Map");
+  const goToMap = () => navigation.navigate('Map');
   const { register, handleSubmit, setValue } = useForm();
-  const [task, setTask] = useState("");
+  const [taskList, setTaskList] = useState([]);
+  const [targetId, setTargetId] = useState('?');
+  const [task, setTask] = useState('');
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
-  const taskSubmit = async (data) => {
-    const { todotask, todoid } = data;
-    console.log(data);
-    await dbService.collection(`${uid}`).doc(`${todoid}`).update({
-      todos: todotask,
-    });
-    addToDo(todotask);
-    setTask("");
-  };
+
   const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
-    console.log("datenow");
     const id = Date.now();
-    setValue("todoid", id);
+    const date = new Date();
+    let today =
+      (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
+      (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+
+    setValue('todoid', id);
     await dbService.collection(`${uid}`).doc(`${id}`).set({
       id,
       startTime: todostarttime,
       endTime: todofinishtime,
       title: todotitle,
+      longitude: '경도',
+      latitude: '위도',
       todos: [],
+      date: today,
     });
-    const todo = [todostarttime, todofinishtime, todotitle];
+    const todo = [id, todostarttime, todofinishtime, todotitle, today];
     createToDo(todo);
   };
+  const taskSubmit = (data) => {
+    const { todotask, todoid } = data;
+    setTaskList((taskList) => [...taskList, todotask]);
+    setTargetId(todoid);
+    addToDo(todotask, todoid);
+    setTask('');
+  };
+  const completed = async () => {
+    await dbService
+      .collection(`${uid}`)
+      .doc(`${targetId}`)
+      .update({
+        todos: [...taskList],
+      });
+  };
+
   useEffect(() => {
-    register("todostarttime"),
-      register("todofinishtime"),
-      register("todotitle"),
-      register("todoid");
-    register("todotask");
+    register('todostarttime'),
+      register('todofinishtime'),
+      register('todotitle'),
+      register('todoid');
+    register('todotask');
   }, [register]);
+
   return (
     <>
       <View style={styles.container}>
@@ -78,22 +97,27 @@ function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
           <TouchableOpacity onPress={goToMap}>
             <Text>지도자리</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text>모달창닫기</Text>
+          <TouchableOpacity
+            onPress={() => {
+              completed();
+              navigation.goBack();
+            }}
+          >
+            <Text>완료</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.modalinputcontainer}>
           <TextInput
             placeholder="시작시간:00:00"
-            onChangeText={(text) => setValue("todostarttime", text)}
+            onChangeText={(text) => setValue('todostarttime', text)}
           ></TextInput>
           <TextInput
             placeholder="마칠시간:00:00"
-            onChangeText={(text) => setValue("todofinishtime", text)}
+            onChangeText={(text) => setValue('todofinishtime', text)}
           ></TextInput>
           <TextInput
             placeholder="제목을 입력해 주세요"
-            onChangeText={(text) => setValue("todotitle", text)}
+            onChangeText={(text) => setValue('todotitle', text)}
           ></TextInput>
           <TouchableOpacity onPress={handleSubmit(titleSubmit)}>
             <Text>추가</Text>
@@ -102,7 +126,7 @@ function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
             placeholder="수행리스트"
             onChangeText={(text) => {
               setTask(text);
-              setValue("todotask", text);
+              setValue('todotask', text);
             }}
             returnKeyType="done"
             value={task}
@@ -119,7 +143,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     createToDo: (todo) => dispatch(create(todo)),
-    addToDo: (task) => dispatch(add(task)),
+    addToDo: (task, id) => dispatch(add({ task, id })),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);
