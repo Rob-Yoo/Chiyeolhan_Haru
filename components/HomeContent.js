@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import deviceInfoModule from 'react-native-device-info';
+const uid = deviceInfoModule.getUniqueId();
+import { dbService } from '../firebase';
+import { connect } from 'react-redux';
+
 const Cards = styled.View``;
-const ToDos = styled.View``;
 const styles = StyleSheet.create({
   item: {
     backgroundColor: '#FFF',
@@ -40,15 +43,16 @@ const styles = StyleSheet.create({
   },
 });
 const Card = (props) => {
+  const { index, text, todos, finishtime, starttime, location } = props;
   return (
     <View style={styles.item}>
       <TouchableOpacity style={styles.square}></TouchableOpacity>
       <Text style={styles.itemText}>
-        {props.starttime}~{props.finishtime}
+        {starttime}~{finishtime}
       </Text>
-      <Text style={styles.itemText}>위치:{props.location}</Text>
+      <Text style={styles.itemText}>위치:{location}</Text>
 
-      <Text style={styles.itemText}>{props.text}</Text>
+      <Text style={styles.itemText}>{text}</Text>
       <Text>진행률바</Text>
     </View>
   );
@@ -68,50 +72,91 @@ const renderPagination = (index, total, context) => {
     console.log('no data');
     return;
   } else {
-    const list = context.props.toDos[index].todo;
+    console.log(context.props.toDos);
+    const list = context.props.toDos[index].todos;
     return (
       <View style={styles.pagenationStyle}>
         <Text>수행 리스트</Text>
-
         {list.map((item, index) => {
           return <Task key={index} text={item} />;
         })}
       </View>
     );
   }
+
+  return (
+    <View style={styles.pagenationStyle}>
+      <Text>수행 리스트</Text>
+      <Text>{index}</Text>
+    </View>
+  );
 };
-function HomeContent(toDos) {
-  const { toDos: content } = toDos;
-  let todoArr = [];
-  for (key in content) todoArr.push(content[key]);
+
+function HomeContent(initToDo) {
+  //const { toDos: content } = toDos;
+  const [isLoading, setLoading] = useState(true);
+  const [fetchedToDo, setFetchObj] = useState({});
+  const [todoArr, setToDoArr] = useState([]);
+  let rowObj = {};
+  //Object.keys(fetchedToDo).length === 0
+
+  const getToDos = async () => {
+    const row = await dbService.collection(`${uid}`).get();
+    row.forEach((data) => (rowObj[data.id] = data.data()));
+    setFetchObj(rowObj);
+    let tempArr = [];
+    for (key in rowObj) tempArr.push(rowObj[key]);
+    setToDoArr([...tempArr]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getToDos();
+    return console.log('unmounted');
+  }, []);
+
+  useEffect(() => {
+    console.log(todoArr);
+  }, [todoArr]);
+
   return (
     <>
       <Text>Cards</Text>
-      <Cards style={{ flex: 2 }}>
-        <Swiper
-          toDos={todoArr}
-          renderPagination={renderPagination}
-          loop={false}
-        >
-          {todoArr.map((item, index) => {
-            return (
-              <Card
-                key={index}
-                index={index}
-                text={item.title}
-                starttime={item.starttime}
-                finishtime={item.finishtime}
-                location={item.location}
-                toDos={todoArr}
-              />
-            );
-          })}
-        </Swiper>
-      </Cards>
+      {isLoading ? (
+        <Text>loading</Text>
+      ) : (
+        <Cards style={{ flex: 2 }}>
+          <Swiper
+            toDos={todoArr}
+            renderPagination={renderPagination}
+            loop={false}
+          >
+            {todoArr.map((item) => {
+              // console.log(`imtem: ${JSON.stringify(item)}`);
+              return (
+                <Card
+                  key={item.id}
+                  text={item.title}
+                  starttime={item.starttime}
+                  finishtime={item.finishtime}
+                  location={item.location}
+                  toDos={todoArr}
+                />
+              );
+            })}
+          </Swiper>
+        </Cards>
+      )}
     </>
   );
 }
 function mapStateToProps(state) {
   return { toDos: state };
 }
-export default connect(mapStateToProps)(HomeContent);
+
+function mapDispatchToProps(dispatch) {
+  return {
+    initToDo: (todo) => dispatch(init(todo)),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContent);
