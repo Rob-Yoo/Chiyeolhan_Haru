@@ -1,12 +1,150 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 import deviceInfoModule from 'react-native-device-info';
-const uid = deviceInfoModule.getUniqueId();
 import { dbService } from '../firebase';
 import { connect } from 'react-redux';
+import { init } from '../redux/store';
 
+import { useSelector, useDispatch } from 'react-redux';
+
+const uid = deviceInfoModule.getUniqueId();
+
+const exampledata = {
+  1628179352151: {
+    date: '0806',
+    finishtime: '12:00',
+    id: 1628179352151,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '11:00',
+    title: 'Title1',
+    todos: ['List1 ', 'List2 ', 'list3'],
+  },
+  1628180195240: {
+    date: '0806',
+    finishtime: '16:00',
+    id: 1628180195240,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Title2',
+    todos: ['List1', 'List2', 'List3', 'list4'],
+  },
+  1628181968664: {
+    date: '0806',
+    finishtime: '15”00',
+    id: 1628181968664,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Title title',
+    todos: ['Kustkust1', 'Listlist2'],
+  },
+  1628185678507: {
+    date: '0806',
+    finishtime: '14:00',
+    id: 1628185678507,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Wasssap',
+    todos: ['List1', 'List2'],
+  },
+  1628185964498: {
+    date: '0806',
+    finishtime: '90',
+    id: 1628185964498,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '7:00',
+    title: 'Update',
+    todos: ['List1', 'List2'],
+  },
+  1628186073250: {
+    date: '0806',
+    finishtime: '22:00',
+    id: 1628186073250,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '13:00',
+    title: 'Hiiiiiii',
+    todos: ['Hi hi', 'Hihihi 2'],
+  },
+  1628186231641: {
+    date: '0806',
+    finishtime: '13:00',
+    id: 1628186231641,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Title',
+    todos: ['Lililili'],
+  },
+  1628187065020: {
+    date: '0806',
+    finishtime: '44:00',
+    id: 1628187065020,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '44:00',
+    title: 'Title121212',
+    todos: ['List1', 'List2'],
+  },
+  1628187328232: {
+    date: '0806',
+    finishtime: '17:00',
+    id: 1628187328232,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Eat',
+    todos: ['Eat eat eat~~!'],
+  },
+  1628187751973: {
+    date: '0806',
+    finishtime: '15:—',
+    id: 1628187751973,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '14:00',
+    title: 'Sleep',
+    todos: ['Good'],
+  },
+  1628187879369: {
+    date: '0806',
+    finishtime: '15:00',
+    id: 1628187879369,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Todo',
+    todos: ['Todo list'],
+  },
+  1628190932164: {
+    date: '0806',
+    finishtime: '16:00',
+    id: 1628190932164,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Todo wh',
+    todos: [],
+  },
+};
 const Cards = styled.View``;
 const styles = StyleSheet.create({
   item: {
@@ -72,6 +210,7 @@ const renderPagination = (index, total, context) => {
     console.log('no data');
     return;
   } else {
+    //console.log(context.props.toDos);
     console.log(context.props.toDos);
     const list = context.props.toDos[index].todos;
     return (
@@ -92,61 +231,94 @@ const renderPagination = (index, total, context) => {
   );
 };
 
-function HomeContent(initToDo) {
-  //const { toDos: content } = toDos;
+const PaintHome = (todoArr) => {
+  console.log(`paintHome${todoArr}`);
+  if (Array.isArray(todoArr) && todoArr.length === 0) {
+    return (
+      <Cards style={{ flex: 2 }}>
+        <Text>데이터가 없습니다</Text>
+      </Cards>
+    );
+  }
+  return (
+    <Cards style={{ flex: 2 }}>
+      <Swiper toDos={todoArr} renderPagination={renderPagination} loop={false}>
+        {todoArr.map((item) => {
+          // console.log(`imtem: ${JSON.stringify(item)}`);
+          return (
+            <Card
+              key={item.id}
+              text={item.title}
+              starttime={item.starttime}
+              finishtime={item.finishtime}
+              location={item.location}
+              toDos={todoArr}
+            />
+          );
+        })}
+      </Swiper>
+    </Cards>
+  );
+};
+
+function HomeContent({ initToDo, toDos }) {
+  //  console.log(`store toDos : ${JSON.stringify(toDos)}`);
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
-  const [todoArr, setToDoArr] = useState([]);
+  const mounted = useRef(false);
+  const mounted2 = useRef(false);
+  //const [todoArr, setToDoArr] = useState([])
+  let completed = false;
+  //const { toDos:content } = toDos;
+  let todoArr = [];
+
   let rowObj = {};
   //Object.keys(fetchedToDo).length === 0
 
   const getToDos = async () => {
     const row = await dbService.collection(`${uid}`).get();
+    console.log('nodata');
     row.forEach((data) => (rowObj[data.id] = data.data()));
+    console.log(rowObj);
+    if (Object.keys(rowObj).length === 0) {
+      setLoading(false);
+      console.log(todoArr);
+    }
     setFetchObj(rowObj);
-    let tempArr = [];
-    for (key in rowObj) tempArr.push(rowObj[key]);
-    setToDoArr([...tempArr]);
-    setLoading(false);
+    // setLoading(false);
+
+    // let tempArr = [];
+    // for (key in rowObj) tempArr.push(rowObj[key]);
+    // setToDoArr([...tempArr]);
   };
 
   useEffect(() => {
     getToDos();
-    return console.log('unmounted');
   }, []);
 
   useEffect(() => {
-    console.log(todoArr);
-  }, [todoArr]);
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      initToDo(fetchedToDo);
+    }
+  }, [fetchedToDo]);
+
+  useEffect(() => {
+    if (!mounted2.current) {
+      mounted2.current = true;
+    } else {
+      console.log('here22');
+      //console.log(toDos);
+      setLoading(false);
+    }
+  }, [toDos]);
+  for (key in toDos) todoArr.push(toDos[key]);
 
   return (
     <>
       <Text>Cards</Text>
-      {isLoading ? (
-        <Text>loading</Text>
-      ) : (
-        <Cards style={{ flex: 2 }}>
-          <Swiper
-            toDos={todoArr}
-            renderPagination={renderPagination}
-            loop={false}
-          >
-            {todoArr.map((item) => {
-              // console.log(`imtem: ${JSON.stringify(item)}`);
-              return (
-                <Card
-                  key={item.id}
-                  text={item.title}
-                  starttime={item.starttime}
-                  finishtime={item.finishtime}
-                  location={item.location}
-                  toDos={todoArr}
-                />
-              );
-            })}
-          </Swiper>
-        </Cards>
-      )}
+      {isLoading ? <Text>loading</Text> : PaintHome(todoArr)}
     </>
   );
 }
