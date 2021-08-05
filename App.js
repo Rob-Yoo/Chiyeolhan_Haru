@@ -4,8 +4,6 @@ import toDos from './redux/store';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from './navigator/HomeNav';
 import { Provider } from 'react-redux';
-import deviceInfoModule from 'react-native-device-info';
-import { fetchToDo } from './redux/fetchData';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
