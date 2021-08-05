@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Provider } from "react-redux";
-import toDos from "../store";
-import ToDoModal from "../components/ToDoModal";
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,

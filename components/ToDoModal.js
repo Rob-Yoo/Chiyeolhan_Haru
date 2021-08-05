@@ -3,9 +3,8 @@ import {
   Keyboard,
   StyleSheet,
   TextInput,
-  TouchableWithoutFeedback,
 } from "react-native";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";

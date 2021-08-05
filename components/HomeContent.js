@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
+
 const Cards = styled.View``;
 const ToDos = styled.View``;
 const styles = StyleSheet.create({
