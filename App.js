@@ -15,7 +15,7 @@ export default function App() {
       try {
         //keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        fetchToDo();
+
         //Pre-load fonts, make any API calls you need to do here
       } catch (e) {
         console.warn(e);

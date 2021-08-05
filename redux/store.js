@@ -12,7 +12,7 @@ const toDos = createSlice({
       location: '스타벅스 어디점',
       longitude: '경도',
       latitude: '위도',
-      todo: ['영단어외우기', '커피마시기'],
+      todos: ['영단어외우기', '커피마시기'],
       date: '0804',
     },
     '02': {
@@ -23,11 +23,14 @@ const toDos = createSlice({
       location: '어디학교 운동장',
       longitude: '경도',
       latitude: '위도',
-      todo: ['운동상체', '끝내주게숨쉬기'],
+      todos: ['운동상체', '끝내주게숨쉬기'],
       date: '0804',
     },
   },
   reducers: {
+    init: (state, action) => {
+      console.log('init');
+    },
     create: (state, action) => {
       const [
         id,
@@ -48,17 +51,17 @@ const toDos = createSlice({
         longitude,
         latitude,
         date,
-        todo: [],
+        todos: [],
       };
     },
     add: (state, action) => {
       const todoId = action.payload.id;
       const task = action.payload.task;
-      state[todoId].todo.push(task);
+      state[todoId].todos.push(task);
     },
   },
 });
 
 const store = configureStore({ reducer: toDos.reducer });
-export const { create, add } = toDos.actions;
+export const { create, add, init } = toDos.actions;
 export default store;

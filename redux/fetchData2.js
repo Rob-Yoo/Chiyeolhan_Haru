@@ -6,22 +6,21 @@ import { dbService } from '../firebase';
 const uid = deviceInfoModule.getUniqueId();
 
 export function fetchToDo(toDos, initToDo) {
-  let rowObj = {};
+  let arr = [];
   const docRef = dbService.collection(`${uid}`);
-
   docRef.get().then((doc) => {
     if (doc !== undefined) {
       console.log('fetchdata');
       isData = true;
-      doc.forEach((data) => (rowObj[data.id] = data.data()));
-
-      return rowObj;
+      doc.forEach((data) => arr.push(data.data()));
+      initToDo(arr);
     } else {
       isData = false;
       console.log('does not exists');
     }
-    return rowObj;
   });
+
+  return arr;
 }
 
 function mapStateToProps(state) {

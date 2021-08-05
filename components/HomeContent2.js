@@ -179,7 +179,6 @@ function HomeContent(initToDo) {
 
   useEffect(() => {
     getToDos();
-    return console.log('unmounted');
   }, []);
 
   useEffect(() => {

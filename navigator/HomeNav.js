@@ -1,12 +1,13 @@
-import React from "react";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import ScheduleToday from "../screen/ScheduleToday";
-import ScheduleTomorrow from "../screen/ScheduleTomorrow";
-import Home from "../screen/Home";
-import Map from "../screen/Map";
-import { View, Text } from "react-native";
-import ToDoModal from "../components/ToDoModal";
+import React from 'react';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import ScheduleToday from '../screen/ScheduleToday';
+import ScheduleTomorrow from '../screen/ScheduleTomorrow';
+import Home from '../screen/Home';
+import Map from '../screen/Map';
+import { View, Text } from 'react-native';
+import ToDoModal from '../components/ToDoModal';
+import { fetchToDo } from '../redux/fetchData';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const navOptionHandler = () => ({
