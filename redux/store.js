@@ -1,30 +1,25 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import reduxSaga from 'redux-saga';
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 const toDos = createSlice({
-  name: 'toDoReducer',
+  name: "toDoReducer",
   initialState: {
-    '01': {
-      id: '01',
-      title: '예시 테스트 1 자습',
-      starttime: '11:00',
-      finishtime: '12:00',
-      location: '스타벅스 어디점',
-      longitude: '경도',
-      latitude: '위도',
-      todo: ['영단어외우기', '커피마시기'],
-      date: '0804',
+    "01": {
+      id: "01",
+      title: "예시 테스트 1 자습",
+      starttime: "11:00",
+      finishtime: "12:00",
+      location: "스타벅스 어디점",
+      todo: ["영단어외우기", "커피마시기"],
+      date: "0804",
     },
-    '02': {
-      id: '02',
-      title: '예시 테스트 2 운동',
-      starttime: '13:00',
-      finishtime: '15:00',
-      location: '어디학교 운동장',
-      longitude: '경도',
-      latitude: '위도',
-      todo: ['운동상체', '끝내주게숨쉬기'],
-      date: '0804',
+    "02": {
+      id: "02",
+      title: "예시 테스트 2 운동",
+      starttime: "13:00",
+      finishtime: "15:00",
+      location: "어디학교 운동장",
+      todo: ["운동상체", "끝내주게숨쉬기"],
+      date: "0804",
     },
   },
   reducers: {
@@ -35,9 +30,9 @@ const toDos = createSlice({
         finishtime,
         title,
         date,
-        location = 'api로받아오기',
-        longitude = '경도',
-        latitude = '위도',
+        location = "api로받아오기",
+        longitude = "경도",
+        latitude = "위도",
       ] = action.payload;
       state[`${id}`] = {
         id,
