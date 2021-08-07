@@ -6,7 +6,6 @@ import ScheduleTomorrow from "../screen/ScheduleTomorrow";
 import Home from "../screen/Home";
 import Map from "../screen/Map";
 import ToDoModal from "../components/ToDoModal";
-
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const navOptionHandler = () => ({

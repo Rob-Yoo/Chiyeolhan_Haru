@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 
 //import { dbService } from '../firebase';
 //import { Alert } from 'react-native';
-import { connect, Provider } from "react-redux";
+import { Provider } from "react-redux";
 //import * as Location from 'expo-location';
 import HomeContent from "../components/HomeContent";
 import { bindActionCreators } from "redux";

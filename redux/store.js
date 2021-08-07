@@ -2,27 +2,12 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 const toDos = createSlice({
   name: "toDoReducer",
-  initialState: {
-    "01": {
-      id: "01",
-      title: "예시 테스트 1 자습",
-      starttime: "11:00",
-      finishtime: "12:00",
-      location: "스타벅스 어디점",
-      todo: ["영단어외우기", "커피마시기"],
-      date: "0804",
-    },
-    "02": {
-      id: "02",
-      title: "예시 테스트 2 운동",
-      starttime: "13:00",
-      finishtime: "15:00",
-      location: "어디학교 운동장",
-      todo: ["운동상체", "끝내주게숨쉬기"],
-      date: "0804",
-    },
-  },
+  initialState: {},
   reducers: {
+    init: (state, action) => {
+      //state = { ...action.payload };
+      Object.assign(state, action.payload);
+    },
     create: (state, action) => {
       const [
         id,
@@ -43,17 +28,17 @@ const toDos = createSlice({
         longitude,
         latitude,
         date,
-        todo: [],
+        todos: [],
       };
     },
     add: (state, action) => {
       const todoId = action.payload.id;
       const task = action.payload.task;
-      state[todoId].todo.push(task);
+      state[todoId].todos.push(task);
     },
   },
 });
 
 const store = configureStore({ reducer: toDos.reducer });
-export const { create, add } = toDos.actions;
+export const { create, add, init } = toDos.actions;
 export default store;

@@ -52,13 +52,14 @@ function ToDoModal({ toDos, createToDo, addToDo, navigation }) {
     setValue("todoid", id);
     await dbService.collection(`${uid}`).doc(`${id}`).set({
       id,
-      startTime: todostarttime,
-      endTime: todofinishtime,
       title: todotitle,
+      starttime: todostarttime,
+      finishtime: todofinishtime,
+      location: "장소명",
       longitude: "경도",
       latitude: "위도",
-      todos: [],
       date: today,
+      todos: [],
     });
     const todo = [id, todostarttime, todofinishtime, todotitle, today];
     createToDo(todo);
