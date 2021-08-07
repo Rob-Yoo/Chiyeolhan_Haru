@@ -1,14 +1,23 @@
 import firbase from "firebase/app";
 import "firebase/firestore";
+import {
+  CYH_APP_API_KEY,
+  CYH_APP_AUTH_DOMAIN,
+  CYH_APP_PROJECT_ID,
+  CYH_APP_STORAGE_BUCKET,
+  CYH_APP_MESSAGIN_ID,
+  CYH_APP_APP_ID,
+  CYH_APP_MEASURE_ID,
+} from "@env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBZTgzhxyyVZnzMQ8i8rp0l08IlxXFT3ss",
-  authDomain: "chiyeolhan-haru.firebaseapp.com",
-  projectId: "chiyeolhan-haru",
-  storageBucket: "chiyeolhan-haru.appspot.com",
-  messagingSenderId: "661313276388",
-  appId: "1:661313276388:web:16836f1faf8f771c895ff1",
-  measurementId: "G-L33L84F2ZW",
+  apiKey: CYH_APP_API_KEY,
+  authDomain: CYH_APP_AUTH_DOMAIN,
+  projectId: CYH_APP_PROJECT_ID,
+  storageBucket: CYH_APP_STORAGE_BUCKET,
+  messagingSenderId: CYH_APP_MESSAGIN_ID,
+  appId: CYH_APP_APP_ID,
+  measurementId: CYH_APP_MEASURE_ID,
 };
 
 firbase.initializeApp(firebaseConfig);
