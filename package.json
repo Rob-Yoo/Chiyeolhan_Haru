@@ -26,6 +26,7 @@
     "react-native-background-fetch": "^4.0.1",
     "react-native-background-geolocation": "^4.1.1",
     "react-native-device-info": "^8.1.5",
+    "react-native-dotenv": "^3.1.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-maps": "^0.28.0",
     "react-native-reanimated": "^1.0.0-alpha",

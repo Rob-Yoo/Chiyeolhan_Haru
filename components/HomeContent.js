@@ -1,181 +1,181 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components/native';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import Swiper from 'react-native-swiper';
-import deviceInfoModule from 'react-native-device-info';
-import { dbService } from '../firebase';
-import { connect } from 'react-redux';
-import { init } from '../redux/store';
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components/native";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import Swiper from "react-native-swiper";
+import deviceInfoModule from "react-native-device-info";
+import { dbService } from "../firebase";
+import { connect } from "react-redux";
+import { init } from "../redux/store";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 
 const uid = deviceInfoModule.getUniqueId();
 
 const exampledata = {
   1628179352151: {
-    date: '0806',
-    finishtime: '12:00',
+    date: "0806",
+    finishtime: "12:00",
     id: 1628179352151,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '11:00',
-    title: 'Title1',
-    todos: ['List1 ', 'List2 ', 'list3'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "11:00",
+    title: "Title1",
+    todos: ["List1 ", "List2 ", "list3"],
   },
   1628180195240: {
-    date: '0806',
-    finishtime: '16:00',
+    date: "0806",
+    finishtime: "16:00",
     id: 1628180195240,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '15:00',
-    title: 'Title2',
-    todos: ['List1', 'List2', 'List3', 'list4'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "15:00",
+    title: "Title2",
+    todos: ["List1", "List2", "List3", "list4"],
   },
   1628181968664: {
-    date: '0806',
-    finishtime: '15”00',
+    date: "0806",
+    finishtime: "15”00",
     id: 1628181968664,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '15:00',
-    title: 'Title title',
-    todos: ['Kustkust1', 'Listlist2'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "15:00",
+    title: "Title title",
+    todos: ["Kustkust1", "Listlist2"],
   },
   1628185678507: {
-    date: '0806',
-    finishtime: '14:00',
+    date: "0806",
+    finishtime: "14:00",
     id: 1628185678507,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '12:00',
-    title: 'Wasssap',
-    todos: ['List1', 'List2'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "12:00",
+    title: "Wasssap",
+    todos: ["List1", "List2"],
   },
   1628185964498: {
-    date: '0806',
-    finishtime: '90',
+    date: "0806",
+    finishtime: "90",
     id: 1628185964498,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '7:00',
-    title: 'Update',
-    todos: ['List1', 'List2'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "7:00",
+    title: "Update",
+    todos: ["List1", "List2"],
   },
   1628186073250: {
-    date: '0806',
-    finishtime: '22:00',
+    date: "0806",
+    finishtime: "22:00",
     id: 1628186073250,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '13:00',
-    title: 'Hiiiiiii',
-    todos: ['Hi hi', 'Hihihi 2'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "13:00",
+    title: "Hiiiiiii",
+    todos: ["Hi hi", "Hihihi 2"],
   },
   1628186231641: {
-    date: '0806',
-    finishtime: '13:00',
+    date: "0806",
+    finishtime: "13:00",
     id: 1628186231641,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '12:00',
-    title: 'Title',
-    todos: ['Lililili'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "12:00",
+    title: "Title",
+    todos: ["Lililili"],
   },
   1628187065020: {
-    date: '0806',
-    finishtime: '44:00',
+    date: "0806",
+    finishtime: "44:00",
     id: 1628187065020,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '44:00',
-    title: 'Title121212',
-    todos: ['List1', 'List2'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "44:00",
+    title: "Title121212",
+    todos: ["List1", "List2"],
   },
   1628187328232: {
-    date: '0806',
-    finishtime: '17:00',
+    date: "0806",
+    finishtime: "17:00",
     id: 1628187328232,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '15:00',
-    title: 'Eat',
-    todos: ['Eat eat eat~~!'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "15:00",
+    title: "Eat",
+    todos: ["Eat eat eat~~!"],
   },
   1628187751973: {
-    date: '0806',
-    finishtime: '15:—',
+    date: "0806",
+    finishtime: "15:—",
     id: 1628187751973,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '14:00',
-    title: 'Sleep',
-    todos: ['Good'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "14:00",
+    title: "Sleep",
+    todos: ["Good"],
   },
   1628187879369: {
-    date: '0806',
-    finishtime: '15:00',
+    date: "0806",
+    finishtime: "15:00",
     id: 1628187879369,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '12:00',
-    title: 'Todo',
-    todos: ['Todo list'],
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "12:00",
+    title: "Todo",
+    todos: ["Todo list"],
   },
   1628190932164: {
-    date: '0806',
-    finishtime: '16:00',
+    date: "0806",
+    finishtime: "16:00",
     id: 1628190932164,
-    latitude: '위도',
-    location: '장소명',
-    longitude: '경도',
-    starttime: '15:00',
-    title: 'Todo wh',
+    latitude: "위도",
+    location: "장소명",
+    longitude: "경도",
+    starttime: "15:00",
+    title: "Todo wh",
     todos: [],
   },
 };
 const Cards = styled.View``;
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
 
   square: {
     width: 24,
     height: 24,
-    backgroundColor: '#55bcf6',
+    backgroundColor: "#55bcf6",
     opacity: 0.4,
     borderRadius: 5,
     marginRight: 15,
   },
   itemText: {
-    maxWidth: '80%',
+    maxWidth: "80%",
   },
   circular: {
     width: 12,
     height: 12,
     borderWidth: 2,
-    borderColor: '#55BCF6',
+    borderColor: "#55BCF6",
     borderRadius: 5,
   },
   paginationStyle: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 10,
     right: 10,
   },
@@ -207,7 +207,7 @@ const Task = (props) => {
 const renderPagination = (index, total, context) => {
   if (context.props.toDos.length === 0) {
     //데이터가 아직 없을때
-    console.log('no data');
+    console.log("no data");
     return;
   } else {
     //console.log(context.props.toDos);
@@ -277,7 +277,7 @@ function HomeContent({ initToDo, toDos }) {
 
   const getToDos = async () => {
     const row = await dbService.collection(`${uid}`).get();
-    console.log('nodata');
+    console.log("nodata");
     row.forEach((data) => (rowObj[data.id] = data.data()));
     console.log(rowObj);
     if (Object.keys(rowObj).length === 0) {
@@ -308,7 +308,7 @@ function HomeContent({ initToDo, toDos }) {
     if (!mounted2.current) {
       mounted2.current = true;
     } else {
-      console.log('here22');
+      console.log("here22");
       //console.log(toDos);
       setLoading(false);
     }
