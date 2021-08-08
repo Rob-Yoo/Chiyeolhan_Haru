@@ -1,8 +1,7 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import reduxSaga from 'redux-saga';
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 const toDos = createSlice({
-  name: 'toDoReducer',
+  name: "toDoReducer",
   initialState: {},
   reducers: {
     init: (state, action) => {
@@ -16,9 +15,9 @@ const toDos = createSlice({
         finishtime,
         title,
         date,
-        location = 'api로받아오기',
-        longitude = '경도',
-        latitude = '위도',
+        location = "api로받아오기",
+        longitude = "경도",
+        latitude = "위도",
       ] = action.payload;
       state[`${id}`] = {
         id,

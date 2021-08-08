@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import {
@@ -18,9 +19,11 @@ import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
 import { ScrollView } from 'react-native-gesture-handler';
 
+
 const uid = deviceInfoModule.getUniqueId();
 
 const exampledata = {
+
   // 1628179352151: {
   //   date: '0806',
   //   finishtime: '12:00',
@@ -245,6 +248,7 @@ const styles = StyleSheet.create({
   },
 
   paginationStyle: {},
+
 });
 const Card = (props) => {
   const { index, text, todos, finishtime, starttime, location, id } = props;
@@ -409,6 +413,7 @@ function HomeContent({ initToDo, toDos }) {
 
     //row.forEach((data) => (rowObj[data.id] = data.data()));
     rowObj = exampledata;
+
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);
     }

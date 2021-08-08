@@ -16,7 +16,6 @@ const ScheduleIcon = styled.Text``;
 
 function Home({ navigation, props }) {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-
   return (
     <>
       <View
@@ -26,7 +25,7 @@ function Home({ navigation, props }) {
           justifyContent: 'space-between',
           alignItems: 'flex-end',
           paddingHorizontal: 30,
-          paddingVertical: 50,
+
         }}
       >
         <View style={{ flex: 0.7 }}>

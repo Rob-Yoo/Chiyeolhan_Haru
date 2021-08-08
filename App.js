@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import toDos from './redux/store';
-import * as SplashScreen from 'expo-splash-screen';
-import HomeNav from './navigator/HomeNav';
-import { Provider } from 'react-redux';
+import React, { useEffect, useState, useCallback } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import toDos from "./redux/store";
+import * as SplashScreen from "expo-splash-screen";
+import HomeNav from "./navigator/HomeNav";
+import { Provider } from "react-redux";
+import { initBgGeofence } from "./BgGeofence";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -13,7 +14,7 @@ export default function App() {
       try {
         //keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-
+        initBgGeofence();
         //Pre-load fonts, make any API calls you need to do here
       } catch (e) {
         console.warn(e);
