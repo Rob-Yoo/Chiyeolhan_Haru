@@ -6,33 +6,68 @@ import {
   Text,
   AppState,
   TextInput,
+  Alert,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { initBgGeofence } from "../BgGeofence";
 import { GOOGLE_PLACES_API_KEY } from "@env";
 
-const url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
-const params =
+const URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
+const PARAMS =
   "inputtype=textquery&language=ko&fields=formatted_address,name,geometry";
 
 const CurrentMap = ({ location }) => {
   const [inputText, setText] = useState("");
-  const _handlePlaceAPI = (text) => {
+  const [locationResult, setResult] = useState(location);
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      "검색 결과가 없습니다.",
+      "",
+      [
+        {
+          text: "취소",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "확인", onPress: () => console.log("OK Pressed") },
+      ],
+      { cancelable: false }
+    );
+  const _handlePlacesAPI = (text) => {
     const place = text.replaceAll(" ", "%20");
-    fetch(`${url}?input=${place}&${params}&key=${GOOGLE_PLACES_API_KEY}`)
+    fetch(`${URL}?input=${place}&${PARAMS}&key=${GOOGLE_PLACES_API_KEY}`)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        const status = data.status;
+        switch (status) {
+          case "OK":
+            const result = data.candidates[0].geometry;
+            setResult({
+              latitude: result.location.lat,
+              longitude: result.location.lng,
+            });
+            break;
+          case "ZERO_RESULTS":
+            createTwoButtonAlert();
+            break;
+          case "OVER_QUERY_LIMIT":
+            console.log("API 할당량 넘었음");
+            break;
+          default:
+            console.log("Error");
+        }
+      });
   };
+  useEffect(() => {}, [locationResult]);
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         region={{
-          ...location,
-          latitudeDelta: 0.002,
-          longitudeDelta: 0.002,
+          ...locationResult,
+          latitudeDelta: 0.004,
+          longitudeDelta: 0.004,
         }}
       >
         <View
@@ -50,13 +85,13 @@ const CurrentMap = ({ location }) => {
             }}
             placeholder="장소, 버스, 지하철, 주소 검색"
             onChangeText={(text) => setText(text)}
-            onSubmitEditing={() => _handlePlaceAPI(inputText)}
+            onSubmitEditing={() => _handlePlacesAPI(inputText)}
           ></TextInput>
         </View>
         <Marker
           coordinate={{
-            latitude: location.latitude,
-            longitude: location.longitude,
+            latitude: locationResult.latitude,
+            longitude: locationResult.longitude,
           }}
         />
       </MapView>
@@ -75,7 +110,7 @@ const Map = () => {
       appState.current.match(/inactive|background/) &&
       nextAppState === "active"
     ) {
-      initBgGeofence();
+      getLocation();
     }
 
     appState.current = nextAppState;
