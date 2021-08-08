@@ -172,9 +172,9 @@ const NoData = styled.View`
 `;
 const styles = StyleSheet.create({
   homeContainer: {
-    flex: 2,
+    flex: 1.8,
     height: 350,
-    marginBottom: 30,
+    marginBottom: 20,
   },
   card: {
     flexShrink: 1,
@@ -186,7 +186,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 10,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
@@ -214,6 +213,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 20,
+    marginBottom: 10,
     flexShrink: 0,
   },
   taskContainer: {
@@ -261,7 +262,7 @@ const Card = (props) => {
       </View>
       <Text style={styles.cardTime}>
         {starttime}
-        {id ? `~` : ''}
+        {id ? `` : '~'}
         {finishtime}
       </Text>
 
@@ -338,7 +339,7 @@ const renderPagination = (index, total, context) => {
         style={{
           paddingHorizontal: 20,
           height: '100%',
-          maxHeight: 900,
+          maxHeight: 700,
           flexGrow: 0,
         }}
       >
