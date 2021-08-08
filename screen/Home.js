@@ -8,11 +8,9 @@ import { Provider } from 'react-redux';
 
 import HomeContent from '../components/HomeContent';
 import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
-
 import IconGoToScheduleButton from '../assets/icons/icon-go-to-schedule-button';
 
 const ScheduleButton = styled.TouchableOpacity``;
-const ScheduleIcon = styled.Text``;
 
 function Home({ navigation, props }) {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
@@ -20,14 +18,28 @@ function Home({ navigation, props }) {
     <>
       <View
         style={{
-          flex: 0.4,
+          flex: 0.9,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          marginTop: -40,
+          paddingBottom: 40,
           paddingHorizontal: 30,
         }}
       >
-        <View style={{ flex: 0.7 }}>
+        <View style={{ flex: 0.7, paddingLeft: 15 }}>
+          <View
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 0,
+              width: 5,
+              height: 65,
+              backgroundColor: '#00A29A',
+
+              shadowColor: '#00000029',
+            }}
+          />
           <Text
             style={{
               color: '#229892',

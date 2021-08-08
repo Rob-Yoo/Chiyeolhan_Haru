@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  LogBox,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import deviceInfoModule from 'react-native-device-info';
@@ -16,150 +17,151 @@ import { init } from '../redux/store';
 import IconTaskListAdd from '../assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
+import IconTaskToDoman from '../assets/icons/icon-todo-man';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const uid = deviceInfoModule.getUniqueId();
 
 const exampledata = {
-  // 1628179352151: {
-  //   date: '0806',
-  //   finishtime: '12:00',
-  //   id: 1628179352151,
-  //   latitude: '위도',
-  //   location: '스타벅스 어디점',
-  //   longitude: '경도',
-  //   starttime: '11:00',
-  //   title: '자습',
-  //   todos: ['자습하기 ', '단어 외우기 ', '커피마시기'],
-  // },
-  // 1628180195240: {
-  //   date: '0806',
-  //   finishtime: '16:00',
-  //   id: 1628180195240,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: '운동',
-  //   todos: [
-  //     '자습하기 ',
-  //     '단어 외우기 ',
-  //     '커피마시기',
-  //     '상체하기',
-  //     '하체',
-  //     '유산소',
-  //   ],
-  // },
-  // 1628181968664: {
-  //   date: '0806',
-  //   finishtime: '15”00',
-  //   id: 1628181968664,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Title title',
-  //   todos: ['Kustkust1', 'Listlist2'],
-  // },
-  // 1628185678507: {
-  //   date: '0806',
-  //   finishtime: '14:00',
-  //   id: 1628185678507,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Wasssap',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628185964498: {
-  //   date: '0806',
-  //   finishtime: '90',
-  //   id: 1628185964498,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '7:00',
-  //   title: 'Update',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628186073250: {
-  //   date: '0806',
-  //   finishtime: '22:00',
-  //   id: 1628186073250,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '13:00',
-  //   title: 'Hiiiiiii',
-  //   todos: ['Hi hi', 'Hihihi 2'],
-  // },
-  // 1628186231641: {
-  //   date: '0806',
-  //   finishtime: '13:00',
-  //   id: 1628186231641,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Title',
-  //   todos: ['Lililili'],
-  // },
-  // 1628187065020: {
-  //   date: '0806',
-  //   finishtime: '44:00',
-  //   id: 1628187065020,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '44:00',
-  //   title: 'Title121212',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628187328232: {
-  //   date: '0806',
-  //   finishtime: '17:00',
-  //   id: 1628187328232,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Eat',
-  //   todos: ['Eat eat eat~~!'],
-  // },
-  // 1628187751973: {
-  //   date: '0806',
-  //   finishtime: '15:—',
-  //   id: 1628187751973,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '14:00',
-  //   title: 'Sleep',
-  //   todos: ['Good'],
-  // },
-  // 1628187879369: {
-  //   date: '0806',
-  //   finishtime: '15:00',
-  //   id: 1628187879369,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Todo',
-  //   todos: ['Todo list'],
-  // },
-  // 1628190932164: {
-  //   date: '0806',
-  //   finishtime: '16:00',
-  //   id: 1628190932164,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Todo wh',
-  //   todos: [],
-  // },
+  1628179352151: {
+    date: '0806',
+    finishtime: '12:00',
+    id: 1628179352151,
+    latitude: '위도',
+    location: '스타벅스 어디점',
+    longitude: '경도',
+    starttime: '11:00',
+    title: '자습',
+    todos: ['자습하기 ', '단어 외우기 ', '커피마시기'],
+  },
+  1628180195240: {
+    date: '0806',
+    finishtime: '16:00',
+    id: 1628180195240,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: '운동',
+    todos: [
+      '자습하기 ',
+      '단어 외우기 ',
+      '커피마시기',
+      '상체하기',
+      '하체',
+      '유산소',
+    ],
+  },
+  1628181968664: {
+    date: '0806',
+    finishtime: '15”00',
+    id: 1628181968664,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Title title',
+    todos: ['Kustkust1', 'Listlist2'],
+  },
+  1628185678507: {
+    date: '0806',
+    finishtime: '14:00',
+    id: 1628185678507,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Wasssap',
+    todos: ['List1', 'List2'],
+  },
+  1628185964498: {
+    date: '0806',
+    finishtime: '90',
+    id: 1628185964498,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '7:00',
+    title: 'Update',
+    todos: ['List1', 'List2'],
+  },
+  1628186073250: {
+    date: '0806',
+    finishtime: '22:00',
+    id: 1628186073250,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '13:00',
+    title: 'Hiiiiiii',
+    todos: ['Hi hi', 'Hihihi 2'],
+  },
+  1628186231641: {
+    date: '0806',
+    finishtime: '13:00',
+    id: 1628186231641,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Title',
+    todos: ['Lililili'],
+  },
+  1628187065020: {
+    date: '0806',
+    finishtime: '44:00',
+    id: 1628187065020,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '44:00',
+    title: 'Title121212',
+    todos: ['List1', 'List2'],
+  },
+  1628187328232: {
+    date: '0806',
+    finishtime: '17:00',
+    id: 1628187328232,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Eat',
+    todos: ['Eat eat eat~~!'],
+  },
+  1628187751973: {
+    date: '0806',
+    finishtime: '15:—',
+    id: 1628187751973,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '14:00',
+    title: 'Sleep',
+    todos: ['Good'],
+  },
+  1628187879369: {
+    date: '0806',
+    finishtime: '15:00',
+    id: 1628187879369,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '12:00',
+    title: 'Todo',
+    todos: ['Todo list'],
+  },
+  1628190932164: {
+    date: '0806',
+    finishtime: '16:00',
+    id: 1628190932164,
+    latitude: '위도',
+    location: '장소명',
+    longitude: '경도',
+    starttime: '15:00',
+    title: 'Todo wh',
+    todos: [],
+  },
 };
 
 const NoData = styled.View`
@@ -172,20 +174,18 @@ const NoData = styled.View`
 `;
 const styles = StyleSheet.create({
   homeContainer: {
-    flex: 1.8,
-    height: 350,
+    flex: 3,
+    alignItems: 'center',
     marginBottom: 20,
   },
   card: {
-    flexShrink: 1,
-    backgroundColor: '#54BCB6',
-    width: 300,
-    height: 220,
-    padding: 20,
-    marginHorizontal: 50,
-    borderRadius: 10,
-    alignItems: 'flex-start',
+    flex: 1,
     justifyContent: 'space-between',
+    backgroundColor: '#54BCB6',
+    maxHeight: 220,
+    padding: 30,
+    marginHorizontal: 15,
+    borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
@@ -193,6 +193,22 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+  },
+  todomanBackgroundCircle: {
+    position: 'absolute',
+    top: 25,
+    left: 25,
+    width: 60,
+    height: 60,
+    backgroundColor: '#ffffff',
+    borderRadius: 50,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 5.84,
   },
   cardTitle: {
     fontFamily: 'NotoSansKR-Bold',
@@ -203,6 +219,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Medium',
     fontWeight: '800',
     color: '#F4F4F4',
+    marginBottom: 5,
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
@@ -218,17 +235,17 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   taskContainer: {
-    flexDirection: 'row',
-    flexShrink: 1,
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    marginTop: 10,
   },
   task: {
     backgroundColor: '#FFF',
-    width: '85%',
+    width: '86%',
     borderRadius: 20,
     padding: 20,
     marginBottom: 10,
+    marginLeft: 20,
     paddingVertical: 25,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -244,6 +261,11 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
+  progressBar: {
+    width: '100%',
+    height: 10,
+    backgroundColor: '#FFFFFF',
+  },
 
   paginationStyle: {},
 });
@@ -251,13 +273,28 @@ const Card = (props) => {
   const { index, text, todos, finishtime, starttime, location, id } = props;
   return (
     <View style={styles.card}>
-      <IconTaskListAdd
-        name="icon-tasklist-add-button"
-        size={40}
-        color="#707070"
-      />
+      <View style={styles.todomanBackgroundCircle} />
+      <IconTaskToDoman
+        name="icon-todo-man"
+        size={50}
+        color="#229892"
+      ></IconTaskToDoman>
+
       <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
         <Text style={styles.cardTitle}>{text}</Text>
+        <View
+          style={{
+            position: 'absolute',
+            top: 25,
+            left: 70,
+            width: 3,
+            height: 20,
+            backgroundColor: '#00A29A',
+
+            shadowColor: '#00000029',
+          }}
+        />
+
         <Text style={styles.cardLocation}>{location}</Text>
       </View>
       <Text style={styles.cardTime}>
@@ -266,7 +303,7 @@ const Card = (props) => {
         {finishtime}
       </Text>
 
-      <Text>진행률바</Text>
+      <View style={styles.progressBar}></View>
       {id ? (
         <NoData
           style={{
@@ -299,17 +336,13 @@ const Card = (props) => {
 };
 const Task = (props) => {
   return (
-    <View style={styles.taskContainer}>
-      <IconTaskListLeft
-        name="icon-tasklist-left"
-        size={50}
-        color="#707070"
-        style={{ paddingHorizontal: 20 }}
-      />
-      <View style={styles.task}>
-        <Text style={styles.taskText}>{props.text}</Text>
+    <>
+      <View style={styles.taskContainer}>
+        <View style={styles.task}>
+          <Text style={styles.taskText}>{props.text}</Text>
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -324,7 +357,7 @@ const renderPagination = (index, total, context) => {
             color: '#229892',
             fontFamily: 'NotoSansKR-Bold',
             fontSize: 20,
-            marginBottom: 20,
+            marginBottom: 5,
           }}
         >
           수행 리스트
@@ -345,7 +378,26 @@ const renderPagination = (index, total, context) => {
       >
         {list &&
           list.map((item, index) => {
-            return <Task key={index} text={item} />;
+            return (
+              <View>
+                {index === 0 ? (
+                  <IconTaskListLeft
+                    name="icon-tasklist-left"
+                    size={105}
+                    color="#707070"
+                    style={{ position: 'absolute', left: -35, top: 0 }}
+                  />
+                ) : (
+                  <IconTaskListLeftFin
+                    name="icon-tasklist-left-fin"
+                    size={105}
+                    color="#707070"
+                    style={{ position: 'absolute', left: -35, top: 0 }}
+                  />
+                )}
+                <Task key={index} text={item} />
+              </View>
+            );
           })}
       </ScrollView>
     </>
@@ -408,9 +460,9 @@ function HomeContent({ initToDo, toDos }) {
 
   const getToDos = async () => {
     //db연결
-    const row = await dbService.collection(`${uid}`).get();
-    row.forEach((data) => (rowObj[data.id] = data.data()));
-
+    //const row = await dbService.collection(`${uid}`).get();
+    //row.forEach((data) => (rowObj[data.id] = data.data()));
+    rowObj = exampledata;
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);
     }
