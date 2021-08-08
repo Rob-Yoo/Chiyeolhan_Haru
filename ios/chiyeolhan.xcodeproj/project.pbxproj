@@ -14,11 +14,10 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		3EA90A9A596042C38292C67E /* icon-go-to-schedule-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C3E7B25E1924EEA84E5E5E0 /* icon-go-to-schedule-button.ttf */; };
 		42500F596E1C44C69EA20E27 /* icon-tasklist-left.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 989B2980B33C4A9280683767 /* icon-tasklist-left.ttf */; };
+		6020F6FE33C24C1FAFDEEDD1 /* libPods-chiyeolhan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */; };
 		9BDCDE8C7FA14002A7850F8D /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */; };
-		A2CA85D90AC5B7889354168D /* libPods-chiyeolhan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */; };
 		AE781B32940D4B77BEC5D73A /* icon-tasklist-left-fin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 736B779130844D06AED2EFE5 /* icon-tasklist-left-fin.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		BD218F9F0AAEB6E964B2C15B /* libPods-chiyeolhan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */; };
 		C3AC82E36E0449EDBFA8D1A8 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173C583864647D09E1B8075 /* noop-file.swift */; };
 		CC289A350B8D442785A32DA8 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */; };
 		CCD7902726B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */; };
@@ -62,7 +61,6 @@
 		B021400CC79E433F871C9498 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-chiyeolhan.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CC9A91C026BBEE8C0030272D /* addtodoicon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = addtodoicon.ttf; path = ../../Downloads/addtodoicon.ttf; sourceTree = "<group>"; };
 		CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Bold.otf"; path = "../assets/fonts/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
 		D28B6A3402644F83BE973F1C /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -76,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD218F9F0AAEB6E964B2C15B /* libPods-chiyeolhan.a in Frameworks */,
+				6020F6FE33C24C1FAFDEEDD1 /* libPods-chiyeolhan.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +248,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC9A91C126BBEEC40030272D /* addtodoicon.ttf in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
