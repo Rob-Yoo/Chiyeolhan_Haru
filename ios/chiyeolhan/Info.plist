@@ -103,6 +103,17 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>NotoSansKR-Black.otf</string>
+		<string>NotoSansKR-Bold.otf</string>
+		<string>NotoSansKR-Light.otf</string>
+		<string>NotoSansKR-Medium.otf</string>
+		<string>NotoSansKR-Regular.otf</string>
+		<string>icon-schedule-button.ttf</string>
+		<string>icon-tasklist-add-button.ttf</string>
+		<string>icon-tasklist-left-fin.ttf</string>
+		<string>icon-tasklist-left.ttf</string>
+		<string>icon-go-to-shcedule-button.ttf</string>
+		<string>icon-go-to-schedule-button.ttf</string>
 	</array>
 </dict>
 </plist>
