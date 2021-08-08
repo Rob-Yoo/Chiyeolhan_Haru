@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import {
@@ -19,11 +18,9 @@ import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
 const uid = deviceInfoModule.getUniqueId();
 
 const exampledata = {
-
   // 1628179352151: {
   //   date: '0806',
   //   finishtime: '12:00',
@@ -248,7 +245,6 @@ const styles = StyleSheet.create({
   },
 
   paginationStyle: {},
-
 });
 const Card = (props) => {
   const { index, text, todos, finishtime, starttime, location, id } = props;
@@ -270,31 +266,33 @@ const Card = (props) => {
       </Text>
 
       <Text>진행률바</Text>
-      <NoData
-        style={{
-          position: 'absolute',
-          left: -100,
-          width: 600,
-          height: 600,
-          backgroundColor: '#000',
-          opacity: 0.2,
-        }}
-      >
-        <Text
+      {id ? (
+        <NoData
           style={{
             position: 'absolute',
-            top: 50,
-            right: '45%',
-            top: '15%',
-            color: '#FFFFFF',
-            opacity: 1,
-            fontFamily: 'NotoSansKR-Regular',
-            fontSize: 20,
+            left: -100,
+            width: 600,
+            height: 600,
+            backgroundColor: '#000',
+            opacity: 0.2,
           }}
         >
-          현재 일정이 없습니다
-        </Text>
-      </NoData>
+          <Text
+            style={{
+              position: 'absolute',
+              top: 50,
+              right: '45%',
+              top: '15%',
+              color: '#FFFFFF',
+              opacity: 1,
+              fontFamily: 'NotoSansKR-Regular',
+              fontSize: 20,
+            }}
+          >
+            현재 일정이 없습니다
+          </Text>
+        </NoData>
+      ) : null}
     </View>
   );
 };
@@ -409,10 +407,8 @@ function HomeContent({ initToDo, toDos }) {
 
   const getToDos = async () => {
     //db연결
-    // const row = await dbService.collection(`${uid}`).get();
-
-    //row.forEach((data) => (rowObj[data.id] = data.data()));
-    rowObj = exampledata;
+    const row = await dbService.collection(`${uid}`).get();
+    row.forEach((data) => (rowObj[data.id] = data.data()));
 
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);

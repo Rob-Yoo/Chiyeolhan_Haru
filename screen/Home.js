@@ -20,12 +20,11 @@ function Home({ navigation, props }) {
     <>
       <View
         style={{
-          flex: 0.3,
+          flex: 0.4,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
           paddingHorizontal: 30,
-
         }}
       >
         <View style={{ flex: 0.7 }}>
