@@ -91,6 +91,10 @@
 		<string>icon-go-to-schedule-button.ttf</string>
 		<string>icon-home-title-rectangle.ttf</string>
 		<string>icon-todo-man.ttf</string>
+		<string>icon-add-favorite.ttf</string>
+		<string>icon-favorite.ttf</string>
+		<string>icon-go-back-button.ttf</string>
+		<string>icon-schedulte-timeset-button.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
