@@ -164,6 +164,14 @@ const exampledata = {
   },
 };
 
+const TitleAfter = styled.View`
+  &:after {
+    content:''
+    width: 3,
+    height: 20,
+    backgroundColor: '#00A29A';
+    }
+`;
 const NoData = styled.View`
   position: absolute;
   left: -100;
@@ -210,10 +218,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.34,
     shadowRadius: 5.84,
   },
+  cardText: {
+    position: 'relative',
+  },
   cardTitle: {
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 35,
     marginRight: 15,
+    position: 'relative',
   },
   cardLocation: {
     fontFamily: 'NotoSansKR-Medium',
@@ -280,21 +292,13 @@ const Card = (props) => {
         color="#229892"
       ></IconTaskToDoman>
 
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+        }}
+      >
         <Text style={styles.cardTitle}>{text}</Text>
-        <View
-          style={{
-            position: 'absolute',
-            top: 25,
-            left: 70,
-            width: 3,
-            height: 20,
-            backgroundColor: '#00A29A',
-
-            shadowColor: '#00000029',
-          }}
-        />
-
         <Text style={styles.cardLocation}>{location}</Text>
       </View>
       <Text style={styles.cardTime}>
@@ -379,7 +383,7 @@ const renderPagination = (index, total, context) => {
         {list &&
           list.map((item, index) => {
             return (
-              <View>
+              <View key={index}>
                 {index === 0 ? (
                   <IconTaskListLeft
                     name="icon-tasklist-left"
@@ -426,7 +430,7 @@ const PaintHome = (todoArr) => {
         toDos={todoArr}
         renderPagination={renderPagination}
         loop={false}
-        style={{ height: '100%', maxHeight: 390 }}
+        style={{ height: '100%', maxHeight: 450 }}
       >
         {todoArr &&
           todoArr.map((item) => {
