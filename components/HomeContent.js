@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  LogBox,
 } from "react-native";
 import Swiper from "react-native-swiper";
 import deviceInfoModule from "react-native-device-info";
@@ -16,6 +17,7 @@ import { init } from "../redux/store";
 import IconTaskListAdd from "../assets/icons/icon-tasklist-add-button";
 import IconTaskListLeft from "../assets/icons/icon-tasklist-left";
 import IconTaskListLeftFin from "../assets/icons/icon-tasklist-left-fin";
+import IconTaskToDoman from "../assets/icons/icon-todo-man";
 import { ScrollView } from "react-native-gesture-handler";
 
 const uid = deviceInfoModule.getUniqueId();
@@ -172,20 +174,18 @@ const NoData = styled.View`
 `;
 const styles = StyleSheet.create({
   homeContainer: {
-    flex: 1.8,
-    height: 350,
+    flex: 3,
+    alignItems: "center",
     marginBottom: 20,
   },
   card: {
-    flexShrink: 1,
-    backgroundColor: "#54BCB6",
-    width: 300,
-    height: 220,
-    padding: 20,
-    marginHorizontal: 50,
-    borderRadius: 10,
-    alignItems: "flex-start",
+    flex: 1,
     justifyContent: "space-between",
+    backgroundColor: "#54BCB6",
+    maxHeight: 220,
+    padding: 30,
+    marginHorizontal: 15,
+    borderRadius: 20,
     shadowColor: "#00000029",
     shadowOffset: {
       width: 3.4,
@@ -194,15 +194,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
   },
+  todomanBackgroundCircle: {
+    position: "absolute",
+    top: 25,
+    left: 25,
+    width: 60,
+    height: 60,
+    backgroundColor: "#ffffff",
+    borderRadius: 50,
+    shadowColor: "#00000029",
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 5.84,
+  },
+  cardText: {
+    position: "relative",
+  },
   cardTitle: {
     fontFamily: "NotoSansKR-Bold",
     fontSize: 35,
     marginRight: 15,
+    position: "relative",
   },
   cardLocation: {
     fontFamily: "NotoSansKR-Medium",
     fontWeight: "800",
     color: "#F4F4F4",
+    marginBottom: 5,
   },
   cardTime: {
     fontFamily: "NotoSansKR-Bold",
@@ -218,17 +239,17 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   taskContainer: {
-    flexDirection: "row",
-    flexShrink: 1,
+    flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    marginTop: 10,
   },
   task: {
     backgroundColor: "#FFF",
-    width: "85%",
+    width: "86%",
     borderRadius: 20,
     padding: 20,
     marginBottom: 10,
+    marginLeft: 20,
     paddingVertical: 25,
     shadowColor: "#00000029",
     shadowOffset: {
@@ -244,6 +265,11 @@ const styles = StyleSheet.create({
     fontFamily: "NotoSansKR-Bold",
     fontSize: 20,
   },
+  progressBar: {
+    width: "100%",
+    height: 10,
+    backgroundColor: "#FFFFFF",
+  },
 
   paginationStyle: {},
 });
@@ -251,12 +277,19 @@ const Card = (props) => {
   const { index, text, todos, finishtime, starttime, location, id } = props;
   return (
     <View style={styles.card}>
-      <IconTaskListAdd
-        name="icon-tasklist-add-button"
-        size={40}
-        color="#707070"
-      />
-      <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+      <View style={styles.todomanBackgroundCircle} />
+      <IconTaskToDoman
+        name="icon-todo-man"
+        size={50}
+        color="#229892"
+      ></IconTaskToDoman>
+
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "flex-end",
+        }}
+      >
         <Text style={styles.cardTitle}>{text}</Text>
         <Text style={styles.cardLocation}>{location}</Text>
       </View>
@@ -266,7 +299,7 @@ const Card = (props) => {
         {finishtime}
       </Text>
 
-      <Text>진행률바</Text>
+      <View style={styles.progressBar}></View>
       {id ? (
         <NoData
           style={{
@@ -299,22 +332,18 @@ const Card = (props) => {
 };
 const Task = (props) => {
   return (
-    <View style={styles.taskContainer}>
-      <IconTaskListLeft
-        name="icon-tasklist-left"
-        size={50}
-        color="#707070"
-        style={{ paddingHorizontal: 20 }}
-      />
-      <View style={styles.task}>
-        <Text style={styles.taskText}>{props.text}</Text>
+    <>
+      <View style={styles.taskContainer}>
+        <View style={styles.task}>
+          <Text style={styles.taskText}>{props.text}</Text>
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
 const renderPagination = (index, total, context) => {
-  //console.log(context.props.toDos);
+  console.log(context.props.toDos);
   const list = context.props.toDos[index].todos;
   return (
     <>
@@ -324,7 +353,7 @@ const renderPagination = (index, total, context) => {
             color: "#229892",
             fontFamily: "NotoSansKR-Bold",
             fontSize: 20,
-            marginBottom: 20,
+            marginBottom: 5,
           }}
         >
           수행 리스트
@@ -345,7 +374,26 @@ const renderPagination = (index, total, context) => {
       >
         {list &&
           list.map((item, index) => {
-            return <Task key={index} text={item} />;
+            return (
+              <View key={index}>
+                {index === 0 ? (
+                  <IconTaskListLeft
+                    name="icon-tasklist-left"
+                    size={105}
+                    color="#707070"
+                    style={{ position: "absolute", left: -35, top: 0 }}
+                  />
+                ) : (
+                  <IconTaskListLeftFin
+                    name="icon-tasklist-left-fin"
+                    size={105}
+                    color="#707070"
+                    style={{ position: "absolute", left: -35, top: 0 }}
+                  />
+                )}
+                <Task key={index} text={item} />
+              </View>
+            );
           })}
       </ScrollView>
     </>
@@ -374,10 +422,11 @@ const PaintHome = (todoArr) => {
         toDos={todoArr}
         renderPagination={renderPagination}
         loop={false}
-        style={{ height: "100%", maxHeight: 390 }}
+        style={{ height: "100%", maxHeight: 450 }}
       >
         {todoArr &&
           todoArr.map((item) => {
+            console.log(item);
             return (
               <Card
                 key={item.id}
@@ -400,9 +449,7 @@ function HomeContent({ initToDo, toDos }) {
   const [fetchedToDo, setFetchObj] = useState({});
   const mounted = useRef(false);
   const mounted2 = useRef(false);
-  let completed = false;
   let todoArr = [];
-
   let rowObj = {};
   //Object.keys(fetchedToDo).length === 0
 
@@ -410,7 +457,7 @@ function HomeContent({ initToDo, toDos }) {
     //db연결
     const row = await dbService.collection(`${uid}`).get();
     row.forEach((data) => (rowObj[data.id] = data.data()));
-
+    // rowObj = exampledata;
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);
     }

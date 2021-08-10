@@ -1,7 +1,7 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const toDos = createSlice({
-  name: "toDoReducer",
+  name: 'toDoReducer',
   initialState: {},
   reducers: {
     init: (state, action) => {
@@ -9,26 +9,34 @@ const toDos = createSlice({
       Object.assign(state, action.payload);
     },
     create: (state, action) => {
+      console.log(action.payload);
       const [
         id,
         starttime,
         finishtime,
         title,
         date,
-        location = "api로받아오기",
-        longitude = "경도",
-        latitude = "위도",
+        todos,
+        location = 'api로받아오기',
+        longitude = '경도',
+        latitude = '위도',
+        locationname,
+        isdone = false,
+        isfavorite = false,
       ] = action.payload;
       state[`${id}`] = {
         id,
-        title,
         starttime,
         finishtime,
+        title,
+        date,
         location,
         longitude,
         latitude,
-        date,
-        todos: [],
+        locationname,
+        isdone,
+        isfavorite,
+        todos: [...todos],
       };
     },
     add: (state, action) => {
