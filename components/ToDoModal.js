@@ -73,18 +73,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 350,
     height: 40,
+    marginBottom: 10,
   },
   modalInputTask: {
     backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
     height: 40,
+    marginBottom: 20,
   },
 });
 
 function ToDoModal({ createToDo, addToDo, navigation, route }) {
-  const name = route.params?.locationDatas?.name ?? false;
-  const locationData = name ? route.params?.locationDatas ?? false : undefined;
+  const location = route.params?.locationData?.location ?? false;
+  const locationData = location
+    ? route.params?.locationData ?? false
+    : undefined;
   const { register, handleSubmit, setValue } = useForm();
   const [toDoId, setToDoId] = useState('');
   const [taskList, setTaskList] = useState([]);
@@ -105,7 +109,8 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
   };
   const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
-    const { latitude, location, longitude } = locationData;
+    console.log(locationData);
+    const { latitude, location, longitude, address } = locationData;
     const date = new Date();
     const today =
       (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
@@ -119,7 +124,8 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
         title: todotitle,
         starttime: todostarttime,
         finishtime: todofinishtime,
-        location: name,
+        location,
+        address,
         longitude,
         latitude,
         date: today,
@@ -134,14 +140,11 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
       todotitle,
       today,
       taskList,
-      location,
+      address,
       longitude,
       latitude,
-      name,
+      location,
     ];
-    console.log(todo);
-    createToDo(todo);
-    console.log('!');
   };
   const taskSubmit = (data) => {
     const { todotask } = data;
@@ -214,7 +217,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
               />
             </View>
             <Text style={styles.modalLocationText}>
-              {name ? name : '물음표를 눌러주세요'}
+              {location ? location : '물음표를 눌러주세요'}
             </Text>
           </View>
           <View

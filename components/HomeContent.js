@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  LogBox,
-} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 import deviceInfoModule from 'react-native-device-info';
 import { dbService } from '../firebase';
@@ -182,9 +175,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: '#54BCB6',
+    width: '90%',
     maxHeight: 220,
     padding: 30,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -242,15 +236,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: 10,
+    maxHeight: 100,
   },
   task: {
     backgroundColor: '#FFF',
-    width: '86%',
+    width: '80%',
     borderRadius: 20,
-    padding: 20,
+    paddingHorizontal: 10,
     marginBottom: 10,
     marginLeft: 20,
-    paddingVertical: 25,
+    paddingVertical: 20,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
@@ -260,7 +255,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   taskText: {
-    maxWidth: '80%',
+    maxWidth: '100%',
     color: '#38504F',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
@@ -274,7 +269,7 @@ const styles = StyleSheet.create({
   paginationStyle: {},
 });
 const Card = (props) => {
-  const { index, text, todos, finishtime, starttime, location, id } = props;
+  const { text, finishtime, starttime, location, id } = props;
   return (
     <View style={styles.card}>
       <View style={styles.todomanBackgroundCircle} />
@@ -288,10 +283,27 @@ const Card = (props) => {
         style={{
           flexDirection: 'row',
           alignItems: 'flex-end',
+          flexShrink: 1,
+          maxHeight: 300,
         }}
       >
         <Text style={styles.cardTitle}>{text}</Text>
-        <Text style={styles.cardLocation}>{location}</Text>
+        <View
+          style={{
+            flexWrap: 'nowrap',
+          }}
+        >
+          <View
+            style={{
+              position: 'absolute',
+              left: -10,
+              width: 5,
+              height: 20,
+              backgroundColor: '#00A29A',
+            }}
+          ></View>
+          <Text style={styles.cardLocation}>{location}</Text>
+        </View>
       </View>
       <Text style={styles.cardTime}>
         {starttime}
@@ -331,11 +343,14 @@ const Card = (props) => {
   );
 };
 const Task = (props) => {
+  const { text: taskText } = props;
   return (
     <>
       <View style={styles.taskContainer}>
         <View style={styles.task}>
-          <Text style={styles.taskText}>{props.text}</Text>
+          <Text style={styles.taskText}>
+            {taskText.length > 17 ? `${taskText.substr(0, 16)}...` : taskText}
+          </Text>
         </View>
       </View>
     </>
@@ -343,7 +358,6 @@ const Task = (props) => {
 };
 
 const renderPagination = (index, total, context) => {
-  console.log(context.props.toDos);
   const list = context.props.toDos[index].todos;
   return (
     <>
@@ -409,6 +423,7 @@ const PaintHome = (todoArr) => {
         id: 0,
         latitude: '',
         location: '',
+        address: '',
         longitude: '',
         starttime: '',
         title: '',
@@ -426,7 +441,6 @@ const PaintHome = (todoArr) => {
       >
         {todoArr &&
           todoArr.map((item) => {
-            console.log(item);
             return (
               <Card
                 key={item.id}
@@ -457,7 +471,6 @@ function HomeContent({ initToDo, toDos }) {
     //db연결
     const row = await dbService.collection(`${uid}`).get();
     row.forEach((data) => (rowObj[data.id] = data.data()));
-    // rowObj = exampledata;
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);
     }
