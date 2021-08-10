@@ -11,6 +11,7 @@ import {
 import Swiper from "react-native-swiper";
 import deviceInfoModule from "react-native-device-info";
 import { dbService } from "../firebase";
+import BackgroundGeolocation from "react-native-background-geolocation";
 import { connect } from "react-redux";
 import { init } from "../redux/store";
 
@@ -343,7 +344,7 @@ const Task = (props) => {
 };
 
 const renderPagination = (index, total, context) => {
-  console.log(context.props.toDos);
+  //console.log(context.props.toDos);
   const list = context.props.toDos[index].todos;
   return (
     <>
@@ -426,7 +427,7 @@ const PaintHome = (todoArr) => {
       >
         {todoArr &&
           todoArr.map((item) => {
-            console.log(item);
+            //console.log(item);
             return (
               <Card
                 key={item.id}
@@ -465,6 +466,10 @@ function HomeContent({ initToDo, toDos }) {
   };
 
   useEffect(() => {
+    BackgroundGeolocation.onGeofence((event) => {
+      console.log("Tracking Start");
+      console.log(event.identifier, event.action);
+    });
     getToDos();
   }, []);
 

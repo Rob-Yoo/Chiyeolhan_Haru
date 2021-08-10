@@ -24,5 +24,5 @@ target 'chiyeolhan' do
   pod 'GoogleMaps', '3.5.0'
   pod 'Google-Maps-iOS-Utils'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-  
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 end
