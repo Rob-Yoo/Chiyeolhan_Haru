@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06EAD5CCF24A4E939C4B6A37 /* icon-go-back-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53E483CA9B75408795E9B60B /* icon-go-back-button.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		30D5F08576BE47C28D80D6FD /* icon-home-title-rectangle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9319B225C3324B65A25BDD6A /* icon-home-title-rectangle.ttf */; };
+		3B19C2F79BBC401CA2F00EBA /* icon-modal-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19C7F7D9FCBA4699B21AD2C3 /* icon-modal-question.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		3EA90A9A596042C38292C67E /* icon-go-to-schedule-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C3E7B25E1924EEA84E5E5E0 /* icon-go-to-schedule-button.ttf */; };
 		6020F6FE33C24C1FAFDEEDD1 /* libPods-chiyeolhan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */; };
+		711DC24A043248B895D11646 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83886BF4E2CA46B0A003635F /* icon-schedulte-timeset-button.ttf */; };
 		872D44B16583432B98095690 /* icon-todo-man.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9857B35AEEB41F49BB9091A /* icon-todo-man.ttf */; };
 		95287465F34F4E73BF66322C /* icon-tasklist-left.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C03DBFCBB7574FAC993EA111 /* icon-tasklist-left.ttf */; };
 		980E5FDEE2684EA98D8B86C4 /* icon-tasklist-left-fin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 082A53E51BF444C0A6D43055 /* icon-tasklist-left-fin.ttf */; };
+		9A89DBC2555948BABCDD6F36 /* icon-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2BF8E375B7348FA85764D53 /* icon-favorite.ttf */; };
 		9BDCDE8C7FA14002A7850F8D /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		C3AC82E36E0449EDBFA8D1A8 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173C583864647D09E1B8075 /* noop-file.swift */; };
 		CC289A350B8D442785A32DA8 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */; };
 		CCD7902726B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */; };
 		DDD6A53572434E508776572A /* icon-tasklist-add-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79EADEB6A9BC4FC186E94354 /* icon-tasklist-add-button.ttf */; };
-		E718B4F94EE5495EA6CD91E2 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8962AD622E97470C8E8E6B1D /* NotoSansKR-Medium.otf */; };
 		E4DF0FEC39534D259F0D1DD2 /* icon-add-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D04F1D2076484325901FB306 /* icon-add-favorite.ttf */; };
-		9A89DBC2555948BABCDD6F36 /* icon-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2BF8E375B7348FA85764D53 /* icon-favorite.ttf */; };
-		06EAD5CCF24A4E939C4B6A37 /* icon-go-back-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53E483CA9B75408795E9B60B /* icon-go-back-button.ttf */; };
-		711DC24A043248B895D11646 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83886BF4E2CA46B0A003635F /* icon-schedulte-timeset-button.ttf */; };
-		3B19C2F79BBC401CA2F00EBA /* icon-modal-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19C7F7D9FCBA4699B21AD2C3 /* icon-modal-question.ttf */; };
+		E718B4F94EE5495EA6CD91E2 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8962AD622E97470C8E8E6B1D /* NotoSansKR-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +43,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = chiyeolhan/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = chiyeolhan/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = chiyeolhan/main.m; sourceTree = "<group>"; };
+		19C7F7D9FCBA4699B21AD2C3 /* icon-modal-question.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-modal-question.ttf"; path = "../assets/icons/ttf-svgs/icon-modal-question.ttf"; sourceTree = "<group>"; };
 		227BC1A45E3534EA4C1BC36C /* Pods-chiyeolhan.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chiyeolhan.debug.xcconfig"; path = "Target Support Files/Pods-chiyeolhan/Pods-chiyeolhan.debug.xcconfig"; sourceTree = "<group>"; };
 		22E9CE09E5E341BEAC39D4D8 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		233BDE9BB9D54B16B3899F02 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 		27D87C4C9C72467E83A5B294 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		280A06E35A4C4898BF315CF0 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		5037EA82B396434487073299 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		53E483CA9B75408795E9B60B /* icon-go-back-button.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-go-back-button.ttf"; path = "../assets/icons/ttf-svgs/icon-go-back-button.ttf"; sourceTree = "<group>"; };
 		54E74EABFD403ADCD38F32B0 /* Pods-chiyeolhan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-chiyeolhan.release.xcconfig"; path = "Target Support Files/Pods-chiyeolhan/Pods-chiyeolhan.release.xcconfig"; sourceTree = "<group>"; };
 		5C81C1B1C369499AB454CFB5 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		5D6E1209D96C41CF8EEFEFA1 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 		7315AE65832F4FA0B8AB26D5 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		79EADEB6A9BC4FC186E94354 /* icon-tasklist-add-button.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-add-button.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-add-button.ttf"; sourceTree = "<group>"; };
 		7DC3CCE822854A00B0F979D1 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		83886BF4E2CA46B0A003635F /* icon-schedulte-timeset-button.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-schedulte-timeset-button.ttf"; path = "../assets/icons/ttf-svgs/icon-schedulte-timeset-button.ttf"; sourceTree = "<group>"; };
 		8962AD622E97470C8E8E6B1D /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Medium.otf"; path = "../assets/fonts/NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		911294BFB2D347A3A2B9FC61 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		9173C583864647D09E1B8075 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "chiyeolhan/noop-file.swift"; sourceTree = "<group>"; };
@@ -71,16 +74,13 @@
 		C03DBFCBB7574FAC993EA111 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Bold.otf"; path = "../assets/fonts/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
+		D04F1D2076484325901FB306 /* icon-add-favorite.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-add-favorite.ttf"; path = "../assets/icons/ttf-svgs/icon-add-favorite.ttf"; sourceTree = "<group>"; };
 		D28B6A3402644F83BE973F1C /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		D9857B35AEEB41F49BB9091A /* icon-todo-man.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-todo-man.ttf"; path = "../assets/icons/ttf-svgs/icon-todo-man.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F2BF8E375B7348FA85764D53 /* icon-favorite.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-favorite.ttf"; path = "../assets/icons/ttf-svgs/icon-favorite.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
-		D04F1D2076484325901FB306 /* icon-add-favorite.ttf */ = {isa = PBXFileReference; name = "icon-add-favorite.ttf"; path = "../assets/icons/ttf-svgs/icon-add-favorite.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F2BF8E375B7348FA85764D53 /* icon-favorite.ttf */ = {isa = PBXFileReference; name = "icon-favorite.ttf"; path = "../assets/icons/ttf-svgs/icon-favorite.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		53E483CA9B75408795E9B60B /* icon-go-back-button.ttf */ = {isa = PBXFileReference; name = "icon-go-back-button.ttf"; path = "../assets/icons/ttf-svgs/icon-go-back-button.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		83886BF4E2CA46B0A003635F /* icon-schedulte-timeset-button.ttf */ = {isa = PBXFileReference; name = "icon-schedulte-timeset-button.ttf"; path = "../assets/icons/ttf-svgs/icon-schedulte-timeset-button.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		19C7F7D9FCBA4699B21AD2C3 /* icon-modal-question.ttf */ = {isa = PBXFileReference; name = "icon-modal-question.ttf"; path = "../assets/icons/ttf-svgs/icon-modal-question.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,7 +305,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=/opt/homebrew/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
 		};
 		780E550D11452C8FFACB7187 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

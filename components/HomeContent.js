@@ -1,9 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  LogBox,
+} from 'react-native';
 import Swiper from 'react-native-swiper';
 import deviceInfoModule from 'react-native-device-info';
 import { dbService } from '../firebase';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 import { connect } from 'react-redux';
 import { init } from '../redux/store';
 
@@ -441,6 +449,7 @@ const PaintHome = (todoArr) => {
       >
         {todoArr &&
           todoArr.map((item) => {
+            //console.log(item);
             return (
               <Card
                 key={item.id}
@@ -478,6 +487,10 @@ function HomeContent({ initToDo, toDos }) {
   };
 
   useEffect(() => {
+    BackgroundGeolocation.onGeofence((event) => {
+      console.log('Tracking Start');
+      console.log(event.identifier, event.action);
+    });
     getToDos();
   }, []);
 
