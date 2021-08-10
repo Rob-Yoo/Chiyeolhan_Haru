@@ -3,7 +3,6 @@ import { View, Text, Platform, Linking } from 'react-native';
 import styled from 'styled-components/native';
 
 import toDos from '../redux/store';
-//import { dbService } from '../firebase';
 import { Provider } from 'react-redux';
 
 import HomeContent from '../components/HomeContent';

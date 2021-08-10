@@ -95,6 +95,7 @@
 		<string>icon-favorite.ttf</string>
 		<string>icon-go-back-button.ttf</string>
 		<string>icon-schedulte-timeset-button.ttf</string>
+		<string>icon-modal-question.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

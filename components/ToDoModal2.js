@@ -81,12 +81,10 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
-
 function ToDoModal({ createToDo, addToDo, navigation, route }) {
-  const name = route.params?.locationDatas?.name ?? false;
-  const locationData = name ? route.params?.locationDatas ?? false : undefined;
+  const name = route.params?.locationDatas.name ?? false;
+  const locationData = name ? route.params.locationDatas : undefined;
   const { register, handleSubmit, setValue } = useForm();
-  const [toDoId, setToDoId] = useState('');
   const [taskList, setTaskList] = useState([]);
   const [targetId, setTargetId] = useState('?');
   const [task, setTask] = useState('');
@@ -99,80 +97,52 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
     console.log('dismiss');
     Keyboard.dismiss();
   };
-  const getToDoId = () => {
-    const id = Date.now();
-    setToDoId(id);
-  };
+
   const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
-    const { latitude, location, longitude } = locationData;
+    const id = Date.now();
     const date = new Date();
-    const today =
+    let today =
       (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
       (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
 
-    await dbService
-      .collection(`${uid}`)
-      .doc(`${toDoId}`)
-      .set({
-        id: toDoId,
-        title: todotitle,
-        starttime: todostarttime,
-        finishtime: todofinishtime,
-        location: name,
-        longitude,
-        latitude,
-        date: today,
-        todos: [...taskList],
-        isdone: false,
-        isfavorite: false,
-      });
-    const todo = [
-      toDoId,
-      todostarttime,
-      todofinishtime,
-      todotitle,
-      today,
-      taskList,
-      location,
-      longitude,
-      latitude,
-      name,
-    ];
-    console.log(todo);
+    setValue('todoid', id);
+    await dbService.collection(`${uid}`).doc(`${id}`).set({
+      id,
+      title: todotitle,
+      starttime: todostarttime,
+      finishtime: todofinishtime,
+      location: name,
+      longitude: '경도',
+      latitude: '위도',
+      date: today,
+      todos: [],
+    });
+    const todo = [id, todostarttime, todofinishtime, todotitle, today];
     createToDo(todo);
-    console.log('!');
   };
   const taskSubmit = (data) => {
-    const { todotask } = data;
+    const { todotask, todoid } = data;
     setTaskList((taskList) => [...taskList, todotask]);
-    //setTargetId(toDoId);
-    //addToDo(todotask, toDoId);
+    setTargetId(todoid);
+    addToDo(todotask, todoid);
     setTask('');
   };
-
-  useEffect(() => console.log(toDoId), [toDoId]);
-
-  //리스트에 추가할때
-  // const completed = () => {
-  //   console.log(id);
-  //   id = id ?? Date.now();
-  //   setToDoId(id);
-  //   await dbService
-  //     .collection(`${uid}`)
-  //     .doc(`${id}`)
-  //     .update({
-  //       todos: [...taskList],
-  //     });
-  // };
-  useEffect(() => getToDoId(), []);
+  const completed = async () => {
+    await dbService
+      .collection(`${uid}`)
+      .doc(`${targetId}`)
+      .update({
+        todos: [...taskList],
+      });
+  };
 
   useEffect(() => {
     register('todostarttime'),
       register('todofinishtime'),
       register('todotitle'),
-      register('todotask');
-    register('todoid');
+      register('todoid');
+    register('todotask');
   }, [register]);
 
   return (
@@ -186,6 +156,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
               </Text>
               <Text
                 onPress={() => {
+                  completed();
                   navigation.goBack();
                 }}
                 style={styles.modalTopText}

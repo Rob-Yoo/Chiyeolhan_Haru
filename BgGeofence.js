@@ -1,7 +1,7 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
 export const initBgGeofence = async () => {
-  BackgroundGeolocation.ready({
+  await BackgroundGeolocation.ready({
     // Geolocation Config
     desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
     locationAuthorizationRequest: 'Always',
@@ -25,7 +25,7 @@ export const initBgGeofence = async () => {
     // Application config
     stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
     startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-  }).then((state) => {
+  }).then(async (state) => {
     BackgroundGeolocation.startGeofences();
   });
 };
