@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components/native";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components/native';
 import {
   TouchableOpacity,
   View,
@@ -7,19 +7,19 @@ import {
   StyleSheet,
   FlatList,
   LogBox,
-} from "react-native";
-import Swiper from "react-native-swiper";
-import deviceInfoModule from "react-native-device-info";
-import { dbService } from "../firebase";
-import BackgroundGeolocation from "react-native-background-geolocation";
-import { connect } from "react-redux";
-import { init } from "../redux/store";
+} from 'react-native';
+import Swiper from 'react-native-swiper';
+import deviceInfoModule from 'react-native-device-info';
+import { dbService } from '../firebase';
+import BackgroundGeolocation from 'react-native-background-geolocation';
+import { connect } from 'react-redux';
+import { init } from '../redux/store';
 
-import IconTaskListAdd from "../assets/icons/icon-tasklist-add-button";
-import IconTaskListLeft from "../assets/icons/icon-tasklist-left";
-import IconTaskListLeftFin from "../assets/icons/icon-tasklist-left-fin";
-import IconTaskToDoman from "../assets/icons/icon-todo-man";
-import { ScrollView } from "react-native-gesture-handler";
+import IconTaskListAdd from '../assets/icons/icon-tasklist-add-button';
+import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
+import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
+import IconTaskToDoman from '../assets/icons/icon-todo-man';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const uid = deviceInfoModule.getUniqueId();
 
@@ -176,18 +176,19 @@ const NoData = styled.View`
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 3,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
   },
   card: {
     flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "#54BCB6",
+    justifyContent: 'space-between',
+    backgroundColor: '#54BCB6',
+    width: '90%',
     maxHeight: 220,
     padding: 30,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     borderRadius: 20,
-    shadowColor: "#00000029",
+    shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
       height: 5,
@@ -196,14 +197,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   todomanBackgroundCircle: {
-    position: "absolute",
+    position: 'absolute',
     top: 25,
     left: 25,
     width: 60,
     height: 60,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 50,
-    shadowColor: "#00000029",
+    shadowColor: '#00000029',
     shadowOffset: {
       width: 10,
       height: 10,
@@ -212,47 +213,48 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
   },
   cardText: {
-    position: "relative",
+    position: 'relative',
   },
   cardTitle: {
-    fontFamily: "NotoSansKR-Bold",
+    fontFamily: 'NotoSansKR-Bold',
     fontSize: 35,
     marginRight: 15,
-    position: "relative",
+    position: 'relative',
   },
   cardLocation: {
-    fontFamily: "NotoSansKR-Medium",
-    fontWeight: "800",
-    color: "#F4F4F4",
+    fontFamily: 'NotoSansKR-Medium',
+    fontWeight: '800',
+    color: '#F4F4F4',
     marginBottom: 5,
   },
   cardTime: {
-    fontFamily: "NotoSansKR-Bold",
+    fontFamily: 'NotoSansKR-Bold',
     fontSize: 15,
   },
   taskHeader: {
     top: 0,
     paddingHorizontal: 40,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
     marginBottom: 10,
     flexShrink: 0,
   },
   taskContainer: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 10,
+    maxHeight: 100,
   },
   task: {
-    backgroundColor: "#FFF",
-    width: "86%",
+    backgroundColor: '#FFF',
+    width: '80%',
     borderRadius: 20,
-    padding: 20,
+    paddingHorizontal: 10,
     marginBottom: 10,
     marginLeft: 20,
-    paddingVertical: 25,
-    shadowColor: "#00000029",
+    paddingVertical: 20,
+    shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
       height: 5,
@@ -261,21 +263,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   taskText: {
-    maxWidth: "80%",
-    color: "#38504F",
-    fontFamily: "NotoSansKR-Bold",
+    maxWidth: '100%',
+    color: '#38504F',
+    fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
   progressBar: {
-    width: "100%",
+    width: '100%',
     height: 10,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
 
   paginationStyle: {},
 });
 const Card = (props) => {
-  const { index, text, todos, finishtime, starttime, location, id } = props;
+  const { text, finishtime, starttime, location, id } = props;
   return (
     <View style={styles.card}>
       <View style={styles.todomanBackgroundCircle} />
@@ -287,16 +289,33 @@ const Card = (props) => {
 
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "flex-end",
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          flexShrink: 1,
+          maxHeight: 300,
         }}
       >
         <Text style={styles.cardTitle}>{text}</Text>
-        <Text style={styles.cardLocation}>{location}</Text>
+        <View
+          style={{
+            flexWrap: 'nowrap',
+          }}
+        >
+          <View
+            style={{
+              position: 'absolute',
+              left: -10,
+              width: 5,
+              height: 20,
+              backgroundColor: '#00A29A',
+            }}
+          ></View>
+          <Text style={styles.cardLocation}>{location}</Text>
+        </View>
       </View>
       <Text style={styles.cardTime}>
         {starttime}
-        {id ? `` : "~"}
+        {id ? `` : '~'}
         {finishtime}
       </Text>
 
@@ -304,23 +323,23 @@ const Card = (props) => {
       {id ? (
         <NoData
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: -100,
             width: 600,
             height: 600,
-            backgroundColor: "#000",
+            backgroundColor: '#000',
             opacity: 0.2,
           }}
         >
           <Text
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: 50,
-              right: "45%",
-              top: "15%",
-              color: "#FFFFFF",
+              right: '45%',
+              top: '15%',
+              color: '#FFFFFF',
               opacity: 1,
-              fontFamily: "NotoSansKR-Regular",
+              fontFamily: 'NotoSansKR-Regular',
               fontSize: 20,
             }}
           >
@@ -332,11 +351,14 @@ const Card = (props) => {
   );
 };
 const Task = (props) => {
+  const { text: taskText } = props;
   return (
     <>
       <View style={styles.taskContainer}>
         <View style={styles.task}>
-          <Text style={styles.taskText}>{props.text}</Text>
+          <Text style={styles.taskText}>
+            {taskText.length > 17 ? `${taskText.substr(0, 16)}...` : taskText}
+          </Text>
         </View>
       </View>
     </>
@@ -344,15 +366,14 @@ const Task = (props) => {
 };
 
 const renderPagination = (index, total, context) => {
-  //console.log(context.props.toDos);
   const list = context.props.toDos[index].todos;
   return (
     <>
       <View style={styles.taskHeader}>
         <Text
           style={{
-            color: "#229892",
-            fontFamily: "NotoSansKR-Bold",
+            color: '#229892',
+            fontFamily: 'NotoSansKR-Bold',
             fontSize: 20,
             marginBottom: 5,
           }}
@@ -362,13 +383,13 @@ const renderPagination = (index, total, context) => {
         <IconTaskListAdd
           name="icon-tasklist-add-button"
           size={20}
-          color={"#229892"}
+          color={'#229892'}
         />
       </View>
       <ScrollView
         style={{
           paddingHorizontal: 20,
-          height: "100%",
+          height: '100%',
           maxHeight: 700,
           flexGrow: 0,
         }}
@@ -382,14 +403,14 @@ const renderPagination = (index, total, context) => {
                     name="icon-tasklist-left"
                     size={105}
                     color="#707070"
-                    style={{ position: "absolute", left: -35, top: 0 }}
+                    style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 ) : (
                   <IconTaskListLeftFin
                     name="icon-tasklist-left-fin"
                     size={105}
                     color="#707070"
-                    style={{ position: "absolute", left: -35, top: 0 }}
+                    style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
                 <Task key={index} text={item} />
@@ -405,15 +426,16 @@ const PaintHome = (todoArr) => {
   if (Array.isArray(todoArr) && todoArr.length === 0) {
     todoArr = [
       {
-        date: "",
-        finishtime: "",
+        date: '',
+        finishtime: '',
         id: 0,
-        latitude: "",
-        location: "",
-        longitude: "",
-        starttime: "",
-        title: "",
-        todos: [" "],
+        latitude: '',
+        location: '',
+        address: '',
+        longitude: '',
+        starttime: '',
+        title: '',
+        todos: [' '],
       },
     ];
   }
@@ -423,7 +445,7 @@ const PaintHome = (todoArr) => {
         toDos={todoArr}
         renderPagination={renderPagination}
         loop={false}
-        style={{ height: "100%", maxHeight: 450 }}
+        style={{ height: '100%', maxHeight: 450 }}
       >
         {todoArr &&
           todoArr.map((item) => {
@@ -458,7 +480,6 @@ function HomeContent({ initToDo, toDos }) {
     //db연결
     const row = await dbService.collection(`${uid}`).get();
     row.forEach((data) => (rowObj[data.id] = data.data()));
-    // rowObj = exampledata;
     if (Object.keys(rowObj).length === 0) {
       setLoading(false);
     }
@@ -467,7 +488,7 @@ function HomeContent({ initToDo, toDos }) {
 
   useEffect(() => {
     BackgroundGeolocation.onGeofence((event) => {
-      console.log("Tracking Start");
+      console.log('Tracking Start');
       console.log(event.identifier, event.action);
     });
     getToDos();

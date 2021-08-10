@@ -23,26 +23,25 @@ const PARAMS =
 const CurrentMap = ({ location, navigation, route }) => {
   const [inputText, setText] = useState("");
   const [isRenderData, setRenderData] = useState(false);
-  const [locationDatas, setDatas] = useState({});
+  const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
   const addToDoLocation = () => {
-    navigation.navigate("TodoModal", { locationDatas });
+    navigation.navigate('TodoModal', { locationData });
   };
   const locationStyles = StyleSheet.create({
     locationDataSection: {
       flex: 1,
-      alignItems: "center",
-      position: "absolute",
-      left: 30,
+      alignItems: 'center',
+      position: 'absolute',
+      left: 20,
       bottom: 30,
     },
     locationInfoCard: {
       flex: 1,
-      flexDirection: "row",
-      justifyContent: "space-around",
-      alignItems: "center",
-      maxWidth: 350,
-      width: 350,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      width: 380,
       height: 130,
       backgroundColor: "#FFFFFF",
       borderRadius: 20,
@@ -54,13 +53,16 @@ const CurrentMap = ({ location, navigation, route }) => {
       color: "#000000",
       marginBottom: 15,
     },
-    locationText: {
-      color: "#000000BA",
+    addressText: {
+      color: '#000000BA',
+      marginRight: 2,
+      paddingHorizontal: 10,
     },
-    roadName: {
-      fontFamily: "NotoSansKR-Regular",
-      color: "#C4C4C4",
-      width: 50,
+    address: {
+      fontFamily: 'NotoSansKR-Regular',
+      color: '#C4C4C4',
+      width: 43,
+      height: 24,
       borderWidth: 2,
       borderColor: "#C4C4C4",
       marginRight: 4,
@@ -85,11 +87,20 @@ const CurrentMap = ({ location, navigation, route }) => {
     return (
       <View style={locationStyles.locationInfoCard}>
         <View style={{ flex: 4 }}>
-          <Text style={locationStyles.locationTitle}>{locationDatas.name}</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={locationStyles.roadName}>도로명</Text>
-            <Text style={locationStyles.locationText}>
-              {locationDatas.location}
+          <Text style={locationStyles.locationTitle}>
+            {locationData.location}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              flexWrap: 'nowrap',
+              paddingRight: 40,
+            }}
+          >
+            <Text style={locationStyles.address}>도로명</Text>
+            <Text style={locationStyles.addressText}>
+              {locationData.address}
             </Text>
           </View>
         </View>
@@ -125,16 +136,16 @@ const CurrentMap = ({ location, navigation, route }) => {
         const {
           candidates: [
             {
-              formatted_address: location,
+              formatted_address: address,
               geometry: {
                 location: { lat: latitude, lng: longitude },
               },
-              name,
+              name: location,
             },
           ],
           status,
         } = data;
-        setDatas({ location, latitude, longitude, name });
+        setData({ location, latitude, longitude, address, status });
         switch (status) {
           case "OK":
             setResult({
