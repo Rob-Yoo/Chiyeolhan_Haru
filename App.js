@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import toDos from './redux/store';
-import * as SplashScreen from 'expo-splash-screen';
-import HomeNav from './navigator/HomeNav';
-import { Provider } from 'react-redux';
-import { initBgGeofence } from './BgGeofence';
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import toDos from "./redux/store";
+import * as SplashScreen from "expo-splash-screen";
+import HomeNav from "./navigator/HomeNav";
+import { Provider } from "react-redux";
+import { initBgGeofence } from "./BgGeofence";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -19,8 +19,7 @@ export default function App() {
       } catch (e) {
         console.warn(e);
       } finally {
-        //Tell ther application to render
-
+        //Tell ther application to render});
         setAppIsReady(true);
         await SplashScreen.hideAsync();
       }
