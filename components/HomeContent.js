@@ -23,148 +23,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const uid = deviceInfoModule.getUniqueId();
 
-const exampledata = {
-  // 1628179352151: {
-  //   date: '0806',
-  //   finishtime: '12:00',
-  //   id: 1628179352151,
-  //   latitude: '위도',
-  //   location: '스타벅스 어디점',
-  //   longitude: '경도',
-  //   starttime: '11:00',
-  //   title: '자습',
-  //   todos: ['자습하기 ', '단어 외우기 ', '커피마시기'],
-  // },
-  // 1628180195240: {
-  //   date: '0806',
-  //   finishtime: '16:00',
-  //   id: 1628180195240,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: '운동',
-  //   todos: [
-  //     '자습하기 ',
-  //     '단어 외우기 ',
-  //     '커피마시기',
-  //     '상체하기',
-  //     '하체',
-  //     '유산소',
-  //   ],
-  // },
-  // 1628181968664: {
-  //   date: '0806',
-  //   finishtime: '15”00',
-  //   id: 1628181968664,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Title title',
-  //   todos: ['Kustkust1', 'Listlist2'],
-  // },
-  // 1628185678507: {
-  //   date: '0806',
-  //   finishtime: '14:00',
-  //   id: 1628185678507,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Wasssap',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628185964498: {
-  //   date: '0806',
-  //   finishtime: '90',
-  //   id: 1628185964498,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '7:00',
-  //   title: 'Update',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628186073250: {
-  //   date: '0806',
-  //   finishtime: '22:00',
-  //   id: 1628186073250,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '13:00',
-  //   title: 'Hiiiiiii',
-  //   todos: ['Hi hi', 'Hihihi 2'],
-  // },
-  // 1628186231641: {
-  //   date: '0806',
-  //   finishtime: '13:00',
-  //   id: 1628186231641,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Title',
-  //   todos: ['Lililili'],
-  // },
-  // 1628187065020: {
-  //   date: '0806',
-  //   finishtime: '44:00',
-  //   id: 1628187065020,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '44:00',
-  //   title: 'Title121212',
-  //   todos: ['List1', 'List2'],
-  // },
-  // 1628187328232: {
-  //   date: '0806',
-  //   finishtime: '17:00',
-  //   id: 1628187328232,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Eat',
-  //   todos: ['Eat eat eat~~!'],
-  // },
-  // 1628187751973: {
-  //   date: '0806',
-  //   finishtime: '15:—',
-  //   id: 1628187751973,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '14:00',
-  //   title: 'Sleep',
-  //   todos: ['Good'],
-  // },
-  // 1628187879369: {
-  //   date: '0806',
-  //   finishtime: '15:00',
-  //   id: 1628187879369,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '12:00',
-  //   title: 'Todo',
-  //   todos: ['Todo list'],
-  // },
-  // 1628190932164: {
-  //   date: '0806',
-  //   finishtime: '16:00',
-  //   id: 1628190932164,
-  //   latitude: '위도',
-  //   location: '장소명',
-  //   longitude: '경도',
-  //   starttime: '15:00',
-  //   title: 'Todo wh',
-  //   todos: [],
-  // },
-};
-
 const NoData = styled.View`
   position: absolute;
   left: -100;
@@ -367,6 +225,16 @@ const Task = (props) => {
 
 const renderPagination = (index, total, context) => {
   const list = context.props.toDos[index].todos;
+  const targetId = context.props.toDos[index].id;
+  //리스트에 추가할때
+  const addTaskList = async () => {
+    await dbService
+      .collection(`${uid}`)
+      .doc(`${targetId}`)
+      .update({
+        todos: [...taskList],
+      });
+  };
   return (
     <>
       <View style={styles.taskHeader}>
@@ -384,6 +252,7 @@ const renderPagination = (index, total, context) => {
           name="icon-tasklist-add-button"
           size={20}
           color={'#229892'}
+          onPress={() => console.log('press')}
         />
       </View>
       <ScrollView
@@ -520,6 +389,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     initToDo: (todo) => dispatch(init(todo)),
+    addToDo: (task, id) => dispatch(add({ task, id })),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContent);
