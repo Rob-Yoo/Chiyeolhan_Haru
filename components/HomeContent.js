@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components/native';
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components/native";
 import {
   TouchableOpacity,
   View,
   Text,
   StyleSheet,
   FlatList,
-} from 'react-native';
-import Swiper from 'react-native-swiper';
-import deviceInfoModule from 'react-native-device-info';
-import { dbService } from '../firebase';
-import { connect } from 'react-redux';
-import { init } from '../redux/store';
+} from "react-native";
+import Swiper from "react-native-swiper";
+import deviceInfoModule from "react-native-device-info";
+import { dbService } from "../firebase";
+import { connect } from "react-redux";
+import { init } from "../redux/store";
 
-import IconTaskListAdd from '../assets/icons/icon-tasklist-add-button';
-import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
-import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
-import { ScrollView } from 'react-native-gesture-handler';
+import IconTaskListAdd from "../assets/icons/icon-tasklist-add-button";
+import IconTaskListLeft from "../assets/icons/icon-tasklist-left";
+import IconTaskListLeftFin from "../assets/icons/icon-tasklist-left-fin";
+import { ScrollView } from "react-native-gesture-handler";
 
 const uid = deviceInfoModule.getUniqueId();
 
@@ -178,15 +178,15 @@ const styles = StyleSheet.create({
   },
   card: {
     flexShrink: 1,
-    backgroundColor: '#54BCB6',
+    backgroundColor: "#54BCB6",
     width: 300,
     height: 220,
     padding: 20,
     marginHorizontal: 50,
     borderRadius: 10,
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    shadowColor: '#00000029',
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    shadowColor: "#00000029",
     shadowOffset: {
       width: 3.4,
       height: 5,
@@ -195,42 +195,42 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   cardTitle: {
-    fontFamily: 'NotoSansKR-Bold',
+    fontFamily: "NotoSansKR-Bold",
     fontSize: 35,
     marginRight: 15,
   },
   cardLocation: {
-    fontFamily: 'NotoSansKR-Medium',
-    fontWeight: '800',
-    color: '#F4F4F4',
+    fontFamily: "NotoSansKR-Medium",
+    fontWeight: "800",
+    color: "#F4F4F4",
   },
   cardTime: {
-    fontFamily: 'NotoSansKR-Bold',
+    fontFamily: "NotoSansKR-Bold",
     fontSize: 15,
   },
   taskHeader: {
     top: 0,
     paddingHorizontal: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 20,
     marginBottom: 10,
     flexShrink: 0,
   },
   taskContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flexShrink: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   task: {
-    backgroundColor: '#FFF',
-    width: '85%',
+    backgroundColor: "#FFF",
+    width: "85%",
     borderRadius: 20,
     padding: 20,
     marginBottom: 10,
     paddingVertical: 25,
-    shadowColor: '#00000029',
+    shadowColor: "#00000029",
     shadowOffset: {
       width: 3.4,
       height: 5,
@@ -239,9 +239,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   taskText: {
-    maxWidth: '80%',
-    color: '#38504F',
-    fontFamily: 'NotoSansKR-Bold',
+    maxWidth: "80%",
+    color: "#38504F",
+    fontFamily: "NotoSansKR-Bold",
     fontSize: 20,
   },
 
@@ -256,13 +256,13 @@ const Card = (props) => {
         size={40}
         color="#707070"
       />
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+      <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
         <Text style={styles.cardTitle}>{text}</Text>
         <Text style={styles.cardLocation}>{location}</Text>
       </View>
       <Text style={styles.cardTime}>
         {starttime}
-        {id ? `` : '~'}
+        {id ? `` : "~"}
         {finishtime}
       </Text>
 
@@ -270,23 +270,23 @@ const Card = (props) => {
       {id ? (
         <NoData
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: -100,
             width: 600,
             height: 600,
-            backgroundColor: '#000',
+            backgroundColor: "#000",
             opacity: 0.2,
           }}
         >
           <Text
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 50,
-              right: '45%',
-              top: '15%',
-              color: '#FFFFFF',
+              right: "45%",
+              top: "15%",
+              color: "#FFFFFF",
               opacity: 1,
-              fontFamily: 'NotoSansKR-Regular',
+              fontFamily: "NotoSansKR-Regular",
               fontSize: 20,
             }}
           >
@@ -321,8 +321,8 @@ const renderPagination = (index, total, context) => {
       <View style={styles.taskHeader}>
         <Text
           style={{
-            color: '#229892',
-            fontFamily: 'NotoSansKR-Bold',
+            color: "#229892",
+            fontFamily: "NotoSansKR-Bold",
             fontSize: 20,
             marginBottom: 20,
           }}
@@ -332,13 +332,13 @@ const renderPagination = (index, total, context) => {
         <IconTaskListAdd
           name="icon-tasklist-add-button"
           size={20}
-          color={'#229892'}
+          color={"#229892"}
         />
       </View>
       <ScrollView
         style={{
           paddingHorizontal: 20,
-          height: '100%',
+          height: "100%",
           maxHeight: 700,
           flexGrow: 0,
         }}
@@ -356,15 +356,15 @@ const PaintHome = (todoArr) => {
   if (Array.isArray(todoArr) && todoArr.length === 0) {
     todoArr = [
       {
-        date: '',
-        finishtime: '',
+        date: "",
+        finishtime: "",
         id: 0,
-        latitude: '',
-        location: '',
-        longitude: '',
-        starttime: '',
-        title: '',
-        todos: [' '],
+        latitude: "",
+        location: "",
+        longitude: "",
+        starttime: "",
+        title: "",
+        todos: [" "],
       },
     ];
   }
@@ -374,7 +374,7 @@ const PaintHome = (todoArr) => {
         toDos={todoArr}
         renderPagination={renderPagination}
         loop={false}
-        style={{ height: '100%', maxHeight: 390 }}
+        style={{ height: "100%", maxHeight: 390 }}
       >
         {todoArr &&
           todoArr.map((item) => {
