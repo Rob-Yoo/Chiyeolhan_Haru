@@ -7,7 +7,6 @@ import {
   CYH_APP_STORAGE_BUCKET,
   CYH_APP_MESSAGIN_ID,
   CYH_APP_APP_ID,
-  CYH_APP_MEASURE_ID,
 } from "@env";
 
 const firebaseConfig = {
@@ -17,7 +16,6 @@ const firebaseConfig = {
   storageBucket: CYH_APP_STORAGE_BUCKET,
   messagingSenderId: CYH_APP_MESSAGIN_ID,
   appId: CYH_APP_APP_ID,
-  measurementId: CYH_APP_MEASURE_ID,
 };
 
 firbase.initializeApp(firebaseConfig);

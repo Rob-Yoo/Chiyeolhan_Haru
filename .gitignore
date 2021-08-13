@@ -73,4 +73,7 @@ web-build/
 #env
 .env
 
+#app.json
+app.json
+
 # @end expo-cli

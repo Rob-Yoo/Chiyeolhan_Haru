@@ -18,7 +18,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.chiyeolhan.chiyeolhan",
       "config": {
-        "googleMapsApiKey": "AIzaSyA0V8O7omJBpFXVIorBAVjbHZgAvc3yPxQ"
+        "googleMapsApiKey": "AIzaSyCWOTj7ug0B_fVz31DslH2etH1zx3q9lpo"
       }
     },
     "android": {
@@ -28,7 +28,7 @@
       },
       "package": "com.chiyeolhan.chiyeolhan",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyBZTgzhxyyVZnzMQ8i8rp0l08IlxXFT3ss" }
+        "googleMaps": { "apiKey": "AIzaSyCWOTj7ug0B_fVz31DslH2etH1zx3q9lpo" }
       }
     },
     "web": {
