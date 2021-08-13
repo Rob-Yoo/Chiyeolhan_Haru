@@ -358,7 +358,7 @@ function HomeContent({ initToDo, toDos }) {
   useEffect(() => {
     BackgroundGeolocation.onGeofence((event) => {
       console.log('Tracking Start');
-      console.log(event.identifier, event.action);
+      console.log(event.action);
     });
     getToDos();
   }, []);

@@ -6,7 +6,7 @@ function setFirstSubmit() {
   AsyncStorage.setItem(KEY_VALUE, 'true');
 }
 
-export default async function checkFirstSubmit() {
+export const checkFirstSubmit = async () => {
   try {
     const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE);
     if (isFirstLaunched === null) {
@@ -18,4 +18,4 @@ export default async function checkFirstSubmit() {
     console.log(' [chk first geofence] :' + error);
     return false;
   }
-}
+};
