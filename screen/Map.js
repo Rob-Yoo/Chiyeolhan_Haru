@@ -26,21 +26,21 @@ const CurrentMap = ({ location, navigation, route }) => {
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
   const addToDoLocation = () => {
-    navigation.navigate('TodoModal', { locationData });
+    navigation.navigate("TodoModal", { locationData });
   };
   const locationStyles = StyleSheet.create({
     locationDataSection: {
       flex: 1,
-      alignItems: 'center',
-      position: 'absolute',
+      alignItems: "center",
+      position: "absolute",
       left: 20,
       bottom: 30,
     },
     locationInfoCard: {
       flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
       width: 380,
       height: 130,
       backgroundColor: "#FFFFFF",
@@ -54,13 +54,13 @@ const CurrentMap = ({ location, navigation, route }) => {
       marginBottom: 15,
     },
     addressText: {
-      color: '#000000BA',
+      color: "#000000BA",
       marginRight: 2,
       paddingHorizontal: 10,
     },
     address: {
-      fontFamily: 'NotoSansKR-Regular',
-      color: '#C4C4C4',
+      fontFamily: "NotoSansKR-Regular",
+      color: "#C4C4C4",
       width: 43,
       height: 24,
       borderWidth: 2,
@@ -92,9 +92,9 @@ const CurrentMap = ({ location, navigation, route }) => {
           </Text>
           <View
             style={{
-              flexDirection: 'row',
-              width: '100%',
-              flexWrap: 'nowrap',
+              flexDirection: "row",
+              width: "100%",
+              flexWrap: "nowrap",
               paddingRight: 40,
             }}
           >

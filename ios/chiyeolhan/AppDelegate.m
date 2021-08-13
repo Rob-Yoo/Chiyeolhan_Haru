@@ -53,7 +53,7 @@ static void InitializeFlipper(UIApplication *application) {
   
 // @generated begin react-native-maps-init - expo prebuild (DO NOT MODIFY) sync-25729c1d9c97f86f8f34dc861e6a45d9de6899d0
 #if __has_include(<GoogleMaps/GoogleMaps.h>)
-  [GMSServices provideAPIKey:@"AIzaSyA0V8O7omJBpFXVIorBAVjbHZgAvc3yPxQ"];
+  [GMSServices provideAPIKey:@"AIzaSyCWOTj7ug0B_fVz31DslH2etH1zx3q9lpo"];
 #endif
 // @generated end react-native-maps-init
   self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
