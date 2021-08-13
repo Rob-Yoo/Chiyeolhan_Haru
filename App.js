@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import toDos from "./redux/store";
-import * as SplashScreen from "expo-splash-screen";
-import HomeNav from "./navigator/HomeNav";
-import { Provider } from "react-redux";
-import { initBgGeofence } from "./BgGeofence";
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import toDos from 'redux/store';
+import * as SplashScreen from 'expo-splash-screen';
+import HomeNav from 'components/base/navigator/HomeNav';
+import { Provider } from 'react-redux';
+import { initBgGeofence } from 'utils/BgGeofence';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);

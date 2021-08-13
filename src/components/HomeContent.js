@@ -10,18 +10,18 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import deviceInfoModule from 'react-native-device-info';
-import { dbService } from '../firebase';
+import { dbService } from 'utils/firebase';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import { connect } from 'react-redux';
-import { init } from '../redux/store';
+import { init } from 'redux/store';
 
-import IconTaskListAdd from '../assets/icons/icon-tasklist-add-button';
-import IconTaskListLeft from '../assets/icons/icon-tasklist-left';
-import IconTaskListLeftFin from '../assets/icons/icon-tasklist-left-fin';
-import IconTaskToDoman from '../assets/icons/icon-todo-man';
+import IconTaskListAdd from '/assets/icons/icon-tasklist-add-button';
+import IconTaskListLeft from '/assets/icons/icon-tasklist-left';
+import IconTaskListLeftFin from '/assets/icons/icon-tasklist-left-fin';
+import IconTaskToDoman from '/assets/icons/icon-todo-man';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const uid = deviceInfoModule.getUniqueId();
+import { UID } from 'constant/const';
 
 const NoData = styled.View`
   position: absolute;
@@ -229,7 +229,7 @@ const renderPagination = (index, total, context) => {
   //리스트에 추가할때
   const addTaskList = async () => {
     await dbService
-      .collection(`${uid}`)
+      .collection(`${UID}`)
       .doc(`${targetId}`)
       .update({
         todos: [...taskList],

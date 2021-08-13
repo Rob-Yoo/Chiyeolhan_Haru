@@ -1,10 +1,9 @@
-import AsyncStorage from "@react-native-community/async-storage";
-
-const KEY_VALUE = "isFirst";
+import AsyncStorage from '@react-native-community/async-storage';
+import { KEY_VALUE } from 'constant/const';
 
 // 키값에 true로 저장한다.
 function setFirstSubmit() {
-  AsyncStorage.setItem(KEY_VALUE, "true");
+  AsyncStorage.setItem(KEY_VALUE, 'true');
 }
 
 export default async function checkFirstSubmit() {
@@ -16,7 +15,7 @@ export default async function checkFirstSubmit() {
     }
     return false;
   } catch (error) {
-    console.log(" [chk first geofence] :" + error);
+    console.log(' [chk first geofence] :' + error);
     return false;
   }
 }

@@ -10,15 +10,14 @@ import { TouchableOpacity, View, Text, Image } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
-import { add, create } from '../redux/store';
-import { dbService } from '../firebase';
+import { add, create } from 'redux/store';
+import { dbService } from 'utils/firebase';
 import styled from 'styled-components/native';
 
-import IconModalQuestion from '../assets/icons/icon-modal-question';
-import checkFirstSubmit from '../asyncStorage';
-import { addFirstGeofence } from '../BgGeofence';
-
-const uid = DeviceInfo.getUniqueId();
+import IconModalQuestion from '/assets/icons/icon-modal-question';
+import checkFirstSubmit from 'utils/asyncStorage';
+import { addFirstGeofence } from 'utils/BgGeofence';
+import { UID } from 'constant/const';
 
 const TodoModal = styled.View`
   flex: 1;
@@ -125,7 +124,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
       (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
 
     await dbService
-      .collection(`${uid}`)
+      .collection(`${UID}`)
       .doc(`${toDoId}`)
       .set({
         id: toDoId,

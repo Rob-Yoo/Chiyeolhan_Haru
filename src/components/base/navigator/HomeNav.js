@@ -1,11 +1,11 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import ScheduleToday from '../screen/ScheduleToday';
-import ScheduleTomorrow from '../screen/ScheduleTomorrow';
-import Home from '../screen/Home';
-import Map from '../screen/Map';
-import ToDoModal from '../components/ToDoModal';
+import ScheduleToday from 'components/screen/ScheduleToday';
+import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
+import Home from 'components/screen/Home';
+import Map from 'components/screen/Map';
+import ToDoModal from 'components/modal/ToDoModal';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 const navOptionHandler = () => ({
