@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,136 +7,51 @@ import {
   AppState,
   TextInput,
   Alert,
-  TouchableOpacity,
-} from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
+} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
-import IconGobackButton from "#assets/icons/icon-go-back-button";
-import IconFavoriteBefore from "#assets/icons/icon-favorite";
+import IconGobackButton from '#assets/icons/icon-go-back-button';
+import IconFavoriteBefore from '#assets/icons/icon-favorite';
 
-import { GOOGLE_PLACES_API_KEY } from "@env";
-import { PLACES_PARAMS } from "constant/const";
-import { GOOGLE_API_URL } from "constant/const";
+import { GOOGLE_PLACES_API_KEY } from '@env';
+import { PLACES_PARAMS } from 'constant/const';
+import { GOOGLE_API_URL } from 'constant/const';
+import { LocationData } from 'components/items/LocationData';
 
-const CurrentMap = ({ location, navigation, route }) => {
-  const [inputText, setText] = useState("");
+const CurrentMap = ({ location, navigation }) => {
+  const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
-  const addToDoLocation = () => {
-    navigation.navigate("TodoModal", { locationData });
-  };
-  const locationStyles = StyleSheet.create({
-    locationDataSection: {
-      flex: 1,
-      alignItems: "center",
-      position: "absolute",
-      left: 20,
-      bottom: 30,
-    },
-    locationInfoCard: {
-      flex: 1,
-      flexDirection: "row",
-      justifyContent: "space-around",
-      alignItems: "center",
-      width: 380,
-      height: 130,
-      backgroundColor: "#FFFFFF",
-      borderRadius: 20,
-      padding: 10,
-    },
-    locationTitle: {
-      fontFamily: "NotoSansKR-Bold",
-      fontSize: 20,
-      color: "#000000",
-      marginBottom: 15,
-    },
-    addressText: {
-      color: "#000000BA",
-      marginRight: 2,
-      paddingHorizontal: 10,
-    },
-    address: {
-      fontFamily: "NotoSansKR-Regular",
-      color: "#C4C4C4",
-      width: 43,
-      height: 24,
-      borderWidth: 2,
-      borderColor: "#C4C4C4",
-      marginRight: 4,
-    },
-    locationFinButton: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      width: 80,
-      height: 50,
-      borderRadius: 10,
-      backgroundColor: "#54BCB6",
-    },
-    locationFinText: {
-      fontFamily: "NotoSansKR-Bold",
-      fontSize: 20,
-      color: "#FFFFFF",
-    },
-  });
 
-  const LocationData = () => {
-    return (
-      <View style={locationStyles.locationInfoCard}>
-        <View style={{ flex: 4 }}>
-          <Text style={locationStyles.locationTitle}>
-            {locationData.location}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              width: "100%",
-              flexWrap: "nowrap",
-              paddingRight: 40,
-            }}
-          >
-            <Text style={locationStyles.address}>도로명</Text>
-            <Text style={locationStyles.addressText}>
-              {locationData.address}
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={locationStyles.locationFinButton}
-          onPress={addToDoLocation}
-        >
-          <Text style={locationStyles.locationFinText}>완료</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  useEffect(() => {}, [locationResult]);
+
   const createTwoButtonAlert = () =>
     Alert.alert(
-      "검색 결과가 없습니다.",
-      "",
+      '검색 결과가 없습니다.',
+      '',
       [
         {
-          text: "취소",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
+          text: '취소',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
         },
-        { text: "확인", onPress: () => console.log("OK Pressed") },
+        { text: '확인', onPress: () => console.log('OK Pressed') },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
+
   const _handlePlacesAPI = (text) => {
-    setRenderData(true);
-    const place = text.replaceAll(" ", "%20");
+    const place = text.replaceAll(' ', '%20');
     fetch(
-      `${GOOGLE_API_URL}?input=${place}&${PLACES_PARAMS}&key=${GOOGLE_PLACES_API_KEY}`
+      `${GOOGLE_API_URL}?input=${place}&${PLACES_PARAMS}&key=${GOOGLE_PLACES_API_KEY}`,
     )
       .then((response) => response.json())
       .then(async (data) => {
         const status = data.status;
         switch (status) {
-          case "OK":
+          case 'OK':
             const {
               candidates: [
                 {
@@ -153,19 +68,20 @@ const CurrentMap = ({ location, navigation, route }) => {
               longitude,
             });
             setData({ location, latitude, longitude, address });
+            setRenderData(true);
             break;
-          case "ZERO_RESULTS":
+          case 'ZERO_RESULTS':
             createTwoButtonAlert();
             break;
-          case "OVER_QUERY_LIMIT":
-            console.log("API 할당량 넘었음");
+          case 'OVER_QUERY_LIMIT':
+            console.log('API 할당량 넘었음');
             break;
           default:
-            console.log("Error");
+            console.log(`Error ${status}`);
         }
       });
   };
-  useEffect(() => {}, [locationResult]);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -179,20 +95,20 @@ const CurrentMap = ({ location, navigation, route }) => {
       >
         <View
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
-            width: "100%",
+            width: '100%',
           }}
         >
           <View
             style={{
               flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
               height: 130,
-              backgroundColor: "#54BCB6",
+              backgroundColor: '#54BCB6',
               borderBottomLeftRadius: 20,
               borderBottomRightRadius: 20,
               paddingTop: 50,
@@ -207,7 +123,7 @@ const CurrentMap = ({ location, navigation, route }) => {
 
             <TextInput
               style={{
-                backgroundColor: "#fff",
+                backgroundColor: '#fff',
                 flex: 0.8,
                 height: 50,
                 borderRadius: 10,
@@ -219,7 +135,7 @@ const CurrentMap = ({ location, navigation, route }) => {
             <IconFavoriteBefore
               name="icon-favorite"
               size={25}
-              style={{ position: "absolute", right: 40, bottom: 30 }}
+              style={{ position: 'absolute', right: 40, bottom: 30 }}
             />
           </View>
         </View>
@@ -230,9 +146,7 @@ const CurrentMap = ({ location, navigation, route }) => {
           }}
         />
         {isRenderData ? (
-          <View style={locationStyles.locationDataSection}>
-            <LocationData />
-          </View>
+          <LocationData locationData={locationData} navigation={navigation} />
         ) : null}
       </MapView>
     </View>
@@ -248,7 +162,7 @@ const Map = ({ navigation }) => {
   const _handleAppStateChange = (nextAppState) => {
     if (
       appState.current.match(/inactive|background/) &&
-      nextAppState === "active"
+      nextAppState === 'active'
     ) {
       getLocation();
     }
@@ -258,7 +172,7 @@ const Map = ({ navigation }) => {
   };
   const getLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
+    if (status !== 'granted') {
       setFind(false);
       return;
     } else {
@@ -272,10 +186,10 @@ const Map = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
+    AppState.addEventListener('change', _handleAppStateChange);
     getLocation();
     return () => {
-      AppState.removeEventListener("change", _handleAppStateChange);
+      AppState.removeEventListener('change', _handleAppStateChange);
     };
   }, []);
   return isFind ? (
@@ -288,13 +202,13 @@ const Map = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
