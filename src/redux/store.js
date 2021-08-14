@@ -1,7 +1,7 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const toDos = createSlice({
-  name: "toDoReducer",
+  name: 'toDoReducer',
   initialState: {},
   reducers: {
     init: (state, action) => {
@@ -9,7 +9,6 @@ const toDos = createSlice({
       Object.assign(state, action.payload);
     },
     create: (state, action) => {
-      console.log(action.payload);
       const [
         id,
         starttime,
