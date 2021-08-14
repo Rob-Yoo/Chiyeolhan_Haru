@@ -4,7 +4,7 @@ import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Task } from './TaskItem';
+import { Task } from 'components/items/TaskItem';
 
 const styles = StyleSheet.create({
   taskHeader: {

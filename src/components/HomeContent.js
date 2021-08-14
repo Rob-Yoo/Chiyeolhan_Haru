@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { init } from 'redux/store';
 
 import { UID } from 'constant/const';
-import { Card } from './items/CardItem';
-import { renderPagination } from './items/renderPagination';
+import { Card } from 'components/items/CardItem';
+import { renderPagination } from 'components/items/renderPagination';
 
 const styles = StyleSheet.create({
   homeContainer: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import AddToDoIcon from '../../../assets/icons/icon-tasklist-add-button.js';
+import AddToDoIcon from '#assets/icons/icon-tasklist-add-button.js';
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,

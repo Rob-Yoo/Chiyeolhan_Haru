@@ -6,9 +6,9 @@ import toDos from 'redux/store';
 import { Provider } from 'react-redux';
 
 import HomeContent from 'components/HomeContent';
+import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
-import { HomeTextItem } from '../items/HomeTextItem';
 
 const ScheduleButton = styled.TouchableOpacity``;
 

@@ -1,10 +1,29 @@
 import React from 'react';
 
+import Home from 'components/screen/Home';
+import { ModalStack } from 'components/base/navigator/Stack';
+import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeStack, ModalStack } from './Stack';
 
 export const Stack = createStackNavigator();
-export const navOptionHandler = { headerShown: false };
+//export const navOptionHandler = { headerShown: false };
+
+function HomeStack({ navigation }) {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ScheduleToday"
+        navigation={navigation}
+        component={SchedullScreenDetail}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function HomeNav() {
   return (

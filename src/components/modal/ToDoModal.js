@@ -8,13 +8,14 @@ import {
 } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
+
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
-import { dbService } from 'utils/firebase';
 
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import checkFirstSubmit from 'utils/asyncStorage';
 import { addFirstGeofence } from 'utils/BgGeofence';
+import { dbService } from 'utils/firebase';
 import { UID } from 'constant/const';
 
 const styles = StyleSheet.create({
