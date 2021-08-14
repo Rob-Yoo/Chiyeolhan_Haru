@@ -1,7 +1,9 @@
 import React from 'react';
 import Map from 'components/screen/Map';
 import ToDoModal from 'components/modal/ToDoModal';
+import { createStackNavigator } from '@react-navigation/stack';
 
+const Stack = createStackNavigator();
 export function ModalStack({ navigation }) {
   return (
     <Stack.Navigator>
