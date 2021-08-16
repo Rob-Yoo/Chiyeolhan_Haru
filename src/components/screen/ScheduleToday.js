@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { dbToAsyncStorage } from "utils/AsyncStorage";
+import { dbService } from "utils/firebase";
 import AddToDoIcon from "#assets/icons/icon-tasklist-add-button.js";
+import { UID } from "constant/const";
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,
@@ -10,7 +14,15 @@ const styles = StyleSheet.create({
     right: 30,
   },
 });
-export default function ScheduleToday({ navigation }) {
+const ScheduleToday = ({ navigation }) => {
+  // useEffect(() => {
+  //   const date = new Date();
+  //   const today =
+  //     (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
+  //     (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+  //   const todosRef = dbService.collection(`${UID}`);
+  //   dbToAsyncStorage(todosRef, today);
+  // });
   const openToDoModal = () => navigation.navigate("ModalStack");
   return (
     <>
@@ -26,4 +38,6 @@ export default function ScheduleToday({ navigation }) {
       </View>
     </>
   );
-}
+};
+
+export default ScheduleToday;
