@@ -8,13 +8,10 @@ import {
 } from 'react-native';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
-
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 
 import IconModalQuestion from '#assets/icons/icon-modal-question';
-import checkFirstSubmit from 'utils/asyncStorage';
-import { addFirstGeofence } from 'utils/BgGeofence';
 import { dbService } from 'utils/firebase';
 import { UID } from 'constant/const';
 
@@ -107,13 +104,6 @@ function ToDoModal({ createToDo, navigation, route }) {
   const toDoSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
     const { latitude, location, longitude, address } = locationData;
-    const isFirstSubmit = await checkFirstSubmit();
-    if (isFirstSubmit) {
-      console.log(
-        ' [App()] : This is the first Submit..!' + isFirstSubmit.toString(),
-      );
-      addFirstGeofence(latitude, longitude);
-    } // 최초로 일정을 등록할 때 지오펜스 추가하고 onGeofence를 등록하는 부분
     const date = new Date();
     const today =
       (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
