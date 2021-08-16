@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
 import AddToDoIcon from '#assets/icons/icon-tasklist-add-button.js';
 
 const styles = StyleSheet.create({
