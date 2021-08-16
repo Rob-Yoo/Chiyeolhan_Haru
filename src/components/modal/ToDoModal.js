@@ -1,83 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Keyboard,
   Modal,
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
-} from "react-native";
-import { TouchableOpacity, View, Text } from "react-native";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
-import { add, create } from "redux/store";
-import { dbService } from "utils/firebase";
-import styled from "styled-components/native";
+} from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
+import { useForm } from 'react-hook-form';
+import { connect } from 'react-redux';
+import { add, create } from 'redux/store';
 
-import IconModalQuestion from "#assets/icons/icon-modal-question";
-import { UID } from "constant/const";
-import { checkFirstSubmit, dbToAsyncStorage } from "utils/AsyncStorage";
-import { addGeofence } from "utils/BgGeofence";
+import IconModalQuestion from '#assets/icons/icon-modal-question';
+import { UID } from 'constant/const';
+import { checkFirstSubmit, dbToAsyncStorage } from 'utils/AsyncStorage';
+import { addGeofence } from 'utils/BgGeofence';
 
-const TodoModal = styled.View`
-  flex: 1;
-  justify-content: center;
-`;
 const styles = StyleSheet.create({
+  toDoModalContainer: { flex: 1, justifyContent: 'center' },
   modalTopContainer: {
-    alignItems: "center",
-    position: "absolute",
-    backgroundColor: "#54BCB6",
-    width: "100%",
+    alignItems: 'center',
+    position: 'absolute',
+    backgroundColor: '#54BCB6',
+    width: '100%',
     height: 350,
     borderRadius: 50,
     padding: 40,
   },
   modalTextView: {
     flex: 1,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   modalTopText: {
-    fontFamily: "NotoSansKR-Bold",
-    color: "#FFFFFF",
+    fontFamily: 'NotoSansKR-Bold',
+    color: '#FFFFFF',
   },
   modalLocationText: {
-    fontFamily: "NotoSansKR-Regular",
-    color: "#FFFFFF",
+    fontFamily: 'NotoSansKR-Regular',
+    color: '#FFFFFF',
     fontSize: 20,
   },
-  modalinputcontainer: {
+  modalInputContainer: {
     flex: 1,
-    backgroundColor: "#ECF5F471",
-    alignItems: "center",
+    backgroundColor: '#ECF5F471',
+    alignItems: 'center',
     marginTop: 150,
     paddingTop: 400,
     borderRadius: 50,
   },
   modalInput1: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     marginRight: 20,
     width: 165,
     height: 40,
   },
   modalInput2: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     width: 165,
     height: 40,
     marginBottom: 10,
   },
   modalInputTitle: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
     height: 40,
     marginBottom: 10,
   },
   modalInputTask: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
     height: 40,
@@ -85,21 +80,21 @@ const styles = StyleSheet.create({
   },
 });
 
-function ToDoModal({ createToDo, addToDo, navigation, route }) {
+function ToDoModal({ createToDo, navigation, route }) {
   const location = route.params?.locationData?.location ?? false;
   const locationData = location
     ? route.params?.locationData ?? false
     : undefined;
   const { register, handleSubmit, setValue } = useForm();
   const [taskList, setTaskList] = useState([]);
-  const [targetId, setTargetId] = useState("?");
-  const [task, setTask] = useState("");
+  const [targetId, setTargetId] = useState('?');
+  const [task, setTask] = useState('');
   const goBack = () => {
     navigation.popToTop();
   };
-  const goToMap = () => navigation.navigate("Map");
+  const goToMap = () => navigation.navigate('Map');
   const dismissKeyboard = () => {
-    console.log("dismiss");
+    console.log('dismiss');
     Keyboard.dismiss();
   };
   const titleSubmit = async (data) => {
@@ -132,7 +127,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
       });
     if (isFirstSubmit) {
       console.log(
-        " [App()] : This is the first Submit..!" + isFirstSubmit.toString()
+        ' [App()] : This is the first Submit..!' + isFirstSubmit.toString(),
       );
       addGeofence(latitude, longitude);
       dbToAsyncStorage(todosRef, today);
@@ -158,7 +153,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
     setTaskList((taskList) => [...taskList, todotask]);
     //setTargetId(toDoId);
     //addToDo(todotask, toDoId);
-    setTask("");
+    setTask('');
   };
   //리스트에 추가할때
   // const completed = () => {
@@ -174,21 +169,21 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
   // };
   useEffect(
     () => {}, //getToDoId()
-    []
+    [],
   );
 
   useEffect(() => {
-    register("todostarttime"),
-      register("todofinishtime"),
-      register("todotitle"),
-      register("todotask");
-    register("todoid");
+    register('todostarttime'),
+      register('todofinishtime'),
+      register('todotitle'),
+      register('todotask');
+    register('todoid');
   }, [register]);
 
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={dismissKeyboard}>
-      <TodoModal>
-        <View style={styles.modalinputcontainer}>
+      <View style={styles.toDoModalContainer}>
+        <View style={styles.modalInputContainer}>
           <View style={styles.modalTopContainer}>
             <View style={styles.modalTextView}>
               <Text style={styles.modalTopText} onPress={goBack}>
@@ -208,7 +203,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
               style={{
                 width: 200,
                 height: 200,
-                backgroundColor: "rgba(0,0,0,0.3)",
+                backgroundColor: 'rgba(0,0,0,0.3)',
                 borderRadius: 100,
                 paddingHorizontal: 65,
                 paddingVertical: 40,
@@ -219,45 +214,45 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
                 size={50}
                 name="icon-modal-question"
                 size={110}
-                color={"#FFFFFF"}
+                color={'#FFFFFF'}
                 onPress={goToMap}
               />
             </View>
             <Text style={styles.modalLocationText}>
-              {location ? location : "물음표를 눌러주세요"}
+              {location ? location : '물음표를 눌러주세요'}
             </Text>
           </View>
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'center',
             }}
           >
             <TextInput
               style={styles.modalInput1}
               placeholder="시작시간:00:00"
-              onChangeText={(text) => setValue("todostarttime", text)}
+              onChangeText={(text) => setValue('todostarttime', text)}
             ></TextInput>
             <TextInput
               style={styles.modalInput2}
               placeholder="마칠시간:00:00"
-              onChangeText={(text) => setValue("todofinishtime", text)}
+              onChangeText={(text) => setValue('todofinishtime', text)}
             ></TextInput>
           </View>
           <TextInput
             placeholder="제목을 입력해 주세요"
             style={styles.modalInputTitle}
-            onChangeText={(text) => setValue("todotitle", text)}
+            onChangeText={(text) => setValue('todotitle', text)}
           ></TextInput>
-          <TouchableOpacity onPress={handleSubmit(titleSubmit)}>
+          <TouchableOpacity onPress={handleSubmit(toDoSubmit)}>
             <Text>추가</Text>
           </TouchableOpacity>
           <TextInput
             placeholder="수행리스트"
             onChangeText={(text) => {
               setTask(text);
-              setValue("todotask", text);
+              setValue('todotask', text);
             }}
             style={styles.modalInputTask}
             returnKeyType="done"
@@ -265,7 +260,7 @@ function ToDoModal({ createToDo, addToDo, navigation, route }) {
             onSubmitEditing={handleSubmit(taskSubmit)}
           ></TextInput>
         </View>
-      </TodoModal>
+      </View>
     </TouchableWithoutFeedback>
   );
 }

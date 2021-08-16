@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { dbToAsyncStorage } from "utils/AsyncStorage";
-import { dbService } from "utils/firebase";
-import AddToDoIcon from "#assets/icons/icon-tasklist-add-button.js";
-import { UID } from "constant/const";
+import React, { useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { dbToAsyncStorage } from 'utils/AsyncStorage';
+import { dbService } from 'utils/firebase';
+import AddToDoIcon from '#assets/icons/icon-tasklist-add-button.js';
+import { UID } from 'constant/const';
 
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,
     height: 50,
-    position: "absolute",
+    position: 'absolute',
     bottom: 50,
     right: 30,
   },
@@ -23,7 +23,7 @@ const ScheduleToday = ({ navigation }) => {
   //   const todosRef = dbService.collection(`${UID}`);
   //   dbToAsyncStorage(todosRef, today);
   // });
-  const openToDoModal = () => navigation.navigate("ModalStack");
+  const openToDoModal = () => navigation.navigate('ModalStack');
   return (
     <>
       <View style={{ flex: 1 }}>
@@ -32,7 +32,7 @@ const ScheduleToday = ({ navigation }) => {
           <AddToDoIcon
             name="icon-tasklist-add-button"
             size={30}
-            color={"#54BCB6"}
+            color={'#54BCB6'}
           />
         </TouchableOpacity>
       </View>
