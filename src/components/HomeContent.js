@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components/native';
 import { View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
-import BackgroundGeolocation from 'react-native-background-geolocation';
 import { connect } from 'react-redux';
 import { init } from 'redux/store';
 
@@ -84,10 +84,6 @@ function HomeContent({ initToDo, toDos }) {
   };
 
   useEffect(() => {
-    BackgroundGeolocation.onGeofence((event) => {
-      console.log('Tracking Start');
-      console.log(event.action);
-    });
     getToDos();
   }, []);
 

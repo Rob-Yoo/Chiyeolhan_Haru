@@ -31,18 +31,33 @@ export const initBgGeofence = async () => {
   });
 };
 
-export const addFirstGeofence = (latitude, longitude) => {
+export const addGeofence = (latitude, longitude) => {
   BackgroundGeolocation.addGeofence({
     identifier: `${UID}`,
     radius: 200,
     latitude,
     longitude,
     notifyOnEntry: true,
-    notifyOnExit: false,
+    notifyOnExit: true,
     notifyOnDwell: false,
   })
-    .then((success) => console.log("Success"))
+    .then((success) => console.log("Adding Geofence Success!!"))
     .catch((error) => {
-      console.log("First adding geofence error");
+      console.log("Adding geofence error", error);
+    });
+};
+
+export const geofenceUpdate = (data) => {
+  BackgroundGeolocation.stop()
+    .then((success) => {
+      console.log("stop geolocation success");
+      const lat = JSON.parse(data)[1].latitude;
+      const lng = JSON.parse(data)[1].longitude;
+      addGeofence(lat, lng);
+      BackgroundGeolocation.startGeofences();
+    })
+    .catch((error) => {
+      console.log("stop geofence fail :" + error);
+      return "-1";
     });
 };

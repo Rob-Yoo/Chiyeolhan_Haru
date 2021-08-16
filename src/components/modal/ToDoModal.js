@@ -12,8 +12,9 @@ import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 
 import IconModalQuestion from '#assets/icons/icon-modal-question';
-import { dbService } from 'utils/firebase';
 import { UID } from 'constant/const';
+import { checkFirstSubmit, dbToAsyncStorage } from 'utils/AsyncStorage';
+import { addGeofence } from 'utils/BgGeofence';
 
 const styles = StyleSheet.create({
   toDoModalContainer: { flex: 1, justifyContent: 'center' },
@@ -85,7 +86,6 @@ function ToDoModal({ createToDo, navigation, route }) {
     ? route.params?.locationData ?? false
     : undefined;
   const { register, handleSubmit, setValue } = useForm();
-  const [toDoId, setToDoId] = useState('');
   const [taskList, setTaskList] = useState([]);
   const [targetId, setTargetId] = useState('?');
   const [task, setTask] = useState('');
@@ -97,17 +97,16 @@ function ToDoModal({ createToDo, navigation, route }) {
     console.log('dismiss');
     Keyboard.dismiss();
   };
-  const getToDoId = () => {
-    const id = Date.now();
-    setToDoId(id);
-  };
-  const toDoSubmit = async (data) => {
+  const titleSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
     const { latitude, location, longitude, address } = locationData;
+    const isFirstSubmit = await checkFirstSubmit();
+    const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
     const today =
       (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
       (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+    const toDoId = `${date.getFullYear()}` + `${today}` + `${todostarttime}`;
 
     await dbService
       .collection(`${UID}`)
@@ -126,6 +125,15 @@ function ToDoModal({ createToDo, navigation, route }) {
         isdone: false,
         isfavorite: false,
       });
+    if (isFirstSubmit) {
+      console.log(
+        ' [App()] : This is the first Submit..!' + isFirstSubmit.toString(),
+      );
+      addGeofence(latitude, longitude);
+      dbToAsyncStorage(todosRef, today);
+    } else {
+      dbToAsyncStorage(todosRef, today);
+    }
     const todo = [
       toDoId,
       todostarttime,
@@ -159,7 +167,10 @@ function ToDoModal({ createToDo, navigation, route }) {
   //       todos: [...taskList],
   //     });
   // };
-  useEffect(() => getToDoId(), []);
+  useEffect(
+    () => {}, //getToDoId()
+    [],
+  );
 
   useEffect(() => {
     register('todostarttime'),

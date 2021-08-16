@@ -191,7 +191,7 @@ const Map = ({ navigation }) => {
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, []);
+  }, [isFind]);
   return isFind ? (
     <CurrentMap navigation={navigation} location={location} />
   ) : (
