@@ -159,6 +159,14 @@ const Map = ({ navigation }) => {
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
 
+  useEffect(() => {
+    AppState.addEventListener('change', _handleAppStateChange);
+    getLocation();
+    return () => {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
+  }, [isFind]);
+
   const _handleAppStateChange = (nextAppState) => {
     if (
       appState.current.match(/inactive|background/) &&
@@ -171,27 +179,24 @@ const Map = ({ navigation }) => {
     setStateVisible(appState.current);
   };
   const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setFind(false);
-      return;
-    } else {
-      const locationData = await Location.getCurrentPositionAsync();
-      const curretLocation = {
-        latitude: locationData.coords.latitude,
-        longitude: locationData.coords.longitude,
-      };
-      setLocation(curretLocation);
-      setFind(true);
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setFind(false);
+        return;
+      } else {
+        const locationData = await Location.getCurrentPositionAsync();
+        const curretLocation = {
+          latitude: locationData.coords.latitude,
+          longitude: locationData.coords.longitude,
+        };
+        setLocation(curretLocation);
+        setFind(true);
+      }
+    } catch (e) {
+      console.log('getLocation Error :', e);
     }
   };
-  useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange);
-    getLocation();
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange);
-    };
-  }, [isFind]);
   return isFind ? (
     <CurrentMap navigation={navigation} location={location} />
   ) : (

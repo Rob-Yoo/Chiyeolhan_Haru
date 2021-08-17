@@ -6,7 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE2 } from 'constant/const';
+import { KEY_VALUE } from 'constant/const';
 import { initBgGeofence, geofenceUpdate } from 'utils/BgGeofence';
 
 export default function App() {
@@ -19,10 +19,10 @@ export default function App() {
         await SplashScreen.preventAutoHideAsync();
         await initBgGeofence();
         BackgroundGeolocation.onGeofence(async (event) => {
-          // console.log("Tracking Start");
           console.log(event.action);
           try {
-            const data = await AsyncStorage.getItem(KEY_VALUE2);
+            const item = await AsyncStorage.getItem(KEY_VALUE);
+            const data = JSON.parse(item);
             const time = new Date();
             const hour =
               time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
@@ -31,11 +31,13 @@ export default function App() {
                 ? `0${time.getMinutes()}`
                 : time.getMinutes();
             const timeString = `${hour}:${min}`;
-            if (JSON.parse(data)[0].startTime == timeString) {
-              geofenceUpdate(data);
+            if (data.length != 0) {
+              if (data[0].startTime == timeString) {
+                geofenceUpdate(data);
+              }
             }
           } catch (error) {
-            console.log('[get geofence data] :' + error);
+            console.log('onGeofence Error :', error);
           }
         });
         //Pre-load fonts, make any API calls you need to do here

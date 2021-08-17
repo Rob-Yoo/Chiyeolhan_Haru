@@ -10,11 +10,11 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
+import { dbService } from 'utils/firebase';
 
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import { UID } from 'constant/const';
-import { checkFirstSubmit, dbToAsyncStorage } from 'utils/AsyncStorage';
-import { addGeofence } from 'utils/BgGeofence';
+import { dbToAsyncStorage } from 'utils/AsyncStorage';
 
 const styles = StyleSheet.create({
   toDoModalContainer: { flex: 1, justifyContent: 'center' },
@@ -97,56 +97,53 @@ function ToDoModal({ createToDo, navigation, route }) {
     console.log('dismiss');
     Keyboard.dismiss();
   };
-  const titleSubmit = async (data) => {
+  const toDoSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
     const { latitude, location, longitude, address } = locationData;
-    const isFirstSubmit = await checkFirstSubmit();
+    // const isFirstSubmit = await checkFirstSubmit();
     const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
     const today =
       (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
       (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
     const toDoId = `${date.getFullYear()}` + `${today}` + `${todostarttime}`;
+    try {
+      await dbService
+        .collection(`${UID}`)
+        .doc(`${toDoId}`)
+        .set({
+          id: toDoId,
+          title: todotitle,
+          starttime: todostarttime,
+          finishtime: todofinishtime,
+          location,
+          address,
+          longitude,
+          latitude,
+          date: today,
+          todos: [...taskList],
+          isdone: false,
+          isfavorite: false,
+        });
 
-    await dbService
-      .collection(`${UID}`)
-      .doc(`${toDoId}`)
-      .set({
-        id: toDoId,
-        title: todotitle,
-        starttime: todostarttime,
-        finishtime: todofinishtime,
-        location,
+      dbToAsyncStorage(todosRef, today);
+
+      const todo = [
+        toDoId,
+        todostarttime,
+        todofinishtime,
+        todotitle,
+        today,
+        taskList,
         address,
         longitude,
         latitude,
-        date: today,
-        todos: [...taskList],
-        isdone: false,
-        isfavorite: false,
-      });
-    if (isFirstSubmit) {
-      console.log(
-        ' [App()] : This is the first Submit..!' + isFirstSubmit.toString(),
-      );
-      addGeofence(latitude, longitude);
-      dbToAsyncStorage(todosRef, today);
-    } else {
-      dbToAsyncStorage(todosRef, today);
+        location,
+      ];
+      createToDo(todo);
+    } catch (e) {
+      console.log('toDoSumbit Error :', e);
     }
-    const todo = [
-      toDoId,
-      todostarttime,
-      todofinishtime,
-      todotitle,
-      today,
-      taskList,
-      address,
-      longitude,
-      latitude,
-      location,
-    ];
-    createToDo(todo);
   };
   const taskSubmit = (data) => {
     const { todotask } = data;

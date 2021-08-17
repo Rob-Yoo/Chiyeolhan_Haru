@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components/native';
 import { View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
@@ -73,16 +72,6 @@ function HomeContent({ initToDo, toDos }) {
   let rowObj = {};
   //Object.keys(fetchedToDo).length === 0
 
-  const getToDos = async () => {
-    //db연결
-    const row = await dbService.collection(`${UID}`).get();
-    row.forEach((data) => (rowObj[data.id] = data.data()));
-    if (Object.keys(rowObj).length === 0) {
-      setLoading(false);
-    }
-    setFetchObj(rowObj);
-  };
-
   useEffect(() => {
     getToDos();
   }, []);
@@ -102,6 +91,20 @@ function HomeContent({ initToDo, toDos }) {
       setLoading(false);
     }
   }, [toDos]);
+
+  const getToDos = async () => {
+    try {
+      const row = await dbService.collection(`${UID}`).get();
+      row.forEach((data) => (rowObj[data.id] = data.data()));
+      if (Object.keys(rowObj).length === 0) {
+        setLoading(false);
+      }
+      setFetchObj(rowObj);
+    } catch (e) {
+      console.log('getToDos Error :', e);
+    }
+  };
+
   for (key in toDos) todoArr.push(toDos[key]);
 
   return <>{isLoading ? <Text>loading</Text> : PaintHome(todoArr)}</>;
