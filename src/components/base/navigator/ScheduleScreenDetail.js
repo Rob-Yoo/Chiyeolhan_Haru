@@ -2,6 +2,7 @@ import React from 'react';
 import ScheduleToday from 'components/screen/ScheduleToday';
 import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Stack } from './HomeNav';
 
 const Tab = createMaterialTopTabNavigator();
 

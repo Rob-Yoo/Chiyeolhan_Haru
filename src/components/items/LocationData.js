@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { WrapperComponent } from '../modal/WrapperComponent';
 
 const styles = StyleSheet.create({
   locationDataSection: {
@@ -57,9 +58,14 @@ const styles = StyleSheet.create({
 });
 
 export const LocationData = (props) => {
-  const { locationData, navigation } = props;
+  const { locationData, navigation, routeName } = props;
+
   const searchedLocation = () => {
-    navigation.navigate('TodoModal', { locationData });
+    navigation.navigate(`${routeName}`, { locationData });
+    // navigation.navigate('WrapperComponent', { locationData });
+
+    //여기서 wrappercomponent로 보내면 이상한 컴포넌트가 뜸
+    //그렇다면 오늘? 내일? 로보냄?
   };
   return (
     <View style={styles.locationDataSection}>

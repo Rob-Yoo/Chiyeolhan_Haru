@@ -19,7 +19,7 @@ import { PLACES_PARAMS } from 'constant/const';
 import { GOOGLE_API_URL } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 
-const CurrentMap = ({ location, navigation }) => {
+const CurrentMap = ({ location, navigation, routeName }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -146,19 +146,22 @@ const CurrentMap = ({ location, navigation }) => {
           }}
         />
         {isRenderData ? (
-          <LocationData locationData={locationData} navigation={navigation} />
+          <LocationData
+            locationData={locationData}
+            navigation={navigation}
+            routeName={routeName}
+          />
         ) : null}
       </MapView>
     </View>
   );
 };
 
-const Map = ({ navigation }) => {
+const Map = ({ navigation, route }) => {
   const appState = useRef(AppState.currentState);
   const [stateVisible, setStateVisible] = useState(appState.current);
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
-
   const _handleAppStateChange = (nextAppState) => {
     if (
       appState.current.match(/inactive|background/) &&
@@ -193,7 +196,11 @@ const Map = ({ navigation }) => {
     };
   }, []);
   return isFind ? (
-    <CurrentMap navigation={navigation} location={location} />
+    <CurrentMap
+      navigation={navigation}
+      location={location}
+      routeName={route.params.routeName}
+    />
   ) : (
     <Text>Loading...</Text>
   );
