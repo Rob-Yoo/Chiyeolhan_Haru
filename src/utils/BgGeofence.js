@@ -1,5 +1,7 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import { UID } from 'constant/const';
+import AsyncStorage from '@react-native-community/async-storage';
+import { dbService } from 'utils/firebase';
+import { UID, KEY_VALUE } from 'constant/const';
 
 export const initBgGeofence = async () => {
   await BackgroundGeolocation.ready({
@@ -43,20 +45,40 @@ export const addGeofence = (latitude, longitude) => {
   })
     .then((success) => console.log('Adding Geofence Success!!'))
     .catch((error) => {
-      console.log('Adding geofence error', error);
+      console.log('addGeofence Error :', error);
     });
+};
+
+export const addGeofenceTrigger = async () => {
+  try {
+    const item = await AsyncStorage.getItem(KEY_VALUE);
+    const data = JSON.parse(item);
+    if (data.length != 0) {
+      const lat = data[0].latitude;
+      const lng = data[0].longitude;
+      addGeofence(lat, lng);
+    }
+  } catch (error) {
+    console.log('addGeofenceTrigger Error :', error);
+  }
 };
 
 export const geofenceUpdate = (data) => {
   BackgroundGeolocation.stop()
-    .then((success) => {
+    .then(async (success) => {
       console.log('stop geolocation success');
-      const lat = JSON.parse(data)[1].latitude;
-      const lng = JSON.parse(data)[1].longitude;
-      addGeofence(lat, lng);
-      BackgroundGeolocation.startGeofences();
+      try {
+        const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+        await toDoRef.update({ isdone: true });
+        const newData = data.slice(1);
+        AsyncStorage.setItem(KEY_VALUE, JSON.stringify(newData));
+        addGeofenceTrigger();
+        BackgroundGeolocation.startGeofences();
+      } catch (e) {
+        console.log('geofenceUpdate Error :', e);
+      }
     })
     .catch((error) => {
-      console.log('stop geofence fail :' + error);
+      console.log('geofenceUpdate Error :' + error);
     });
 };
