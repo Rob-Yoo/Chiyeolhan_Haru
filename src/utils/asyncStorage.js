@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE } from 'constant/const';
 import { addGeofenceTrigger } from 'utils/BgGeofence';
+import { TODAY } from 'constant/const';
 
 // const setFirstSubmit = () => {
 //   AsyncStorage.setItem(KEY_VALUE1, 'true');
@@ -24,11 +25,11 @@ const setGeofenceData = (array) => {
 //   }
 // };
 
-export const dbToAsyncStorage = async (todosRef, today) => {
+export const dbToAsyncStorage = async (todosRef) => {
   try {
     const geofenceDataArray = [];
     const sortedByStartTime = await todosRef
-      .where('date', '==', `${today}`)
+      .where('date', '==', `${TODAY}`)
       .where('isdone', '==', false)
       .get();
     sortedByStartTime.forEach((result) => {

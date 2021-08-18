@@ -8,6 +8,8 @@ import { init } from 'redux/store';
 import { UID } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
+import { TODAY } from 'constant/const';
+import { supported32BitAbis } from 'react-native-device-info';
 
 const styles = StyleSheet.create({
   homeContainer: {
@@ -94,7 +96,10 @@ function HomeContent({ initToDo, toDos }) {
 
   const getToDos = async () => {
     try {
-      const row = await dbService.collection(`${UID}`).get();
+      const row = await dbService
+        .collection(`${UID}`)
+        .where('date', '==', `${TODAY}`)
+        .get();
       row.forEach((data) => (rowObj[data.id] = data.data()));
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);
@@ -106,6 +111,15 @@ function HomeContent({ initToDo, toDos }) {
   };
 
   for (key in toDos) todoArr.push(toDos[key]);
+  todoArr.sort((a, b) => {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  });
 
   return <>{isLoading ? <Text>loading</Text> : PaintHome(todoArr)}</>;
 }

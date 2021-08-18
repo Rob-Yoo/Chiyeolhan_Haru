@@ -15,6 +15,7 @@ import { dbService } from 'utils/firebase';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import { UID } from 'constant/const';
 import { dbToAsyncStorage } from 'utils/AsyncStorage';
+import { TODAY } from 'constant/const';
 
 const styles = StyleSheet.create({
   toDoModalContainer: { flex: 1, justifyContent: 'center' },
@@ -103,10 +104,7 @@ function ToDoModal({ createToDo, navigation, route }) {
     // const isFirstSubmit = await checkFirstSubmit();
     const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
-    const today =
-      (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
-      (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
-    const toDoId = `${date.getFullYear()}` + `${today}` + `${todostarttime}`;
+    const toDoId = `${date.getFullYear()}` + `${TODAY}` + `${todostarttime}`;
     try {
       await dbService
         .collection(`${UID}`)
@@ -120,20 +118,20 @@ function ToDoModal({ createToDo, navigation, route }) {
           address,
           longitude,
           latitude,
-          date: today,
+          date: TODAY,
           todos: [...taskList],
           isdone: false,
           isfavorite: false,
         });
 
-      dbToAsyncStorage(todosRef, today);
+      dbToAsyncStorage(todosRef);
 
       const todo = [
         toDoId,
         todostarttime,
         todofinishtime,
         todotitle,
-        today,
+        TODAY,
         taskList,
         address,
         longitude,
