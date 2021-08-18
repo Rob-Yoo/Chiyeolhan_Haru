@@ -58,14 +58,11 @@ const styles = StyleSheet.create({
 });
 
 export const LocationData = (props) => {
-  const { locationData, navigation, routeName } = props;
+  const { locationData, navigation, routeName, modalHandler } = props;
 
   const searchedLocation = () => {
     navigation.navigate(`${routeName}`, { locationData });
-    // navigation.navigate('WrapperComponent', { locationData });
-
-    //여기서 wrappercomponent로 보내면 이상한 컴포넌트가 뜸
-    //그렇다면 오늘? 내일? 로보냄?
+    modalHandler();
   };
   return (
     <View style={styles.locationDataSection}>

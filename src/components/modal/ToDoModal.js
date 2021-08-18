@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   Keyboard,
-  Modal,
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import { TouchableOpacity, View, Text } from 'react-native';
+import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
@@ -14,23 +15,42 @@ import { add, create } from 'redux/store';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import { dbService } from 'utils/firebase';
 import { UID } from 'constant/const';
+import Map from '../screen/Map';
 
 const styles = StyleSheet.create({
-  toDoModalContainer: { flex: 1, justifyContent: 'center' },
+  container: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  background: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  toDoModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    margin: 0,
+  },
   modalTopContainer: {
     alignItems: 'center',
-    position: 'absolute',
+    borderRadius: 10,
+    marginTop: '50%',
     backgroundColor: '#54BCB6',
-    width: '100%',
-    height: 350,
+    height: 300,
     borderRadius: 50,
-    padding: 40,
+    marginTop: -10,
   },
   modalTextView: {
     flex: 1,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: 50,
+    marginTop: 20,
   },
   modalTopText: {
     fontFamily: 'NotoSansKR-Bold',
@@ -42,11 +62,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   modalInputContainer: {
-    flex: 1,
-    backgroundColor: '#ECF5F471',
-    alignItems: 'center',
+    backgroundColor: '#e2ece9',
     marginTop: 150,
-    paddingTop: 400,
+    height: 650,
     borderRadius: 50,
   },
   modalInput1: {
@@ -79,8 +97,19 @@ const styles = StyleSheet.create({
   },
 });
 
-function ToDoModal({ createToDo, navigation, route }) {
-  const location = route.params?.locationData?.location ?? false;
+export function ToDoModal({
+  createToDo,
+  navigation,
+  route,
+  routeName,
+  modalHandler,
+  isModalVisible,
+}) {
+  const [isMapVisible, setMapVisible] = useState(false);
+  const toggleMap = () => {
+    setMapVisible(!isMapVisible);
+  };
+  const location = false;
   const locationData = location
     ? route.params?.locationData ?? false
     : undefined;
@@ -92,10 +121,11 @@ function ToDoModal({ createToDo, navigation, route }) {
   const goBack = () => {
     navigation.popToTop();
   };
-  const goToMap = () => navigation.navigate('Map');
-  const dismissKeyboard = () => {
-    console.log('dismiss');
-    Keyboard.dismiss();
+  const goToMap = () => {
+    navigation.navigate('ModalStack', {
+      screen: 'Map',
+      params: { routeName },
+    });
   };
   const getToDoId = () => {
     const id = Date.now();
@@ -170,20 +200,15 @@ function ToDoModal({ createToDo, navigation, route }) {
   }, [register]);
 
   return (
-    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={dismissKeyboard}>
-      <View style={styles.toDoModalContainer}>
+    <>
+      <Modal isVisible={isModalVisible} style={{ margin: 0 }}>
         <View style={styles.modalInputContainer}>
           <View style={styles.modalTopContainer}>
             <View style={styles.modalTextView}>
               <Text style={styles.modalTopText} onPress={goBack}>
                 취소
               </Text>
-              <Text
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                style={styles.modalTopText}
-              >
+              <Text onPress={modalHandler} style={styles.modalTopText}>
                 완료
               </Text>
             </View>
@@ -249,8 +274,8 @@ function ToDoModal({ createToDo, navigation, route }) {
             onSubmitEditing={handleSubmit(taskSubmit)}
           ></TextInput>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 }
 function mapStateToProps(state) {

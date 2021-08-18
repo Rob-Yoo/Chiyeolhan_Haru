@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const styles = StyleSheet.create({
   toDoModalContainer: { flex: 1, justifyContent: 'center', margin: 0 },
@@ -105,6 +106,10 @@ export const WrapperComponent = ({
           <Text style={styles.modalLocationText}>
             {location ? location : '물음표를 눌러주세요'}
           </Text>
+        </View>
+        <View>
+          <Text>시간</Text>
+          <DateTimePicker value={new Date()} mode="time" />
         </View>
       </View>
     </View>

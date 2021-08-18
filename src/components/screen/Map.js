@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import Modal from 'react-native-modal';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconFavoriteBefore from '#assets/icons/icon-favorite';
@@ -159,6 +160,7 @@ const CurrentMap = ({ location, navigation, routeName }) => {
 
 const Map = ({ navigation, route }) => {
   const appState = useRef(AppState.currentState);
+
   const [stateVisible, setStateVisible] = useState(appState.current);
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});

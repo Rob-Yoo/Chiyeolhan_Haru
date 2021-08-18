@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-tasklist-add-button.js';
 import { WrapperComponent } from 'components/modal/WrapperComponent';
-
+import ToDoModal from '../modal/ToDoModal';
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,
@@ -20,6 +20,8 @@ export default function ScheduleToday({ navigation, route }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+
+    console.log(isModalVisible);
   };
   return (
     <>
@@ -34,12 +36,12 @@ export default function ScheduleToday({ navigation, route }) {
         />
       </TouchableOpacity>
       {isModalVisible ? (
-        <WrapperComponent
+        <ToDoModal
           navigation={navigation}
-          navigationHandler={() => goToMap()}
           modalHandler={() => toggleModal()}
           routeName={route.name}
           locationData={locationData}
+          isModalVisible={isModalVisible}
         />
       ) : (
         <></>
