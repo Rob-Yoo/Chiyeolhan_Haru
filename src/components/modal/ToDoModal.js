@@ -11,11 +11,12 @@ import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
+import { dbService } from 'utils/firebase';
 
 import IconModalQuestion from '#assets/icons/icon-modal-question';
-import { dbService } from 'utils/firebase';
 import { UID } from 'constant/const';
-import Map from '../screen/Map';
+import { dbToAsyncStorage } from 'utils/AsyncStorage';
+import { TODAY } from 'constant/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -114,7 +115,6 @@ export function ToDoModal({
     ? route.params?.locationData ?? false
     : undefined;
   const { register, handleSubmit, setValue } = useForm();
-  const [toDoId, setToDoId] = useState('');
   const [taskList, setTaskList] = useState([]);
   const [targetId, setTargetId] = useState('?');
   const [task, setTask] = useState('');
@@ -127,48 +127,50 @@ export function ToDoModal({
       params: { routeName },
     });
   };
-  const getToDoId = () => {
-    const id = Date.now();
-    setToDoId(id);
-  };
   const toDoSubmit = async (data) => {
     const { todostarttime, todofinishtime, todotitle } = data;
     const { latitude, location, longitude, address } = locationData;
+    // const isFirstSubmit = await checkFirstSubmit();
+    const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
-    const today =
-      (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
-      (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+    const toDoId = `${date.getFullYear()}` + `${TODAY}` + `${todostarttime}`;
+    try {
+      await dbService
+        .collection(`${UID}`)
+        .doc(`${toDoId}`)
+        .set({
+          id: toDoId,
+          title: todotitle,
+          starttime: todostarttime,
+          finishtime: todofinishtime,
+          location,
+          address,
+          longitude,
+          latitude,
+          date: TODAY,
+          todos: [...taskList],
+          isdone: false,
+          isfavorite: false,
+        });
 
-    await dbService
-      .collection(`${UID}`)
-      .doc(`${toDoId}`)
-      .set({
-        id: toDoId,
-        title: todotitle,
-        starttime: todostarttime,
-        finishtime: todofinishtime,
-        location,
+      dbToAsyncStorage(todosRef);
+
+      const todo = [
+        toDoId,
+        todostarttime,
+        todofinishtime,
+        todotitle,
+        TODAY,
+        taskList,
         address,
         longitude,
         latitude,
-        date: today,
-        todos: [...taskList],
-        isdone: false,
-        isfavorite: false,
-      });
-    const todo = [
-      toDoId,
-      todostarttime,
-      todofinishtime,
-      todotitle,
-      today,
-      taskList,
-      address,
-      longitude,
-      latitude,
-      location,
-    ];
-    createToDo(todo);
+        location,
+      ];
+      createToDo(todo);
+    } catch (e) {
+      console.log('toDoSumbit Error :', e);
+    }
   };
   const taskSubmit = (data) => {
     const { todotask } = data;
@@ -189,7 +191,10 @@ export function ToDoModal({
   //       todos: [...taskList],
   //     });
   // };
-  useEffect(() => getToDoId(), []);
+  useEffect(
+    () => {}, //getToDoId()
+    [],
+  );
 
   useEffect(() => {
     register('todostarttime'),

@@ -1,21 +1,49 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE } from 'constant/const';
+import { addGeofenceTrigger } from 'utils/BgGeofence';
+import { TODAY } from 'constant/const';
 
-// 키값에 true로 저장한다.
-function setFirstSubmit() {
-  AsyncStorage.setItem(KEY_VALUE, 'true');
-}
+// const setFirstSubmit = () => {
+//   AsyncStorage.setItem(KEY_VALUE1, 'true');
+// };
 
-export const checkFirstSubmit = async () => {
+const setGeofenceData = (array) => {
+  AsyncStorage.setItem(KEY_VALUE, array);
+};
+
+// export const checkFirstSubmit = async () => {
+//   try {
+//     const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE1);
+//     if (isFirstLaunched === null) {
+//       setFirstSubmit();
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.log(' [add first geofence] :' + error);
+//     return false;
+//   }
+// };
+
+export const dbToAsyncStorage = async (todosRef) => {
   try {
-    const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE);
-    if (isFirstLaunched === null) {
-      setFirstSubmit();
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.log(' [chk first geofence] :' + error);
-    return false;
+    const geofenceDataArray = [];
+    const sortedByStartTime = await todosRef
+      .where('date', '==', `${TODAY}`)
+      .where('isdone', '==', false)
+      .get();
+    sortedByStartTime.forEach((result) => {
+      geofenceDataArray.push({
+        id: result.data().id,
+        startTime: result.data().starttime,
+        finishTime: result.data().finishtime,
+        latitude: result.data().latitude,
+        longitude: result.data().longitude,
+      });
+    });
+    setGeofenceData(JSON.stringify(geofenceDataArray));
+    addGeofenceTrigger();
+  } catch (e) {
+    console.log('dbToAsyncStorage Error :', e);
   }
 };

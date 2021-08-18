@@ -7,6 +7,7 @@ const toDos = createSlice({
     init: (state, action) => {
       //state = { ...action.payload };
       Object.assign(state, action.payload);
+      console.log(state);
     },
     create: (state, action) => {
       const [
