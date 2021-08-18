@@ -14,9 +14,7 @@ export function ModalStack({ navigation }) {
         name="SchedullScreenDetail"
         component={SchedullScreenDetail}
         navigation={navigation}
-        option={{ headerShown: false }}
       />
-
       <Stack.Screen
         name="TodoModal"
         component={ToDoModal}
