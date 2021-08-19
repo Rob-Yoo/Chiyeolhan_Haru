@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import Modal from 'react-native-modal';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconFavoriteBefore from '#assets/icons/icon-favorite';
@@ -20,7 +19,7 @@ import { PLACES_PARAMS } from 'constant/const';
 import { GOOGLE_API_URL } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 
-const CurrentMap = ({ location, navigation, routeName }) => {
+const CurrentMap = ({ location, Modalhandler, locationDataHandler }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -119,7 +118,7 @@ const CurrentMap = ({ location, navigation, routeName }) => {
               name="icon-go-back-button"
               size={20}
               style={{ width: 30, height: 30 }}
-              onPress={() => navigation.goBack()}
+              onPress={Modalhandler}
             />
 
             <TextInput
@@ -149,8 +148,8 @@ const CurrentMap = ({ location, navigation, routeName }) => {
         {isRenderData ? (
           <LocationData
             locationData={locationData}
-            navigation={navigation}
-            routeName={routeName}
+            Modalhandler={Modalhandler}
+            locationDataHandler={locationDataHandler}
           />
         ) : null}
       </MapView>
@@ -158,7 +157,7 @@ const CurrentMap = ({ location, navigation, routeName }) => {
   );
 };
 
-const Map = ({ navigation, route }) => {
+const Map = ({ Modalhandler, locationDataHandler }) => {
   const appState = useRef(AppState.currentState);
 
   const [stateVisible, setStateVisible] = useState(appState.current);
@@ -205,9 +204,9 @@ const Map = ({ navigation, route }) => {
   };
   return isFind ? (
     <CurrentMap
-      navigation={navigation}
       location={location}
-      routeName={route.params.routeName}
+      Modalhandler={Modalhandler}
+      locationDataHandler={locationDataHandler}
     />
   ) : (
     <Text>Loading...</Text>

@@ -9,7 +9,6 @@ import { UID } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
 import { TODAY } from 'constant/const';
-import { supported32BitAbis } from 'react-native-device-info';
 
 const styles = StyleSheet.create({
   homeContainer: {
@@ -25,15 +24,15 @@ const PaintHome = (todoArr) => {
     todoArr = [
       {
         date: '',
-        finishtime: '',
+        finishTime: '',
         id: 0,
         latitude: '',
         location: '',
         address: '',
         longitude: '',
-        starttime: '',
+        startTime: '',
         title: '',
-        todos: [' '],
+        toDos: [' '],
       },
     ];
   }
@@ -52,8 +51,8 @@ const PaintHome = (todoArr) => {
               <Card
                 key={item.id}
                 text={item.title}
-                starttime={item.starttime}
-                finishtime={item.finishtime}
+                startTime={item.startTime}
+                finishTime={item.finishTime}
                 location={item.location}
                 toDos={todoArr}
               />

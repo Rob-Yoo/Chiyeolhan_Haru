@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Keyboard,
   StyleSheet,
   TextInput,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
+  View,
+  Text,
 } from 'react-native';
-
-import { TouchableOpacity, View, Text } from 'react-native';
 import Modal from 'react-native-modal';
+
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-
-import IconModalQuestion from '#assets/icons/icon-modal-question';
-import { UID } from 'constant/const';
 import { dbToAsyncStorage } from 'utils/AsyncStorage';
+
+import { UID } from 'constant/const';
 import { TODAY } from 'constant/const';
+import IconModalQuestion from '#assets/icons/icon-modal-question';
+import Map from 'components/screen/Map';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,12 +42,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: '50%',
     backgroundColor: '#54BCB6',
-    height: 300,
+    height: 320,
     borderRadius: 50,
     marginTop: -10,
   },
   modalTextView: {
-    flex: 1,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -56,16 +56,19 @@ const styles = StyleSheet.create({
   modalTopText: {
     fontFamily: 'NotoSansKR-Bold',
     color: '#FFFFFF',
+    fontSize: 20,
   },
   modalLocationText: {
     fontFamily: 'NotoSansKR-Regular',
     color: '#FFFFFF',
     fontSize: 20,
+    marginBottom: 10,
   },
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-    marginTop: 150,
-    height: 650,
+
+    marginTop: 200,
+    height: 750,
     borderRadius: 50,
   },
   modalInput1: {
@@ -98,68 +101,61 @@ const styles = StyleSheet.create({
   },
 });
 
-export function ToDoModal({
-  createToDo,
-  navigation,
-  route,
-  routeName,
-  modalHandler,
-  isModalVisible,
-}) {
-  const [isMapVisible, setMapVisible] = useState(false);
-  const toggleMap = () => {
-    setMapVisible(!isMapVisible);
-  };
-  const location = false;
-  const locationData = location
-    ? route.params?.locationData ?? false
-    : undefined;
-  const { register, handleSubmit, setValue } = useForm();
+export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
+  const [locationName, setLocationName] = useState(false);
+  const [locationData, setLocationData] = useState({});
+  const [inputIsVisible, setInputIsVisible] = useState(false);
+  const [mapIsVisible, setMapIsVisible] = useState(false);
   const [taskList, setTaskList] = useState([]);
-  const [targetId, setTargetId] = useState('?');
   const [task, setTask] = useState('');
-  const goBack = () => {
-    navigation.popToTop();
+  const { register, handleSubmit, setValue } = useForm();
+  const toggleIsVisible = (isVisible, setVisible) => {
+    setVisible(!isVisible);
   };
-  const goToMap = () => {
-    navigation.navigate('ModalStack', {
-      screen: 'Map',
-      params: { routeName },
-    });
+  const getLocationData = (value) => {
+    setLocationData(value);
+    setLocationName(value.location);
   };
-  const toDoSubmit = async (data) => {
-    const { todostarttime, todofinishtime, todotitle } = data;
+  // const goBack = () => {
+  //   navigation.popToTop();
+  // };
+  // const goToMap = () => {
+  //   navigation.navigate('Map', {
+  //     screen: 'Map',
+  //     params: { routeName },
+  //   });
+  // };
+  const toDoSubmit = async ({ todoStartTime, todoFinishTime, todoTitle }) => {
     const { latitude, location, longitude, address } = locationData;
-    // const isFirstSubmit = await checkFirstSubmit();
     const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
-    const toDoId = `${date.getFullYear()}` + `${TODAY}` + `${todostarttime}`;
+    const todoId = `${date.getFullYear()}` + `${TODAY}` + `${todoStartTime}`;
     try {
       await dbService
         .collection(`${UID}`)
-        .doc(`${toDoId}`)
+        .doc(`${todoId}`)
         .set({
-          id: toDoId,
-          title: todotitle,
-          starttime: todostarttime,
-          finishtime: todofinishtime,
+          id: todoId,
+          title: todoTitle,
+          startTime: todoStartTime,
+          finishTime: todoFinishTime,
           location,
           address,
           longitude,
           latitude,
           date: TODAY,
-          todos: [...taskList],
-          isdone: false,
-          isfavorite: false,
+          toDos: [...taskList],
+          isDone: false,
+          isFavorite: false,
         });
 
       dbToAsyncStorage(todosRef);
 
       const todo = [
-        toDoId,
-        todostarttime,
-        todofinishtime,
-        todotitle,
+        todoId,
+        todoStartTime,
+        todoFinishTime,
+        todoTitle,
         TODAY,
         taskList,
         address,
@@ -172,12 +168,14 @@ export function ToDoModal({
       console.log('toDoSumbit Error :', e);
     }
   };
+
   const taskSubmit = (data) => {
     const { todotask } = data;
     setTaskList((taskList) => [...taskList, todotask]);
     //setTargetId(toDoId);
     //addToDo(todotask, toDoId);
     setTask('');
+    toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
   //리스트에 추가할때
   // const completed = () => {
@@ -191,26 +189,27 @@ export function ToDoModal({
   //       todos: [...taskList],
   //     });
   // };
-  useEffect(
-    () => {}, //getToDoId()
-    [],
-  );
 
   useEffect(() => {
-    register('todostarttime'),
-      register('todofinishtime'),
-      register('todotitle'),
-      register('todotask');
-    register('todoid');
+    register('todoStartTime'),
+      register('todoFinishTime'),
+      register('todoTitle'),
+      register('todoTask');
+    register('todoId');
   }, [register]);
 
   return (
     <>
       <Modal isVisible={isModalVisible} style={{ margin: 0 }}>
+        <TouchableOpacity
+          style={styles.background}
+          activeOpacity={1}
+          onPress={modalHandler}
+        />
         <View style={styles.modalInputContainer}>
           <View style={styles.modalTopContainer}>
             <View style={styles.modalTextView}>
-              <Text style={styles.modalTopText} onPress={goBack}>
+              <Text style={styles.modalTopText} onPress={modalHandler}>
                 취소
               </Text>
               <Text onPress={modalHandler} style={styles.modalTopText}>
@@ -234,11 +233,11 @@ export function ToDoModal({
                 name="icon-modal-question"
                 size={110}
                 color={'#FFFFFF'}
-                onPress={goToMap}
+                onPress={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
               />
             </View>
             <Text style={styles.modalLocationText}>
-              {location ? location : '물음표를 눌러주세요'}
+              {locationName ? locationName : '물음표를 눌러주세요'}
             </Text>
           </View>
           <View
@@ -251,33 +250,53 @@ export function ToDoModal({
             <TextInput
               style={styles.modalInput1}
               placeholder="시작시간:00:00"
-              onChangeText={(text) => setValue('todostarttime', text)}
+              onChangeText={(text) => setValue('todoStartTime', text)}
             ></TextInput>
             <TextInput
               style={styles.modalInput2}
               placeholder="마칠시간:00:00"
-              onChangeText={(text) => setValue('todofinishtime', text)}
+              onChangeText={(text) => setValue('todoFinishTime', text)}
             ></TextInput>
           </View>
           <TextInput
             placeholder="제목을 입력해 주세요"
             style={styles.modalInputTitle}
-            onChangeText={(text) => setValue('todotitle', text)}
+            onChangeText={(text) => setValue('todoTitle', text)}
           ></TextInput>
+          <TouchableOpacity
+            style={styles.modalInputTask}
+            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+          />
           <TouchableOpacity onPress={handleSubmit(toDoSubmit)}>
             <Text>추가</Text>
           </TouchableOpacity>
-          <TextInput
-            placeholder="수행리스트"
-            onChangeText={(text) => {
-              setTask(text);
-              setValue('todotask', text);
-            }}
-            style={styles.modalInputTask}
-            returnKeyType="done"
-            value={task}
-            onSubmitEditing={handleSubmit(taskSubmit)}
-          ></TextInput>
+          <Modal isVisible={inputIsVisible} avoidKeyboard>
+            <TextInput
+              placeholder="수행리스트"
+              onChangeText={(text) => {
+                setTask(text);
+                setValue('todotask', text);
+              }}
+              style={styles.modalInputTask}
+              returnKeyType="done"
+              value={task}
+              onSubmitEditing={handleSubmit(taskSubmit)}
+            ></TextInput>
+          </Modal>
+          <Modal
+            isVisible={mapIsVisible}
+            animationIn="slideInRight"
+            animationOut="slideOutRight"
+          >
+            <Map
+              Modalhandler={() =>
+                toggleIsVisible(mapIsVisible, setMapIsVisible)
+              }
+              locationDataHandler={(value) => getLocationData(value)}
+
+              //onModalHide={() => setLocationData(locationData)}
+            />
+          </Modal>
         </View>
       </Modal>
     </>

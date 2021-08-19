@@ -4,7 +4,6 @@ import Home from 'components/screen/Home';
 import { ModalStack } from 'components/base/navigator/Stack';
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
 import { createStackNavigator } from '@react-navigation/stack';
-import Map from '../../screen/Map';
 
 export const Stack = createStackNavigator();
 //export const navOptionHandler = { headerShown: false };
@@ -25,7 +24,7 @@ function HomeStack({ navigation }) {
   );
 }
 
-export default function HomeNav() {
+export default function HomeNav({ navigation }) {
   return (
     <Stack.Navigator
       mode="modal"
