@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
 });
 
 export default function ScheduleTomorrow({ navigation, route }) {
-  console.log(route);
   const { params: locationData } = route;
   const [isModalVisible, setModalVisible] = useState(false);
   const [slideUpValue, setSlideValue] = useState(new Animated.Value(0));

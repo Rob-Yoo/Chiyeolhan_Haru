@@ -18,6 +18,8 @@ import { UID } from 'constant/const';
 import { TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import Map from 'components/screen/Map';
+import { TimePicker } from 'components/items/TimePicker';
+import { TaskListModal } from 'components/modal/TaskListModal';
 
 const styles = StyleSheet.create({
   container: {
@@ -98,6 +100,47 @@ const styles = StyleSheet.create({
     width: 350,
     height: 40,
     marginBottom: 20,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  },
+  modalInputText: {
+    color: '#B7B7B7',
+    marginVertical: 10,
+  },
+  timePickerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 20,
+  },
+  todoInputContainer: {
+    alignItems: 'center',
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  },
+  modalTaskContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: 350,
+    height: 200,
+    marginBottom: 20,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
   },
 });
 
@@ -105,6 +148,9 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
+  const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
+  const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
+
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState('');
@@ -164,6 +210,7 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
         location,
       ];
       createToDo(todo);
+      modalHandler();
     } catch (e) {
       console.log('toDoSumbit Error :', e);
     }
@@ -172,9 +219,6 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
   const taskSubmit = (data) => {
     const { todotask } = data;
     setTaskList((taskList) => [...taskList, todotask]);
-    //setTargetId(toDoId);
-    //addToDo(todotask, toDoId);
-    setTask('');
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
   //리스트에 추가할때
@@ -212,9 +256,14 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
               <Text style={styles.modalTopText} onPress={modalHandler}>
                 취소
               </Text>
-              <Text onPress={modalHandler} style={styles.modalTopText}>
-                완료
-              </Text>
+              <TouchableOpacity>
+                <Text
+                  onPress={handleSubmit(toDoSubmit)}
+                  style={styles.modalTopText}
+                >
+                  완료
+                </Text>
+              </TouchableOpacity>
             </View>
 
             <View
@@ -240,49 +289,52 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
               {locationName ? locationName : '물음표를 눌러주세요'}
             </Text>
           </View>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}
-          >
-            <TextInput
-              style={styles.modalInput1}
-              placeholder="시작시간:00:00"
-              onChangeText={(text) => setValue('todoStartTime', text)}
-            ></TextInput>
-            <TextInput
-              style={styles.modalInput2}
-              placeholder="마칠시간:00:00"
-              onChangeText={(text) => setValue('todoFinishTime', text)}
-            ></TextInput>
+          <View style={styles.timePickerContainer}>
+            <TimePicker
+              isVisible={startTimePickerVisible}
+              setVisible={setStartTimePickerVisible}
+              timeText={'시작'}
+              pickerHandler={(text) => setValue('todoStartTime', text)}
+            />
+            <Text style={{ fontSize: 25 }}>~</Text>
+            <TimePicker
+              isVisible={finishTimePickerVisible}
+              setVisible={setFinishTimePickerVisible}
+              timeText={'끝'}
+              pickerHandler={(text) => setValue('todoFinishTime', text)}
+            />
           </View>
-          <TextInput
-            placeholder="제목을 입력해 주세요"
-            style={styles.modalInputTitle}
-            onChangeText={(text) => setValue('todoTitle', text)}
-          ></TextInput>
-          <TouchableOpacity
-            style={styles.modalInputTask}
-            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
-          />
-          <TouchableOpacity onPress={handleSubmit(toDoSubmit)}>
-            <Text>추가</Text>
-          </TouchableOpacity>
-          <Modal isVisible={inputIsVisible} avoidKeyboard>
+          <View style={styles.todoInputContainer}>
             <TextInput
-              placeholder="수행리스트"
-              onChangeText={(text) => {
-                setTask(text);
+              placeholder="제목을 입력해 주세요"
+              style={styles.modalInputTitle}
+              onChangeText={(text) => setValue('todoTitle', text)}
+            ></TextInput>
+            <TouchableOpacity
+              style={styles.modalInputTask}
+              onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+            >
+              <Text style={styles.modalInputText}>수행리스트</Text>
+            </TouchableOpacity>
+            <TaskListModal
+              taskListHandler={(text) => {
                 setValue('todotask', text);
               }}
-              style={styles.modalInputTask}
-              returnKeyType="done"
-              value={task}
-              onSubmitEditing={handleSubmit(taskSubmit)}
-            ></TextInput>
-          </Modal>
+              taskListVisibleHandler={() =>
+                toggleIsVisible(inputIsVisible, setInputIsVisible)
+              }
+              taskSubmitHandler={handleSubmit(taskSubmit)}
+              inputIsVisible={inputIsVisible}
+              task={task}
+            />
+            <View style={styles.modalTaskContainer}>
+              {taskList.map((item, index) => (
+                <Text style={styles.modalInputText} key={index}>
+                  {item}
+                </Text>
+              ))}
+            </View>
+          </View>
           <Modal
             isVisible={mapIsVisible}
             animationIn="slideInRight"
