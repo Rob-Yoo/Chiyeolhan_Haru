@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import toDos from 'redux/store';
+import toDosSlice from 'redux/store';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
@@ -56,7 +56,7 @@ export default function App() {
   }
   return (
     <>
-      <Provider store={toDos}>
+      <Provider store={toDosSlice}>
         <NavigationContainer>
           <HomeNav />
         </NavigationContainer>

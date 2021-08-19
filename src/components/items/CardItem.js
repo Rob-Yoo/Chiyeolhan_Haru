@@ -63,7 +63,13 @@ const styles = StyleSheet.create({
 });
 
 export const Card = (props) => {
-  const { text, finishtime, starttime, location, id } = props;
+  const {
+    text,
+    finishTime: finishTime,
+    startTime: startTime,
+    location,
+    id,
+  } = props;
   return (
     <View style={styles.card}>
       <View style={styles.todomanBackgroundCircle} />
@@ -100,9 +106,9 @@ export const Card = (props) => {
         </View>
       </View>
       <Text style={styles.cardTime}>
-        {starttime}
+        {startTime}
         {id ? `` : '~'}
-        {finishtime}
+        {finishTime}
       </Text>
 
       <View style={styles.progressBar}></View>

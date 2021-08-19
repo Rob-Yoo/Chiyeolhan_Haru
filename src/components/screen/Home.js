@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
-import toDos from 'redux/store';
+import toDosSlice from 'redux/store';
 import { Provider } from 'react-redux';
 
 import HomeContent from 'components/HomeContent';
@@ -57,7 +57,7 @@ function Home({ navigation }) {
           />
         </ScheduleButton>
       </View>
-      <Provider store={toDos}>
+      <Provider store={toDosSlice}>
         <HomeContent />
       </Provider>
     </>

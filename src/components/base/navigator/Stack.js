@@ -4,6 +4,7 @@ import ToDoModal from 'components/modal/ToDoModal';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
+
 export function ModalStack({ navigation }) {
   return (
     <Stack.Navigator>
@@ -15,9 +16,9 @@ export function ModalStack({ navigation }) {
       />
       <Stack.Screen
         name="Map"
+        component={Map}
         navigation={navigation}
         options={{ headerShown: false }}
-        component={Map}
       />
     </Stack.Navigator>
   );
