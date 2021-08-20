@@ -2,38 +2,9 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
 import { UID, KEY_VALUE_GEOFENCE } from 'constant/const';
+import { getTimeDifference } from 'utils/Time';
 
-export const initBgGeofence = async () => {
-  await BackgroundGeolocation.ready({
-    // Geolocation Config
-    desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-    locationAuthorizationRequest: 'Always',
-    backgroundPermissionRationale: {
-      // Android only
-      title: '위치 서비스 이용 제한',
-      message:
-        '원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 {backgroundPermissionOptionLabel}으로 설정해주세요.',
-      positiveAction: '설정',
-      negativeAction: '취소',
-    },
-    locationAuthorizationAlert: {
-      // ios only
-      titleWhenNotEnabled: '위치 서비스 이용 제한',
-      titleWhenOff: '위치 서비스 이용 제한',
-      instructions:
-        "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
-      settingsButton: '설정',
-      cancelButton: '취소',
-    },
-    // Application config
-    stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-    startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-  }).then((state) => {
-    BackgroundGeolocation.startGeofences();
-  });
-};
-
-export const addGeofence = (latitude, longitude) => {
+const addGeofence = (latitude, longitude) => {
   BackgroundGeolocation.addGeofence({
     identifier: `${UID}`,
     radius: 200,
@@ -82,4 +53,64 @@ export const geofenceUpdate = (data) => {
     .catch((error) => {
       console.log('geofenceUpdate Error :' + error);
     });
+};
+
+export const initBgGeofence = async () => {
+  await BackgroundGeolocation.ready({
+    // Geolocation Config
+    desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+    locationAuthorizationRequest: 'Always',
+    backgroundPermissionRationale: {
+      // Android only
+      title: '위치 서비스 이용 제한',
+      message:
+        '원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 {backgroundPermissionOptionLabel}으로 설정해주세요.',
+      positiveAction: '설정',
+      negativeAction: '취소',
+    },
+    locationAuthorizationAlert: {
+      // ios only
+      titleWhenNotEnabled: '위치 서비스 이용 제한',
+      titleWhenOff: '위치 서비스 이용 제한',
+      instructions:
+        "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
+      settingsButton: '설정',
+      cancelButton: '취소',
+    },
+    // Application config
+    stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+    startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+  }).then((state) => {
+    BackgroundGeolocation.startGeofences();
+    BackgroundGeolocation.onGeofence(async (event) => {
+      console.log(event.action);
+      try {
+        const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        const data = JSON.parse(item);
+        const time = new Date();
+        const hour =
+          time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+        const min =
+          time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+        const currentTime = `${hour}:${min}`;
+        if (data.length != 0) {
+          if (data[0].startTime <= currentTime) {
+            console.log(currentTime);
+            geofenceUpdate(data);
+          } else {
+            const timeDifference = getTimeDifference(
+              data[0].startTime,
+              currentTime,
+            );
+            if (timeDifference <= 20) {
+              console.log(data[0].startTime);
+              geofenceUpdate(data);
+            }
+          }
+        }
+      } catch (error) {
+        console.log('onGeofence Error :', error);
+      }
+    });
+  });
 };
