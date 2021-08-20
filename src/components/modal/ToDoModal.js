@@ -12,10 +12,9 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage } from 'utils/AsyncStorage';
+import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
 
-import { UID } from 'constant/const';
-import { TODAY } from 'constant/const';
+import { UID, TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
@@ -147,6 +146,7 @@ const styles = StyleSheet.create({
 export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
+  const [searchedObject, setSearchedObject] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
   const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
@@ -173,7 +173,6 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
   // };
   const toDoSubmit = async ({ todoStartTime, todoFinishTime, todoTitle }) => {
     const { latitude, location, longitude, address } = locationData;
-    const todosRef = dbService.collection(`${UID}`);
     const date = new Date();
     const todoId = `${date.getFullYear()}` + `${TODAY}` + `${todoStartTime}`;
     try {
@@ -195,7 +194,8 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
           isFavorite: false,
         });
 
-      dbToAsyncStorage(todosRef);
+      dbToAsyncStorage();
+      saveSearchedData(searchedObject);
 
       const todo = [
         todoId,
@@ -345,7 +345,7 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
               locationDataHandler={(value) => getLocationData(value)}
-
+              setSearchedObject={(object) => setSearchedObject(object)}
               //onModalHide={() => setLocationData(locationData)}
             />
           </Modal>

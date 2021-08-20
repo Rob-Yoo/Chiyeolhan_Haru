@@ -16,7 +16,12 @@ import { GOOGLE_PLACES_API_KEY } from '@env';
 import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 
-const CurrentMap = ({ location, Modalhandler, locationDataHandler }) => {
+const CurrentMap = ({
+  location,
+  Modalhandler,
+  locationDataHandler,
+  setSearchedObject,
+}) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -63,6 +68,10 @@ const CurrentMap = ({ location, Modalhandler, locationDataHandler }) => {
             setResult({
               latitude,
               longitude,
+            });
+            setSearchedObject({
+              searched: text,
+              place: location,
             });
             setData({ location, latitude, longitude, address });
             setRenderData(true);
@@ -154,7 +163,7 @@ const CurrentMap = ({ location, Modalhandler, locationDataHandler }) => {
   );
 };
 
-const Map = ({ Modalhandler, locationDataHandler }) => {
+const Map = ({ Modalhandler, locationDataHandler, setSearchedObject }) => {
   const appState = useRef(AppState.currentState);
 
   const [stateVisible, setStateVisible] = useState(appState.current);
@@ -204,6 +213,7 @@ const Map = ({ Modalhandler, locationDataHandler }) => {
       location={location}
       Modalhandler={Modalhandler}
       locationDataHandler={locationDataHandler}
+      setSearchedObject={setSearchedObject}
     />
   ) : (
     <Text>Loading...</Text>

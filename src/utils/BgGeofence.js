@@ -1,7 +1,7 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
-import { UID, KEY_VALUE } from 'constant/const';
+import { UID, KEY_VALUE_GEOFENCE } from 'constant/const';
 
 export const initBgGeofence = async () => {
   await BackgroundGeolocation.ready({
@@ -52,7 +52,7 @@ export const addGeofence = (latitude, longitude) => {
 
 export const addGeofenceTrigger = async () => {
   try {
-    const item = await AsyncStorage.getItem(KEY_VALUE);
+    const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
     const data = JSON.parse(item);
     if (data.length != 0) {
       const lat = data[0].latitude;
@@ -72,7 +72,7 @@ export const geofenceUpdate = (data) => {
         const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
         await toDoRef.update({ isdone: true });
         const newDataArray = data.slice(1);
-        AsyncStorage.setItem(KEY_VALUE, JSON.stringify(newDataArray));
+        AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(newDataArray));
         addGeofenceTrigger();
         BackgroundGeolocation.startGeofences();
       } catch (e) {
