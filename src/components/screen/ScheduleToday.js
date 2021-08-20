@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-tasklist-add-button.js';
-
+import ToDoModal from 'components/modal/ToDoModal';
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 50,
@@ -11,22 +11,29 @@ const styles = StyleSheet.create({
     right: 30,
   },
 });
-const ScheduleToday = ({ navigation }) => {
-  const openToDoModal = () => navigation.navigate('ModalStack');
+
+export default function ScheduleToday() {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
     <>
-      <View style={{ flex: 1 }}>
+      <View>
         <Text>Today</Text>
-        <TouchableOpacity style={styles.addToDoButton} onPress={openToDoModal}>
-          <AddToDoIcon
-            name="icon-tasklist-add-button"
-            size={30}
-            color={'#54BCB6'}
-          />
-        </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
+        <AddToDoIcon
+          name="icon-tasklist-add-button"
+          size={30}
+          color={'#54BCB6'}
+        />
+      </TouchableOpacity>
+
+      <ToDoModal
+        modalHandler={() => toggleModal()}
+        isModalVisible={isModalVisible}
+      />
     </>
   );
-};
-
-export default ScheduleToday;
+}

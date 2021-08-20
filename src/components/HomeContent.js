@@ -24,15 +24,15 @@ const PaintHome = (todoArr) => {
     todoArr = [
       {
         date: '',
-        finishtime: '',
+        finishTime: '',
         id: 0,
         latitude: '',
         location: '',
         address: '',
         longitude: '',
-        starttime: '',
+        startTime: '',
         title: '',
-        todos: [' '],
+        toDos: [' '],
       },
     ];
   }
@@ -51,8 +51,8 @@ const PaintHome = (todoArr) => {
               <Card
                 key={item.id}
                 text={item.title}
-                starttime={item.starttime}
-                finishtime={item.finishtime}
+                startTime={item.startTime}
+                finishTime={item.finishTime}
                 location={item.location}
                 toDos={todoArr}
               />

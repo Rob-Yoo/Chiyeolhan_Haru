@@ -8,22 +8,25 @@ const Tab = createMaterialTopTabNavigator();
 export function SchedullScreenDetail() {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerBackTitleVisible: false,
-        headerTitle: false,
-        headerShown: false,
+      tabBarOptions={{
+        activeTintColor: '#229892',
+        inactiveTintColor: '#ADADAD',
+
+        labelStyle: {
+          fontFamily: 'NotosansKR-Bold',
+          fontSize: 20,
+          fontWeight: 'bold',
+        },
+        indicatorStyle: {
+          backgroundColor: '#229892',
+          marginLeft: 25,
+          width: 50,
+        },
+        tabStyle: { width: 100, marginTop: 50 },
       }}
     >
-      <Tab.Screen
-        name="오늘"
-        component={ScheduleToday}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen
-        name="내일"
-        component={ScheduleTomorrow}
-        options={{ headerShown: false }}
-      />
+      <Tab.Screen name="오늘" component={ScheduleToday} />
+      <Tab.Screen name="내일" component={ScheduleTomorrow} />
     </Tab.Navigator>
   );
 }

@@ -10,12 +10,11 @@ export const Stack = createStackNavigator();
 
 function HomeStack({ navigation }) {
   return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="ScheduleToday"
         navigation={navigation}
@@ -25,7 +24,7 @@ function HomeStack({ navigation }) {
   );
 }
 
-export default function HomeNav() {
+export default function HomeNav({ navigation }) {
   return (
     <Stack.Navigator
       mode="modal"

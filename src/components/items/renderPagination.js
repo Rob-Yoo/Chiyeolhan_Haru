@@ -47,15 +47,16 @@ const styles = StyleSheet.create({
 });
 
 export const renderPagination = (index, total, context) => {
-  const list = context.props.toDos[index].todos;
+  const list = context.props.toDos[index].toDos;
   const targetId = context.props.toDos[index].id;
+
   //리스트에 추가할때
   const addTaskList = async () => {
     await dbService
       .collection(`${UID}`)
       .doc(`${targetId}`)
       .update({
-        todos: [...taskList],
+        toDos: [...taskList],
       });
   };
   return (

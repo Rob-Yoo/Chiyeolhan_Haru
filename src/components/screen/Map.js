@@ -16,7 +16,7 @@ import { GOOGLE_PLACES_API_KEY } from '@env';
 import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 
-const CurrentMap = ({ location, navigation }) => {
+const CurrentMap = ({ location, Modalhandler, locationDataHandler }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -115,7 +115,7 @@ const CurrentMap = ({ location, navigation }) => {
               name="icon-go-back-button"
               size={20}
               style={{ width: 30, height: 30 }}
-              onPress={() => navigation.goBack()}
+              onPress={Modalhandler}
             />
 
             <TextInput
@@ -143,15 +143,20 @@ const CurrentMap = ({ location, navigation }) => {
           }}
         />
         {isRenderData ? (
-          <LocationData locationData={locationData} navigation={navigation} />
+          <LocationData
+            locationData={locationData}
+            Modalhandler={Modalhandler}
+            locationDataHandler={locationDataHandler}
+          />
         ) : null}
       </MapView>
     </View>
   );
 };
 
-const Map = ({ navigation }) => {
+const Map = ({ Modalhandler, locationDataHandler }) => {
   const appState = useRef(AppState.currentState);
+
   const [stateVisible, setStateVisible] = useState(appState.current);
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
@@ -195,7 +200,11 @@ const Map = ({ navigation }) => {
     }
   };
   return isFind ? (
-    <CurrentMap navigation={navigation} location={location} />
+    <CurrentMap
+      location={location}
+      Modalhandler={Modalhandler}
+      locationDataHandler={locationDataHandler}
+    />
   ) : (
     <Text>Loading...</Text>
   );

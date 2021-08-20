@@ -56,16 +56,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export const LocationData = (props) => {
-  const { locationData, navigation } = props;
+export const LocationData = ({
+  locationData,
+
+  Modalhandler,
+  locationDataHandler,
+}) => {
   const searchedLocation = () => {
-    navigation.navigate('TodoModal', { locationData });
+    locationDataHandler(locationData);
+    Modalhandler();
   };
+  const { latitude, location, address } = locationData;
   return (
     <View style={styles.locationDataSection}>
-      <View style={styles.locationInfoCard} key={locationData.latitude}>
+      <View style={styles.locationInfoCard} key={latitude}>
         <View style={{ flex: 4 }}>
-          <Text style={styles.locationTitle}>{locationData.location}</Text>
+          <Text style={styles.locationTitle}>{location}</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -75,7 +81,7 @@ export const LocationData = (props) => {
             }}
           >
             <Text style={styles.address}>도로명</Text>
-            <Text style={styles.addressText}>{locationData.address}</Text>
+            <Text style={styles.addressText}>{address}</Text>
           </View>
         </View>
         <TouchableOpacity
