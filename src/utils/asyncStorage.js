@@ -1,19 +1,28 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE } from 'constant/const';
 import { addGeofenceTrigger } from 'utils/BgGeofence';
-import { TODAY } from 'constant/const';
+import { dbService } from 'utils/firebase';
+import {
+  TODAY,
+  UID,
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_SEARCHED,
+} from 'constant/const';
 
 // const setFirstSubmit = () => {
-//   AsyncStorage.setItem(KEY_VALUE1, 'true');
+//   AsyncStorage.setItem(KEY_VALUE_GEOFENCE1, 'true');
 // };
 
 const setGeofenceData = (array) => {
-  AsyncStorage.setItem(KEY_VALUE, array);
+  AsyncStorage.setItem(KEY_VALUE_GEOFENCE, array);
+};
+
+const setSearchedData = (array) => {
+  AsyncStorage.setItem(KEY_VALUE_SEARCHED, array);
 };
 
 // export const checkFirstSubmit = async () => {
 //   try {
-//     const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE1);
+//     const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE1);
 //     if (isFirstLaunched === null) {
 //       setFirstSubmit();
 //       return true;
@@ -25,18 +34,20 @@ const setGeofenceData = (array) => {
 //   }
 // };
 
-export const dbToAsyncStorage = async (todosRef) => {
+export const dbToAsyncStorage = async () => {
   try {
     const geofenceDataArray = [];
-    const sortedByStartTime = await todosRef
+    const todosRef = dbService.collection(`${UID}`);
+    const data = await todosRef
       .where('date', '==', `${TODAY}`)
-      .where('isdone', '==', false)
+      .where('isDone', '==', false)
       .get();
-    sortedByStartTime.forEach((result) => {
+    data.forEach((result) => {
+      console.log(result.data());
       geofenceDataArray.push({
         id: result.data().id,
-        startTime: result.data().starttime,
-        finishTime: result.data().finishtime,
+        startTime: result.data().startTime,
+        finishTime: result.data().finishTime,
         latitude: result.data().latitude,
         longitude: result.data().longitude,
       });
@@ -45,5 +56,25 @@ export const dbToAsyncStorage = async (todosRef) => {
     addGeofenceTrigger();
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
+  }
+};
+
+export const saveSearchedData = async (searchedObject) => {
+  try {
+    const data = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+    if (data === null) {
+      const searchedDataArray = [];
+      searchedDataArray.push(searchedObject);
+      setSearchedData(JSON.stringify(searchedDataArray));
+    } else {
+      let searchedArray = JSON.parse(data);
+      searchedArray.push(searchedObject);
+      const newSearchedArray = searchedArray.reverse();
+      setSearchedData(JSON.stringify(newSearchedArray));
+    }
+    const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+    console.log(JSON.parse(newData));
+  } catch (e) {
+    console.log('searchedHistory Error :', e);
   }
 };
