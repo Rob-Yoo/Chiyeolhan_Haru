@@ -58,13 +58,12 @@ const styles = StyleSheet.create({
 
 export const LocationData = ({
   locationData,
-
-  Modalhandler,
+  modalHandler,
   locationDataHandler,
 }) => {
   const searchedLocation = () => {
     locationDataHandler(locationData);
-    Modalhandler();
+    modalHandler();
   };
   const { latitude, location, address } = locationData;
   return (

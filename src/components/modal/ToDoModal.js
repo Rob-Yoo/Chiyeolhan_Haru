@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   },
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-
     marginTop: 200,
     height: 750,
     borderRadius: 50,
@@ -143,7 +142,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
+export function ToDoModal({
+  createToDo,
+  modalHandler,
+  isModalVisible,
+  navigation,
+}) {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [searchedObject, setSearchedObject] = useState({});
@@ -246,7 +250,11 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
 
   return (
     <>
-      <Modal isVisible={isModalVisible} style={{ margin: 0 }}>
+      <Modal
+        navigation={navigation}
+        isVisible={isModalVisible}
+        style={{ margin: 0 }}
+      >
         <TouchableOpacity
           style={styles.background}
           activeOpacity={1}
@@ -343,11 +351,12 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
             animationOut="slideOutRight"
           >
             <Map
-              Modalhandler={() =>
+              modalHandler={() =>
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
               locationDataHandler={(value) => getLocationData(value)}
               setSearchedObject={(object) => setSearchedObject(object)}
+              navigation={navigation}
               //onModalHide={() => setLocationData(locationData)}
             />
           </Modal>
