@@ -9,7 +9,6 @@ import { UID } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
 import { TODAY } from 'constant/const';
-import { supported32BitAbis } from 'react-native-device-info';
 
 const styles = StyleSheet.create({
   homeContainer: {

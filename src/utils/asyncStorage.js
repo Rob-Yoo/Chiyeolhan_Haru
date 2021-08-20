@@ -28,11 +28,11 @@ const setGeofenceData = (array) => {
 export const dbToAsyncStorage = async (todosRef) => {
   try {
     const geofenceDataArray = [];
-    const sortedByStartTime = await todosRef
+    const data = await todosRef
       .where('date', '==', `${TODAY}`)
       .where('isdone', '==', false)
       .get();
-    sortedByStartTime.forEach((result) => {
+    data.forEach((result) => {
       geofenceDataArray.push({
         id: result.data().id,
         startTime: result.data().starttime,

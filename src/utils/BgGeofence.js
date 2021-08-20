@@ -41,7 +41,8 @@ export const addGeofence = (latitude, longitude) => {
     longitude,
     notifyOnEntry: true,
     notifyOnExit: true,
-    notifyOnDwell: false,
+    loiteringDelay: 30000,
+    notifyOnDwell: true,
   })
     .then((success) => console.log('Adding Geofence Success!!'))
     .catch((error) => {
@@ -70,8 +71,8 @@ export const geofenceUpdate = (data) => {
       try {
         const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
         await toDoRef.update({ isdone: true });
-        const newData = data.slice(1);
-        AsyncStorage.setItem(KEY_VALUE, JSON.stringify(newData));
+        const newDataArray = data.slice(1);
+        AsyncStorage.setItem(KEY_VALUE, JSON.stringify(newDataArray));
         addGeofenceTrigger();
         BackgroundGeolocation.startGeofences();
       } catch (e) {

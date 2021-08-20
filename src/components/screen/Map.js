@@ -10,13 +10,10 @@ import {
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconFavoriteBefore from '#assets/icons/icon-favorite';
-
 import { GOOGLE_PLACES_API_KEY } from '@env';
-import { PLACES_PARAMS } from 'constant/const';
-import { GOOGLE_API_URL } from 'constant/const';
+import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 
 const CurrentMap = ({ location, navigation }) => {
@@ -45,7 +42,7 @@ const CurrentMap = ({ location, navigation }) => {
   const _handlePlacesAPI = (text) => {
     const place = text.replaceAll(' ', '%20');
     fetch(
-      `${GOOGLE_API_URL}?input=${place}&${PLACES_PARAMS}&key=${GOOGLE_PLACES_API_KEY}`,
+      `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
     )
       .then((response) => response.json())
       .then(async (data) => {

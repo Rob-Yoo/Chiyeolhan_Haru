@@ -32,9 +32,9 @@ export default function App() {
                 : time.getMinutes();
             const timeString = `${hour}:${min}`;
             if (data.length != 0) {
-              if (data[0].startTime == timeString) {
-                geofenceUpdate(data);
+              if (data[0].startTime < timeString) {
               }
+              geofenceUpdate(data);
             }
           } catch (error) {
             console.log('onGeofence Error :', error);
