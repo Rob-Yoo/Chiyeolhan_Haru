@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
+import { dbToAsyncStorage, saveSearchedData } from 'utils/asyncStorage';
 
 import { UID, TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
@@ -209,6 +209,8 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
         latitude,
         location,
       ];
+      setLocationName(false);
+      setTaskList([]);
       createToDo(todo);
       modalHandler();
     } catch (e) {
