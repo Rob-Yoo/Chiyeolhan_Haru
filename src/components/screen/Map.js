@@ -70,8 +70,8 @@ const CurrentMap = ({
               longitude,
             });
             setSearchedObject({
-              searched: text,
-              place: location,
+              searched: { searched_id: Date.now(), text },
+              place: { place_id: Date.now() + 1, location },
             });
             setData({ location, latitude, longitude, address });
             setRenderData(true);
