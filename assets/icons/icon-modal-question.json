@@ -11,20 +11,6 @@
       "css": "help",
       "code": 59392,
       "src": "entypo"
-    },
-    {
-      "uid": "d0d68eb2f005647f9143a37dc991c39a",
-      "css": "icon-todo-nodata",
-      "code": 59392,
-      "src": "custom_icons",
-      "selected": false,
-      "svg": {
-        "path": "",
-        "width": 1000
-      },
-      "search": [
-        "icon-todo-nodata"
-      ]
     }
   ]
 }

@@ -64,14 +64,12 @@ const PaintHome = (todoArr) => {
 };
 
 function HomeContent({ initToDo, toDos }) {
-  //  console.log(`store toDos : ${JSON.stringify(toDos)}`);
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   const mounted = useRef(false);
   const mounted2 = useRef(false);
   let todoArr = [];
   let rowObj = {};
-  //Object.keys(fetchedToDo).length === 0
 
   useEffect(() => {
     getToDos();
