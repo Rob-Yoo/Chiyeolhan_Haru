@@ -36,6 +36,32 @@ export const MapSearch = ({
   const deleteHistory = (id) => {
     setHistoryObj(historyObj.filter((item) => item.id !== id));
   };
+  const printSearchHistory = Object.keys(historyObj).map((key) => {
+    const item = historyObj[key];
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingVertical: 15,
+          paddingHorizontal: 10,
+          borderBottomWidth: 1,
+        }}
+        key={item.id}
+      >
+        <Text style={styles.icon}>
+          {item.type === 'location' ? '장소' : '돋보기'}
+        </Text>
+        <Text style={styles.searchedText}>{item.text}</Text>
+        <Text
+          id={item.id}
+          style={{ position: 'absolute', top: 15, right: 0 }}
+          onPress={() => deleteHistory(item.id)}
+        >
+          삭제
+        </Text>
+      </View>
+    );
+  });
 
   return (
     <View>
@@ -98,31 +124,7 @@ export const MapSearch = ({
           </View>
           {searchedHistoryVisible ? (
             <ScrollView style={{ paddingHorizontal: 20 }}>
-              {historyObj.map((item) => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingVertical: 15,
-                      paddingHorizontal: 10,
-                      borderBottomWidth: 1,
-                    }}
-                    key={item.id}
-                  >
-                    <Text style={styles.icon}>
-                      {item.type === 'location' ? '장소' : '돋보기'}
-                    </Text>
-                    <Text style={styles.searchedText}>{item.text}</Text>
-                    <Text
-                      id={item.id}
-                      style={{ position: 'absolute', top: 15, right: 0 }}
-                      onPress={() => deleteHistory(item.id)}
-                    >
-                      삭제
-                    </Text>
-                  </View>
-                );
-              })}
+              {printSearchHistory}
               <Text
                 onPress={() => setHistoryObj([])}
                 style={{
