@@ -71,7 +71,6 @@ const CurrentMap = ({
               latitude,
               longitude,
             });
-
             setData({ location, latitude, longitude, address });
             setRenderData(true);
             break;
