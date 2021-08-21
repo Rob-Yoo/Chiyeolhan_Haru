@@ -199,7 +199,6 @@ export const ToDoModal = ({
         });
 
       dbToAsyncStorage();
-
       saveSearchedData({
         id: Date.now(),
         text: location,

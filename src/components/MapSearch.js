@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE_SEARCHED } from 'constant/const';
 //임시데이터
 import { data } from '../constant/data';
+import { saveSearchedData } from 'utils/AsyncStorage';
+import { deleteSearchedData } from 'utils/AsyncStorage';
+import { deleteAllSearchedData } from 'utils/AsyncStorage';
 
 const styles = StyleSheet.create({
   searchedHistoryContainer: {
@@ -19,49 +22,31 @@ const styles = StyleSheet.create({
 
 export const MapSearch = ({ _handlePlacesAPI, modalHandler }) => {
   const [inputText, setText] = useState('');
-  const [historyObj, setHistoryObj] = useState();
+  const [historyObj, setHistoryObj] = useState({});
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
-
-  const getSearchedList = async () => {
-    const searchedList = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-    return JSON.parse(searchedList);
+  const [searchedList, setSearchedList] = useState([]);
+  const [fetchedData, setFetchedData] = useState(false);
+  const deleteAllHistory = async () => {
+    await deleteAllSearchedData();
+    setHistoryObj([]);
   };
-
-  const deleteHistory = (id) => {
-    setHistoryObj(historyObj.filter((item) => item.id !== id));
+  const deleteHistory = async (id) => {
+    const tempData = historyObj.filter((item) => item.id !== id);
+    await deleteSearchedData(tempData);
+    setHistoryObj(tempData);
   };
-  const printSearchHistory = Object.keys(historyObj).map((key) => {
-    const item = historyObj[key];
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingVertical: 15,
-          paddingHorizontal: 10,
-          borderBottomWidth: 1,
-        }}
-        key={item.id}
-      >
-        <Text style={styles.icon}>
-          {item.type === 'location' ? '장소' : '돋보기'}
-        </Text>
-        <Text style={styles.searchedText}>{item.text}</Text>
-        <Text
-          id={item.id}
-          style={{ position: 'absolute', top: 15, right: 0 }}
-          onPress={() => deleteHistory(item.id)}
-        >
-          삭제
-        </Text>
-      </View>
-    );
-  });
 
   useEffect(() => {
-    const data = getSearchedList();
-    setHistoryObj(data);
+    const getSearchedList = async () => {
+      const searchedData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+      setSearchedList(JSON.parse(searchedData));
+    };
+    getSearchedList();
+    setHistoryObj(searchedList);
   }, []);
-
+  useEffect(() => {
+    console.log(historyObj);
+  }, [historyObj]);
   return (
     <View>
       <View
@@ -116,9 +101,33 @@ export const MapSearch = ({ _handlePlacesAPI, modalHandler }) => {
           </View>
           {searchedHistoryVisible ? (
             <ScrollView style={{ paddingHorizontal: 20 }}>
-              {printSearchHistory}
+              {historyObj.map((item) => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      paddingVertical: 15,
+                      paddingHorizontal: 10,
+                      borderBottomWidth: 1,
+                    }}
+                    key={item.id}
+                  >
+                    <Text style={styles.icon}>
+                      {item.type === 'location' ? '장소' : '돋보기'}
+                    </Text>
+                    <Text style={styles.searchedText}>{item.text}</Text>
+                    <Text
+                      id={item.id}
+                      style={{ position: 'absolute', top: 15, right: 0 }}
+                      onPress={() => deleteHistory(item.id)}
+                    >
+                      삭제
+                    </Text>
+                  </View>
+                );
+              })}
               <Text
-                onPress={() => setHistoryObj([])}
+                onPress={() => deleteAllHistory()}
                 style={{
                   fontSize: 20,
                   marginVertical: 25,
