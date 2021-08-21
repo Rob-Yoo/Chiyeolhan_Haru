@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage, saveSearchedData } from 'utils/asyncStorage';
+import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
 
 import { UID, TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
@@ -142,15 +142,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export function ToDoModal({
+export const ToDoModal = ({
   createToDo,
   modalHandler,
   isModalVisible,
   navigation,
-}) {
+}) => {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
-  const [searchedObject, setSearchedObject] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
   const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
@@ -167,7 +166,6 @@ export function ToDoModal({
     setLocationName(value.location);
   };
 
-  console.log(searchedObject);
   // const goBack = () => {
   //   navigation.popToTop();
   // };
@@ -200,14 +198,13 @@ export function ToDoModal({
           isFavorite: false,
         });
 
-      //async에 'type:location'으로 넣기
-      setSearchedObject({
+      dbToAsyncStorage();
+
+      saveSearchedData({
         id: Date.now(),
         text: location,
         type: 'location',
       });
-      dbToAsyncStorage();
-      saveSearchedData(searchedObject);
 
       const todo = [
         todoId,
@@ -363,7 +360,6 @@ export function ToDoModal({
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
               locationDataHandler={(value) => getLocationData(value)}
-              setSearchedObject={(object) => setSearchedObject(object)}
               navigation={navigation}
               //onModalHide={() => setLocationData(locationData)}
             />
@@ -372,7 +368,7 @@ export function ToDoModal({
       </Modal>
     </>
   );
-}
+};
 function mapStateToProps(state) {
   return { toDos: state };
 }

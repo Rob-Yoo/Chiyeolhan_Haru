@@ -16,14 +16,10 @@ import IconFavoriteBefore from '#assets/icons/icon-favorite';
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
-import { MapSearch, SearchedHistory } from '../MapSearch';
+import { MapSearch } from 'components/MapSearch';
+import { saveSearchedData } from 'utils/AsyncStorage';
 
-const CurrentMap = ({
-  location,
-  modalHandler,
-  locationDataHandler,
-  setSearchedObject,
-}) => {
+const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -72,6 +68,11 @@ const CurrentMap = ({
               longitude,
             });
             setData({ location, latitude, longitude, address });
+            saveSearchedData({
+              id: Date.now(),
+              text,
+              type: 'search',
+            });
             setRenderData(true);
             break;
           case 'ZERO_RESULTS':
@@ -98,7 +99,6 @@ const CurrentMap = ({
         }}
       >
         <MapSearch
-          setSearchedObject={setSearchedObject}
           _handlePlacesAPI={_handlePlacesAPI}
           modalHandler={modalHandler}
         />
@@ -121,7 +121,7 @@ const CurrentMap = ({
   );
 };
 
-const Map = ({ modalHandler, locationDataHandler, setSearchedObject }) => {
+const Map = ({ modalHandler, locationDataHandler }) => {
   const appState = useRef(AppState.currentState);
 
   const [stateVisible, setStateVisible] = useState(appState.current);
@@ -171,7 +171,6 @@ const Map = ({ modalHandler, locationDataHandler, setSearchedObject }) => {
       location={location}
       modalHandler={modalHandler}
       locationDataHandler={locationDataHandler}
-      setSearchedObject={setSearchedObject}
     />
   ) : (
     <Text>Loading...</Text>
