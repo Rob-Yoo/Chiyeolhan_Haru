@@ -14,11 +14,11 @@ import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
 import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
 
-import { UID, TODAY } from 'constant/const';
-import IconModalQuestion from '#assets/icons/icon-modal-question';
 import Map from 'components/screen/Map';
+import { UID, TODAY } from 'constant/const';
 import { TimePicker } from 'components/items/TimePicker';
 import { TaskListModal } from 'components/modal/TaskListModal';
+import IconModalQuestion from '#assets/icons/icon-modal-question';
 
 const styles = StyleSheet.create({
   container: {
@@ -158,6 +158,7 @@ export const ToDoModal = ({
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState('');
   const { register, handleSubmit, setValue } = useForm();
+
   const toggleIsVisible = (isVisible, setVisible) => {
     setVisible(!isVisible);
   };
@@ -165,16 +166,10 @@ export const ToDoModal = ({
     setLocationData(value);
     setLocationName(value.location);
   };
-
-  // const goBack = () => {
-  //   navigation.popToTop();
-  // };
-  // const goToMap = () => {
-  //   navigation.navigate('Map', {
-  //     screen: 'Map',
-  //     params: { routeName },
-  //   });
-  // };
+  const clearData = () => {
+    setLocationName(false);
+    setTaskList([]);
+  };
   const toDoSubmit = async ({ todoStartTime, todoFinishTime, todoTitle }) => {
     const { latitude, location, longitude, address } = locationData;
     const date = new Date();
@@ -217,8 +212,6 @@ export const ToDoModal = ({
         latitude,
         location,
       ];
-      setLocationName(false);
-      setTaskList([]);
       createToDo(todo);
       modalHandler();
     } catch (e) {
@@ -258,6 +251,7 @@ export const ToDoModal = ({
         navigation={navigation}
         isVisible={isModalVisible}
         style={{ margin: 0 }}
+        onModalHide={() => clearData()}
       >
         <TouchableOpacity
           style={styles.background}

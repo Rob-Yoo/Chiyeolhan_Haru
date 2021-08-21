@@ -5,27 +5,35 @@ import {
   Dimensions,
   Text,
   AppState,
-  TextInput,
   Alert,
-  TouchableOpacity,
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import IconGobackButton from '#assets/icons/icon-go-back-button';
-import IconFavoriteBefore from '#assets/icons/icon-favorite';
+
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
 import { MapSearch } from 'components/MapSearch';
+
+import { KEY_VALUE_SEARCHED } from 'constant/const';
 import { saveSearchedData } from 'utils/AsyncStorage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
-  const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
+  const [searchedList, setSearchedList] = useState([]);
+
   useEffect(() => {}, [locationResult]);
+  useEffect(() => {
+    const getSearchedList = async () => {
+      const searchedData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+      setSearchedList(JSON.parse(searchedData));
+    };
+    getSearchedList();
+  }, []);
 
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -43,6 +51,7 @@ const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
     );
 
   const _handlePlacesAPI = (text) => {
+    // setSearchedList(text);
     const place = text.replaceAll(' ', '%20');
     fetch(
       `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
@@ -101,6 +110,8 @@ const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
         <MapSearch
           _handlePlacesAPI={_handlePlacesAPI}
           modalHandler={modalHandler}
+          searchedList={searchedList}
+          setSearchedList={setSearchedList}
         />
 
         <Marker
