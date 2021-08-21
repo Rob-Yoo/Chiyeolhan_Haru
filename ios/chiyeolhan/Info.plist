@@ -96,6 +96,9 @@
 		<string>icon-go-back-button.ttf</string>
 		<string>icon-schedulte-timeset-button.ttf</string>
 		<string>icon-modal-question.ttf</string>
+		<string>icon-schedule-pointer.ttf</string>
+		<string>icon-searched-location.ttf</string>
+		<string>icon-searched-search.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

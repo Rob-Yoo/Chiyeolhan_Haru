@@ -1,0 +1,24 @@
+{
+  "name": "icon-searched-search",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "318cd4998301b065b6c0605c970d6222",
+      "css": "icon-searched-search",
+      "code": 59392,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M569.1 655.1L914.7 999.6 999.6 915 659.8 574.1M653.7 613.7A371.7 371.7 0 1 0 613.7 653.7M372.4 629.1A257.1 257.1 0 1 1 629.1 372.4H629.1A256.3 256.3 0 0 1 373.1 629.4H373.1Z",
+        "width": 1000
+      },
+      "search": [
+        "icon-searched-search"
+      ]
+    }
+  ]
+}
