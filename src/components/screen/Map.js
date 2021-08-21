@@ -71,10 +71,7 @@ const CurrentMap = ({
               latitude,
               longitude,
             });
-            setSearchedObject({
-              searched: text,
-              place: location,
-            });
+
             setData({ location, latitude, longitude, address });
             setRenderData(true);
             break;
@@ -102,6 +99,7 @@ const CurrentMap = ({
         }}
       >
         <MapSearch
+          setSearchedObject={setSearchedObject}
           _handlePlacesAPI={_handlePlacesAPI}
           modalHandler={modalHandler}
         />

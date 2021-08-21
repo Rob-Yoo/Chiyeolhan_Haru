@@ -166,6 +166,8 @@ export function ToDoModal({
     setLocationData(value);
     setLocationName(value.location);
   };
+
+  console.log(searchedObject);
   // const goBack = () => {
   //   navigation.popToTop();
   // };
@@ -198,6 +200,12 @@ export function ToDoModal({
           isFavorite: false,
         });
 
+      //async에 'type:location'으로 넣기
+      setSearchedObject({
+        id: Date.now(),
+        text: location,
+        type: 'location',
+      });
       dbToAsyncStorage();
       saveSearchedData(searchedObject);
 

@@ -5,6 +5,8 @@ import IconGobackButton from '#assets/icons/icon-go-back-button';
 //임시데이터
 import { data } from '../constant/data';
 
+import { saveSearchedData } from '../utils/asyncStorage';
+
 const styles = StyleSheet.create({
   searchedHistoryContainer: {
     flex: 1,
@@ -16,11 +18,17 @@ const styles = StyleSheet.create({
   searchedText: {},
 });
 
-export const MapSearch = ({ _handlePlacesAPI, modalHandler }) => {
+export const MapSearch = ({
+  _handlePlacesAPI,
+  modalHandler,
+  setSearchedObject,
+}) => {
   const [inputText, setText] = useState('');
   const [historyObj, setHistoryObj] = useState([]);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
 
+  //async 에서 데이터 받아오기
+  //data에 어싱크에서 받아온 데이터가 들어가면 됨
   useEffect(() => {
     setHistoryObj([...data]);
   }, []);
@@ -78,6 +86,13 @@ export const MapSearch = ({ _handlePlacesAPI, modalHandler }) => {
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
                 setSearchedHistroyVisible(!searchedHistoryVisible);
+
+                //async에 'type:search'로 넣기
+                setSearchedObject({
+                  id: Date.now(),
+                  text: inputText,
+                  type: 'search',
+                });
               }}
             />
           </View>
