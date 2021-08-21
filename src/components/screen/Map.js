@@ -7,6 +7,7 @@ import {
   AppState,
   TextInput,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -15,10 +16,11 @@ import IconFavoriteBefore from '#assets/icons/icon-favorite';
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
 import { LocationData } from 'components/items/LocationData';
+import { MapSearch, SearchedHistory } from '../MapSearch';
 
 const CurrentMap = ({
   location,
-  Modalhandler,
+  modalHandler,
   locationDataHandler,
   setSearchedObject,
 }) => {
@@ -26,7 +28,7 @@ const CurrentMap = ({
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
-
+  const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
   useEffect(() => {}, [locationResult]);
 
   const createTwoButtonAlert = () =>
@@ -69,10 +71,6 @@ const CurrentMap = ({
               latitude,
               longitude,
             });
-            setSearchedObject({
-              searched: { searched_id: Date.now(), text },
-              place: { place_id: Date.now() + 1, location },
-            });
             setData({ location, latitude, longitude, address });
             setRenderData(true);
             break;
@@ -99,52 +97,12 @@ const CurrentMap = ({
           longitudeDelta: 0.004,
         }}
       >
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              height: 130,
-              backgroundColor: '#54BCB6',
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              paddingTop: 50,
-            }}
-          >
-            <IconGobackButton
-              name="icon-go-back-button"
-              size={20}
-              style={{ width: 30, height: 30 }}
-              onPress={Modalhandler}
-            />
+        <MapSearch
+          setSearchedObject={setSearchedObject}
+          _handlePlacesAPI={_handlePlacesAPI}
+          modalHandler={modalHandler}
+        />
 
-            <TextInput
-              style={{
-                backgroundColor: '#fff',
-                flex: 0.8,
-                height: 50,
-                borderRadius: 10,
-              }}
-              placeholder=" 장소, 버스, 지하철, 주소 검색"
-              onChangeText={(text) => setText(text)}
-              onSubmitEditing={() => _handlePlacesAPI(inputText)}
-            ></TextInput>
-            <IconFavoriteBefore
-              name="icon-favorite"
-              size={25}
-              style={{ position: 'absolute', right: 40, bottom: 30 }}
-            />
-          </View>
-        </View>
         <Marker
           coordinate={{
             latitude: locationResult.latitude,
@@ -154,7 +112,7 @@ const CurrentMap = ({
         {isRenderData ? (
           <LocationData
             locationData={locationData}
-            Modalhandler={Modalhandler}
+            modalHandler={modalHandler}
             locationDataHandler={locationDataHandler}
           />
         ) : null}
@@ -163,7 +121,7 @@ const CurrentMap = ({
   );
 };
 
-const Map = ({ Modalhandler, locationDataHandler, setSearchedObject }) => {
+const Map = ({ modalHandler, locationDataHandler, setSearchedObject }) => {
   const appState = useRef(AppState.currentState);
 
   const [stateVisible, setStateVisible] = useState(appState.current);
@@ -211,7 +169,7 @@ const Map = ({ Modalhandler, locationDataHandler, setSearchedObject }) => {
   return isFind ? (
     <CurrentMap
       location={location}
-      Modalhandler={Modalhandler}
+      modalHandler={modalHandler}
       locationDataHandler={locationDataHandler}
       setSearchedObject={setSearchedObject}
     />

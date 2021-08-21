@@ -112,33 +112,6 @@ export const Card = (props) => {
       </Text>
 
       <View style={styles.progressBar}></View>
-      {id ? (
-        <NoData
-          style={{
-            position: 'absolute',
-            left: -100,
-            width: 600,
-            height: 600,
-            backgroundColor: '#000',
-            opacity: 0.2,
-          }}
-        >
-          <Text
-            style={{
-              position: 'absolute',
-              top: 50,
-              right: '45%',
-              top: '15%',
-              color: '#FFFFFF',
-              opacity: 1,
-              fontFamily: 'NotoSansKR-Regular',
-              fontSize: 20,
-            }}
-          >
-            현재 일정이 없습니다
-          </Text>
-        </NoData>
-      ) : null}
     </View>
   );
 };

@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
+import { dbToAsyncStorage, saveSearchedData } from 'utils/asyncStorage';
 
 import { UID, TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   },
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-
     marginTop: 200,
     height: 750,
     borderRadius: 50,
@@ -143,7 +142,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
+export function ToDoModal({
+  createToDo,
+  modalHandler,
+  isModalVisible,
+  navigation,
+}) {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [searchedObject, setSearchedObject] = useState({});
@@ -162,6 +166,8 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
     setLocationData(value);
     setLocationName(value.location);
   };
+
+  console.log(searchedObject);
   // const goBack = () => {
   //   navigation.popToTop();
   // };
@@ -194,6 +200,12 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
           isFavorite: false,
         });
 
+      //async에 'type:location'으로 넣기
+      setSearchedObject({
+        id: Date.now(),
+        text: location,
+        type: 'location',
+      });
       dbToAsyncStorage();
       saveSearchedData(searchedObject);
 
@@ -209,6 +221,8 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
         latitude,
         location,
       ];
+      setLocationName(false);
+      setTaskList([]);
       createToDo(todo);
       modalHandler();
     } catch (e) {
@@ -244,7 +258,11 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
 
   return (
     <>
-      <Modal isVisible={isModalVisible} style={{ margin: 0 }}>
+      <Modal
+        navigation={navigation}
+        isVisible={isModalVisible}
+        style={{ margin: 0 }}
+      >
         <TouchableOpacity
           style={styles.background}
           activeOpacity={1}
@@ -341,11 +359,12 @@ export function ToDoModal({ createToDo, modalHandler, isModalVisible }) {
             animationOut="slideOutRight"
           >
             <Map
-              Modalhandler={() =>
+              modalHandler={() =>
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
               locationDataHandler={(value) => getLocationData(value)}
               setSearchedObject={(object) => setSearchedObject(object)}
+              navigation={navigation}
               //onModalHide={() => setLocationData(locationData)}
             />
           </Modal>
