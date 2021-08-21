@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import IconGobackButton from '#assets/icons/icon-go-back-button';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import { KEY_VALUE_SEARCHED } from 'constant/const';
 //임시데이터
 import { data } from '../constant/data';
-
-import { saveSearchedData } from '../utils/asyncStorage';
 
 const styles = StyleSheet.create({
   searchedHistoryContainer: {
@@ -18,20 +17,15 @@ const styles = StyleSheet.create({
   searchedText: {},
 });
 
-export const MapSearch = ({
-  _handlePlacesAPI,
-  modalHandler,
-  setSearchedObject,
-}) => {
+export const MapSearch = ({ _handlePlacesAPI, modalHandler }) => {
   const [inputText, setText] = useState('');
-  const [historyObj, setHistoryObj] = useState([]);
+  const [historyObj, setHistoryObj] = useState();
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
 
-  //async 에서 데이터 받아오기
-  //data에 어싱크에서 받아온 데이터가 들어가면 됨
-  useEffect(() => {
-    setHistoryObj([...data]);
-  }, []);
+  const getSearchedList = async () => {
+    const searchedList = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+    return JSON.parse(searchedList);
+  };
 
   const deleteHistory = (id) => {
     setHistoryObj(historyObj.filter((item) => item.id !== id));
@@ -62,6 +56,11 @@ export const MapSearch = ({
       </View>
     );
   });
+
+  useEffect(() => {
+    const data = getSearchedList();
+    setHistoryObj(data);
+  }, []);
 
   return (
     <View>
@@ -112,13 +111,6 @@ export const MapSearch = ({
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
                 setSearchedHistroyVisible(!searchedHistoryVisible);
-
-                //async에 'type:search'로 넣기
-                setSearchedObject({
-                  id: Date.now(),
-                  text: inputText,
-                  type: 'search',
-                });
               }}
             />
           </View>
