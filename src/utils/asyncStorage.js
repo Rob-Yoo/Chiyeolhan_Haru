@@ -68,8 +68,8 @@ export const saveSearchedData = async (searchedObject) => {
       setSearchedData(JSON.stringify(searchedDataArray));
     } else {
       let searchedArray = JSON.parse(data);
-      searchedArray.push(searchedObject);
-      const newSearchedArray = searchedArray.reverse();
+      searchedArray.unshift(searchedObject);
+      const newSearchedArray = searchedArray;
       setSearchedData(JSON.stringify(newSearchedArray));
     }
     const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
