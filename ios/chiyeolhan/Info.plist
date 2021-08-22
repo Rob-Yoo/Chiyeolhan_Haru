@@ -99,6 +99,7 @@
 		<string>icon-schedule-pointer.ttf</string>
 		<string>icon-searched-location.ttf</string>
 		<string>icon-searched-search.ttf</string>
+		<string>icon-add-todo.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

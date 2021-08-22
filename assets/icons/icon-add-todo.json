@@ -1,0 +1,24 @@
+{
+  "name": "icon-add-todo",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "15655362a484b16c32805afa56f7b833",
+      "css": "icon-add-todo",
+      "code": 59392,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M510 220H510A50 50 0 0 1 560 270V730A50 50 0 0 1 510 780H510A50 50 0 0 1 460 730V270A50 50 0 0 1 510 220ZM788.9 500H788.9A44.3 44.3 0 0 1 744.3 544.3H277.9A44.3 44.3 0 0 1 233.2 500H233.2A44.3 44.3 0 0 1 277.9 455.7H744.3A44.3 44.3 0 0 1 788.9 500Z",
+        "width": 1000
+      },
+      "search": [
+        "icon-add-todo"
+      ]
+    }
+  ]
+}
