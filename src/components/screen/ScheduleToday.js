@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import ToDoModal from 'components/modal/ToDoModal';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
+import ToDoModal from 'components/modal/ToDoModal';
 
 const styles = StyleSheet.create({
   addToDoButton: {
