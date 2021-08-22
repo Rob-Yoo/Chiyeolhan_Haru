@@ -15,6 +15,8 @@ import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/MapSearch';
 import { LocationData } from 'components/items/LocationData';
 
+import IconFindLocation from '#assets/icons/icon-target.js';
+import IconFavorite from '#assets/icons/icon-favorite.js';
 import {
   GOOGLE_API_URL,
   GOOGLE_PARARMS,
@@ -22,12 +24,43 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  iconFindLocation: {
+    top: 150,
+    right: 30,
+    padding: 7,
+    position: 'absolute',
+    width: 40,
+    height: 40,
+    backgroundColor: '#FFF',
+    borderRadius: 50,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  },
+});
+
 const CurrentMap = ({
   location,
   modalHandler,
   locationDataHandler,
   searchedList,
   setSearchedList,
+  navigation,
 }) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
@@ -43,6 +76,10 @@ const CurrentMap = ({
     getSearchedList();
   }, []);
 
+  const handleFindCurrentLocation = () => {
+    //위치찾기
+    console.log('위치찾기 넣어줘');
+  };
   const createTwoButtonAlert = () =>
     Alert.alert(
       '검색 결과가 없습니다.',
@@ -101,38 +138,71 @@ const CurrentMap = ({
   };
 
   return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        region={{
-          ...locationResult,
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        }}
-      >
-        <MapSearch
-          _handlePlacesAPI={_handlePlacesAPI}
-          modalHandler={modalHandler}
-          searchedList={searchedList}
-          setSearchedList={setSearchedList}
-        />
-
-        <Marker
-          coordinate={{
-            latitude: locationResult.latitude,
-            longitude: locationResult.longitude,
+    <>
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          region={{
+            ...locationResult,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
           }}
-        />
-        {isRenderData ? (
-          <LocationData
-            locationData={locationData}
-            modalHandler={modalHandler}
-            locationDataHandler={locationDataHandler}
+        >
+          <View style={{ flex: 1 }}>
+            <MapSearch
+              _handlePlacesAPI={_handlePlacesAPI}
+              modalHandler={modalHandler}
+              searchedList={searchedList}
+              setSearchedList={setSearchedList}
+            />
+            <IconFindLocation
+              size={30}
+              name="target"
+              style={styles.iconFindLocation}
+              color="#00000041"
+              onPress={() => handleFindCurrentLocation()}
+            />
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              bottom: 0,
+            }}
+          >
+            {/* <IconFavorite
+              size={60}
+              name="icon-favorite"
+              style={{
+                position: 'absolute',
+                borderRadius: 50,
+                bottom: isRenderData ? 160 : 10,
+                left: 20,
+              }}
+              onPress={() => console.log('favorite도modal로띄우냐고')}
+            /> */}
+
+            {isRenderData ? (
+              <LocationData
+                locationData={locationData}
+                modalHandler={modalHandler}
+                locationDataHandler={locationDataHandler}
+              />
+            ) : (
+              <></>
+            )}
+          </View>
+          <Marker
+            coordinate={{
+              latitude: locationResult.latitude,
+              longitude: locationResult.longitude,
+            }}
+            image={{ uri: 'custom_pin' }}
           />
-        ) : null}
-      </MapView>
-    </View>
+        </MapView>
+      </View>
+    </>
   );
 };
 
@@ -141,6 +211,7 @@ const Map = ({
   locationDataHandler,
   searchedList,
   setSearchedList,
+  navigation,
 }) => {
   const appState = useRef(AppState.currentState);
 
@@ -188,6 +259,7 @@ const Map = ({
   };
   return isFind ? (
     <CurrentMap
+      navigation={navigation}
       location={location}
       modalHandler={modalHandler}
       locationDataHandler={locationDataHandler}
@@ -198,18 +270,5 @@ const Map = ({
     <Text>Loading...</Text>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-});
 
 export default Map;

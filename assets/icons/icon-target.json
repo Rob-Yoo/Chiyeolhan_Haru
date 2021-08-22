@@ -1,0 +1,30 @@
+{
+  "name": "icon-target",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "3eadc3e443cf1c7e17f1b44d21254c00",
+      "css": "target",
+      "code": 59392,
+      "src": "entypo"
+    },
+    {
+      "uid": "2df34cc4aec5e482d7256e119763a8cd",
+      "css": "icon-schedule-pointer",
+      "code": 59394,
+      "src": "custom_icons",
+      "selected": false,
+      "svg": {
+        "path": "M822.9 404.7A110.4 110.4 0 0 1 861.8 556.5 112.6 112.6 0 0 1 822.9 595.3L167.4 984.7A111.2 111.2 0 0 1 15.3 945.8 112.6 112.6 0 0 1 0 890.6V110.4A110.8 110.8 0 0 1 111.2 0 109 109 0 0 1 167.4 15.7Z",
+        "width": 877
+      },
+      "search": [
+        "icon-schedule-pointer"
+      ]
+    }
+  ]
+}

@@ -11,8 +11,7 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { deleteSearchedData } from 'utils/asyncStorage';
-import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
+import { dbToAsyncStorage } from 'utils/AsyncStorage';
 
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
@@ -357,8 +356,8 @@ export const ToDoModal = ({
               modalHandler={() =>
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
-              locationDataHandler={(value) => getLocationData(value)}
               navigation={navigation}
+              locationDataHandler={(value) => getLocationData(value)}
               searchedList={searchedList}
               setSearchedList={setSearchedList}
             />

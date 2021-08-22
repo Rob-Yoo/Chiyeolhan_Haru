@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ScheduleToday() {
+export default function ScheduleToday({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -36,6 +36,7 @@ export default function ScheduleToday() {
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
       </TouchableOpacity>
       <ToDoModal
+        navigation={navigation}
         modalHandler={() => toggleModal()}
         isModalVisible={isModalVisible}
       />

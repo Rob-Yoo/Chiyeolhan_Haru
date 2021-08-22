@@ -1,0 +1,22 @@
+{
+  "name": "icon-angle-down",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "b64f21ccc02e9842ffe714287ec37a6a",
+      "css": "icon-angle-down",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M940.9 1000A83.3 83.3 0 0 1 883.1 976.5L25.5 143.8A83.3 83.3 0 1 1 141.1 24.2L998.7 856.9A83.3 83.3 0 0 1 940.9 1000ZM940.9 1000A83.3 83.3 0 0 1 882.4 856.9L1740.6 23.5A83.3 83.3 0 1 1 1856.2 143.1L998.7 976.5A83.3 83.3 0 0 1 940.9 1000Z",
+        "width": 1882
+      },
+      "search": ["icon-angle-down"]
+    }
+  ]
+}
