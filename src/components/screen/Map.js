@@ -7,24 +7,32 @@ import {
   AppState,
   Alert,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-community/async-storage';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 import { GOOGLE_PLACES_API_KEY } from '@env';
-import { GOOGLE_API_URL, GOOGLE_PARARMS } from 'constant/const';
-import { LocationData } from 'components/items/LocationData';
 import { MapSearch } from 'components/MapSearch';
+import { LocationData } from 'components/items/LocationData';
 
-import { KEY_VALUE_SEARCHED } from 'constant/const';
-import { saveSearchedData } from 'utils/AsyncStorage';
-import AsyncStorage from '@react-native-community/async-storage';
+import {
+  GOOGLE_API_URL,
+  GOOGLE_PARARMS,
+  KEY_VALUE_SEARCHED,
+} from 'constant/const';
+import { handleFilterData } from 'utils/handleFilterData';
 
-const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
+const CurrentMap = ({
+  location,
+  modalHandler,
+  locationDataHandler,
+  searchedList,
+  setSearchedList,
+}) => {
   const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
-  const [searchedList, setSearchedList] = useState([]);
 
   useEffect(() => {}, [locationResult]);
   useEffect(() => {
@@ -77,11 +85,7 @@ const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
               longitude,
             });
             setData({ location, latitude, longitude, address });
-            saveSearchedData({
-              id: Date.now(),
-              text,
-              type: 'search',
-            });
+            handleFilterData(text, 'search', searchedList, setSearchedList);
             setRenderData(true);
             break;
           case 'ZERO_RESULTS':
@@ -132,7 +136,12 @@ const CurrentMap = ({ location, modalHandler, locationDataHandler }) => {
   );
 };
 
-const Map = ({ modalHandler, locationDataHandler }) => {
+const Map = ({
+  modalHandler,
+  locationDataHandler,
+  searchedList,
+  setSearchedList,
+}) => {
   const appState = useRef(AppState.currentState);
 
   const [stateVisible, setStateVisible] = useState(appState.current);
@@ -182,6 +191,8 @@ const Map = ({ modalHandler, locationDataHandler }) => {
       location={location}
       modalHandler={modalHandler}
       locationDataHandler={locationDataHandler}
+      searchedList={searchedList}
+      setSearchedList={setSearchedList}
     />
   ) : (
     <Text>Loading...</Text>
