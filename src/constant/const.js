@@ -1,8 +1,8 @@
 import DeviceInfo from 'react-native-device-info';
 
 export const KEY_VALUE_GEOFENCE = 'gefenceDataArray';
-
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
+export const KEY_VALUE_TOO_EARLY = 'isTooEarly';
 
 export const UID = DeviceInfo.getUniqueId();
 
