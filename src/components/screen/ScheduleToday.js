@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 60,
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ScheduleToday() {
+export default function ScheduleToday({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -34,8 +35,8 @@ export default function ScheduleToday() {
       <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
       </TouchableOpacity>
-
       <ToDoModal
+        navigation={navigation}
         modalHandler={() => toggleModal()}
         isModalVisible={isModalVisible}
       />

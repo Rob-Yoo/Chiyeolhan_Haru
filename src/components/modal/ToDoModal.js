@@ -7,18 +7,19 @@ import {
   Text,
 } from 'react-native';
 import Modal from 'react-native-modal';
-
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage, saveSearchedData } from 'utils/AsyncStorage';
+import { dbToAsyncStorage } from 'utils/AsyncStorage';
 
 import Map from 'components/screen/Map';
-import { UID, TODAY } from 'constant/const';
 import { TimePicker } from 'components/items/TimePicker';
 import { TaskListModal } from 'components/modal/TaskListModal';
+
+import { UID, TODAY } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
+import { handleFilterData } from 'utils/handleFilterData';
 
 const styles = StyleSheet.create({
   container: {
@@ -154,6 +155,8 @@ export const ToDoModal = ({
   const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
   const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
 
+  const [searchedList, setSearchedList] = useState([]);
+
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState('');
@@ -194,11 +197,12 @@ export const ToDoModal = ({
         });
 
       dbToAsyncStorage();
-      saveSearchedData({
-        id: Date.now(),
-        text: location,
-        type: 'location',
-      });
+      // saveSearchedData({
+      //   id: Date.now(),
+      //   text: location,
+      //   type: 'location',
+      // });
+      handleFilterData(location, 'location', searchedList, setSearchedList);
 
       const todo = [
         todoId,
@@ -352,9 +356,10 @@ export const ToDoModal = ({
               modalHandler={() =>
                 toggleIsVisible(mapIsVisible, setMapIsVisible)
               }
-              locationDataHandler={(value) => getLocationData(value)}
               navigation={navigation}
-              //onModalHide={() => setLocationData(locationData)}
+              locationDataHandler={(value) => getLocationData(value)}
+              searchedList={searchedList}
+              setSearchedList={setSearchedList}
             />
           </Modal>
         </View>

@@ -63,7 +63,6 @@
 	<string>CHANGEME: Motion permission helps detect when device in in-motion</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>addtodoicon.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -91,8 +90,6 @@
 		<string>icon-go-to-schedule-button.ttf</string>
 		<string>icon-home-title-rectangle.ttf</string>
 		<string>icon-todo-man.ttf</string>
-		<string>icon-add-favorite.ttf</string>
-		<string>icon-favorite.ttf</string>
 		<string>icon-go-back-button.ttf</string>
 		<string>icon-schedulte-timeset-button.ttf</string>
 		<string>icon-modal-question.ttf</string>
@@ -100,6 +97,12 @@
 		<string>icon-searched-location.ttf</string>
 		<string>icon-searched-search.ttf</string>
 		<string>icon-add-todo.ttf</string>
+		<string>icon-angle-down.ttf</string>
+		<string>icon-question-background.ttf</string>
+		<string>icon-question.ttf</string>
+		<string>icon-star-border.ttf</string>
+		<string>icon-target.ttf</string>
+		<string>icon-favorite.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

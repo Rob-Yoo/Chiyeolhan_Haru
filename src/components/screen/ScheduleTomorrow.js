@@ -6,8 +6,9 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
-import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
+import AddToDoIcon from '#assets/icons/icon-add-todo.js';
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 60,
@@ -43,7 +44,6 @@ export default function ScheduleTomorrow({ navigation, route }) {
       <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
       </TouchableOpacity>
-
       <ToDoModal
         navigation={navigation}
         modalHandler={() => toggleModal()}

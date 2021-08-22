@@ -78,9 +78,12 @@ export const saveSearchedData = async (searchedObject) => {
     console.log('searchedHistory Error :', e);
   }
 };
-export const deleteSearchedData = async (data) => {
+export const deleteSearchedData = async (data, updateData = false) => {
   try {
     await AsyncStorage.removeItem(KEY_VALUE_SEARCHED);
+    if (updateData) {
+      data.unshift(updateData);
+    }
     return AsyncStorage.setItem(KEY_VALUE_SEARCHED, JSON.stringify(data));
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
