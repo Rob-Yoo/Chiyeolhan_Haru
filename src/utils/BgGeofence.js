@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
 import { UID, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { getTimeDifference } from 'utils/Time';
+import { successNotification } from 'utils/Notification';
 
 const addGeofence = (latitude, longitude) => {
   BackgroundGeolocation.addGeofence({
@@ -94,7 +95,11 @@ export const initBgGeofence = async () => {
           time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
         const currentTime = `${hour}:${min}`;
         if (data.length != 0) {
-          if (data[0].startTime <= currentTime) {
+          if (
+            data[0].startTime <= currentTime &&
+            data[0].finishTime >= currentTime
+          ) {
+            successNotification();
             console.log(currentTime);
             geofenceUpdate(data);
           } else {
@@ -103,6 +108,7 @@ export const initBgGeofence = async () => {
               currentTime,
             );
             if (timeDifference <= 20) {
+              successNotification();
               console.log(data[0].startTime);
               geofenceUpdate(data);
             }
