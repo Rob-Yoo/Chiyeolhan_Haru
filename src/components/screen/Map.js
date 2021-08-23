@@ -159,6 +159,7 @@ const CurrentMap = ({
             latitudeDelta: 0.004,
             longitudeDelta: 0.004,
           }}
+          onPress={() => console.log('touch')}
         >
           <View style={{ flex: 1 }}>
             <MapSearch

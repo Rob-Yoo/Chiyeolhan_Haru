@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   swiperStyle: { height: '100%', maxHeight: 450 },
 });
 
-const PaintHome = (todoArr) => {
+const PaintHome = ({ todoArr }) => {
   if (Array.isArray(todoArr) && todoArr.length === 0) {
     todoArr = [
       {
@@ -55,7 +55,7 @@ const PaintHome = (todoArr) => {
                 finishTime={item.finishTime}
                 location={item.location}
                 toDos={todoArr}
-              />
+              ></Card>
             );
           })}
       </Swiper>
@@ -118,7 +118,9 @@ function HomeContent({ initToDo, toDos }) {
     return 0;
   });
 
-  return <>{isLoading ? <Text>loading</Text> : PaintHome(todoArr)}</>;
+  return (
+    <>{isLoading ? <Text>loading</Text> : <PaintHome todoArr={todoArr} />}</>
+  );
 }
 function mapStateToProps(state) {
   return { toDos: state };

@@ -93,21 +93,25 @@ export const Card = (props) => {
             flexWrap: 'nowrap',
           }}
         >
-          <View
-            style={{
-              position: 'absolute',
-              left: -10,
-              width: 5,
-              height: 20,
-              backgroundColor: '#00A29A',
-            }}
-          ></View>
+          {!id ? (
+            <></>
+          ) : (
+            <View
+              style={{
+                position: 'absolute',
+                left: -10,
+                width: 5,
+                height: 20,
+                backgroundColor: '#00A29A',
+              }}
+            />
+          )}
           <Text style={styles.cardLocation}>{location}</Text>
         </View>
       </View>
       <Text style={styles.cardTime}>
         {startTime}
-        {id ? `` : '~'}
+        {!id ? `` : '~'}
         {finishTime}
       </Text>
 
