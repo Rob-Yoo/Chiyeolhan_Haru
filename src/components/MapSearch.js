@@ -83,13 +83,21 @@ export const MapSearch = ({
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
 
   const deleteAllHistory = async () => {
-    await deleteAllSearchedData();
-    setSearchedList([]);
+    try {
+      await deleteAllSearchedData();
+      setSearchedList([]);
+    } catch (e) {
+      console.log('deleteAllHistory Error :', e);
+    }
   };
   const deleteHistory = async (id) => {
-    const tempData = searchedList.filter((item) => item.id !== id);
-    await deleteSearchedData(tempData);
-    setSearchedList(tempData);
+    try {
+      const tempData = searchedList.filter((item) => item.id !== id);
+      await deleteSearchedData(tempData);
+      setSearchedList(tempData);
+    } catch (e) {
+      console.log('deleteHistory Error :', e);
+    }
   };
   const searchInput = useRef('');
 

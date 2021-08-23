@@ -70,15 +70,26 @@ const CurrentMap = ({
   useEffect(() => {}, [locationResult]);
   useEffect(() => {
     const getSearchedList = async () => {
-      const searchedData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-      setSearchedList(JSON.parse(searchedData));
+      try {
+        const searchedData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+        setSearchedList(JSON.parse(searchedData));
+      } catch (e) {
+        console.log('getSearchedList Error :', e);
+      }
     };
     getSearchedList();
   }, []);
 
-  const handleFindCurrentLocation = () => {
-    //위치찾기
-    console.log('위치찾기 넣어줘');
+  const handleFindCurrentLocation = async () => {
+    try {
+      const result = await Location.getLastKnownPositionAsync();
+      const {
+        coords: { latitude, longitude },
+      } = result;
+      setResult({ latitude, longitude });
+    } catch (e) {
+      console.log('handleFindCurrentLocation Error :', e);
+    }
   };
   const createTwoButtonAlert = () =>
     Alert.alert(
