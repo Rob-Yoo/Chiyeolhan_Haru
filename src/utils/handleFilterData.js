@@ -1,4 +1,4 @@
-import { deleteSearchedData, saveSearchedData } from './asyncStorage';
+import { deleteSearchedData, saveSearchedData } from 'utils/AsyncStorage';
 
 export const handleFilterData = (text, type, searchedList, setSearchedList) => {
   const updateData = {
@@ -6,7 +6,11 @@ export const handleFilterData = (text, type, searchedList, setSearchedList) => {
     text,
     type,
   };
-  if (searchedList.some((item) => item.text === text)) {
+  if (searchedList === null) {
+    saveSearchedData(updateData);
+    setSearchedList([updateData]);
+    console.log(searchedList);
+  } else if (searchedList.some((item) => item.text === text)) {
     const tempData = searchedList.filter((item) => item.text !== text);
     deleteSearchedData(tempData, updateData);
     setSearchedList([updateData, ...tempData]);

@@ -52,12 +52,16 @@ export const renderPagination = (index, total, context) => {
 
   //리스트에 추가할때
   const addTaskList = async () => {
-    await dbService
-      .collection(`${UID}`)
-      .doc(`${targetId}`)
-      .update({
-        toDos: [...taskList],
-      });
+    try {
+      await dbService
+        .collection(`${UID}`)
+        .doc(`${targetId}`)
+        .update({
+          toDos: [...taskList],
+        });
+    } catch (e) {
+      console.log('addTaskList Error :', e);
+    }
   };
   return (
     <>
