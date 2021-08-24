@@ -5,10 +5,9 @@ import { dbService } from 'utils/firebase';
 import { connect } from 'react-redux';
 import { init } from 'redux/store';
 
-import { UID } from 'constant/const';
+import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
-import { TODAY } from 'constant/const';
 
 const styles = StyleSheet.create({
   homeContainer: {

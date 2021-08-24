@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import Modal from 'react-native-modal';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, TextInput, View, Text } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { edit } from 'redux/store';
-import { ModalLayout } from '../modal/ModalLayout';
+import { ModalLayout } from 'components/modal/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -63,6 +55,12 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
+  modalAddText: {
+    position: 'absolute',
+    color: '#229892',
+    top: 20,
+    right: 15,
+  },
 });
 
 export const Task = (props) => {
@@ -76,6 +74,11 @@ export const Task = (props) => {
   };
   const editTaskList = (targetId, taskTitle) => {
     dispatch(edit({ targetId, taskTitle, index }));
+  };
+
+  const submitTask = () => {
+    toggleIsVisible();
+    editTaskList(targetId, taskTitle);
   };
 
   return (
@@ -105,8 +108,13 @@ export const Task = (props) => {
               style={styles.modalInputTask}
               returnKeyType="done"
             />
-            <Text onPress={() => {}} style={styles.modalAdd}>
-              추가
+            <Text
+              onPress={() => {
+                submitTask();
+              }}
+              style={styles.modalAddText}
+            >
+              수정
             </Text>
           </View>
         </ModalLayout>

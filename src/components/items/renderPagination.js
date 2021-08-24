@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Task } from 'components/items/TaskItem';
 import { useDispatch } from 'react-redux';
 import { add } from 'redux/store';
-import { ModalLayout } from '../modal/ModalLayout';
+import { Task } from 'components/items/TaskItem';
+import { ModalLayout } from 'components/modal/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
     width: 350,
     height: 60,
     marginBottom: 20,
+  },
+  modalAddText: {
+    position: 'absolute',
+    color: '#229892',
+    top: 20,
+    right: 15,
   },
 });
 
@@ -137,13 +143,17 @@ export const Pagination = ({ list, targetId }) => {
               setTaskTitle(text);
             }}
             onSubmitEditing={() => {
-              toggleIsVisible();
               addTaskList(targetId, taskTitle);
             }}
             style={styles.modalInputTask}
             returnKeyType="done"
           />
-          <Text onPress={() => {}} style={styles.modalAdd}>
+          <Text
+            onPress={() => {
+              addTaskList(targetId, taskTitle);
+            }}
+            style={styles.modalAddText}
+          >
             추가
           </Text>
         </View>
