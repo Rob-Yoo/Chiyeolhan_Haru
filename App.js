@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import toDosSlice from 'redux/store';
+//import toDosSlice from 'redux/store';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
 import { initBgGeofence, geofenceUpdate } from 'utils/BgGeofence';
+import store from 'redux/store';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -31,7 +32,7 @@ export default function App() {
   }
   return (
     <>
-      <Provider store={toDosSlice}>
+      <Provider store={store}>
         <NavigationContainer>
           <HomeNav />
         </NavigationContainer>

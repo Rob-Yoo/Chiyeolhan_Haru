@@ -1,10 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import { add } from 'redux/store';
 import { Task } from 'components/items/TaskItem';
+import { ModalLayout } from 'components/modal/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -44,24 +47,33 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
+  modalInputTask: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: 350,
+    height: 60,
+    marginBottom: 20,
+  },
+  modalAddText: {
+    position: 'absolute',
+    color: '#229892',
+    top: 20,
+    right: 15,
+  },
 });
 
-export const renderPagination = (index, total, context) => {
-  const list = context.props.toDos[index].toDos;
-  const targetId = context.props.toDos[index].id;
+export const Pagination = ({ list, targetId }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [taskTitle, setTaskTitle] = useState('');
 
-  //리스트에 추가할때
-  const addTaskList = async () => {
-    try {
-      await dbService
-        .collection(`${UID}`)
-        .doc(`${targetId}`)
-        .update({
-          toDos: [...taskList],
-        });
-    } catch (e) {
-      console.log('addTaskList Error :', e);
-    }
+  const dispatch = useDispatch();
+
+  const toggleIsVisible = () => {
+    setIsVisible(!isVisible);
+  };
+  addTaskList = () => {
+    toggleIsVisible();
+    dispatch(add({ targetId, taskTitle }));
   };
   return (
     <>
@@ -80,7 +92,7 @@ export const renderPagination = (index, total, context) => {
           name="icon-tasklist-add-button"
           size={20}
           color={'#229892'}
-          onPress={() => console.log('press')}
+          onPress={() => toggleIsVisible()}
         />
       </View>
       <ScrollView
@@ -110,11 +122,48 @@ export const renderPagination = (index, total, context) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task key={index} text={item} />
+                <Task
+                  key={targetId}
+                  index={index}
+                  text={item}
+                  targetId={targetId}
+                />
               </View>
             );
           })}
       </ScrollView>
+
+      <ModalLayout
+        isVisible={isVisible}
+        taskListVisibleHandler={() => toggleIsVisible()}
+      >
+        <View>
+          <TextInput
+            onChangeText={(text) => {
+              setTaskTitle(text);
+            }}
+            onSubmitEditing={() => {
+              addTaskList(targetId, taskTitle);
+            }}
+            style={styles.modalInputTask}
+            returnKeyType="done"
+          />
+          <Text
+            onPress={() => {
+              addTaskList(targetId, taskTitle);
+            }}
+            style={styles.modalAddText}
+          >
+            추가
+          </Text>
+        </View>
+      </ModalLayout>
     </>
   );
+};
+
+export const renderPagination = (index, total, context) => {
+  const list = context.props.toDos[index].toDos;
+  const targetId = context.props.toDos[index].id;
+  return <Pagination list={list} targetId={targetId} />;
 };
