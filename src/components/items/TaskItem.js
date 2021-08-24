@@ -57,21 +57,24 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
+  background: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
 });
 
 export const Task = (props) => {
   const { text: taskText, targetId, index } = props;
   const [taskTitle, setTaskTitle] = useState(taskText);
-  const [isVisibe, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
 
   const toggleIsVisible = () => {
-    console.log('press');
-
-    setIsVisible(!isVisibe);
+    setIsVisible(!isVisible);
   };
   const editTaskList = (targetId, taskTitle) => {
-    console.log(taskTitle, index, targetId);
     dispatch(edit({ targetId, taskTitle, index }));
   };
 
@@ -84,22 +87,28 @@ export const Task = (props) => {
           </Text>
         </View>
 
-        <ModalLayout isVisibe={isVisibe}>
-          <TextInput
-            onChangeText={(text) => {
-              setTaskTitle(text);
-            }}
-            value={taskTitle}
-            onSubmitEditing={() => {
-              toggleIsVisible();
-              editTaskList(targetId, taskTitle);
-            }}
-            style={styles.modalInputTask}
-            returnKeyType="done"
-          />
-          <Text onPress={() => {}} style={styles.modalAdd}>
-            추가
-          </Text>
+        <ModalLayout
+          isVisible={isVisible}
+          taskListVisibleHandler={() => toggleIsVisible()}
+          setHandler={() => setTaskTitle(taskTitle)}
+        >
+          <View>
+            <TextInput
+              onChangeText={(text) => {
+                setTaskTitle(text);
+              }}
+              value={taskTitle}
+              onSubmitEditing={() => {
+                toggleIsVisible();
+                editTaskList(targetId, taskTitle);
+              }}
+              style={styles.modalInputTask}
+              returnKeyType="done"
+            />
+            <Text onPress={() => {}} style={styles.modalAdd}>
+              추가
+            </Text>
+          </View>
         </ModalLayout>
       </View>
     </>

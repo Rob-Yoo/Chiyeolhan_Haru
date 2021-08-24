@@ -331,6 +331,7 @@ export const ToDoModal = ({
             <TaskListModal
               taskListHandler={(text) => {
                 setValue('todotask', text);
+                handleSubmit(taskSubmit);
               }}
               taskListVisibleHandler={() =>
                 toggleIsVisible(inputIsVisible, setInputIsVisible)

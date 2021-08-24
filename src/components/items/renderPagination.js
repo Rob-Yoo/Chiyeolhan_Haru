@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Task } from 'components/items/TaskItem';
 import { useDispatch } from 'react-redux';
 import { add } from 'redux/store';
+import { ModalLayout } from '../modal/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -46,11 +47,28 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
+  modalInputTask: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: 350,
+    height: 60,
+    marginBottom: 20,
+  },
 });
 
 export const Pagination = ({ list, targetId }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [taskTitle, setTaskTitle] = useState('');
+
   const dispatch = useDispatch();
 
+  const toggleIsVisible = () => {
+    setIsVisible(!isVisible);
+  };
+  addTaskList = () => {
+    toggleIsVisible();
+    dispatch(add({ targetId, taskTitle }));
+  };
   return (
     <>
       <View style={styles.taskHeader}>
@@ -68,7 +86,7 @@ export const Pagination = ({ list, targetId }) => {
           name="icon-tasklist-add-button"
           size={20}
           color={'#229892'}
-          onPress={() => console.log('press')}
+          onPress={() => toggleIsVisible()}
         />
       </View>
       <ScrollView
@@ -108,6 +126,28 @@ export const Pagination = ({ list, targetId }) => {
             );
           })}
       </ScrollView>
+
+      <ModalLayout
+        isVisible={isVisible}
+        taskListVisibleHandler={() => toggleIsVisible()}
+      >
+        <View>
+          <TextInput
+            onChangeText={(text) => {
+              setTaskTitle(text);
+            }}
+            onSubmitEditing={() => {
+              toggleIsVisible();
+              addTaskList(targetId, taskTitle);
+            }}
+            style={styles.modalInputTask}
+            returnKeyType="done"
+          />
+          <Text onPress={() => {}} style={styles.modalAdd}>
+            추가
+          </Text>
+        </View>
+      </ModalLayout>
     </>
   );
 };

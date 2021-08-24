@@ -56,6 +56,7 @@ const PaintHome = ({ todoArr }) => {
                 location={item.location}
                 toDos={todoArr}
                 id={item.id}
+                isDone={item.isDone}
               ></Card>
             );
           })}

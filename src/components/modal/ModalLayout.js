@@ -11,10 +11,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ModalLayout = ({ isVisibe, children }) => {
+export const ModalLayout = ({
+  isVisible,
+  children,
+  taskListVisibleHandler,
+}) => {
   return (
-    <Modal style={{ margin: 0 }} isVisible={isVisibe}>
-      <TouchableOpacity style={styles.background} activeOpacity={1} />
+    <Modal style={{ margin: 0 }} isVisible={isVisible}>
+      <TouchableOpacity
+        style={styles.background}
+        activeOpacity={1}
+        onPress={taskListVisibleHandler}
+      />
       <View style={{ alignItems: 'center' }}>{children}</View>
     </Modal>
   );

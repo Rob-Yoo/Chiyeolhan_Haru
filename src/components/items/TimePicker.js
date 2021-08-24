@@ -43,7 +43,6 @@ Date.prototype.format = function (f) {
     }
   });
 };
-
 String.prototype.string = function (len) {
   var s = '',
     i = 0;
