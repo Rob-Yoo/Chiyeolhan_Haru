@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
-    height: 40,
+    height: 60,
     marginBottom: 20,
   },
   modalAdd: {

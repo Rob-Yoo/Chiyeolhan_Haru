@@ -5,6 +5,8 @@ import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Task } from 'components/items/TaskItem';
+import { useDispatch } from 'react-redux';
+import { add } from 'redux/store';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -46,23 +48,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export const renderPagination = (index, total, context) => {
-  const list = context.props.toDos[index].toDos;
-  const targetId = context.props.toDos[index].id;
+export const Pagination = ({ list, targetId }) => {
+  const dispatch = useDispatch();
 
-  //리스트에 추가할때
-  const addTaskList = async () => {
-    try {
-      await dbService
-        .collection(`${UID}`)
-        .doc(`${targetId}`)
-        .update({
-          toDos: [...taskList],
-        });
-    } catch (e) {
-      console.log('addTaskList Error :', e);
-    }
-  };
   return (
     <>
       <View style={styles.taskHeader}>
@@ -110,11 +98,22 @@ export const renderPagination = (index, total, context) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task key={index} text={item} />
+                <Task
+                  key={targetId}
+                  index={index}
+                  text={item}
+                  targetId={targetId}
+                />
               </View>
             );
           })}
       </ScrollView>
     </>
   );
+};
+
+export const renderPagination = (index, total, context) => {
+  const list = context.props.toDos[index].toDos;
+  const targetId = context.props.toDos[index].id;
+  return <Pagination list={list} targetId={targetId} />;
 };

@@ -229,20 +229,16 @@ export const ToDoModal = ({
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
   //리스트에 추가할때
-  // const completed = async () => {
-  //   try {
-  //     console.log(id);
-  //     id = id ?? Date.now();
-  //     setToDoId(id);
-  //     await dbService
-  //       .collection(`${uid}`)
-  //       .doc(`${id}`)
-  //       .update({
-  //         todos: [...taskList],
-  //       });
-  //   } catch (e) {
-  //     console.log('completed Error :', e);
-  //   }
+  // const completed = () => {
+  //   console.log(id);
+  //   id = id ?? Date.now();
+  //   setToDoId(id);
+  //   await dbService
+  //     .collection(`${uid}`)
+  //     .doc(`${id}`)
+  //     .update({
+  //       todos: [...taskList],
+  //     });
   // };
 
   useEffect(() => {

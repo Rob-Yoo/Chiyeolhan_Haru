@@ -69,7 +69,10 @@ export const Card = (props) => {
     startTime: startTime,
     location,
     id,
+    toDos,
   } = props;
+  // console.log(toDos);
+
   return (
     <View style={styles.card}>
       <View style={styles.todomanBackgroundCircle} />
@@ -93,7 +96,7 @@ export const Card = (props) => {
             flexWrap: 'nowrap',
           }}
         >
-          {!id ? (
+          {id ? (
             <></>
           ) : (
             <View
@@ -111,7 +114,7 @@ export const Card = (props) => {
       </View>
       <Text style={styles.cardTime}>
         {startTime}
-        {!id ? `` : '~'}
+        {id ? `` : `~`}
         {finishTime}
       </Text>
 
