@@ -1,4 +1,5 @@
 import PushNotification from 'react-native-push-notification';
+import { commonTimeExpression } from 'utils/Time';
 
 export const successNotification = () => {
   PushNotification.localNotificationSchedule({
@@ -45,4 +46,18 @@ export const arriveTooEarlyNotification = (time) => {
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications(['4']);
+};
+
+export const notifyNextSchedule = (startTime, location) => {
+  const timeNotify = commonTimeExpression(startTime); // ex) 09:05 -> 오전 9시 5분
+  const msg = `수고하셨습니다. ${timeNotify}에 ${location}에서 다음 일정이 예정되어 있습니다.`;
+
+  PushNotification.localNotificationSchedule({
+    //... You can use all the options from localNotifications
+    id: '5',
+    message: `${msg}`, // (required)
+    date: new Date(Date.now() + 1000), // 시작시간에 10분
+    allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+  });
+  PushNotification.removeDeliveredNotifications(['5']);
 };
