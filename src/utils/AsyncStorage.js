@@ -50,6 +50,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
         finishTime: result.data().finishTime,
         latitude: result.data().latitude,
         longitude: result.data().longitude,
+        location: result.data().location,
       });
     });
     setGeofenceData(JSON.stringify(geofenceDataArray));
