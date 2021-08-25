@@ -213,12 +213,7 @@ export const ToDoModal = ({
           isDone: false,
           isFavorite: false,
         });
-<<<<<<< HEAD
-
-      dbToAsyncStorage();
-=======
       dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
->>>>>>> c5b9e1dcc05d2ef83dcc81ae26927a98981a7f01
       handleFilterData(location, 'location', searchedList, setSearchedList);
       const todo = [
         todoId,
