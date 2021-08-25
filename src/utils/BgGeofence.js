@@ -68,9 +68,75 @@ export const geofenceUpdate = (data) => {
     });
 };
 
+const subscribeOnGeofence = () => {
+  BackgroundGeolocation.onGeofence(async (event) => {
+    console.log(event.action);
+    try {
+      const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      const isTooEarly = await AsyncStorage.getItem(KEY_VALUE_TOO_EARLY);
+      const data = JSON.parse(item);
+      const time = new Date();
+      const hour =
+        time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+      const min =
+        time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+      const currentTime = `${hour}:${min}`;
+      if (data.length != 0) {
+        const startTime = data[0].startTime;
+        const finishTime = data[0].finishTime;
+        if (isTooEarly == 'true' && event.action == 'EXIT') {
+          if (currentTime >= startTime) {
+            // 사용자가 엄청 일찍 들어와서 계속 그자리에 있다가 시작 시간 이후에 나간다면 일정을 완료한 것으로 간주하고 업데이트
+            console.log(
+              '굉장히 일찍 와서 계속 그 위치에서 일정까지 소화하고 나감',
+              currentTime,
+            );
+            geofenceUpdate(data);
+          } else {
+            // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
+            console.log(
+              '굉장히 일찍 왔지만 일정 시작전에 나간 경우 혹은 그냥 시작 시각 전에 그 주위에 있다가 트래킹이 된 경우',
+              currentTime,
+            );
+            PushNotification.cancelLocalNotification('3'); //arriveTooEarlyNotification 알림 사라짐
+          }
+          AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
+        }
+        if (event.action == 'ENTER') {
+          if (startTime <= currentTime && currentTime <= finishTime) {
+            const timeDiff = getLateTimeDiff(startTime, currentTime);
+            if (0 <= timeDiff && timeDiff <= 10) {
+              successNotification();
+              console.log('제 시간에 옴', currentTime);
+              geofenceUpdate(data);
+            } else {
+              arriveLateNotification();
+              console.log('늦은 시간에 옴', currentTime);
+              geofenceUpdate(data);
+            }
+          } else {
+            const timeDiff = getEarlyTimeDiff(startTime, currentTime);
+            if (0 < timeDiff && timeDiff <= 10) {
+              // 일정보다 10분 내로 먼저 도착했을 경우
+              arriveEarlyNotification();
+              console.log('좀 일찍 옴', currentTime);
+              geofenceUpdate(data);
+            } else if (timeDiff > 10) {
+              arriveTooEarlyNotification(timeDiff);
+              AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'true');
+              console.log('굉장히 일찍 옴', currentTime);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.log('subscribeOnGeofence Error :', e);
+    }
+  });
+};
 export const initBgGeofence = async () => {
   try {
-    await BackgroundGeolocation.ready({
+    const state = await BackgroundGeolocation.ready({
       // Geolocation Config
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       locationAuthorizationRequest: 'Always',
@@ -94,83 +160,11 @@ export const initBgGeofence = async () => {
       // Application config
       stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
       startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-    }).then((state) => {
-      BackgroundGeolocation.startGeofences();
-      BackgroundGeolocation.onGeofence(async (event) => {
-        BackgroundGeolocation.stop()
-          .then((success) => {
-            addGeofenceTrigger();
-            BackgroundGeolocation.startGeofences();
-          })
-          .catch((e) => {
-            console.log('Error');
-          });
-        console.log(event.action);
-        try {
-          const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-          const isTooEarly = await AsyncStorage.getItem(KEY_VALUE_TOO_EARLY);
-          const data = JSON.parse(item);
-          const time = new Date();
-          const hour =
-            time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-          const min =
-            time.getMinutes() < 10
-              ? `0${time.getMinutes()}`
-              : time.getMinutes();
-          const currentTime = `${hour}:${min}`;
-          if (data.length != 0) {
-            const startTime = data[0].startTime;
-            const finishTime = data[0].finishTime;
-            if (isTooEarly == 'true' && event.action == 'EXIT') {
-              if (currentTime >= startTime) {
-                // 사용자가 엄청 일찍 들어와서 계속 그자리에 있다가 시작 시간 이후에 나간다면 일정을 완료한 것으로 간주하고 업데이트
-                console.log(
-                  '굉장히 일찍 와서 계속 그 위치에서 일정까지 소화하고 나감',
-                  currentTime,
-                );
-                geofenceUpdate(data);
-              } else {
-                // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
-                console.log(
-                  '굉장히 일찍 왔지만 일정 시작전에 나간 경우 혹은 그냥 시작 시각 전에 그 주위에 있다가 트래킹이 된 경우',
-                  currentTime,
-                );
-                PushNotification.cancelLocalNotification('3'); //arriveTooEarlyNotification 알림 사라짐
-              }
-              AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
-            }
-            if (event.action == 'ENTER') {
-              if (startTime <= currentTime && currentTime <= finishTime) {
-                const timeDiff = getLateTimeDiff(startTime, currentTime);
-                if (0 <= timeDiff && timeDiff <= 10) {
-                  successNotification();
-                  console.log('제 시간에 옴', currentTime);
-                  geofenceUpdate(data);
-                } else {
-                  arriveLateNotification();
-                  console.log('늦은 시간에 옴', currentTime);
-                  geofenceUpdate(data);
-                }
-              } else {
-                const timeDiff = getEarlyTimeDiff(startTime, currentTime);
-                if (0 < timeDiff && timeDiff <= 10) {
-                  // 일정보다 10분 내로 먼저 도착했을 경우
-                  arriveEarlyNotification();
-                  console.log('좀 일찍 옴', currentTime);
-                  geofenceUpdate(data);
-                } else if (timeDiff > 10) {
-                  arriveTooEarlyNotification(timeDiff);
-                  AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'true');
-                  console.log('굉장히 일찍 옴', currentTime);
-                }
-              }
-            }
-          }
-        } catch (e) {
-          console.log('onGeofence Error :', e);
-        }
-      });
     });
+    console.log('Init Geofence');
+    await BackgroundGeolocation.startGeofences();
+    subscribeOnGeofence();
+    return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);
   }
