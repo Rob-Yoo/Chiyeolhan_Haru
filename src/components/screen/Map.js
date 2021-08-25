@@ -16,7 +16,7 @@ import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/MapSearch';
 import { LocationData } from 'components/items/LocationData';
 
-import IconFindLocation from '#assets/icons/icon-target.js';
+import IconFindLocation from '#assets/icons/icon-find-current-location.js';
 import IconFavorite from '#assets/icons/icon-favorite.js';
 import {
   GOOGLE_API_URL,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 40,
     height: 40,
-    backgroundColor: '#FFF',
+
     borderRadius: 50,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -168,7 +168,7 @@ const CurrentMap = ({
             />
             <IconFindLocation
               size={30}
-              name="target"
+              name="icon-find-current-location"
               style={styles.iconFindLocation}
               color="#00000041"
               onPress={() => handleFindCurrentLocation()}

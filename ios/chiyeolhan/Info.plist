@@ -103,6 +103,7 @@
 		<string>icon-star-border.ttf</string>
 		<string>icon-target.ttf</string>
 		<string>icon-favorite.ttf</string>
+		<string>icon-find-current-location.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

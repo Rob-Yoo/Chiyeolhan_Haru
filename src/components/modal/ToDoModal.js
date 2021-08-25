@@ -15,9 +15,9 @@ import { dbService } from 'utils/firebase';
 import { dbToAsyncStorage } from 'utils/AsyncStorage';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
-import { TaskListModal } from 'components/modal/ToDoModalTaskListModal';
+import { ToDoModalInput } from 'components/modal/ToDoModalInput';
+import IconQuestion from '#assets/icons/icon-question';
 import { UID, TODAY, KEY_VALUE_GEOFENCE } from 'constant/const';
-import IconModalQuestion from '#assets/icons/icon-modal-question';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
 
@@ -213,7 +213,12 @@ export const ToDoModal = ({
           isDone: false,
           isFavorite: false,
         });
+<<<<<<< HEAD
+
+      dbToAsyncStorage();
+=======
       dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+>>>>>>> c5b9e1dcc05d2ef83dcc81ae26927a98981a7f01
       handleFilterData(location, 'location', searchedList, setSearchedList);
       const todo = [
         todoId,
@@ -236,21 +241,12 @@ export const ToDoModal = ({
 
   const taskSubmit = (data) => {
     const { todotask } = data;
-    setTaskList((taskList) => [...taskList, todotask]);
+    if (todotask.length > 0) {
+      setTaskList((taskList) => [...taskList, todotask]);
+    }
+    setValue('todotask', '');
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
-  //리스트에 추가할때
-  // const completed = () => {
-  //   console.log(id);
-  //   id = id ?? Date.now();
-  //   setToDoId(id);
-  //   await dbService
-  //     .collection(`${uid}`)
-  //     .doc(`${id}`)
-  //     .update({
-  //       todos: [...taskList],
-  //     });
-  // };
 
   useEffect(() => {
     register('todoStartTime'),
@@ -300,9 +296,9 @@ export const ToDoModal = ({
                 marginBottom: 20,
               }}
             >
-              <IconModalQuestion
+              <IconQuestion
                 size={50}
-                name="icon-modal-question"
+                name="icon-question"
                 size={110}
                 color={'#FFFFFF'}
                 onPress={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
@@ -339,7 +335,7 @@ export const ToDoModal = ({
             >
               <Text style={styles.modalInputText}>수행리스트</Text>
             </TouchableOpacity>
-            <TaskListModal
+            <ToDoModalInput
               taskListHandler={(text) => {
                 setValue('todotask', text);
                 handleSubmit(taskSubmit);

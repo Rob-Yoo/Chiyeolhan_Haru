@@ -91,7 +91,6 @@ export const Card = ({
         const numerator = finishTime - currentTime;
         let width = Math.floor((numerator / denominator) * 100);
         setWidth(width);
-        console.log(text, width);
       }
     }
   };

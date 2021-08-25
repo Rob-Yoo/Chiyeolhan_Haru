@@ -143,14 +143,16 @@ export const Pagination = ({ list, targetId }) => {
               setTaskTitle(text);
             }}
             onSubmitEditing={() => {
-              addTaskList(targetId, taskTitle);
+              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
+              else toggleIsVisible();
             }}
             style={styles.modalInputTask}
             returnKeyType="done"
           />
           <Text
             onPress={() => {
-              addTaskList(targetId, taskTitle);
+              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
+              else toggleIsVisible();
             }}
             style={styles.modalAddText}
           >
