@@ -1,7 +1,7 @@
 import { createIconSetFromFontello } from 'react-native-vector-icons';
-import fontelloConfig from './icon-question-background.json';
+import fontelloConfig from './icon-find-current-location.json';
 const Icon = createIconSetFromFontello(
   fontelloConfig,
-  'icon-question-background',
+  'icon-find-current-location',
 );
 export default Icon;

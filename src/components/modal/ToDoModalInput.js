@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const TaskListModal = (props) => {
+export const ToDoModalInput = (props) => {
   const [task, setTask] = useState('');
   const {
     inputIsVisible,
@@ -67,8 +67,11 @@ export const TaskListModal = (props) => {
         ></TextInput>
         <Text
           onPress={() => {
-            taskSubmitHandler(task);
-            setTask('');
+            if (task.length > 0) {
+              taskSubmitHandler(task);
+              setTask('');
+              taskListHandler;
+            } else taskListHandler;
           }}
           style={styles.modalAddText}
         >

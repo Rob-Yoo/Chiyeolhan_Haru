@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Text } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { edit } from 'redux/store';
 import { ModalLayout } from 'components/modal/ModalLayout';
+import { remove } from 'redux/store';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -61,34 +69,77 @@ const styles = StyleSheet.create({
     top: 20,
     right: 15,
   },
+  removeButtonText: {
+    color: '#788382',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#707070',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    fontWeight: '300',
+  },
 });
 
 export const Task = (props) => {
   const { text: taskText, targetId, index } = props;
   const [taskTitle, setTaskTitle] = useState(taskText);
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleRemoveButton, setIsVisibleRemoveButton] = useState(false);
+
   const dispatch = useDispatch();
 
+  const toggleRemoveButton = () => {
+    setIsVisibleRemoveButton(!isVisibleRemoveButton);
+  };
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
   const editTaskList = (targetId, taskTitle) => {
     dispatch(edit({ targetId, taskTitle, index }));
   };
+  const deleteTaskList = (targetId, index) => {
+    dispatch(remove({ targetId, index }));
+  };
 
   const submitTask = () => {
+    if (taskTitle.length > 0) editTaskList(targetId, taskTitle);
+    else if (taskTitle.length === 0) deleteTaskList(targetId, index);
     toggleIsVisible();
-    editTaskList(targetId, taskTitle);
   };
 
   return (
     <>
       <View style={styles.taskContainer}>
-        <View style={styles.task}>
-          <Text style={styles.taskText} onPress={() => toggleIsVisible()}>
-            {taskText.length > 17 ? `${taskText.substr(0, 16)}...` : taskText}
-          </Text>
-        </View>
+        <TouchableHighlight
+          onLongPress={() => toggleRemoveButton()}
+          onPress={() => toggleIsVisible()}
+          style={styles.task}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.taskText}>
+              {taskText.length > 17 ? `${taskText.substr(0, 11)}...` : taskText}
+            </Text>
+            {isVisibleRemoveButton ? (
+              <Text
+                style={styles.removeButtonText}
+                onPress={() => {
+                  deleteTaskList(targetId, index);
+                  toggleRemoveButton();
+                }}
+              >
+                삭제
+              </Text>
+            ) : (
+              <></>
+            )}
+          </View>
+        </TouchableHighlight>
 
         <ModalLayout
           isVisible={isVisible}
@@ -102,8 +153,7 @@ export const Task = (props) => {
               }}
               value={taskTitle}
               onSubmitEditing={() => {
-                toggleIsVisible();
-                editTaskList(targetId, taskTitle);
+                submitTask();
               }}
               style={styles.modalInputTask}
               returnKeyType="done"

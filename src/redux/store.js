@@ -49,8 +49,13 @@ const toDosSlice = createSlice({
       state[targetId].toDos[index] = taskTitle;
       toDosUpdateDB(state[targetId], targetId);
     },
+    remove: (state, action) => {
+      const { targetId, index } = action.payload;
+      console.log(targetId, index);
+      state[targetId].toDos.splice(index, 1);
+    },
   },
 });
 
-export const { create, add, init, edit } = toDosSlice.actions;
+export const { create, add, init, edit, remove } = toDosSlice.actions;
 export default configureStore({ reducer: toDosSlice.reducer });
