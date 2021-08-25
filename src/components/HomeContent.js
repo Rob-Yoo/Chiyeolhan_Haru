@@ -45,8 +45,7 @@ const PaintHome = ({ todoArr }) => {
       >
         {todoArr &&
           todoArr.map((item) => {
-            //console.log(item);
-            return (
+            return item.date === TODAY ? (
               <Card
                 key={item.id}
                 text={item.title}
@@ -56,7 +55,9 @@ const PaintHome = ({ todoArr }) => {
                 toDos={todoArr}
                 id={item.id}
                 isDone={item.isDone}
-              ></Card>
+              />
+            ) : (
+              <></>
             );
           })}
       </Swiper>
@@ -96,7 +97,7 @@ function HomeContent({ initToDo, toDos }) {
     try {
       const row = await dbService
         .collection(`${UID}`)
-        .where('date', '==', `${TODAY}`)
+        // .where('date', '==', `${TODAY}`)
         .get();
       row.forEach((data) => (rowObj[data.id] = data.data()));
       if (Object.keys(rowObj).length === 0) {
@@ -108,7 +109,9 @@ function HomeContent({ initToDo, toDos }) {
     }
   };
 
-  for (key in toDos) todoArr.push(toDos[key]);
+  for (key in toDos) {
+    if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
+  }
   todoArr.sort((a, b) => {
     if (a.id < b.id) {
       return -1;

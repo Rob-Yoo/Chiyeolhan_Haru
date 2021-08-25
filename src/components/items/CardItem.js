@@ -66,12 +66,12 @@ export const Card = ({
   isDone,
   toDos,
 }) => {
+  const [width, setWidth] = useState('0%');
+  const [isData, setIsData] = useState(false);
   useEffect(() => {
     getProgressBarWidth();
     setIsData(id);
   }, []);
-  const [width, setWidth] = useState('0%');
-  const [isData, setIsData] = useState(false);
   const getProgressBarWidth = () => {
     if (isDone) {
       setWidth('100%');
@@ -90,11 +90,10 @@ export const Card = ({
         const denominator = finishTime - startTime;
         const numerator = finishTime - currentTime;
         let width = Math.floor((numerator / denominator) * 100);
-        setWidth(width);
+        setWidth(`${width}%`);
       }
     }
   };
-  // console.log(toDos);
   return (
     <View style={styles.card}>
       <View style={styles.todomanBackgroundCircle} />

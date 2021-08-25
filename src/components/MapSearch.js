@@ -81,7 +81,9 @@ export const MapSearch = ({
 }) => {
   const [inputText, setText] = useState('');
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
-
+  toggleModal = () => {
+    setSearchedHistroyVisible(!searchedHistoryVisible);
+  };
   const deleteAllHistory = async () => {
     await deleteAllSearchedData();
     setSearchedList([]);
@@ -109,7 +111,9 @@ export const MapSearch = ({
               name="icon-go-back-button"
               size={20}
               style={{ width: 30, height: 30, marginLeft: 15 }}
-              onPress={modalHandler}
+              onPress={() => {
+                searchedHistoryVisible ? toggleModal() : modalHandler();
+              }}
             />
             <TextInput
               style={styles.mapSearchInput}
@@ -123,7 +127,7 @@ export const MapSearch = ({
               onChangeText={(text) => setText(text)}
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
-                setSearchedHistroyVisible(!searchedHistoryVisible);
+                toggleModal();
               }}
             />
           </View>
@@ -136,7 +140,7 @@ export const MapSearch = ({
                     activeOpacity={1}
                     onPress={() => {
                       _handlePlacesAPI(item.text);
-                      setSearchedHistroyVisible(!searchedHistoryVisible);
+                      toggleModal();
                       searchInput.current.placeholder = `${item.text}`;
                       setText(item.text);
                     }}

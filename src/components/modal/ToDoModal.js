@@ -20,6 +20,7 @@ import IconQuestion from '#assets/icons/icon-question';
 import { UID, TODAY, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
+import { TOMORROW } from '../../constant/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -148,6 +149,7 @@ export const ToDoModal = ({
   modalHandler,
   isModalVisible,
   navigation,
+  isToday,
 }) => {
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
@@ -176,7 +178,10 @@ export const ToDoModal = ({
   const toDoSubmit = async ({ todoStartTime, todoFinishTime, todoTitle }) => {
     const { latitude, location, longitude, address } = locationData;
     const date = new Date();
-    const todoId = `${date.getFullYear()}` + `${TODAY}` + `${todoStartTime}`;
+    const todoId =
+      `${date.getFullYear()}` +
+      `${isToday ? TODAY : TOMORROW}` +
+      `${todoStartTime}`;
     let isChangeEarliest = true;
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
@@ -208,7 +213,7 @@ export const ToDoModal = ({
           address,
           longitude,
           latitude,
-          date: TODAY,
+          date: isToday ? TODAY : TOMORROW,
           toDos: [...taskList],
           isDone: false,
           isFavorite: false,
@@ -220,7 +225,7 @@ export const ToDoModal = ({
         todoStartTime,
         todoFinishTime,
         todoTitle,
-        TODAY,
+        isToday ? TODAY : TOMORROW,
         taskList,
         address,
         longitude,

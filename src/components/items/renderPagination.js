@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { add } from 'redux/store';
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/modal/ModalLayout';
+import { TODAY } from '../../constant/const';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -62,10 +63,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Pagination = ({ list, targetId }) => {
+export const Pagination = ({ taskList, targetId }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
-
   const dispatch = useDispatch();
 
   const toggleIsVisible = () => {
@@ -103,8 +103,8 @@ export const Pagination = ({ list, targetId }) => {
           flexGrow: 0,
         }}
       >
-        {list &&
-          list.map((item, index) => {
+        {taskList &&
+          taskList.map((item, index) => {
             return (
               <View key={index}>
                 {index === 0 ? (
@@ -143,16 +143,14 @@ export const Pagination = ({ list, targetId }) => {
               setTaskTitle(text);
             }}
             onSubmitEditing={() => {
-              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
-              else toggleIsVisible();
+              addTaskList(targetId, taskTitle);
             }}
             style={styles.modalInputTask}
             returnKeyType="done"
           />
           <Text
             onPress={() => {
-              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
-              else toggleIsVisible();
+              addTaskList(targetId, taskTitle);
             }}
             style={styles.modalAddText}
           >
@@ -165,7 +163,7 @@ export const Pagination = ({ list, targetId }) => {
 };
 
 export const renderPagination = (index, total, context) => {
-  const list = context.props.toDos[index].toDos;
+  const taskList = context.props.toDos[index].toDos;
   const targetId = context.props.toDos[index].id;
-  return <Pagination list={list} targetId={targetId} />;
+  return <Pagination taskList={taskList} targetId={targetId} />;
 };
