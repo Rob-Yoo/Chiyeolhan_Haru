@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { toDosUpdateDB } from '../utils/Database';
 
 const toDosSlice = createSlice({
   name: 'toDoReducer',
@@ -39,12 +40,17 @@ const toDosSlice = createSlice({
       };
     },
     add: (state, action) => {
-      const todoId = action.payload.id;
-      const task = action.payload.task;
-      state[todoId].toDos.push(task);
+      const { targetId, taskTitle } = action.payload;
+      state[targetId].toDos.push(taskTitle);
+      toDosUpdateDB(state[targetId], targetId);
+    },
+    edit: (state, action) => {
+      const { targetId, taskTitle, index } = action.payload;
+      state[targetId].toDos[index] = taskTitle;
+      toDosUpdateDB(state[targetId], targetId);
     },
   },
 });
 
-export const { create, add, init } = toDosSlice.actions;
+export const { create, add, init, edit } = toDosSlice.actions;
 export default configureStore({ reducer: toDosSlice.reducer });

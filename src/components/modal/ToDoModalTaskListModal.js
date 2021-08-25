@@ -19,12 +19,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
-    height: 40,
+    height: 60,
     marginBottom: 20,
   },
-  modalAdd: {
+  modalAddText: {
     position: 'absolute',
-    top: 12,
+    color: '#229892',
+    top: 20,
     right: 15,
   },
 });
@@ -69,7 +70,7 @@ export const TaskListModal = (props) => {
             taskSubmitHandler(task);
             setTask('');
           }}
-          style={styles.modalAdd}
+          style={styles.modalAddText}
         >
           추가
         </Text>
