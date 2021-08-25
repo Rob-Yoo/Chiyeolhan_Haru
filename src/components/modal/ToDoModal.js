@@ -10,16 +10,16 @@ import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
+import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
 import { dbToAsyncStorage } from 'utils/AsyncStorage';
-
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { TaskListModal } from 'components/modal/TaskListModal';
-
-import { UID, TODAY } from 'constant/const';
+import { UID, TODAY, KEY_VALUE_GEOFENCE } from 'constant/const';
 import IconModalQuestion from '#assets/icons/icon-modal-question';
 import { handleFilterData } from 'utils/handleFilterData';
+import { isEarliestTime } from 'utils/Time';
 
 const styles = StyleSheet.create({
   container: {
@@ -177,6 +177,24 @@ export const ToDoModal = ({
     const { latitude, location, longitude, address } = locationData;
     const date = new Date();
     const todoId = `${date.getFullYear()}` + `${TODAY}` + `${todoStartTime}`;
+    let isChangeEarliest = true;
+    // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
+    // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
+    try {
+      const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      if (result != null) {
+        const data = JSON.parse(result);
+        if (data.length != 0) {
+          const earliestTime = data[0].startTime;
+          if (!isEarliestTime(earliestTime, todoStartTime)) {
+            isChangeEarliest = false;
+          }
+        }
+      }
+    } catch (e) {
+      console.log('toDoSubmit first try catch Error :', e);
+    }
+
     try {
       await dbService
         .collection(`${UID}`)
@@ -195,15 +213,8 @@ export const ToDoModal = ({
           isDone: false,
           isFavorite: false,
         });
-
-      dbToAsyncStorage();
-      // saveSearchedData({
-      //   id: Date.now(),
-      //   text: location,
-      //   type: 'location',
-      // });
+      dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
       handleFilterData(location, 'location', searchedList, setSearchedList);
-
       const todo = [
         todoId,
         todoStartTime,
@@ -219,7 +230,7 @@ export const ToDoModal = ({
       createToDo(todo);
       modalHandler();
     } catch (e) {
-      console.log('toDoSumbit Error :', e);
+      console.log('toDoSumbit second try catch Error :', e);
     }
   };
 

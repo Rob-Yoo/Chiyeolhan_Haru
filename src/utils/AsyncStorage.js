@@ -34,7 +34,7 @@ const setSearchedData = (array) => {
 //   }
 // };
 
-export const dbToAsyncStorage = async () => {
+export const dbToAsyncStorage = async (isChangeEarliest) => {
   try {
     const geofenceDataArray = [];
     const todosRef = dbService.collection(`${UID}`);
@@ -53,7 +53,9 @@ export const dbToAsyncStorage = async () => {
       });
     });
     setGeofenceData(JSON.stringify(geofenceDataArray));
-    addGeofenceTrigger();
+    if (isChangeEarliest) {
+      addGeofenceTrigger();
+    }
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
   }

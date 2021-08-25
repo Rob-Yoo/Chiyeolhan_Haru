@@ -3,9 +3,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
 import { UID, KEY_VALUE_GEOFENCE, KEY_VALUE_TOO_EARLY } from 'constant/const';
 import PushNotification from 'react-native-push-notification';
-import { getTimeDifference } from 'utils/Time';
+import { getEarlyTimeDiff, getLateTimeDiff } from 'utils/Time';
 import {
   successNotification,
+  arriveLateNotification,
   arriveEarlyNotification,
   arriveTooEarlyNotification,
 } from 'utils/Notification';
@@ -33,6 +34,14 @@ export const addGeofenceTrigger = async () => {
       const lat = data[0].latitude;
       const lng = data[0].longitude;
       addGeofence(lat, lng);
+    } else {
+      BackgroundGeolocation.removeGeofence(`${UID}`)
+        .then((success) => {
+          console.log('[removeGeofence] success');
+        })
+        .catch((error) => {
+          console.log('[removeGeofence] FAILURE: ', error);
+        });
     }
   } catch (error) {
     console.log('addGeofenceTrigger Error :', error);
@@ -88,6 +97,14 @@ export const initBgGeofence = async () => {
     }).then((state) => {
       BackgroundGeolocation.startGeofences();
       BackgroundGeolocation.onGeofence(async (event) => {
+        BackgroundGeolocation.stop()
+          .then((success) => {
+            addGeofenceTrigger();
+            BackgroundGeolocation.startGeofences();
+          })
+          .catch((e) => {
+            console.log('Error');
+          });
         console.log(event.action);
         try {
           const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
@@ -102,8 +119,10 @@ export const initBgGeofence = async () => {
               : time.getMinutes();
           const currentTime = `${hour}:${min}`;
           if (data.length != 0) {
+            const startTime = data[0].startTime;
+            const finishTime = data[0].finishTime;
             if (isTooEarly == 'true' && event.action == 'EXIT') {
-              if (currentTime >= data[0].startTime) {
+              if (currentTime >= startTime) {
                 // 사용자가 엄청 일찍 들어와서 계속 그자리에 있다가 시작 시간 이후에 나간다면 일정을 완료한 것으로 간주하고 업데이트
                 console.log(
                   '굉장히 일찍 와서 계속 그 위치에서 일정까지 소화하고 나감',
@@ -113,7 +132,7 @@ export const initBgGeofence = async () => {
               } else {
                 // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
                 console.log(
-                  '굉장히 일찍 왔지만 일정 시작전에 나감',
+                  '굉장히 일찍 왔지만 일정 시작전에 나간 경우 혹은 그냥 시작 시각 전에 그 주위에 있다가 트래킹이 된 경우',
                   currentTime,
                 );
                 PushNotification.cancelLocalNotification('3'); //arriveTooEarlyNotification 알림 사라짐
@@ -121,25 +140,26 @@ export const initBgGeofence = async () => {
               AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
             }
             if (event.action == 'ENTER') {
-              if (
-                data[0].startTime <= currentTime &&
-                data[0].finishTime >= currentTime
-              ) {
-                successNotification();
-                console.log('제 시간에 옴', currentTime);
-                geofenceUpdate(data);
+              if (startTime <= currentTime && currentTime <= finishTime) {
+                const timeDiff = getLateTimeDiff(startTime, currentTime);
+                if (0 <= timeDiff && timeDiff <= 10) {
+                  successNotification();
+                  console.log('제 시간에 옴', currentTime);
+                  geofenceUpdate(data);
+                } else {
+                  arriveLateNotification();
+                  console.log('늦은 시간에 옴', currentTime);
+                  geofenceUpdate(data);
+                }
               } else {
-                const timeDifference = getTimeDifference(
-                  data[0].startTime,
-                  currentTime,
-                );
-                if (timeDifference <= 20 && timeDifference > 0) {
-                  // 일정보다 20분 내로 먼저 도착했을 경우
+                const timeDiff = getEarlyTimeDiff(startTime, currentTime);
+                if (0 < timeDiff && timeDiff <= 10) {
+                  // 일정보다 10분 내로 먼저 도착했을 경우
                   arriveEarlyNotification();
                   console.log('좀 일찍 옴', currentTime);
                   geofenceUpdate(data);
-                } else if (timeDifference > 20) {
-                  arriveTooEarlyNotification(timeDifference);
+                } else if (timeDiff > 10) {
+                  arriveTooEarlyNotification(timeDiff);
                   AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'true');
                   console.log('굉장히 일찍 옴', currentTime);
                 }
