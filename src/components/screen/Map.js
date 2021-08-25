@@ -10,6 +10,7 @@ import {
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/MapSearch';
@@ -106,46 +107,43 @@ const CurrentMap = ({
       { cancelable: false },
     );
 
-  const _handlePlacesAPI = (text) => {
-    // setSearchedList(text);
+  const _handlePlacesAPI = async (text) => {
     const place = text.replaceAll(' ', '%20');
-    fetch(
+    const response = await fetch(
       `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
-    )
-      .then((response) => response.json())
-      .then(async (data) => {
-        const status = data.status;
-        switch (status) {
-          case 'OK':
-            const {
-              candidates: [
-                {
-                  formatted_address: address,
-                  geometry: {
-                    location: { lat: latitude, lng: longitude },
-                  },
-                  name: location,
-                },
-              ],
-            } = data;
-            setResult({
-              latitude,
-              longitude,
-            });
-            setData({ location, latitude, longitude, address });
-            handleFilterData(text, 'search', searchedList, setSearchedList);
-            setRenderData(true);
-            break;
-          case 'ZERO_RESULTS':
-            createTwoButtonAlert();
-            break;
-          case 'OVER_QUERY_LIMIT':
-            console.log('API 할당량 넘었음');
-            break;
-          default:
-            console.log(`Error ${status}`);
-        }
-      });
+    );
+    const data = await response.json();
+    const status = data.status;
+    switch (status) {
+      case 'OK':
+        const {
+          candidates: [
+            {
+              formatted_address: address,
+              geometry: {
+                location: { lat: latitude, lng: longitude },
+              },
+              name: location,
+            },
+          ],
+        } = data;
+        setResult({
+          latitude,
+          longitude,
+        });
+        setData({ location, latitude, longitude, address });
+        handleFilterData(text, 'search', searchedList, setSearchedList);
+        setRenderData(true);
+        break;
+      case 'ZERO_RESULTS':
+        createTwoButtonAlert();
+        break;
+      case 'OVER_QUERY_LIMIT':
+        console.log('API 할당량 넘었음');
+        break;
+      default:
+        console.log(`Error ${status}`);
+    }
   };
 
   return (
@@ -225,37 +223,21 @@ const Map = ({
   setSearchedList,
   navigation,
 }) => {
-  const appState = useRef(AppState.currentState);
-
-  const [stateVisible, setStateVisible] = useState(appState.current);
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
 
   useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange);
-    getLocation();
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange);
+    const getLoctionTrigger = async () => {
+      await getLocation();
     };
+    getLoctionTrigger();
   }, [isFind]);
 
-  const _handleAppStateChange = (nextAppState) => {
-    if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
-      getLocation();
-    }
-
-    appState.current = nextAppState;
-    setStateVisible(appState.current);
-  };
   const getLocation = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      if (status != 'granted') {
         setFind(false);
-        return;
       } else {
         const locationData = await Location.getCurrentPositionAsync();
         const curretLocation = {
@@ -269,6 +251,7 @@ const Map = ({
       console.log('getLocation Error :', e);
     }
   };
+
   return isFind ? (
     <CurrentMap
       navigation={navigation}
@@ -279,7 +262,7 @@ const Map = ({
       setSearchedList={setSearchedList}
     />
   ) : (
-    <Text>Loading...</Text>
+    <></>
   );
 };
 
