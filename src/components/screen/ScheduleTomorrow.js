@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import ToDoModal from 'components/modal/ToDoModal';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
-
+import { makeScheduleDate } from 'utils/makeScheduleData';
+import { ScheduleComponent } from 'components/items/ScheduleCompoentn';
+import { useSelector } from 'react-redux';
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 60,
@@ -28,18 +24,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ScheduleTomorrow({ navigation, route }) {
-  const { params: locationData } = route;
+export default function ScheduleTomorrow({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [slideUpValue, setSlideValue] = useState(new Animated.Value(0));
+  const tomorrowToDos = [];
+  const toDos = useSelector((state) => state);
+  console.log(toDos);
+  makeScheduleDate(toDos, tomorrowToDos, false);
+  console.log(tomorrowToDos);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-    console.log(isModalVisible);
   };
   return (
     <>
-      <View>
-        <Text>Tomorrow</Text>
+      <View style={{ flex: 1 }}>
+        <ScheduleComponent toDos={tomorrowToDos} istoday={false} />
       </View>
       <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
@@ -47,9 +45,8 @@ export default function ScheduleTomorrow({ navigation, route }) {
       <ToDoModal
         navigation={navigation}
         modalHandler={() => toggleModal()}
-        routeName={route.name}
-        locationData={locationData}
         isModalVisible={isModalVisible}
+        isToday={false}
       />
     </>
   );

@@ -43,6 +43,7 @@
     "react-native-unimodules": "~0.14.5",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.11",
+    "react-native-week-view": "^0.6.1",
     "react-navigation": "^4.4.4",
     "react-navigation-tabs": "^2.11.1",
     "react-redux": "^7.2.4",

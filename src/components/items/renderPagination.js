@@ -62,10 +62,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Pagination = ({ list, targetId }) => {
+export const Pagination = ({ taskList, targetId }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
-
   const dispatch = useDispatch();
 
   const toggleIsVisible = () => {
@@ -103,10 +102,10 @@ export const Pagination = ({ list, targetId }) => {
           flexGrow: 0,
         }}
       >
-        {list &&
-          list.map((item, index) => {
+        {taskList &&
+          taskList.map((item, index) => {
             return (
-              <View key={index}>
+              <View key={`T` + targetId + index}>
                 {index === 0 ? (
                   <IconTaskListLeft
                     name="icon-tasklist-left"
@@ -122,12 +121,7 @@ export const Pagination = ({ list, targetId }) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task
-                  key={targetId}
-                  index={index}
-                  text={item}
-                  targetId={targetId}
-                />
+                <Task index={index} text={item} />
               </View>
             );
           })}
@@ -143,16 +137,14 @@ export const Pagination = ({ list, targetId }) => {
               setTaskTitle(text);
             }}
             onSubmitEditing={() => {
-              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
-              else toggleIsVisible();
+              addTaskList(targetId, taskTitle);
             }}
             style={styles.modalInputTask}
             returnKeyType="done"
           />
           <Text
             onPress={() => {
-              if (taskTitle.length > 0) addTaskList(targetId, taskTitle);
-              else toggleIsVisible();
+              addTaskList(targetId, taskTitle);
             }}
             style={styles.modalAddText}
           >
@@ -165,7 +157,7 @@ export const Pagination = ({ list, targetId }) => {
 };
 
 export const renderPagination = (index, total, context) => {
-  const list = context.props.toDos[index].toDos;
+  const taskList = context.props.toDos[index].toDos;
   const targetId = context.props.toDos[index].id;
-  return <Pagination list={list} targetId={targetId} />;
+  return <Pagination taskList={taskList} targetId={targetId} />;
 };
