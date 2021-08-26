@@ -55,7 +55,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
     });
     setGeofenceData(JSON.stringify(geofenceDataArray));
     if (isChangeEarliest) {
-      addGeofenceTrigger();
+      await addGeofenceTrigger();
     }
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
