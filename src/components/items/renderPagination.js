@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { add } from 'redux/store';
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/modal/ModalLayout';
-import { TODAY } from '../../constant/const';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -106,7 +105,7 @@ export const Pagination = ({ taskList, targetId }) => {
         {taskList &&
           taskList.map((item, index) => {
             return (
-              <View key={index}>
+              <View key={`T` + targetId + index}>
                 {index === 0 ? (
                   <IconTaskListLeft
                     name="icon-tasklist-left"
@@ -122,12 +121,7 @@ export const Pagination = ({ taskList, targetId }) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task
-                  key={targetId}
-                  index={index}
-                  text={item}
-                  targetId={targetId}
-                />
+                <Task index={index} text={item} />
               </View>
             );
           })}
