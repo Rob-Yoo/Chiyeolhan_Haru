@@ -5,7 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 const Tab = createMaterialTopTabNavigator();
 
-export function SchedullScreenDetail() {
+export const SchedullScreenDetail = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -29,4 +29,4 @@ export function SchedullScreenDetail() {
       <Tab.Screen name="내일" component={ScheduleTomorrow} />
     </Tab.Navigator>
   );
-}
+};

@@ -220,7 +220,12 @@ export const ToDoModal = ({
           isFavorite: false,
         });
       dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      handleFilterData(location, 'location', searchedList, setSearchedList);
+      await handleFilterData(
+        location,
+        'location',
+        searchedList,
+        setSearchedList,
+      );
       const todo = [
         todoId,
         todoStartTime,
@@ -376,13 +381,13 @@ export const ToDoModal = ({
     </>
   );
 };
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return { toDos: state };
-}
-function mapDispatchToProps(dispatch) {
+};
+const mapDispatchToProps = (dispatch) => {
   return {
     createToDo: (todo) => dispatch(create(todo)),
     addToDo: (task, id) => dispatch(add({ task, id })),
   };
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);

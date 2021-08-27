@@ -1,6 +1,11 @@
 import { deleteSearchedData, saveSearchedData } from 'utils/AsyncStorage';
 
-export const handleFilterData = (text, type, searchedList, setSearchedList) => {
+export const handleFilterData = async (
+  text,
+  type,
+  searchedList,
+  setSearchedList,
+) => {
   const updateData = {
     id: Date.now(),
     text,
@@ -8,7 +13,7 @@ export const handleFilterData = (text, type, searchedList, setSearchedList) => {
   };
 
   if (searchedList === null) {
-    saveSearchedData(updateData);
+    await saveSearchedData(updateData);
     setSearchedList([updateData]);
     console.log(searchedList);
   } else if (
@@ -18,10 +23,10 @@ export const handleFilterData = (text, type, searchedList, setSearchedList) => {
       (item) => !(item.text == text && item.type === type),
     );
     console.log(tempData);
-    deleteSearchedData(tempData, updateData);
+    await deleteSearchedData(tempData, updateData);
     setSearchedList([updateData, ...tempData]);
   } else {
-    saveSearchedData(updateData);
+    await saveSearchedData(updateData);
     setSearchedList([updateData, ...searchedList]);
   }
 };

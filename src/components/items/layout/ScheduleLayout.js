@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Schedule({ navigation, isToday, children }) {
+const Schedule = ({ navigation, isToday, children }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -41,4 +41,6 @@ export default function Schedule({ navigation, isToday, children }) {
       />
     </>
   );
-}
+};
+
+export default Schedule;

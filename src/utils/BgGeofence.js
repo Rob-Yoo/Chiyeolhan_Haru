@@ -11,7 +11,6 @@ import {
   arriveTooEarlyNotification,
   notifyNextSchedule,
 } from 'utils/Notification';
-import { color, concat } from 'react-native-reanimated';
 
 const addGeofence = async (latitude, longitude) => {
   try {

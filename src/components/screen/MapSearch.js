@@ -81,19 +81,22 @@ export const MapSearch = ({
 }) => {
   const [inputText, setText] = useState('');
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
-  toggleModal = () => {
+  const searchInput = useRef('');
+
+  const toggleModal = () => {
     setSearchedHistroyVisible(!searchedHistoryVisible);
   };
+
   const deleteAllHistory = async () => {
     await deleteAllSearchedData();
     setSearchedList([]);
   };
+
   const deleteHistory = async (id) => {
     const tempData = searchedList.filter((item) => item.id !== id);
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
   };
-  const searchInput = useRef('');
 
   return (
     <View>
