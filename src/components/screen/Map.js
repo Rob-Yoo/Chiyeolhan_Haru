@@ -1,19 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Text,
-  AppState,
-  Alert,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Dimensions, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { GOOGLE_PLACES_API_KEY } from '@env';
-import { MapSearch } from 'components/MapSearch';
+import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
 
 import IconFindLocation from '#assets/icons/icon-find-current-location.js';
@@ -63,7 +55,6 @@ const CurrentMap = ({
   setSearchedList,
   navigation,
 }) => {
-  const [inputText, setText] = useState('');
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);

@@ -62,12 +62,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  modalAddText: {
-    position: 'absolute',
-    color: '#229892',
-    top: 20,
-    right: 15,
-  },
   removeButtonText: {
     color: '#788382',
     borderRadius: 10,
@@ -157,14 +151,6 @@ export const Task = (props) => {
               style={styles.modalInputTask}
               returnKeyType="done"
             />
-            {/* <Text
-              onPress={() => {
-                submitTask();
-              }}
-              style={styles.modalAddText}
-            >
-              수정
-            </Text> */}
           </View>
         </ModalLayout>
       </View>

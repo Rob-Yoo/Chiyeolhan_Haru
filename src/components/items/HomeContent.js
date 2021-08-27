@@ -63,7 +63,7 @@ const PaintHome = ({ todoArr }) => {
   );
 };
 
-function HomeContent({ initToDo, toDos }) {
+const HomeContent = ({ initToDo, toDos }) => {
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   const mounted = useRef(false);
@@ -123,7 +123,7 @@ function HomeContent({ initToDo, toDos }) {
   return (
     <>{isLoading ? <Text>loading</Text> : <PaintHome todoArr={todoArr} />}</>
   );
-}
+};
 function mapStateToProps(state) {
   return { toDos: state };
 }

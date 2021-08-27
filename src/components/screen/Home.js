@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
 import { Provider } from 'react-redux';
 
-import HomeContent from 'components/HomeContent';
+import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';

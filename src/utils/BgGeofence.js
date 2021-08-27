@@ -11,20 +11,22 @@ import {
   arriveTooEarlyNotification,
   notifyNextSchedule,
 } from 'utils/Notification';
+import { color, concat } from 'react-native-reanimated';
 
-const addGeofence = (latitude, longitude) => {
-  BackgroundGeolocation.addGeofence({
-    identifier: `${UID}`,
-    radius: 200,
-    latitude,
-    longitude,
-    notifyOnEntry: true,
-    notifyOnExit: true,
-  })
-    .then((success) => console.log('Adding Geofence Success!!'))
-    .catch((error) => {
-      console.log('addGeofence Error :', error);
+const addGeofence = async (latitude, longitude) => {
+  try {
+    await BackgroundGeolocation.addGeofence({
+      identifier: `${UID}`,
+      radius: 200,
+      latitude,
+      longitude,
+      notifyOnEntry: true,
+      notifyOnExit: true,
     });
+    console.log('Adding Geofence Success!!');
+  } catch (e) {
+    console.log('addGeofence Error :', e);
+  }
 };
 
 export const addGeofenceTrigger = async () => {
@@ -34,42 +36,34 @@ export const addGeofenceTrigger = async () => {
     if (data.length != 0) {
       const lat = data[0].latitude;
       const lng = data[0].longitude;
-      addGeofence(lat, lng);
+      await addGeofence(lat, lng);
     } else {
-      BackgroundGeolocation.removeGeofence(`${UID}`)
-        .then((success) => {
-          console.log('[removeGeofence] success');
-        })
-        .catch((error) => {
-          console.log('[removeGeofence] FAILURE: ', error);
-        });
+      await BackgroundGeolocation.removeGeofence(`${UID}`);
+      console.log('[removeGeofence] success');
+      await BackgroundGeolocation.startGeofences();
     }
   } catch (error) {
     console.log('addGeofenceTrigger Error :', error);
   }
 };
 
-export const geofenceUpdate = (data) => {
-  BackgroundGeolocation.stop()
-    .then(async (success) => {
-      console.log('stop geolocation success');
-      try {
-        const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-        await toDoRef.update({ isDone: true });
-        const newDataArray = data.slice(1);
-        AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(newDataArray));
-        addGeofenceTrigger();
-        BackgroundGeolocation.startGeofences();
-      } catch (e) {
-        console.log('geofenceUpdate Error :', e);
-      }
-    })
-    .catch((error) => {
-      console.log('geofenceUpdate Error :' + error);
-    });
+export const geofenceUpdate = async (data) => {
+  try {
+    await BackgroundGeolocation.stop();
+    console.log('stop geolocation success');
+    const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+    await toDoRef.update({ isDone: true });
+    const newDataArray = data.slice(1);
+    AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(newDataArray));
+    await addGeofenceTrigger();
+    await BackgroundGeolocation.startGeofences();
+  } catch (e) {
+    console.log('geofenceUpdate Error :', e);
+  }
 };
 
-const subscribeOnGeofence = () => {
+const subscribeOnGeofence = async () => {
+  console.log('onGeofence');
   BackgroundGeolocation.onGeofence(async (event) => {
     console.log(event.action);
     try {
@@ -120,21 +114,21 @@ const subscribeOnGeofence = () => {
                 '굉장히 일찍 와서 계속 그 위치에서 일정까지 소화하고 나감',
                 currentTime,
               );
-              geofenceUpdate(data);
               if (data.length >= 2) {
                 const nextScheduleStartTime = data[1].startTime;
                 const nextScheduleLocation = data[1].location;
                 notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
               }
+              await geofenceUpdate(data);
+              AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
             } else {
               // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
               console.log(
                 '굉장히 일찍 왔지만 일정 시작전에 나간 경우 혹은 그냥 시작 시각 전에 그 주위에 있다가 트래킹이 된 경우',
                 currentTime,
               );
-              PushNotification.cancelLocalNotification('3'); //arriveTooEarlyNotification 알림 사라짐
+              PushNotification.cancelLocalNotification('4'); //arriveTooEarlyNotification 알림 사라짐
             }
-            AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
           }
         } else {
           if (event.action == 'EXIT') {
@@ -143,7 +137,7 @@ const subscribeOnGeofence = () => {
               const nextScheduleLocation = data[1].location;
               notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
             }
-            geofenceUpdate(data);
+            await geofenceUpdate(data);
           }
         }
       }
@@ -182,7 +176,8 @@ export const initBgGeofence = async () => {
     });
     console.log('Init Geofence');
     await BackgroundGeolocation.startGeofences();
-    subscribeOnGeofence();
+    console.log('Start Geofence');
+    await subscribeOnGeofence();
     return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);
