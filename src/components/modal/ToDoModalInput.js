@@ -22,12 +22,6 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
-  modalAddText: {
-    position: 'absolute',
-    color: '#229892',
-    top: 20,
-    right: 15,
-  },
 });
 
 export const ToDoModalInput = (props) => {
@@ -65,18 +59,6 @@ export const ToDoModalInput = (props) => {
           returnKeyType="done"
           value={task}
         ></TextInput>
-        <Text
-          onPress={() => {
-            if (task.length > 0) {
-              taskSubmitHandler(task);
-              setTask('');
-              taskListHandler;
-            } else taskListHandler;
-          }}
-          style={styles.modalAddText}
-        >
-          추가
-        </Text>
       </View>
     </Modal>
   );
