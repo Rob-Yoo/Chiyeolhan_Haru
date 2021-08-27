@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { View, Button } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AsyncStorage from '@react-native-community/async-storage';
+import { KEY_VALUE_START_TIME } from 'constant/const';
+import { getTimeDiff } from 'utils/Time';
+import {
+  alertStartTimePicker,
+  alertFinsihTimePicker,
+} from 'utils/TwoButtonAlert';
 
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return ' ';
@@ -59,8 +66,20 @@ Number.prototype.zf = function (len) {
 };
 
 export const TimePicker = (props) => {
-  const { isVisible, setVisible, timeText, pickerHandler } = props;
+  const { isStart, timeText, pickerHandler, isToday } = props;
+  const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
+  const timeObject = new Date();
+  const hour =
+    timeObject.getHours() < 10
+      ? `0${timeObject.getHours()}`
+      : timeObject.getHours();
+  const min =
+    timeObject.getMinutes() < 10
+      ? `0${timeObject.getMinutes()}`
+      : timeObject.getMinutes();
+  const currentTime = `${hour}:${min}`;
+
   const showTimePicker = () => {
     setVisible(true);
   };
@@ -69,9 +88,58 @@ export const TimePicker = (props) => {
     setVisible(false);
   };
 
-  const handleConfirm = (time) => {
-    setTime(time.format('HH:mm'));
-    pickerHandler(time.format('HH:mm'));
+  const checkValidateStarTime = async (formatTime) => {
+    try {
+      if (isToday) {
+        if (currentTime <= formatTime) {
+          await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
+          handleConfirm(formatTime);
+        } else {
+          alertStartTimePicker(hideTimePicker);
+        }
+      } else {
+        await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
+        handleConfirm(formatTime);
+      }
+    } catch (e) {
+      console.log('checkValidateStarTime Error :', e);
+    }
+  };
+
+  const checkValidateFinishTime = async (formatTime) => {
+    try {
+      const startTime = await AsyncStorage.getItem(KEY_VALUE_START_TIME);
+      if (startTime != null) {
+        const timeDiff = getTimeDiff(startTime, formatTime);
+        if (timeDiff >= 5) {
+          await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
+          handleConfirm(formatTime);
+        } else {
+          alertFinsihTimePicker(
+            '시작시간과 최소 5분 간격으로 설정해주세요.',
+            hideTimePicker,
+          );
+        }
+      } else {
+        alertFinsihTimePicker('시작시간부터 설정해주세요.', hideTimePicker);
+      }
+    } catch (e) {
+      console.log('checkValidateFinishTime Error :', e);
+    }
+  };
+
+  const checkValidateTime = async (timeData) => {
+    const formatTime = timeData.format('HH:mm');
+    if (isStart) {
+      await checkValidateStarTime(formatTime);
+    } else {
+      await checkValidateFinishTime(formatTime);
+    }
+  };
+
+  const handleConfirm = (formatTime) => {
+    setTime(formatTime);
+    pickerHandler(formatTime);
     hideTimePicker();
   };
 
@@ -85,7 +153,7 @@ export const TimePicker = (props) => {
       <DateTimePickerModal
         isVisible={isVisible}
         mode="time"
-        onConfirm={handleConfirm}
+        onConfirm={checkValidateTime}
         onCancel={hideTimePicker}
         locale="en_GB"
         date={new Date()}

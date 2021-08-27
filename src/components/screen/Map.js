@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, Alert } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -14,6 +14,7 @@ import {
   KEY_VALUE_SEARCHED,
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
+import { noDataAlert } from 'utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
   container: {
@@ -82,21 +83,6 @@ const CurrentMap = ({
     }
   };
 
-  const createTwoButtonAlert = () =>
-    Alert.alert(
-      '검색 결과가 없습니다.',
-      '',
-      [
-        {
-          text: '취소',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: '확인', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
-
   const _handlePlacesAPI = async (text) => {
     try {
       const place = text.replaceAll(' ', '%20');
@@ -127,7 +113,7 @@ const CurrentMap = ({
           setRenderData(true);
           break;
         case 'ZERO_RESULTS':
-          createTwoButtonAlert();
+          noDataAlert();
           break;
         case 'OVER_QUERY_LIMIT':
           console.log('API 할당량 넘었음');

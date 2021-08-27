@@ -30,6 +30,25 @@ export const getLateTimeDiff = (startTime, currentTime) => {
   }
 };
 
+export const getTimeDiff = (startTime, finishTime) => {
+  const startHour = startTime.slice(0, 2);
+  const startMin = startTime.slice(3);
+  const finishHour = finishTime.slice(0, 2);
+  const finishMin = finishTime.slice(3);
+
+  const startMinInt = parseInt(startMin, 10);
+  const finishMinInt = parseInt(finishMin, 10);
+
+  if (startTime < finishTime) {
+    if (startHour < finishHour) {
+      return finishMinInt + 60 - startMinInt;
+    } else {
+      return finishMinInt - startMinInt;
+    }
+  }
+  return 0;
+};
+
 export const isEarliestTime = (earliestTime, willAddTime) => {
   const earliestTimeHour = earliestTime.slice(0, 2);
   const earliestTimeMin = earliestTime.slice(3);

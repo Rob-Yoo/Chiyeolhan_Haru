@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
+import AsyncStorage from '@react-native-community/async-storage';
+import { KEY_VALUE_START_TIME } from 'constant/const';
 
 const styles = StyleSheet.create({
   addToDoButton: {
@@ -24,8 +26,13 @@ const styles = StyleSheet.create({
 
 const Schedule = ({ navigation, isToday, children }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const toggleModal = async () => {
+    try {
+      setModalVisible(!isModalVisible);
+      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
+    } catch (e) {
+      console.log('toggleModal Error :', e);
+    }
   };
   return (
     <>
