@@ -44,10 +44,10 @@ const PaintHome = ({ todoArr }) => {
         style={styles.swiperStyle}
       >
         {todoArr &&
-          todoArr.map((item) => {
-            return item.date === TODAY ? (
+          todoArr.map((item, index) => {
+            return (
               <Card
-                key={item.id}
+                key={`C` + index}
                 text={item.title}
                 startTime={item.startTime}
                 finishTime={item.finishTime}
@@ -56,8 +56,6 @@ const PaintHome = ({ todoArr }) => {
                 id={item.id}
                 isDone={item.isDone}
               />
-            ) : (
-              <></>
             );
           })}
       </Swiper>

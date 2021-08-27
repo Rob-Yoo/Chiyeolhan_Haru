@@ -157,14 +157,14 @@ export const Task = (props) => {
               style={styles.modalInputTask}
               returnKeyType="done"
             />
-            <Text
+            {/* <Text
               onPress={() => {
                 submitTask();
               }}
               style={styles.modalAddText}
             >
               수정
-            </Text>
+            </Text> */}
           </View>
         </ModalLayout>
       </View>

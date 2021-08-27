@@ -65,7 +65,7 @@ export const ToDoModalInput = (props) => {
           returnKeyType="done"
           value={task}
         ></TextInput>
-        <Text
+        {/* <Text
           onPress={() => {
             if (task.length > 0) {
               taskSubmitHandler(task);
@@ -76,7 +76,7 @@ export const ToDoModalInput = (props) => {
           style={styles.modalAddText}
         >
           추가
-        </Text>
+        </Text> */}
       </View>
     </Modal>
   );
