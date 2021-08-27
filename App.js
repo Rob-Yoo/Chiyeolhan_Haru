@@ -41,6 +41,7 @@ const App = () => {
         //Pre-load fonts, make any API calls you need to do here
       } catch (e) {
         console.warn(e);
+        await SplashScreen.hideAsync();
       } finally {
         //Tell ther application to render});
         setAppIsReady(true);

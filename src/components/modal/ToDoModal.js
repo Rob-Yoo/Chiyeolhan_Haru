@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  ScrollView,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -347,13 +348,13 @@ export const ToDoModal = ({
               inputIsVisible={inputIsVisible}
               task={task}
             />
-            <View style={styles.modalTaskContainer}>
+            <ScrollView style={styles.modalTaskContainer}>
               {taskList.map((item, index) => (
                 <Text style={styles.modalInputText} key={index}>
                   {item}
                 </Text>
               ))}
-            </View>
+            </ScrollView>
           </View>
           <Modal
             isVisible={mapIsVisible}

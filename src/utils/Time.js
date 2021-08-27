@@ -69,6 +69,5 @@ export const commonTimeExpression = (time) => {
   } else {
     msg = min == '0' ? `오전 ${sdHour}시` : `오전 ${sdHour}시 ${min}분`;
   }
-  console.log(`msg ${msg}`);
   return msg;
 };
