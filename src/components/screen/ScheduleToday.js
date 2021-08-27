@@ -2,7 +2,7 @@ import React from 'react';
 import { ScheduleComponent } from 'components/items/ScheduleCompoentn';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import { useSelector } from 'react-redux';
-import Schedule from 'components/items/scheduleLayout';
+import ScheduleLayout from 'components/items/ScheduleLayout';
 
 export default function ScheduleToday() {
   const todayData = [];
@@ -11,9 +11,9 @@ export default function ScheduleToday() {
 
   return (
     <>
-      <Schedule isToday={true}>
+      <ScheduleLayout isToday={true}>
         <ScheduleComponent day={'today'} events={todayData} />
-      </Schedule>
+      </ScheduleLayout>
     </>
   );
 }
