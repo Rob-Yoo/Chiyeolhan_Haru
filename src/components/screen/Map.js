@@ -3,11 +3,9 @@ import { StyleSheet, View, Dimensions, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
-
 import IconFindLocation from '#assets/icons/icon-find-current-location.js';
 import IconFavorite from '#assets/icons/icon-favorite.js';
 import {
@@ -83,6 +81,7 @@ const CurrentMap = ({
       console.log('handleFindCurrentLocation Error :', e);
     }
   };
+
   const createTwoButtonAlert = () =>
     Alert.alert(
       '검색 결과가 없습니다.',
@@ -99,41 +98,45 @@ const CurrentMap = ({
     );
 
   const _handlePlacesAPI = async (text) => {
-    const place = text.replaceAll(' ', '%20');
-    const response = await fetch(
-      `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
-    );
-    const data = await response.json();
-    const status = data.status;
-    switch (status) {
-      case 'OK':
-        const {
-          candidates: [
-            {
-              formatted_address: address,
-              geometry: {
-                location: { lat: latitude, lng: longitude },
+    try {
+      const place = text.replaceAll(' ', '%20');
+      const response = await fetch(
+        `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
+      );
+      const data = await response.json();
+      const status = data.status;
+      switch (status) {
+        case 'OK':
+          const {
+            candidates: [
+              {
+                formatted_address: address,
+                geometry: {
+                  location: { lat: latitude, lng: longitude },
+                },
+                name: location,
               },
-              name: location,
-            },
-          ],
-        } = data;
-        setResult({
-          latitude,
-          longitude,
-        });
-        setData({ location, latitude, longitude, address });
-        handleFilterData(text, 'search', searchedList, setSearchedList);
-        setRenderData(true);
-        break;
-      case 'ZERO_RESULTS':
-        createTwoButtonAlert();
-        break;
-      case 'OVER_QUERY_LIMIT':
-        console.log('API 할당량 넘었음');
-        break;
-      default:
-        console.log(`Error ${status}`);
+            ],
+          } = data;
+          setResult({
+            latitude,
+            longitude,
+          });
+          setData({ location, latitude, longitude, address });
+          await handleFilterData(text, 'search', searchedList, setSearchedList);
+          setRenderData(true);
+          break;
+        case 'ZERO_RESULTS':
+          createTwoButtonAlert();
+          break;
+        case 'OVER_QUERY_LIMIT':
+          console.log('API 할당량 넘었음');
+          break;
+        default:
+          console.log(`Error ${status}`);
+      }
+    } catch (e) {
+      console.log('_handlePlacesAPI Error :', e);
     }
   };
 

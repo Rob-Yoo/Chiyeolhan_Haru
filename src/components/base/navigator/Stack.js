@@ -2,12 +2,11 @@ import React from 'react';
 import Map from 'components/screen/Map';
 //import Favorite from 'components/screen/Favorite';
 import ToDoModal from 'components/modal/ToDoModal';
-
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-export function ModalStack({ navigation }) {
+export const ModalStack = ({ navigation }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -29,4 +28,4 @@ export function ModalStack({ navigation }) {
       /> */}
     </Stack.Navigator>
   );
-}
+};
