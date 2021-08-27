@@ -2,18 +2,18 @@ import React from 'react';
 import { ScheduleComponent } from 'components/items/ScheduleCompoentn';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import { useSelector } from 'react-redux';
-import Schedule from 'components/items/scheduleLayout';
+import ScheduleLayout from 'components/items/ScheduleLayout';
 
-export default function ScheduleTmorrow() {
+export default function ScheduleTomorrow() {
   const tmorrowData = [];
   const storeData = useSelector((state) => state);
   makeScheduleDate(storeData, tmorrowData, false);
 
   return (
     <>
-      <Schedule isToday={false}>
+      <ScheduleLayout isToday={false}>
         <ScheduleComponent day={'tomorrow'} events={tmorrowData} />
-      </Schedule>
+      </ScheduleLayout>
     </>
   );
 }
