@@ -13,6 +13,12 @@ export const GOOGLE_PARARMS =
   'inputtype=textquery&language=ko&fields=formatted_address,name,geometry';
 
 const date = new Date();
+export const YEAR = date.getFullYear();
+export const MONTH = date.getMonth() + 1;
+export const DAY = date.getDay();
 export const TODAY =
   (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
-  (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay());
+  (date.getDay() < 10 ? `0${date.getDay()}` : date.getDay());
+export const TOMORROW =
+  (date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1) +
+  (date.getDay() < 10 ? `0${date.getDay() + 1}` : date.getDay() + 1);

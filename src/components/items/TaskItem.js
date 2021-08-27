@@ -4,7 +4,6 @@ import {
   TextInput,
   View,
   Text,
-  TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
 import { useDispatch } from 'react-redux';

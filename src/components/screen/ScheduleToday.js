@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
+import { ScheduleComponent } from 'components/items/ScheduleCompoentn';
+import { makeScheduleDate } from 'utils/makeScheduleData';
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   addToDoButton: {
@@ -24,13 +27,17 @@ const styles = StyleSheet.create({
 
 export default function ScheduleToday({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
+  const todayToDos = [];
+  const toDos = useSelector((state) => state);
+  makeScheduleDate(toDos, todayToDos, true);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
   return (
     <>
-      <View>
-        <Text>Today</Text>
+      <View style={{ flex: 1 }}>
+        <ScheduleComponent toDos={todayToDos} istoday={true} />
       </View>
       <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
@@ -39,6 +46,7 @@ export default function ScheduleToday({ navigation }) {
         navigation={navigation}
         modalHandler={() => toggleModal()}
         isModalVisible={isModalVisible}
+        isToday={true}
       />
     </>
   );
