@@ -64,13 +64,14 @@ export const Card = ({
   location,
   id,
   isDone,
+  isData,
 }) => {
   const [width, setWidth] = useState('0%');
-  const [isData, setIsData] = useState(false);
+  console.log(isData);
   useEffect(() => {
     getProgressBarWidth();
-    setIsData(id);
   }, []);
+
   const getProgressBarWidth = () => {
     if (isDone) {
       setWidth('100%');
@@ -80,11 +81,9 @@ export const Card = ({
         date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
       const minute =
         date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-      const currentTime = hour + minute;
-
+      const currentTime = (hour.toString() + minute.toString()) * 1;
       startTime = startTime.replace(':', '');
       finishTime = finishTime.replace(':', '');
-
       if (startTime < currentTime && finishTime > currentTime) {
         const denominator = finishTime - startTime;
         const numerator = currentTime - startTime;

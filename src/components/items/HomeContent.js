@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
 });
 
 const PaintHome = ({ todoArr }) => {
+  const [isData, setIsData] = useState(
+    todoArr[0]?.id === undefined ? false : true,
+  );
+
   if (Array.isArray(todoArr) && todoArr.length === 0) {
     todoArr = [
       {
@@ -35,6 +39,9 @@ const PaintHome = ({ todoArr }) => {
       },
     ];
   }
+  useEffect(() => {
+    setIsData(todoArr[0]?.id === 0 ? false : true);
+  }, [todoArr]);
   return (
     <View style={styles.homeContainer}>
       <Swiper
@@ -55,6 +62,7 @@ const PaintHome = ({ todoArr }) => {
                 toDos={todoArr}
                 id={item.id}
                 isDone={item.isDone}
+                isData={isData}
               />
             );
           })}
