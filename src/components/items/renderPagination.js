@@ -7,7 +7,7 @@ import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 import { useDispatch } from 'react-redux';
 import { add } from 'redux/store';
 import { Task } from 'components/items/TaskItem';
-import { ModalLayout } from 'components/modal/ModalLayout';
+import { ModalLayout } from 'components/items/layout/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {

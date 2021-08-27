@@ -1,8 +1,8 @@
 import React from 'react';
-import { ScheduleComponent } from 'components/items/ScheduleCompoentn';
+import { ScheduleComponent } from 'components/items/ScheduleComponent';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import { useSelector } from 'react-redux';
-import ScheduleLayout from 'components/items/ScheduleLayout';
+import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 
 export default function ScheduleTomorrow() {
   const tmorrowData = [];

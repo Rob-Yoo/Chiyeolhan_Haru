@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { edit } from 'redux/store';
-import { ModalLayout } from 'components/modal/ModalLayout';
+import { ModalLayout } from 'components/items/layout/ModalLayout';
 import { remove } from 'redux/store';
 
 const styles = StyleSheet.create({
