@@ -18,7 +18,12 @@ import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
-import { UID, TODAY, KEY_VALUE_GEOFENCE } from 'constant/const';
+import {
+  UID,
+  TODAY,
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_START_TIME,
+} from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
 import { TOMORROW } from '../../constant/const';
@@ -155,8 +160,8 @@ export const ToDoModal = ({
   const [locationName, setLocationName] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
-  const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
-  const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
+  // const [startTimePickerVisible, setStartTimePickerVisible] = useState(false);
+  // const [finishTimePickerVisible, setFinishTimePickerVisible] = useState(false);
 
   const [searchedList, setSearchedList] = useState([]);
 
@@ -176,6 +181,7 @@ export const ToDoModal = ({
     setLocationName(false);
     setTaskList([]);
   };
+
   const toDoSubmit = async ({ todoStartTime, todoFinishTime, todoTitle }) => {
     const { latitude, location, longitude, address } = locationData;
     const date = new Date();
@@ -200,7 +206,9 @@ export const ToDoModal = ({
     } catch (e) {
       console.log('toDoSubmit first try catch Error :', e);
     }
+    // const isValidateSubmit = () => {
 
+    // }
     try {
       await dbService
         .collection(`${UID}`)
@@ -220,7 +228,12 @@ export const ToDoModal = ({
           isFavorite: false,
         });
       dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      handleFilterData(location, 'location', searchedList, setSearchedList);
+      await handleFilterData(
+        location,
+        'location',
+        searchedList,
+        setSearchedList,
+      );
       const todo = [
         todoId,
         todoStartTime,
@@ -235,6 +248,7 @@ export const ToDoModal = ({
       ];
       createToDo(todo);
       modalHandler();
+      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
       console.log('toDoSumbit second try catch Error :', e);
     }
@@ -311,15 +325,14 @@ export const ToDoModal = ({
           </View>
           <View style={styles.timePickerContainer}>
             <TimePicker
-              isVisible={startTimePickerVisible}
-              setVisible={setStartTimePickerVisible}
+              isStart={true}
               timeText={'시작'}
               pickerHandler={(text) => setValue('todoStartTime', text)}
+              isToday={isToday}
             />
             <Text style={{ fontSize: 25 }}>~</Text>
             <TimePicker
-              isVisible={finishTimePickerVisible}
-              setVisible={setFinishTimePickerVisible}
+              isStart={false}
               timeText={'끝'}
               pickerHandler={(text) => setValue('todoFinishTime', text)}
             />
@@ -376,13 +389,13 @@ export const ToDoModal = ({
     </>
   );
 };
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return { toDos: state };
-}
-function mapDispatchToProps(dispatch) {
+};
+const mapDispatchToProps = (dispatch) => {
   return {
     createToDo: (todo) => dispatch(create(todo)),
     addToDo: (task, id) => dispatch(add({ task, id })),
   };
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);

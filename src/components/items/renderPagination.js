@@ -54,12 +54,6 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
-  modalAddText: {
-    position: 'absolute',
-    color: '#229892',
-    top: 20,
-    right: 15,
-  },
 });
 
 export const Pagination = ({ taskList, targetId }) => {
@@ -70,10 +64,12 @@ export const Pagination = ({ taskList, targetId }) => {
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
-  addTaskList = () => {
+
+  const addTaskList = () => {
     toggleIsVisible();
     dispatch(add({ targetId, taskTitle }));
   };
+
   return (
     <>
       <View style={styles.taskHeader}>
@@ -142,14 +138,6 @@ export const Pagination = ({ taskList, targetId }) => {
             style={styles.modalInputTask}
             returnKeyType="done"
           />
-          <Text
-            onPress={() => {
-              addTaskList(targetId, taskTitle);
-            }}
-            style={styles.modalAddText}
-          >
-            추가
-          </Text>
         </View>
       </ModalLayout>
     </>

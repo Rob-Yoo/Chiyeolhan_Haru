@@ -4,7 +4,6 @@ import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
 import { connect } from 'react-redux';
 import { init } from 'redux/store';
-
 import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
@@ -132,14 +131,14 @@ const HomeContent = ({ initToDo, toDos }) => {
     <>{isLoading ? <Text>loading</Text> : <PaintHome todoArr={todoArr} />}</>
   );
 };
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return { toDos: state };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     initToDo: (todo) => dispatch(init(todo)),
     addToDo: (task, id) => dispatch(add({ task, id })),
   };
-}
+};
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContent);

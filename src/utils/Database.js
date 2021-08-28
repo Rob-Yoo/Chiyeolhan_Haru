@@ -10,6 +10,6 @@ export const toDosUpdateDB = async (newData, id) => {
         ...newData,
       });
   } catch (e) {
-    console.log(('toDosUpdateDB', e));
+    console.log(('toDosUpdateDB Error :', e));
   }
 };

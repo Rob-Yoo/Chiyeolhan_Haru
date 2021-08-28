@@ -12,12 +12,20 @@ import {
 //   AsyncStorage.setItem(KEY_VALUE_GEOFENCE1, 'true');
 // };
 
-const setGeofenceData = (array) => {
-  AsyncStorage.setItem(KEY_VALUE_GEOFENCE, array);
+const setGeofenceData = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, array);
+  } catch (e) {
+    console.log('setGeofenceData Error :', e);
+  }
 };
 
-const setSearchedData = (array) => {
-  AsyncStorage.setItem(KEY_VALUE_SEARCHED, array);
+const setSearchedData = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_SEARCHED, array);
+  } catch (e) {
+    console.log('setSearchedData Error :', e);
+  }
 };
 
 // export const checkFirstSubmit = async () => {
@@ -53,7 +61,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
         location: result.data().location,
       });
     });
-    setGeofenceData(JSON.stringify(geofenceDataArray));
+    await setGeofenceData(JSON.stringify(geofenceDataArray));
     if (isChangeEarliest) {
       await addGeofenceTrigger();
     }
@@ -73,7 +81,7 @@ export const saveSearchedData = async (searchedObject) => {
       let searchedArray = JSON.parse(data);
       searchedArray.unshift(searchedObject);
       const newSearchedArray = searchedArray;
-      setSearchedData(JSON.stringify(newSearchedArray));
+      await setSearchedData(JSON.stringify(newSearchedArray));
     }
     const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
     console.log(JSON.parse(newData));
@@ -81,21 +89,28 @@ export const saveSearchedData = async (searchedObject) => {
     console.log('searchedHistory Error :', e);
   }
 };
+
 export const deleteSearchedData = async (data, updateData = false) => {
   try {
     await AsyncStorage.removeItem(KEY_VALUE_SEARCHED);
     if (updateData) {
       data.unshift(updateData);
     }
-    return AsyncStorage.setItem(KEY_VALUE_SEARCHED, JSON.stringify(data));
+    const setData = await AsyncStorage.setItem(
+      KEY_VALUE_SEARCHED,
+      JSON.stringify(data),
+    );
+    return setData;
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
   }
 };
+
 export const deleteAllSearchedData = async (data) => {
   try {
     await AsyncStorage.removeItem(KEY_VALUE_SEARCHED);
-    return AsyncStorage.setItem(KEY_VALUE_SEARCHED, `[]`);
+    const setData = await AsyncStorage.setItem(KEY_VALUE_SEARCHED, `[]`);
+    return setData;
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
   }

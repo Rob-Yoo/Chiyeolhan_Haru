@@ -4,7 +4,7 @@ import { makeScheduleDate } from 'utils/makeScheduleData';
 import { useSelector } from 'react-redux';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 
-export default function ScheduleToday() {
+const ScheduleToday = () => {
   const todayData = [];
   const storeData = useSelector((state) => state);
   makeScheduleDate(storeData, todayData, true);
@@ -16,4 +16,6 @@ export default function ScheduleToday() {
       </ScheduleLayout>
     </>
   );
-}
+};
+
+export default ScheduleToday;

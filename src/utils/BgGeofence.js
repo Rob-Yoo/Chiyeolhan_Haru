@@ -11,7 +11,6 @@ import {
   arriveTooEarlyNotification,
   notifyNextSchedule,
 } from 'utils/Notification';
-import { color, concat } from 'react-native-reanimated';
 
 const addGeofence = async (latitude, longitude) => {
   try {
@@ -54,7 +53,10 @@ export const geofenceUpdate = async (data) => {
     const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
     await toDoRef.update({ isDone: true });
     const newDataArray = data.slice(1);
-    AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(newDataArray));
+    await AsyncStorage.setItem(
+      KEY_VALUE_GEOFENCE,
+      JSON.stringify(newDataArray),
+    );
     await addGeofenceTrigger();
     await BackgroundGeolocation.startGeofences();
   } catch (e) {
@@ -120,7 +122,7 @@ const subscribeOnGeofence = async () => {
                 notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
               }
               await geofenceUpdate(data);
-              AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
+              await AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
             } else {
               // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
               console.log(
