@@ -6,6 +6,7 @@ import {
   View,
   Text,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -300,25 +301,41 @@ export const ToDoModal = ({
               </TouchableOpacity>
             </View>
 
-            <View
+            <ImageBackground
               style={{
                 width: 200,
                 height: 200,
-                backgroundColor: 'rgba(0,0,0,0.3)',
+
                 borderRadius: 100,
-                paddingHorizontal: 65,
-                paddingVertical: 40,
-                marginBottom: 20,
               }}
+              source={{ uri: 'map' }}
             >
-              <IconQuestion
-                size={50}
-                name="icon-question"
-                size={110}
-                color={'#FFFFFF'}
-                onPress={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
-              />
-            </View>
+              <View
+                style={{
+                  width: 200,
+                  height: 200,
+                  borderRadius: 100,
+                  backgroundColor: 'rgba(0,0,0,0.3)',
+                  paddingHorizontal: 65,
+                  paddingVertical: 40,
+                  marginBottom: 20,
+                }}
+              >
+                {locationName ? (
+                  <></>
+                ) : (
+                  <IconQuestion
+                    size={50}
+                    name="icon-question"
+                    size={110}
+                    color={'#FFFFFF'}
+                    onPress={() =>
+                      toggleIsVisible(mapIsVisible, setMapIsVisible)
+                    }
+                  />
+                )}
+              </View>
+            </ImageBackground>
             <Text style={styles.modalLocationText}>
               {locationName ? locationName : '물음표를 눌러주세요'}
             </Text>
@@ -327,7 +344,10 @@ export const ToDoModal = ({
             <TimePicker
               isStart={true}
               timeText={'시작'}
-              pickerHandler={(text) => setValue('todoStartTime', text)}
+              pickerHandler={(text) => {
+                console.log(text);
+                setValue('todoStartTime', text);
+              }}
               isToday={isToday}
             />
             <Text style={{ fontSize: 25 }}>~</Text>
@@ -342,7 +362,7 @@ export const ToDoModal = ({
               placeholder="제목을 입력해 주세요"
               style={styles.modalInputTitle}
               onChangeText={(text) => setValue('todoTitle', text)}
-            ></TextInput>
+            />
             <TouchableOpacity
               style={styles.modalInputTask}
               onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}

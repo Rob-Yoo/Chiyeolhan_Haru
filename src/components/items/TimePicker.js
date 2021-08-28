@@ -158,6 +158,8 @@ export const TimePicker = (props) => {
         locale="en_GB"
         date={new Date()}
         minuteInterval={5}
+        cancelTextIOS="취소"
+        confirmTextIOS="확인"
       />
     </View>
   );
