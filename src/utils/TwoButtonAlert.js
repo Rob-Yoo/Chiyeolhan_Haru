@@ -37,10 +37,23 @@ export const noDataAlert = () =>
     [
       {
         text: '취소',
-        onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: '확인', onPress: () => console.log('OK Pressed') },
+      { text: '확인' },
+    ],
+    { cancelable: false },
+  );
+
+export const alertInValidSubmit = () =>
+  Alert.alert(
+    '그 시간대에 이미 다른 일정이 존재합니다.',
+    '',
+    [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      { text: '확인' },
     ],
     { cancelable: false },
   );
