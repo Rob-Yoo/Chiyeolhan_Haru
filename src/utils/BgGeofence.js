@@ -89,6 +89,7 @@ const subscribeOnGeofence = async () => {
             const timeDiff = getLateTimeDiff(startTime, currentTime);
             if (0 <= timeDiff && timeDiff <= 10) {
               successNotification();
+              await geofenceUpdate(data);
               console.log('제 시간에 옴', currentTime);
             } else {
               arriveLateNotification();
@@ -99,6 +100,7 @@ const subscribeOnGeofence = async () => {
             if (0 < timeDiff && timeDiff <= 10) {
               // 일정보다 10분 내로 먼저 도착했을 경우
               arriveEarlyNotification();
+              await geofenceUpdate(data);
               console.log('좀 일찍 옴', currentTime);
             } else if (timeDiff > 10) {
               arriveTooEarlyNotification(timeDiff);
@@ -132,16 +134,17 @@ const subscribeOnGeofence = async () => {
               PushNotification.cancelLocalNotification('4'); //arriveTooEarlyNotification 알림 사라짐
             }
           }
-        } else {
-          if (event.action == 'EXIT') {
-            if (data.length >= 2) {
-              const nextScheduleStartTime = data[1].startTime;
-              const nextScheduleLocation = data[1].location;
-              notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
-            }
-            await geofenceUpdate(data);
-          }
         }
+        // else {
+        //   if (event.action == 'EXIT') {
+        //     if (data.length >= 2) {
+        //       const nextScheduleStartTime = data[1].startTime;
+        //       const nextScheduleLocation = data[1].location;
+        //       notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
+        //     }
+        //     //await geofenceUpdate(data);
+        //   }
+        // }
       }
     } catch (e) {
       console.log('subscribeOnGeofence Error :', e);

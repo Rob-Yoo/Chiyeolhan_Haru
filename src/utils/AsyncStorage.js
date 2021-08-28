@@ -3,14 +3,24 @@ import { addGeofenceTrigger } from 'utils/BgGeofence';
 import { dbService } from 'utils/firebase';
 import {
   TODAY,
+  TOMORROW,
   UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_SEARCHED,
+  KEY_VALUE_TOMORROW,
 } from 'constant/const';
 
 // const setFirstSubmit = () => {
 //   AsyncStorage.setItem(KEY_VALUE_GEOFENCE1, 'true');
 // };
+
+const setTomorrowData = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, array);
+  } catch (e) {
+    console.log('setTomorrowData Error :', e);
+  }
+};
 
 const setGeofenceData = async (array) => {
   try {
@@ -51,7 +61,6 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
       .where('isDone', '==', false)
       .get();
     data.forEach((result) => {
-      console.log(result.data());
       geofenceDataArray.push({
         id: result.data().id,
         startTime: result.data().startTime,
@@ -67,6 +76,27 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
     }
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
+  }
+};
+
+export const dbToAsyncTomorrow = async () => {
+  try {
+    const tomorrowDataArray = [];
+    const todosRef = dbService.collection(`${UID}`);
+    const data = await todosRef.where('date', '==', `${TOMORROW}`).get();
+    data.forEach((result) => {
+      tomorrowDataArray.push({
+        id: result.data().id,
+        startTime: result.data().startTime,
+        finishTime: result.data().finishTime,
+        latitude: result.data().latitude,
+        longitude: result.data().longitude,
+        location: result.data().location,
+      });
+    });
+    await setTomorrowData(JSON.stringify(tomorrowDataArray));
+  } catch (e) {
+    console.log('dbToAsyncTomorrow Error :', e);
   }
 };
 
