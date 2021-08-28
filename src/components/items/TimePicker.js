@@ -157,6 +157,7 @@ export const TimePicker = (props) => {
         onCancel={hideTimePicker}
         locale="en_GB"
         date={new Date()}
+        minuteInterval={5}
       />
     </View>
   );

@@ -94,12 +94,7 @@ export const Card = ({
   return (
     <View style={styles.card} key={`CARD` + id}>
       <View style={styles.todomanBackgroundCircle} />
-      <IconTaskToDoman
-        name="icon-todo-man"
-        size={50}
-        color="#229892"
-      ></IconTaskToDoman>
-
+      <IconTaskToDoman name="icon-todo-man" size={50} color="#229892" />
       <View
         style={{
           flexDirection: 'row',
