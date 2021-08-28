@@ -12,6 +12,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
       toDoArr.push({
         id: toDos[key].id,
         description: toDos[key].title,
+        location: toDos[key].location,
         startDate: new Date(YEAR, MONTH - 1, DAY, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY, endH, endM),
         location: toDos[key].location,
@@ -21,6 +22,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
       toDoArr.push({
         id: toDos[key].id,
         description: toDos[key].title,
+        location: toDos[key].location,
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         location: toDos[key].location,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 30,
   },
-  homeHeader: { flex: 0.7, paddingLeft: 15 },
+  homeHeaderText: { flex: 0.7, paddingLeft: 15 },
   homeHeaderRectangle: {
     position: 'absolute',
     top: 10,
@@ -38,26 +38,27 @@ const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   return (
     <>
-      <View style={styles.homeContainer}>
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderRectangle} />
-          <HomeTextItem />
-
-          <IconTaskListLeft />
+      <ImageBackground style={{ widht: '100%', height: '100%' }}>
+        <View style={styles.homeContainer}>
+          <View style={styles.homeHeaderText}>
+            <View style={styles.homeHeaderRectangle} />
+            <HomeTextItem />
+            <IconTaskListLeft />
+          </View>
+          <ScheduleButton>
+            <IconGoToScheduleButton
+              name="icon-go-to-schedule-button"
+              size={40}
+              color={'#229892'}
+              onPress={goToScheduleToday}
+              style={styles.iconScheduleButton}
+            />
+          </ScheduleButton>
         </View>
-        <ScheduleButton>
-          <IconGoToScheduleButton
-            name="icon-go-to-schedule-button"
-            size={40}
-            color={'#229892'}
-            onPress={goToScheduleToday}
-            style={styles.iconScheduleButton}
-          />
-        </ScheduleButton>
-      </View>
-      <Provider store={toDosSlice}>
-        <HomeContent />
-      </Provider>
+        <Provider store={toDosSlice}>
+          <HomeContent />
+        </Provider>
+      </ImageBackground>
     </>
   );
 };

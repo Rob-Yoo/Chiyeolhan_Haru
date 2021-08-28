@@ -97,7 +97,6 @@ export const MapSearch = ({
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
   };
-
   return (
     <View>
       <View style={styles.mapSearchContainer}>
@@ -139,7 +138,7 @@ export const MapSearch = ({
               {searchedList?.map((item) => {
                 return (
                   <TouchableOpacity
-                    key={item.id}
+                    key={`${item.id}`}
                     activeOpacity={1}
                     onPress={() => {
                       _handlePlacesAPI(item.text);
