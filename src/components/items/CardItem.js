@@ -67,7 +67,6 @@ export const Card = ({
   isData,
 }) => {
   const [width, setWidth] = useState('0%');
-  console.log(isData);
   useEffect(() => {
     getProgressBarWidth();
   }, []);
