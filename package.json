@@ -43,11 +43,10 @@
     "react-native-unimodules": "~0.14.5",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.11",
-    "react-native-week-view": "^0.6.1",
+    "react-native-week-view": "https://github.com/6mn12j/react-native-week-view.git",
     "react-navigation": "^4.4.4",
     "react-navigation-tabs": "^2.11.1",
     "react-redux": "^7.2.4",
-    "redux-saga": "^1.1.3",
     "styled-components": "^5.3.0"
   },
   "devDependencies": {
