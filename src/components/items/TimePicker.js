@@ -88,7 +88,7 @@ export const TimePicker = (props) => {
     setVisible(false);
   };
 
-  const checkValidStarTime = async (formatTime) => {
+  const checkValidStartTime = async (formatTime) => {
     try {
       if (isToday) {
         if (currentTime <= formatTime) {
@@ -102,7 +102,7 @@ export const TimePicker = (props) => {
         handleConfirm(formatTime);
       }
     } catch (e) {
-      console.log('checkValidStarTime Error :', e);
+      console.log('checkValidStartTime Error :', e);
     }
   };
 
@@ -115,7 +115,7 @@ export const TimePicker = (props) => {
           handleConfirm(formatTime);
         } else {
           alertFinsihTimePicker(
-            '시작시간과 최소 5분 간격으로 설정해주세요.',
+            '시작시간보다 뒤로 설정해주세요.',
             hideTimePicker,
           );
         }
@@ -127,10 +127,17 @@ export const TimePicker = (props) => {
     }
   };
 
-  const checkValidateTime = async (timeData) => {
-    const formatTime = timeData.format('HH:mm');
+  const checkValidTime = async (timeData) => {
+    let formatTime = timeData.format('HH:mm');
+    const restMin = formatTime.slice(0, 4);
+    const oneDigitMin = formatTime.slice(4);
+    if ('1' <= oneDigitMin && oneDigitMin <= '4') {
+      formatTime = restMin + '0';
+    } else if ('6' <= oneDigitMin && oneDigitMin <= '9') {
+      formatTime = restMin + '5';
+    }
     if (isStart) {
-      await checkValidStarTime(formatTime);
+      await checkValidStartTime(formatTime);
     } else {
       await checkValidFinishTime(formatTime);
     }
@@ -152,7 +159,7 @@ export const TimePicker = (props) => {
       <DateTimePickerModal
         isVisible={isVisible}
         mode="time"
-        onConfirm={checkValidateTime}
+        onConfirm={checkValidTime}
         onCancel={hideTimePicker}
         locale="en_GB"
         date={new Date()}

@@ -28,7 +28,7 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
-import { alertInValidSubmit } from 'utils/TwoButtonAlert';
+import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   createToDo,
@@ -158,6 +158,22 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
+    const timeObject = new Date();
+    const hour =
+      timeObject.getHours() < 10
+        ? `0${timeObject.getHours()}`
+        : timeObject.getHours();
+    const min =
+      timeObject.getMinutes() < 10
+        ? `0${timeObject.getMinutes()}`
+        : timeObject.getMinutes();
+    const currentTime = `${hour}:${min}`;
+
+    if (currentTime > todoStartTime) {
+      alertStartTimeError();
+      modalHandler();
+      return;
+    }
     try {
       const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
       let isNeedAlert = false;
@@ -232,6 +248,29 @@ export const ToDoModal = ({
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
 
+  const timeHandler = (text, isStart) => {
+    let newTime;
+    const restMin = text.slice(0, 4);
+    const oneDigitMin = text.slice(4);
+    if ('0' <= oneDigitMin && oneDigitMin <= '4') {
+      newTime = restMin + '0';
+    } else if ('5' <= oneDigitMin && oneDigitMin <= '9') {
+      newTime = restMin + '5';
+    } else {
+      // if (isStart) {
+      //   setValue('todoStartTime', text);
+      //   return ;
+      // } else {
+      //   setValue('todoFinishTime', text);
+      // }
+    }
+    if (isStart) {
+      setValue('todoStartTime', newTime);
+    } else {
+      setValue('todoFinishTime', newTime);
+    }
+  };
+
   useEffect(() => {
     register('todoStartTime'),
       register('todoFinishTime'),
@@ -296,14 +335,14 @@ export const ToDoModal = ({
             <TimePicker
               isStart={true}
               timeText={'시작'}
-              pickerHandler={(text) => setValue('todoStartTime', text)}
+              pickerHandler={(text) => timeHandler(text, true)}
               isToday={isToday}
             />
             <Text style={{ fontSize: 25 }}>~</Text>
             <TimePicker
               isStart={false}
               timeText={'끝'}
-              pickerHandler={(text) => setValue('todoFinishTime', text)}
+              pickerHandler={(text) => timeHandler(text, false)}
             />
           </View>
           <View style={styles.todoInputContainer}>

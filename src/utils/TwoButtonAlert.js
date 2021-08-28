@@ -2,12 +2,26 @@ import { Alert } from 'react-native';
 
 export const alertStartTimePicker = (hideTimePicker) =>
   Alert.alert(
-    '이전 시간대는 선택할 수 없습니다.',
+    `현재 시간보다 이전 시간대는\n선택할 수 없습니다.`,
     '',
     [
       {
         text: '취소',
         onPress: () => hideTimePicker(),
+        style: 'default',
+      },
+      { text: '확인' },
+    ],
+    { cancelable: false },
+  );
+
+export const alertStartTimeError = () =>
+  Alert.alert(
+    `현재 시간보다 이전 시간대의\n 일정은 생성할 수 없습니다.`,
+    '',
+    [
+      {
+        text: '취소',
         style: 'cancel',
       },
       { text: '확인' },
