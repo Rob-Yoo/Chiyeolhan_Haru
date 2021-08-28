@@ -34,18 +34,22 @@ const toDosSlice = createSlice({
         latitude,
         location,
         address,
-        isdone: isDone,
+        isDone,
         isfavorite: isFavorite,
         toDos: [...toDos],
       };
     },
     add: (state, action) => {
       const { targetId, taskTitle } = action.payload;
+      console.log(`add: ${JSON.stringify(state)}`);
       state[targetId].toDos.push(taskTitle);
+
       toDosUpdateDB(state[targetId], targetId);
     },
     edit: (state, action) => {
       const { targetId, taskTitle, index } = action.payload;
+      console.log(targetId);
+      console.log(`eidt: ${JSON.stringify(state)}`);
       state[targetId].toDos[index] = taskTitle;
       toDosUpdateDB(state[targetId], targetId);
     },

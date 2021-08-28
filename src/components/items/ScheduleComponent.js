@@ -1,6 +1,8 @@
 import React from 'react';
 import WeekView from 'react-native-week-view';
 import { DAY, MONTH, YEAR } from 'constant/const';
+import { createPortal } from 'react-dom';
+import { View } from 'react-native';
 
 export const ScheduleComponent = ({ events, day }) => {
   let weekStart = new Date().getDay();
@@ -18,7 +20,9 @@ export const ScheduleComponent = ({ events, day }) => {
       weekStart = weekStart + 1;
       break;
   }
-  return day === 'tomorrow' ? (
+  const BACKGROUND_COLOR = '#ECF5F471';
+  console.log(events);
+  return (
     <WeekView
       events={events}
       selectedDate={selectedDate}
@@ -26,33 +30,18 @@ export const ScheduleComponent = ({ events, day }) => {
       weekStartsOn={weekStart}
       numberOfDays={1}
       headerStyle={{
-        color: '#ECF5F471',
-        borderColor: '#ECF5F471',
+        color: BACKGROUND_COLOR,
+        borderColor: BACKGROUND_COLOR,
       }}
+      // headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
-        backGroundColor: '#ECF5F471',
+        borderRadius: 20,
+        maxWidth: 200,
+        left: 40,
       }}
       formatTimeLabel="HH:mm A"
       showTitle={false}
       showNowLine={true}
     />
-  ) : (
-    <WeekView
-      events={events}
-      selectedDate={selectedDate}
-      fixedHorizontally={true}
-      weekStartsOn={weekStart}
-      numberOfDays={1}
-      headerStyle={{
-        color: '#ECF5F471',
-        borderColor: '#ECF5F471',
-      }}
-      eventContainerStyle={{
-        backGroundColor: '#ECF5F471',
-      }}
-      formatTimeLabel="HH:mm A"
-      showTitle={false}
-      showNowLine={true}
-    ></WeekView>
   );
 };

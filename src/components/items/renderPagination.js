@@ -117,7 +117,7 @@ export const Pagination = ({ taskList, targetId }) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task index={index} text={item} />
+                <Task index={index} text={item} targetId={targetId} />
               </View>
             );
           })}

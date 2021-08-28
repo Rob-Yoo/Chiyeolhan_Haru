@@ -88,6 +88,7 @@ export const Task = (props) => {
     setIsVisible(!isVisible);
   };
   const editTaskList = (targetId, taskTitle) => {
+    console.log(`taskitem:${targetId}`);
     dispatch(edit({ targetId, taskTitle, index }));
   };
   const deleteTaskList = (targetId, index) => {
