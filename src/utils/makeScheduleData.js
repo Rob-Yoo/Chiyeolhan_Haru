@@ -4,6 +4,8 @@ import { TODAY, TOMORROW } from 'constant/const';
 export const makeScheduleDate = (toDos, toDoArr, isToday) => {
   for (key in toDos) {
     const isDone = toDos[key].isDone;
+    console.log(toDos[key]);
+    console.log(isDone);
     const startH = toDos[key].startTime.replace(/:\d\d/, '');
     const startM = toDos[key].startTime.replace(/\d\d:/, '');
     const endH = toDos[key].finishTime.replace(/:\d\d/, '');

@@ -21,6 +21,7 @@ export const ScheduleComponent = ({ events, day }) => {
       break;
   }
   const BACKGROUND_COLOR = '#ECF5F471';
+  console.log(events);
   return (
     <WeekView
       events={events}
@@ -32,9 +33,8 @@ export const ScheduleComponent = ({ events, day }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      headerTextStyle={{ color: BACKGROUND_COLOR }}
+      // headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
-        borderColor: 'red',
         borderRadius: 20,
         maxWidth: 200,
         left: 40,
