@@ -7,7 +7,6 @@ import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
 import IconFindLocation from '#assets/icons/icon-find-current-location.js';
-import IconFavorite from '#assets/icons/icon-favorite.js';
 import {
   GOOGLE_API_URL,
   GOOGLE_PARARMS,
@@ -57,6 +56,7 @@ const CurrentMap = ({
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
   const [locationResult, setResult] = useState(location);
+  const [isCurrentLocation, setIscurrentLocation] = useState(true);
 
   useEffect(() => {}, [locationResult]);
   useEffect(() => {
@@ -77,6 +77,7 @@ const CurrentMap = ({
       const {
         coords: { latitude, longitude },
       } = result;
+      setIscurrentLocation(true);
       setResult({ latitude, longitude });
     } catch (e) {
       console.log('handleFindCurrentLocation Error :', e);
@@ -109,6 +110,7 @@ const CurrentMap = ({
             longitude,
           });
           setData({ location, latitude, longitude, address });
+          setIscurrentLocation(false);
           await handleFilterData(text, 'search', searchedList, setSearchedList);
           setRenderData(true);
           break;
@@ -188,7 +190,9 @@ const CurrentMap = ({
               latitude: locationResult.latitude,
               longitude: locationResult.longitude,
             }}
-            image={{ uri: 'custom_pin' }}
+            image={{
+              uri: isCurrentLocation ? 'custom_location' : 'custom_pin',
+            }}
           />
         </MapView>
       </View>

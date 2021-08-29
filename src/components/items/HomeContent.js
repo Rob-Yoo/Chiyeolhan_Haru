@@ -100,10 +100,7 @@ const HomeContent = ({ initToDo, toDos }) => {
 
   const getToDos = async () => {
     try {
-      const row = await dbService
-        .collection(`${UID}`)
-        // .where('date', '==', `${TODAY}`)
-        .get();
+      const row = await dbService.collection(`${UID}`).get();
       row.forEach((data) => (rowObj[data.id] = data.data()));
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);

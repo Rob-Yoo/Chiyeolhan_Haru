@@ -13,20 +13,18 @@ export const handleFilterData = async (
   };
 
   if (searchedList === null) {
-    await saveSearchedData(updateData);
     setSearchedList([updateData]);
-    console.log(searchedList);
+    await saveSearchedData(updateData);
   } else if (
     searchedList.some((item) => item.text === text && item.type === type)
   ) {
     const tempData = searchedList.filter(
       (item) => !(item.text == text && item.type === type),
     );
-    console.log(tempData);
-    await deleteSearchedData(tempData, updateData);
     setSearchedList([updateData, ...tempData]);
+    await deleteSearchedData(tempData, updateData);
   } else {
-    await saveSearchedData(updateData);
     setSearchedList([updateData, ...searchedList]);
+    await saveSearchedData(updateData);
   }
 };

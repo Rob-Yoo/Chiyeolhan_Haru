@@ -22,7 +22,7 @@ export const SchedullScreenDetail = () => {
           marginLeft: 25,
           width: 50,
         },
-        tabStyle: { width: 100, marginTop: 50 },
+        tabStyle: { width: 100, marginTop: 30 },
       }}
     >
       <Tab.Screen name="오늘" component={ScheduleToday} />

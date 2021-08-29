@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { View, Text, StyleSheet } from 'react-native';
-
-const styles = StyleSheet.create({
+import IconTaskToDoman from '#assets/icons/icon-todo-man';
+import { DAY, MONTH } from 'constant/const';
+export const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    justifyContent: 'space-between',
-    backgroundColor: '#54BCB6',
-    width: '90%',
     maxHeight: 220,
-    padding: 30,
-    marginHorizontal: 20,
+    padding: 20,
+    marginHorizontal: 10,
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -22,10 +18,10 @@ const styles = StyleSheet.create({
   },
   todomanBackgroundCircle: {
     position: 'absolute',
-    top: 25,
-    left: 25,
-    width: 60,
-    height: 60,
+    top: 12,
+    left: 13,
+    width: 50,
+    height: 50,
     backgroundColor: '#ffffff',
     borderRadius: 50,
     shadowColor: '#00000029',
@@ -55,6 +51,13 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 15,
   },
+  cardCalendar: {
+    flex: 0.2,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
 });
 
 export const Card = ({
@@ -67,7 +70,6 @@ export const Card = ({
   isData,
 }) => {
   const [width, setWidth] = useState('0%');
-  console.log(isData);
   useEffect(() => {
     getProgressBarWidth();
   }, []);
@@ -93,68 +95,83 @@ export const Card = ({
     }
   };
   return (
-    <View style={styles.card} key={`CARD` + id}>
-      <View style={styles.todomanBackgroundCircle} />
-      <IconTaskToDoman
-        name="icon-todo-man"
-        size={50}
-        color="#229892"
-      ></IconTaskToDoman>
-
+    <View style={{ flex: 1, flexDirection: 'row' }}>
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-          flexShrink: 1,
-          maxHeight: 300,
-        }}
+        style={[
+          styles.card,
+          {
+            flex: 0.8,
+            justifyContent: 'space-between',
+            backgroundColor: '#54BCB6',
+          },
+        ]}
+        key={`CARD${id}`}
       >
-        <Text style={styles.cardTitle}>{text}</Text>
+        <View style={styles.todomanBackgroundCircle} />
+        <IconTaskToDoman name="icon-todo-man" size={35} color="#229892" />
         <View
           style={{
-            flexWrap: 'nowrap',
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            flexShrink: 1,
+            maxHeight: 300,
           }}
         >
-          {!isData ? (
-            <></>
-          ) : (
-            <View
-              style={{
-                position: 'absolute',
-                left: -10,
-                width: 5,
-                height: 20,
-                backgroundColor: '#00A29A',
-              }}
-            />
-          )}
-          <Text style={styles.cardLocation}>{location}</Text>
+          <Text style={styles.cardTitle}>{text}</Text>
+          <View
+            style={{
+              flexWrap: 'nowrap',
+            }}
+          >
+            {!isData ? (
+              <></>
+            ) : (
+              <View
+                style={{
+                  position: 'absolute',
+                  left: -10,
+                  width: 5,
+                  height: 20,
+                  backgroundColor: '#00A29A',
+                }}
+              />
+            )}
+            <Text style={styles.cardLocation}>{location}</Text>
+          </View>
+        </View>
+        <Text style={styles.cardTime}>
+          {startTime}
+          {!isData ? `` : `~`}
+          {finishTime}
+        </Text>
+        <View style={{ position: 'relative' }}>
+          <View
+            style={{
+              width: '100%',
+              height: 10,
+              backgroundColor: '#C4C4C4',
+              borderRadius: 5,
+              bottom: 0,
+            }}
+          ></View>
+          <View
+            style={{
+              width: width,
+              height: 10,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 5,
+              position: 'absolute',
+            }}
+          ></View>
         </View>
       </View>
-      <Text style={styles.cardTime}>
-        {startTime}
-        {!isData ? `` : `~`}
-        {finishTime}
-      </Text>
-      <View style={{ position: 'relative' }}>
-        <View
-          style={{
-            width: '100%',
-            height: 10,
-            backgroundColor: '#C4C4C4',
-            borderRadius: 5,
-            bottom: 0,
-          }}
-        ></View>
-        <View
-          style={{
-            width: width,
-            height: 10,
-            backgroundColor: '#FFFFFF',
-            borderRadius: 5,
-            position: 'absolute',
-          }}
-        ></View>
+      <View style={[styles.card, styles.cardCalendar]}>
+        <Text style={[styles.cardCalendarText, { fontSize: 45 }]}>{DAY}</Text>
+        <Text
+          style={[styles.cardCalendarText, { fontSize: 30, color: '#458B87' }]}
+        >
+          {MONTH}월
+        </Text>
       </View>
     </View>
   );
