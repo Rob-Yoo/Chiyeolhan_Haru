@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, ImageBackground } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -27,21 +27,13 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
   iconFindLocation: {
-    top: 150,
-    right: 30,
+    top: 0,
+    right: 4,
     padding: 7,
     position: 'absolute',
     width: 40,
     height: 40,
-
     borderRadius: 50,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
   },
 });
 
@@ -141,20 +133,39 @@ const CurrentMap = ({
           }}
           onPress={() => console.log('touch')}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, position: 'relative' }}>
             <MapSearch
               _handlePlacesAPI={_handlePlacesAPI}
               modalHandler={modalHandler}
               searchedList={searchedList}
               setSearchedList={setSearchedList}
             />
-            <IconFindLocation
-              size={30}
-              name="icon-find-current-location"
-              style={styles.iconFindLocation}
-              color="#00000041"
-              onPress={() => handleFindCurrentLocation()}
-            />
+            <ImageBackground
+              source={{ uri: 'iconBackground' }}
+              style={{
+                top: 150,
+                right: 10,
+                padding: 7,
+                position: 'absolute',
+                width: 45,
+                height: 45,
+                shadowColor: '#00000029',
+                shadowOffset: {
+                  width: 0,
+                  height: 5,
+                },
+                shadowOpacity: 0.4,
+                shadowRadius: 1,
+              }}
+            >
+              <IconFindLocation
+                size={30}
+                name="icon-find-current-location"
+                style={styles.iconFindLocation}
+                color="#00000041"
+                onPress={() => handleFindCurrentLocation()}
+              />
+            </ImageBackground>
           </View>
 
           <View
@@ -163,18 +174,6 @@ const CurrentMap = ({
               bottom: 0,
             }}
           >
-            {/* <IconFavorite
-              size={60}
-              name="icon-favorite"
-              style={{
-                position: 'absolute',
-                borderRadius: 50,
-                bottom: isRenderData ? 160 : 10,
-                left: 20,
-              }}
-              onPress={() => console.log('favorite도modal로띄우냐고')}
-            /> */}
-
             {isRenderData ? (
               <LocationData
                 locationData={locationData}
@@ -191,7 +190,7 @@ const CurrentMap = ({
               longitude: locationResult.longitude,
             }}
             image={{
-              uri: isCurrentLocation ? 'custom_location' : 'custom_pin',
+              uri: isCurrentLocation ? 'customLocation' : 'customPin',
             }}
           />
         </MapView>

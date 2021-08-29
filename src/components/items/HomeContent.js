@@ -10,11 +10,10 @@ import { renderPagination } from 'components/items/renderPagination';
 
 const styles = StyleSheet.create({
   homeContainer: {
-    flex: 3,
+    flex: 5,
     alignItems: 'center',
-    marginBottom: 20,
   },
-  swiperStyle: { height: '100%', maxHeight: 450 },
+  swiperStyle: { height: '100%' },
 });
 
 const PaintHome = ({ todoArr }) => {

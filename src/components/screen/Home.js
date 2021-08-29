@@ -11,26 +11,14 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 const ScheduleButton = styled.TouchableOpacity``;
 
 const styles = StyleSheet.create({
-  homeContainer: {
-    flex: 0.9,
+  homeHeader: {
+    flex: 1.3,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginTop: -40,
-    paddingBottom: 40,
-    paddingHorizontal: 30,
+    alignItems: 'center',
   },
   homeHeaderText: { flex: 0.7, paddingLeft: 15 },
-  homeHeaderRectangle: {
-    position: 'absolute',
-    top: 10,
-    left: 0,
-    width: 5,
-    height: 65,
-    backgroundColor: '#00A29A',
 
-    shadowColor: '#00000029',
-  },
   iconScheduleButton: { marginBottom: 10 },
 });
 
@@ -38,10 +26,12 @@ const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   return (
     <>
-      <ImageBackground style={{ widht: '100%', height: '100%' }}>
-        <View style={styles.homeContainer}>
+      <ImageBackground
+        source={{ uri: 'homeBackground' }}
+        style={{ widht: '100%', height: '100%', paddingHorizontal: 20 }}
+      >
+        <View style={styles.homeHeader}>
           <View style={styles.homeHeaderText}>
-            <View style={styles.homeHeaderRectangle} />
             <HomeTextItem />
             <IconTaskListLeft />
           </View>

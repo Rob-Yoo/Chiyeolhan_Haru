@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { DAY, MONTH } from 'constant/const';
+
+import {
+  fontPercentage,
+  heightPercentage,
+  widthPercentage,
+} from '../../utils/responsive';
 export const styles = StyleSheet.create({
   card: {
-    maxHeight: 220,
+    maxHeight:
+      Dimensions.get('screen').height > 667
+        ? Dimensions.get('screen').height / 4
+        : Dimensions.get('screen').height / 3.5,
     padding: 20,
     marginHorizontal: 10,
     borderRadius: 20,
@@ -18,12 +27,12 @@ export const styles = StyleSheet.create({
   },
   todomanBackgroundCircle: {
     position: 'absolute',
-    top: 12,
-    left: 13,
-    width: 50,
-    height: 50,
+    top: Dimensions.get('screen').height > 667 ? 10 : 12,
+    left: 12,
+    width: Dimensions.get('screen').height > 667 ? 60 : 50,
+    height: Dimensions.get('screen').height > 667 ? 60 : 50,
     backgroundColor: '#ffffff',
-    borderRadius: 50,
+    borderRadius: Dimensions.get('screen').height > 667 ? 60 : 50,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 10,
@@ -37,19 +46,25 @@ export const styles = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 35,
+    fontSize:
+      Dimensions.get('window').height > 667
+        ? fontPercentage(40)
+        : fontPercentage(24),
     marginRight: 15,
     position: 'relative',
   },
   cardLocation: {
     fontFamily: 'NotoSansKR-Medium',
+    fontSize: fontPercentage(12),
     fontWeight: '800',
+    flexWrap: 'wrap',
+    // backgroundColor: 'red',
     color: '#F4F4F4',
     marginBottom: 5,
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 15,
+    fontSize: fontPercentage(15),
   },
   cardCalendar: {
     flex: 0.2,
@@ -75,8 +90,10 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
+    console.log(isDone);
     if (isDone) {
       setWidth('100%');
+      console.log(width);
     } else {
       const date = new Date();
       const hour =
@@ -94,6 +111,7 @@ export const Card = ({
       }
     }
   };
+
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
       <View
@@ -108,7 +126,11 @@ export const Card = ({
         key={`CARD${id}`}
       >
         <View style={styles.todomanBackgroundCircle} />
-        <IconTaskToDoman name="icon-todo-man" size={35} color="#229892" />
+        <IconTaskToDoman
+          name="icon-todo-man"
+          size={Dimensions.get('screen').height > 667 ? 42 : 35}
+          color="#229892"
+        />
         <View
           style={{
             flexDirection: 'row',
@@ -118,11 +140,7 @@ export const Card = ({
           }}
         >
           <Text style={styles.cardTitle}>{text}</Text>
-          <View
-            style={{
-              flexWrap: 'nowrap',
-            }}
-          >
+          <View style={{ flexWrap: 'nowrap' }}>
             {!isData ? (
               <></>
             ) : (
@@ -136,7 +154,9 @@ export const Card = ({
                 }}
               />
             )}
-            <Text style={styles.cardLocation}>{location}</Text>
+            <Text style={styles.cardLocation}>
+              {location.length > 8 ? `${location.substr(0, 7)}...` : location}
+            </Text>
           </View>
         </View>
         <Text style={styles.cardTime}>
@@ -166,11 +186,26 @@ export const Card = ({
         </View>
       </View>
       <View style={[styles.card, styles.cardCalendar]}>
-        <Text style={[styles.cardCalendarText, { fontSize: 45 }]}>{DAY}</Text>
         <Text
-          style={[styles.cardCalendarText, { fontSize: 30, color: '#458B87' }]}
+          style={[
+            styles.cardCalendarText,
+            {
+              fontSize:
+                Dimensions.get('window').height > 667
+                  ? fontPercentage(40)
+                  : fontPercentage(35),
+            },
+          ]}
         >
-          {MONTH}월
+          {DAY}
+        </Text>
+        <Text
+          style={[
+            styles.cardCalendarText,
+            { fontSize: fontPercentage(25), color: '#458B87' },
+          ]}
+        >
+          {MONTH} 월
         </Text>
       </View>
     </View>

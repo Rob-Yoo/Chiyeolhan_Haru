@@ -14,17 +14,13 @@ const styles = StyleSheet.create({
     top: 0,
     paddingHorizontal: 40,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     marginTop: 20,
     marginBottom: 10,
     flexShrink: 0,
   },
-  taskContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 10,
-    maxHeight: 100,
-  },
+
   task: {
     backgroundColor: '#FFF',
     width: '80%',
@@ -77,25 +73,25 @@ export const Pagination = ({ taskList, targetId }) => {
           style={{
             color: '#229892',
             fontFamily: 'NotoSansKR-Bold',
-            fontSize: 20,
-            marginBottom: 5,
+            fontSize: 22,
+            marginRight: 10,
           }}
         >
           수행 리스트
         </Text>
         <IconTaskListAdd
           name="icon-tasklist-add-button"
-          size={20}
+          size={19}
           color={'#229892'}
           onPress={() => toggleIsVisible()}
         />
       </View>
       <ScrollView
         style={{
-          paddingHorizontal: 20,
           height: '100%',
           maxHeight: 700,
           flexGrow: 0,
+          // paddingHorizontal: 20,
         }}
       >
         {taskList &&
