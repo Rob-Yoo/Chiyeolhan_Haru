@@ -29,7 +29,11 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
-import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
+import {
+  alertInValidSubmit,
+  alertStartTimeError,
+  alertNotFillIn,
+} from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   createToDo,
@@ -38,7 +42,7 @@ export const ToDoModal = ({
   navigation,
   isToday,
 }) => {
-  const [locationName, setLocationName] = useState(false);
+  const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
@@ -55,8 +59,14 @@ export const ToDoModal = ({
     setLocationName(value.location);
   };
   const clearData = () => {
+    setLocationData({});
     setLocationName(false);
     setTaskList([]);
+    setValue('todoStartTime', undefined);
+    setValue('todoFinishTime', undefined);
+    setValue('todoTitle', undefined);
+    setValue('todoTask', undefined);
+    setValue('todoId', undefined);
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -233,10 +243,20 @@ export const ToDoModal = ({
   };
 
   const handleTodoSubmit = ({ todoStartTime, todoFinishTime, todoTitle }) => {
-    if (isToday) {
-      handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+    if (Object.keys(locationData).length == 0) {
+      alertNotFillIn('일정 장소를 등록해주세요.');
+    } else if (todoStartTime === undefined) {
+      alertNotFillIn('일정의 시작시간을 등록해주세요.');
+    } else if (todoFinishTime === undefined) {
+      alertNotFillIn('일정의 끝시간을 등록해주세요.');
+    } else if (todoTitle === undefined) {
+      alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      if (isToday) {
+        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else {
+        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      }
     }
   };
 

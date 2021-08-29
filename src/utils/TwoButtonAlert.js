@@ -44,6 +44,20 @@ export const alertFinsihTimePicker = (message, hideTimePicker) =>
     { cancelable: false },
   );
 
+export const alertNotFillIn = (message) =>
+  Alert.alert(
+    `${message}`,
+    '',
+    [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      { text: '확인' },
+    ],
+    { cancelable: false },
+  );
+
 export const noDataAlert = () =>
   Alert.alert(
     '검색 결과가 없습니다.',
