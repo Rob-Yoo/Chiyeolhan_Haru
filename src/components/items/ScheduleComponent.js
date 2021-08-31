@@ -80,6 +80,7 @@ export const ScheduleComponent = ({ events, day }) => {
         maxWidth: 250,
         left: 40,
       }}
+      scrollToTimeNow={true}
       EventComponent={MyEventComponent}
     />
   );
