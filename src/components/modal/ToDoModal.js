@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -29,11 +30,9 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
-import {
-  alertInValidSubmit,
-  alertStartTimeError,
-  alertNotFillIn,
-} from 'utils/TwoButtonAlert';
+import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
+import { fontPercentage } from '../../utils/responsive';
+
 
 export const ToDoModal = ({
   createToDo,
@@ -305,7 +304,7 @@ export const ToDoModal = ({
       <Modal
         navigation={navigation}
         isVisible={isModalVisible}
-        style={{ margin: 0 }}
+        style={{ margin: 0, flex: 1 }}
         onModalHide={() => clearData()}
       >
         <TouchableOpacity
@@ -331,20 +330,20 @@ export const ToDoModal = ({
 
             <ImageBackground
               style={{
-                width: 200,
-                height: 200,
-
+                width: Dimensions.get('window').height > 667 ? 200 : 150,
+                height: Dimensions.get('window').height > 667 ? 200 : 150,
                 borderRadius: 100,
               }}
               source={{ uri: 'map' }}
             >
               <View
                 style={{
-                  width: 200,
-                  height: 200,
+                  width: Dimensions.get('window').height > 667 ? 200 : 150,
+                  height: Dimensions.get('window').height > 667 ? 200 : 150,
                   borderRadius: 100,
                   backgroundColor: 'rgba(0,0,0,0.3)',
-                  paddingHorizontal: 65,
+                  paddingHorizontal:
+                    Dimensions.get('window').height > 667 ? '33%' : '35%',
                   paddingVertical: 40,
                   marginBottom: 20,
                 }}
@@ -353,9 +352,8 @@ export const ToDoModal = ({
                   <></>
                 ) : (
                   <IconQuestion
-                    size={50}
                     name="icon-question"
-                    size={110}
+                    size={Dimensions.get('window').height > 667 ? 110 : 70}
                     color={'#FFFFFF'}
                     onPress={() =>
                       toggleIsVisible(mapIsVisible, setMapIsVisible)
@@ -465,9 +463,9 @@ const styles = StyleSheet.create({
   modalTopContainer: {
     alignItems: 'center',
     borderRadius: 10,
-    marginTop: '50%',
     backgroundColor: '#54BCB6',
-    height: 320,
+    height: Dimensions.get('window').height > 667 ? '40%' : '45%',
+    // height: 320,
     borderRadius: 50,
     marginTop: -10,
   },
@@ -486,14 +484,15 @@ const styles = StyleSheet.create({
   modalLocationText: {
     fontFamily: 'NotoSansKR-Regular',
     color: '#FFFFFF',
-    fontSize: 20,
-    marginBottom: 10,
+    fontSize: fontPercentage(20),
   },
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-    marginTop: 200,
-    height: 750,
-    borderRadius: 50,
+    marginTop: '40%',
+    height: Dimensions.get('window').height / 1.2,
+    // height: 750,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
   },
   modalInput1: {
     backgroundColor: '#fff',
@@ -538,7 +537,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   todoInputContainer: {
     alignItems: 'center',
@@ -554,7 +553,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
-    height: 200,
+    height: Dimensions.get('window').height > 667 ? 200 : 100,
     marginBottom: 20,
     shadowColor: '#00000029',
     shadowOffset: {

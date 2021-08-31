@@ -73,13 +73,14 @@ export const ScheduleComponent = ({ events, day }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      onEventPress={() => console.log(event)}
+      onEventPress={(event) => console.log(event)}
       onEventLongPress={(event) => console.log('delete')}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
         maxWidth: 250,
         left: 40,
       }}
+      scrollToTimeNow={true}
       EventComponent={MyEventComponent}
     />
   );

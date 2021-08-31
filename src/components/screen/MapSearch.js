@@ -53,12 +53,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     paddingTop: 20,
   },
-  mapSearchInput: {
-    backgroundColor: '#fff',
-    width: 340,
-    height: 50,
-    borderRadius: 10,
-  },
+  mapSearchInput: { position: 'absolute', top: 70, left: 50 },
   searchedDeleteAllText: {
     fontSize: 20,
     marginVertical: 25,
@@ -109,29 +104,48 @@ export const MapSearch = ({
           }}
         >
           <View style={styles.searchInputView}>
-            <IconGobackButton
-              name="icon-go-back-button"
-              size={20}
-              style={{ width: 30, height: 30, marginLeft: 15 }}
-              onPress={() => {
-                searchedHistoryVisible ? toggleModal() : modalHandler();
+            <View
+              style={{
+                flexDirection: 'row',
+                position: 'relative',
+                backgroundColor: '#fff',
+                width: '90%',
+                height: 50,
+                borderRadius: 10,
               }}
-            />
-            <TextInput
-              style={styles.mapSearchInput}
-              ref={searchInput}
-              onTouchStart={() => {
-                if (searchedHistoryVisible === false)
-                  setSearchedHistroyVisible(true);
-              }}
-              value={inputText}
-              placeholder=" 장소, 버스, 지하철, 주소 검색"
-              onChangeText={(text) => setText(text)}
-              onSubmitEditing={() => {
-                _handlePlacesAPI(inputText);
-                toggleModal();
-              }}
-            />
+            >
+              <IconGobackButton
+                name="icon-go-back-button"
+                size={20}
+                style={{
+                  position: 'absolute',
+                  top: 63,
+                  left: 30,
+                  width: 30,
+                  height: 30,
+                  paddingTop: 5,
+                  marginLeft: 1,
+                }}
+                onPress={() => {
+                  searchedHistoryVisible ? toggleModal() : modalHandler();
+                }}
+              />
+              <TextInput
+                style={styles.mapSearchInput}
+                ref={searchInput}
+                onTouchStart={() => {
+                  if (searchedHistoryVisible === false)
+                    setSearchedHistroyVisible(true);
+                }}
+                value={inputText}
+                placeholder=" 장소, 버스, 지하철, 주소 검색"
+                onChangeText={(text) => setText(text)}
+                onSubmitEditing={() => {
+                  _handlePlacesAPI(inputText);
+                  toggleModal();
+                }}
+              />
+            </View>
           </View>
           {searchedHistoryVisible ? (
             <ScrollView style={{ paddingHorizontal: 20 }}>
