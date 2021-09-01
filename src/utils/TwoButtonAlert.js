@@ -1,4 +1,9 @@
 import { Alert } from 'react-native';
+import { connect } from 'react-redux';
+import { deleteToDoDispatch } from 'redux/store';
+
+import { deleteToDo } from '../components/items/HomeContent';
+import { toDosDeleteDB } from './Database';
 
 export const alertStartTimePicker = (hideTimePicker) =>
   Alert.alert(
@@ -71,3 +76,36 @@ export const alertInValidSubmit = () =>
     ],
     { cancelable: false },
   );
+
+export const deleteToDoAlert = (props) => {
+  console.log(props);
+  const { event, deleteToDoDispatch } = props;
+  Alert.alert(
+    `일정을 삭제 하시겠습니까?`,
+    '',
+    [
+      {
+        text: '취소',
+      },
+      {
+        text: '확인',
+        style: 'destructive',
+        onPress: () => {
+          //  toDosDeleteDB(event.id);
+          //deleteToDoDispatch(props.id);
+          console.log('toDos도 삭제해서 업데이트 해야됨');
+
+          //store도 삭제해서 업데이트 해야됨
+        },
+      },
+    ],
+    { cancelable: false },
+  );
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteToDoDispatch: (id) => dispatch(deleteToDoDispatch(id)),
+  };
+};
+export default connect(mapDispatchToProps)(deleteToDoAlert);

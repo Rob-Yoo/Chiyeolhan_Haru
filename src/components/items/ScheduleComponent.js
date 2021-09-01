@@ -3,6 +3,9 @@ import WeekView from 'react-native-week-view';
 import { DAY, MONTH, YEAR } from 'constant/const';
 import { View, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
+import { deleteToDoAlert } from '../../utils/TwoButtonAlert';
+import { useDispatch } from 'react-redux';
+import { deleteToDoDispatch } from 'redux/store';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -42,6 +45,7 @@ const MyEventComponent = ({ event, position }) => {
     </>
   );
 };
+
 export const ScheduleComponent = ({ events, day }) => {
   let weekStart = new Date().getDay();
   let selectedDate = '';
@@ -74,13 +78,15 @@ export const ScheduleComponent = ({ events, day }) => {
         borderColor: BACKGROUND_COLOR,
       }}
       onEventPress={(event) => console.log(event)}
-      onEventLongPress={(event) => console.log('delete')}
+      onEventLongPress={(event) => {
+        deleteToDoAlert(event);
+      }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
         maxWidth: 250,
         left: 40,
       }}
-      scrollToTimeNow={true}
+      scrollToTimeNow={day === 'today' ? true : false}
       EventComponent={MyEventComponent}
     />
   );

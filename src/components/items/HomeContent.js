@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
 import { connect } from 'react-redux';
-import { init } from 'redux/store';
+import { init, deleteToDoDispatch } from 'redux/store';
 import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
@@ -47,6 +47,7 @@ const PaintHome = ({ todoArr }) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
+        index={2}
       >
         {todoArr &&
           todoArr.map((item, index) => {
@@ -67,6 +68,13 @@ const PaintHome = ({ todoArr }) => {
       </Swiper>
     </View>
   );
+};
+
+export const deleteToDo = (props) => {
+  console.log('homecontent deleteTodo dispatch');
+  console.log(props);
+
+  deleteToDoDispatch(props);
 };
 
 const HomeContent = ({ initToDo, toDos }) => {
@@ -135,6 +143,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     initToDo: (todo) => dispatch(init(todo)),
     addToDo: (task, id) => dispatch(add({ task, id })),
+    deleteToDoDispatch: (id) => dispatch(deleteToDoDispatch(id)),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContent);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  HomeContent,
+  deleteToDo,
+);

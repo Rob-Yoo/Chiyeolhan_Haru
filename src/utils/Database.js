@@ -13,3 +13,11 @@ export const toDosUpdateDB = async (newData, id) => {
     console.log(('toDosUpdateDB Error :', e));
   }
 };
+
+export const toDosDeleteDB = async (id) => {
+  try {
+    await dbService.collection(`${UID}`).doc(`${id}`).delete();
+  } catch (e) {
+    console.log(('toDosDeleteDB Error :', e));
+  }
+};

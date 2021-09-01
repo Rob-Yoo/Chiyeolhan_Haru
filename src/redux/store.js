@@ -53,12 +53,25 @@ const toDosSlice = createSlice({
       state[targetId].toDos[index] = taskTitle;
       toDosUpdateDB(state[targetId], targetId);
     },
+    //수행리스트 제거
     remove: (state, action) => {
       const { targetId, index } = action.payload;
       state[targetId].toDos.splice(index, 1);
     },
+    //투두 제거
+    deleteToDoDispatch: (state, action) => {
+      const { targetId } = action.payload;
+
+      console.log('before', state);
+      state = state.filter((item) => {
+        item.id !== targetId;
+      });
+      console.log('store');
+      console.log(state);
+    },
   },
 });
 
-export const { create, add, init, edit, remove } = toDosSlice.actions;
+export const { create, add, init, edit, remove, deleteToDoDispatch } =
+  toDosSlice.actions;
 export default configureStore({ reducer: toDosSlice.reducer });
