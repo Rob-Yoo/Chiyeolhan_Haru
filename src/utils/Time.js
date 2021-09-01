@@ -4,11 +4,14 @@ export const getEarlyTimeDiff = (startTime, currentTime) => {
   const currentHour = currentTime.slice(0, 2);
   const currentMin = currentTime.slice(3);
 
+  const startHourInt = parseInt(startHour, 10);
+  const currentHourInt = parseInt(currentHour, 10);
   const startMinInt = parseInt(startMin, 10);
   const currentMinInt = parseInt(currentMin, 10);
 
-  if (startHour > currentHour) {
-    return startMinInt + 60 - currentMinInt;
+  if (startHourInt > currentHourInt) {
+    const hourDiff = startHourInt - currentHourInt;
+    return 60 * hourDiff + startMinInt - currentMinInt;
   } else {
     return startMinInt - currentMinInt;
   }
@@ -20,11 +23,14 @@ export const getLateTimeDiff = (startTime, currentTime) => {
   const currentHour = currentTime.slice(0, 2);
   const currentMin = currentTime.slice(3);
 
+  const startHourInt = parseInt(startHour, 10);
+  const currentHourInt = parseInt(currentHour, 10);
   const startMinInt = parseInt(startMin, 10);
   const currentMinInt = parseInt(currentMin, 10);
 
-  if (startHour < currentHour) {
-    return currentMinInt + 60 - startMinInt;
+  if (startHourInt < currentHourInt) {
+    const hourDiff = currentHourInt - startHourInt;
+    return 60 * hourDiff + currentMinInt - startMinInt;
   } else {
     return currentMinInt - startMinInt;
   }
@@ -36,12 +42,15 @@ export const getTimeDiff = (startTime, finishTime) => {
   const finishHour = finishTime.slice(0, 2);
   const finishMin = finishTime.slice(3);
 
+  const startHourInt = parseInt(startHour, 10);
+  const finishHourInt = parseInt(finishHour, 10);
   const startMinInt = parseInt(startMin, 10);
   const finishMinInt = parseInt(finishMin, 10);
 
   if (startTime < finishTime) {
-    if (startHour < finishHour) {
-      return finishMinInt + 60 - startMinInt;
+    if (startHourInt < finishHourInt) {
+      const hourDiff = finishHourInt - startHourInt;
+      return 60 * hourDiff + finishMinInt - startMinInt;
     } else {
       return finishMinInt - startMinInt;
     }

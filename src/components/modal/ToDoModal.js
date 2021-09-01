@@ -30,9 +30,12 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { isEarliestTime } from 'utils/Time';
-import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
-import { fontPercentage } from '../../utils/responsive';
-
+import {
+  alertInValidSubmit,
+  alertStartTimeError,
+  alertNotFillIn,
+} from 'utils/TwoButtonAlert';
+import { fontPercentage } from 'utils/responsive';
 
 export const ToDoModal = ({
   createToDo,
