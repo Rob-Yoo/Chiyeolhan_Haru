@@ -22,6 +22,17 @@ const setTomorrowData = async (array) => {
   }
 };
 
+export const deleteTomorrowAsyncStorageData = async (id) => {
+  try {
+    const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
+    await AsyncStorage.removeItem(KEY_VALUE_TOMORROW);
+    const updateData = tomorrowData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
+  } catch (e) {
+    console.log('deleteTomorrowAsyncStorageData Error :', e);
+  }
+};
+
 const setGeofenceData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, array);

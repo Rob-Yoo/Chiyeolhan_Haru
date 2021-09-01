@@ -148,6 +148,7 @@ export const TimePicker = (props) => {
     pickerHandler(formatTime);
     hideTimePicker();
   };
+  console.log(new Date());
 
   return (
     <View style={{ flexDirection: 'row' }}>
@@ -162,6 +163,7 @@ export const TimePicker = (props) => {
         onConfirm={checkValidTime}
         onCancel={hideTimePicker}
         locale="en_GB"
+        //ios일때는 date android 일때는 value
         date={new Date()}
         minuteInterval={5}
       />

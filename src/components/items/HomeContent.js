@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { init } from 'redux/store';
+import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
-import { connect } from 'react-redux';
-import { init } from 'redux/store';
 import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
@@ -47,6 +47,7 @@ const PaintHome = ({ todoArr }) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
+        index={2}
       >
         {todoArr &&
           todoArr.map((item, index) => {
