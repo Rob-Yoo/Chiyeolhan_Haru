@@ -74,8 +74,6 @@ export const alertInValidSubmit = () =>
 
 export const deleteToDoAlert = async (event) =>
   new Promise((resolve) => {
-    console.log(resolve);
-    console.log(event);
     Alert.alert(
       `일정을 삭제 하시겠습니까?`,
       '',
