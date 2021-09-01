@@ -7,8 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { deleteSearchedData } from 'utils/AsyncStorage';
-import { deleteAllSearchedData } from 'utils/AsyncStorage';
+import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
