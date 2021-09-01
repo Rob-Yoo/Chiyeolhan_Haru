@@ -90,8 +90,8 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
-    const startH = startTime.replace(/:\d\d/, '');
-    const startM = startTime.replace(/\d\d:/, '');
+    const startH = finishTime.replace(/:\d\d/, '');
+    const startM = finishTime.replace(/\d\d:/, '');
     if (
       isDone &&
       new Date().getHours() >= startH &&

@@ -31,12 +31,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         location: toDos[key].location,
-        color:
-          isDone &&
-          new Date().getHours() >= startH &&
-          new Date().getMinutes() >= startM
-            ? '#54BCB6'
-            : '#B9B9B9',
+        color: isDone ? '#54BCB6' : '#B9B9B9',
       });
     }
   }
