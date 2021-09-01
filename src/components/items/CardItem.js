@@ -7,7 +7,7 @@ import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
-} from '../../utils/responsive';
+} from 'utils/responsive';
 export const styles = StyleSheet.create({
   card: {
     maxHeight:

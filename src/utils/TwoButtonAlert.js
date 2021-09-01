@@ -1,10 +1,5 @@
 import { Alert } from 'react-native';
-import { connect } from 'react-redux';
-import { deleteToDoDispatch } from 'redux/store';
-
-import { deleteToDo } from '../components/items/HomeContent';
-import { toDosDeleteDB } from './Database';
-
+import { toDosDeleteDB } from 'utils/Database';
 export const alertStartTimePicker = (hideTimePicker) =>
   Alert.alert(
     `현재 시간보다 이전 시간대는\n선택할 수 없습니다.`,
@@ -77,35 +72,26 @@ export const alertInValidSubmit = () =>
     { cancelable: false },
   );
 
-export const deleteToDoAlert = (props) => {
-  console.log(props);
-  const { event, deleteToDoDispatch } = props;
-  Alert.alert(
-    `일정을 삭제 하시겠습니까?`,
-    '',
-    [
-      {
-        text: '취소',
-      },
-      {
-        text: '확인',
-        style: 'destructive',
-        onPress: () => {
-          //  toDosDeleteDB(event.id);
-          //deleteToDoDispatch(props.id);
-          console.log('toDos도 삭제해서 업데이트 해야됨');
-
-          //store도 삭제해서 업데이트 해야됨
+export const deleteToDoAlert = async (event) =>
+  new Promise((resolve) => {
+    console.log(resolve);
+    console.log(event);
+    Alert.alert(
+      `일정을 삭제 하시겠습니까?`,
+      '',
+      [
+        {
+          text: '취소',
         },
-      },
-    ],
-    { cancelable: false },
-  );
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteToDoDispatch: (id) => dispatch(deleteToDoDispatch(id)),
-  };
-};
-export default connect(mapDispatchToProps)(deleteToDoAlert);
+        {
+          text: '확인',
+          style: 'destructive',
+          onPress: () => {
+            toDosDeleteDB(event.id);
+            resolve('true');
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  });

@@ -1,11 +1,11 @@
 import React from 'react';
 import WeekView from 'react-native-week-view';
-import { DAY, MONTH, YEAR } from 'constant/const';
-import { View, Text } from 'react-native';
-import { StyleSheet } from 'react-native';
-import { deleteToDoAlert } from '../../utils/TwoButtonAlert';
+import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { DAY, MONTH, YEAR } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
+import { deleteToDoAlert } from 'utils/TwoButtonAlert';
+import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -47,6 +47,7 @@ const MyEventComponent = ({ event, position }) => {
 };
 
 export const ScheduleComponent = ({ events, day }) => {
+  const dispatch = useDispatch();
   let weekStart = new Date().getDay();
   let selectedDate = '';
   switch (day) {
@@ -78,8 +79,16 @@ export const ScheduleComponent = ({ events, day }) => {
         borderColor: BACKGROUND_COLOR,
       }}
       onEventPress={(event) => console.log(event)}
-      onEventLongPress={(event) => {
-        deleteToDoAlert(event);
+      onEventLongPress={async (event) => {
+        const targetId = event.id;
+        if ((await deleteToDoAlert(event)) === 'true') {
+          dispatch(deleteToDoDispatch(targetId));
+          if (day === 'today') {
+            //오늘 어싱크 스토리지 삭제해야됨
+          } else if (day === 'tomorrow') {
+            deleteTomorrowAsyncStorageData(targetId);
+          }
+        }
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{

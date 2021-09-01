@@ -41,15 +41,11 @@ const toDosSlice = createSlice({
     },
     add: (state, action) => {
       const { targetId, taskTitle } = action.payload;
-      console.log(`add: ${JSON.stringify(state)}`);
       state[targetId].toDos.push(taskTitle);
-
       toDosUpdateDB(state[targetId], targetId);
     },
     edit: (state, action) => {
       const { targetId, taskTitle, index } = action.payload;
-      console.log(targetId);
-      console.log(`eidt: ${JSON.stringify(state)}`);
       state[targetId].toDos[index] = taskTitle;
       toDosUpdateDB(state[targetId], targetId);
     },
@@ -60,14 +56,8 @@ const toDosSlice = createSlice({
     },
     //투두 제거
     deleteToDoDispatch: (state, action) => {
-      const { targetId } = action.payload;
-
-      console.log('before', state);
-      state = state.filter((item) => {
-        item.id !== targetId;
-      });
-      console.log('store');
-      console.log(state);
+      const targetId = action.payload;
+      delete state[`${targetId}`];
     },
   },
 });

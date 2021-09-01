@@ -15,7 +15,6 @@
 		1AB62AC0B7C64D809057E99D /* icon-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CF931BEAE8A4069BD5D7E45 /* icon-question.ttf */; };
 		2017A195C71642FCA48AAB1B /* icon-searched-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2ACCD7D983A482AA4C1BF38 /* icon-searched-location.ttf */; };
 		30D5F08576BE47C28D80D6FD /* icon-home-title-rectangle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9319B225C3324B65A25BDD6A /* icon-home-title-rectangle.ttf */; };
-		3B19C2F79BBC401CA2F00EBA /* icon-modal-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19C7F7D9FCBA4699B21AD2C3 /* icon-modal-question.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		3EA90A9A596042C38292C67E /* icon-go-to-schedule-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C3E7B25E1924EEA84E5E5E0 /* icon-go-to-schedule-button.ttf */; };
 		4F6ED2F9F0BD4228ABAA9FD0 /* icon-star-border.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 419BDD43E7DA4E4DBE79B8F1 /* icon-star-border.ttf */; };
@@ -26,26 +25,24 @@
 		980E5FDEE2684EA98D8B86C4 /* icon-tasklist-left-fin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 082A53E51BF444C0A6D43055 /* icon-tasklist-left-fin.ttf */; };
 		9BDCDE8C7FA14002A7850F8D /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */; };
 		A82DB9D3118347CBB31D70E4 /* icon-schedule-pointer.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C0A99513E1D471E98A41074 /* icon-schedule-pointer.ttf */; };
-		B1A598B0999B4C2DBEB10DB6 /* icon-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15F80828A494741BE5F281D /* icon-favorite.ttf */; };
+		AB5DEB5C96B34F418C704DBD /* icon-find-current-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A038686534A4C03B6189DAF /* icon-find-current-location.ttf */; };
 		B60BA6E3E5E04DB9BBBEA10F /* icon-searched-search.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D8846B1F5EC48298ED0B378 /* icon-searched-search.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		C3AC82E36E0449EDBFA8D1A8 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9173C583864647D09E1B8075 /* noop-file.swift */; };
-		C43F8D2FFB204A169280AAAA /* icon-target.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5EF57DE7C1541149B80FE2A /* icon-target.ttf */; };
 		CC289A350B8D442785A32DA8 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */; };
 		CCD7902726B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */; };
-		D906B96CF7694DC6A6970920 /* icon-question-background.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 470E19AD094E4C9EBD559F3C /* icon-question-background.ttf */; };
 		DDD6A53572434E508776572A /* icon-tasklist-add-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 79EADEB6A9BC4FC186E94354 /* icon-tasklist-add-button.ttf */; };
 		E4DF0FEC39534D259F0D1DD2 /* icon-add-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D04F1D2076484325901FB306 /* icon-add-favorite.ttf */; };
 		E718B4F94EE5495EA6CD91E2 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8962AD622E97470C8E8E6B1D /* NotoSansKR-Medium.otf */; };
 		EBBAE641D1C24BD1B1B0BA97 /* icon-angle-down.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4F59261BE9F45628461F8C7 /* icon-angle-down.ttf */; };
 		F2CB060D7A5B410CB9A75166 /* icon-add-todo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7E01E3F394140F68B23D691 /* icon-add-todo.ttf */; };
-		AB5DEB5C96B34F418C704DBD /* icon-find-current-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A038686534A4C03B6189DAF /* icon-find-current-location.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		082A53E51BF444C0A6D43055 /* icon-tasklist-left-fin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left-fin.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left-fin.ttf"; sourceTree = "<group>"; };
 		086B848955314533ADF98A3F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		0A038686534A4C03B6189DAF /* icon-find-current-location.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-find-current-location.ttf"; path = "../assets/icons/ttf-svgs/icon-find-current-location.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* chiyeolhan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chiyeolhan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = chiyeolhan/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = chiyeolhan/AppDelegate.m; sourceTree = "<group>"; };
@@ -100,7 +97,6 @@
 		F2ACCD7D983A482AA4C1BF38 /* icon-searched-location.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-searched-location.ttf"; path = "../assets/icons/ttf-svgs/icon-searched-location.ttf"; sourceTree = "<group>"; };
 		F7E01E3F394140F68B23D691 /* icon-add-todo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-add-todo.ttf"; path = "../assets/icons/ttf-svgs/icon-add-todo.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
-		0A038686534A4C03B6189DAF /* icon-find-current-location.ttf */ = {isa = PBXFileReference; name = "icon-find-current-location.ttf"; path = "../assets/icons/ttf-svgs/icon-find-current-location.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
+			shellScript = "export NODE_BINARY=/opt/homebrew/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
 		};
 		780E550D11452C8FFACB7187 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
