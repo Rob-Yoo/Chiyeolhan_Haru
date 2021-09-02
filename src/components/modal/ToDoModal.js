@@ -29,14 +29,20 @@ import {
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
 } from 'constant/const';
+import { editToDoDispatch } from 'redux/store';
+import { makeNowTime } from 'utils/Time';
+import { fontPercentage } from 'utils/responsive';
+import { checkEarlistTodo } from 'utils/AsyncStorage';
 import { handleFilterData } from 'utils/handleFilterData';
-import { isEarliestTime } from 'utils/Time';
-import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
-import { fontPercentage } from '../../utils/responsive';
-import { alertNotFillIn } from '../../utils/TwoButtonAlert';
+import {
+  alertInValidSubmit,
+  alertStartTimeError,
+  alertNotFillIn,
+} from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   createToDo,
+  editToDoDispatch,
   modalHandler,
   isModalVisible,
   navigation,
@@ -87,20 +93,7 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     if (isToday) {
-      try {
-        const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-        if (result != null) {
-          const data = JSON.parse(result);
-          if (data.length != 0) {
-            const earliestTime = data[0].startTime;
-            if (!isEarliestTime(earliestTime, todoStartTime)) {
-              isChangeEarliest = false;
-            }
-          }
-        }
-      } catch (e) {
-        console.log('toDoSubmit first try catch Error :', e);
-      }
+      checkEarlistTodo(todoStartTime);
     }
     try {
       await dbService
@@ -120,11 +113,10 @@ export const ToDoModal = ({
           isDone: false,
           isFavorite: false,
         });
-      if (isToday) {
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      } else {
-        dbToAsyncTomorrow();
-      }
+      isToday
+        ? dbToAsyncStorage(isChangeEarliest) //isChangeEarliest가 true이면 addGeofence 아니면 안함
+        : dbToAsyncTomorrow();
+
       await handleFilterData(
         location,
         'location',
@@ -162,12 +154,20 @@ export const ToDoModal = ({
       const finishTime = toDo.finishTime;
       // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
       // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
-      if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+      if (
+        !isTodoEdit &&
+        startTime <= todoStartTime &&
+        todoStartTime <= finishTime
+      ) {
         isNeedAlert = true;
         return;
       }
 
-      if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
+      if (
+        !isTodoEdit &&
+        startTime <= todoFinishTime &&
+        todoFinishTime <= finishTime
+      ) {
         isNeedAlert = true;
         return;
       }
@@ -181,17 +181,7 @@ export const ToDoModal = ({
     todoTitle,
     isTodoEdit,
   ) => {
-    const timeObject = new Date();
-    const hour =
-      timeObject.getHours() < 10
-        ? `0${timeObject.getHours()}`
-        : timeObject.getHours();
-    const min =
-      timeObject.getMinutes() < 10
-        ? `0${timeObject.getMinutes()}`
-        : timeObject.getMinutes();
-    const currentTime = `${hour}:${min}`;
-
+    const currentTime = makeNowTime();
     if (!isTodoEdit && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
@@ -253,8 +243,30 @@ export const ToDoModal = ({
       console.log('handleTodayTodoSubmit Error :', e);
     }
   };
+  const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    const id = passModalData?.id;
+    const currentTime = makeNowTime();
+    if (!isTodoEdit && currentTime > todoStartTime) {
+      alertStartTimeError();
+      modalHandler();
+      return;
+    }
+    editToDoDispatch(
+      { todoTitle, todoStartTime, todoFinishTime, taskList },
+      id,
+    );
 
-  const handleTodoSubmit = ({ todoStartTime, todoFinishTime, todoTitle }) => {
+    //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
+    isToday && checkEarlistTodo(todoStartTime);
+    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+    modalHandler();
+  };
+
+  const handleTodoSubmit = async ({
+    todoStartTime,
+    todoFinishTime,
+    todoTitle,
+  }) => {
     if (Object.keys(locationData).length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
@@ -264,27 +276,18 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (isToday) {
-        handleTodayTodoSubmit(
-          todoStartTime,
-          todoFinishTime,
-          todoTitle,
-          isTodoEdit,
-        );
-      } else {
-        handleTomorrowTodoSubmit(
-          todoStartTime,
-          todoFinishTime,
-          todoTitle,
-          isTodoEdit,
-        );
+      if (!isTodoEdit && isToday) {
+        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (!isTodoEdit && !isToday) {
+        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (isTodoEdit) {
+        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
   };
 
   const taskSubmit = ({ index, task }) => {
     if (index === false) {
-      console.log('안인덱스로업데이트');
       setTaskList([...taskList, task]);
     } else {
       setTaskList([
@@ -292,7 +295,6 @@ export const ToDoModal = ({
         task,
         ...taskList.slice(index + 1),
       ]);
-      console.log('index로업뎃완료');
     }
 
     toggleIsVisible(inputIsVisible, setInputIsVisible);
@@ -320,9 +322,6 @@ export const ToDoModal = ({
       setValue('todoFinishTime', newTime);
     }
   };
-  useEffect(() => {
-    console.log(task);
-  }, [task]);
 
   useEffect(() => {
     register('todoStartTime'),
@@ -332,12 +331,14 @@ export const ToDoModal = ({
     register('todoId');
   }, [register]);
   useEffect(() => {
-    if (passModalData) {
+    if (passModalData !== undefined) {
       setLocationName(passModalData.location);
       setTitle(passModalData.description);
       setTaskList([...passModalData.toDos]);
       setLocationData(passModalData.location);
       setIsTodoEdit(true);
+    } else {
+      setIsTodoEdit(false);
     }
   }, [passModalData]);
   return (
@@ -409,6 +410,7 @@ export const ToDoModal = ({
           </View>
           <View style={styles.timePickerContainer}>
             <TimePicker
+              isTodoEdit={isTodoEdit}
               isStart={true}
               timeText={'시작'}
               pickerHandler={(text) => timeHandler(text, true)}
@@ -417,6 +419,7 @@ export const ToDoModal = ({
             />
             <Text style={{ fontSize: 25 }}>~</Text>
             <TimePicker
+              isTodoEdit={{ isTodoEdit }}
               isStart={false}
               timeText={'끝'}
               pickerHandler={(text) => timeHandler(text, false)}
@@ -489,6 +492,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createToDo: (todo) => dispatch(create(todo)),
     addToDo: (task, id) => dispatch(add({ task, id })),
+    editToDoDispatch: (data, id) => dispatch(editToDoDispatch({ data, id })),
   };
 };
 

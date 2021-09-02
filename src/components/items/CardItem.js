@@ -8,6 +8,7 @@ import {
   heightPercentage,
   widthPercentage,
 } from 'utils/responsive';
+import { makeNowTime } from '../../utils/Time';
 export const styles = StyleSheet.create({
   card: {
     maxHeight:
@@ -48,7 +49,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize:
       Dimensions.get('window').height > 667
-        ? fontPercentage(30)
+        ? fontPercentage(24)
         : fontPercentage(20),
     marginRight: 15,
     position: 'relative',
@@ -90,13 +91,7 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
-    const startH = finishTime.replace(/:\d\d/, '');
-    const startM = finishTime.replace(/\d\d:/, '');
-    if (
-      isDone &&
-      new Date().getHours() >= startH &&
-      new Date().getMinutes() >= startM
-    ) {
+    if (isDone && makeNowTime() >= finishTime) {
       setWidth('100%');
     } else {
       const date = new Date();
