@@ -71,8 +71,6 @@ export const TimePicker = ({
   pickerHandler,
   isToday,
   timeDate,
-  isTodoEdit = false,
-  prevStartTime = false,
 }) => {
   const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
@@ -113,15 +111,9 @@ export const TimePicker = ({
     }
   };
 
-  const checkValidFinishTime = async (
-    formatTime,
-    isTodoEdit = false,
-    prevStartTime,
-  ) => {
+  const checkValidFinishTime = async (formatTime) => {
     try {
-      const startTime = isTodoEdit
-        ? prevStartTime
-        : await AsyncStorage.getItem(KEY_VALUE_START_TIME);
+      const startTime = await AsyncStorage.getItem(KEY_VALUE_START_TIME);
       if (startTime != null) {
         const timeDiff = getTimeDiff(startTime, formatTime);
         if (timeDiff >= 5) {
@@ -152,7 +144,7 @@ export const TimePicker = ({
     if (isStart) {
       await checkValidStartTime(formatTime);
     } else {
-      await checkValidFinishTime(formatTime, isTodoEdit, prevStartTime);
+      await checkValidFinishTime(formatTime);
     }
   };
   useEffect(() => {

@@ -48,7 +48,6 @@ export const ToDoModal = ({
   setPassModalData,
 }) => {
   const dispatch = useDispatch();
-  const [prevStartTime, setPrevStartTime] = useState(passModalData?.startTime);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -93,7 +92,6 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     if (isToday) {
       isChangeEarliest = await checkEarlistTodo(todoStartTime);
-      console.log(isChangeEarliest);
     }
     try {
       isToday
@@ -229,11 +227,8 @@ export const ToDoModal = ({
     }
   };
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    console.log('here');
     const id = passModalData?.id;
-
     const currentTime = makeNowTime();
-    console.log(currentTime);
     if (!isTodoEdit && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
@@ -251,7 +246,6 @@ export const ToDoModal = ({
     let isChangeEarliest = true;
     //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
     isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
-    console.log(isChangeEarliest);
     isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
     modalHandler();
   };
@@ -294,7 +288,7 @@ export const ToDoModal = ({
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
 
-  const timeHandler = (text, isStart) => {
+  const timeHandler = async (text, isStart) => {
     let newTime;
     const restMin = text.slice(0, 4);
     const oneDigitMin = text.slice(4);
@@ -311,8 +305,7 @@ export const ToDoModal = ({
       // }
     }
     if (isStart) {
-      setPrevStartTime(newTime);
-      console.log(`new TIme:${newTime}`);
+      await AsyncStorage.setItem(KEY_VALUE_START_TIME, newTime);
       setValue('todoStartTime', newTime);
     } else {
       setValue('todoFinishTime', newTime);
@@ -400,7 +393,6 @@ export const ToDoModal = ({
           </View>
           <View style={styles.timePickerContainer}>
             <TimePicker
-              isTodoEdit={isTodoEdit}
               isStart={true}
               timeText={'시작'}
               pickerHandler={(text) => timeHandler(text, true)}
@@ -409,8 +401,6 @@ export const ToDoModal = ({
             />
             <Text style={{ fontSize: 25 }}>~</Text>
             <TimePicker
-              isTodoEdit={isTodoEdit}
-              prevStartTime={prevStartTime}
               isStart={false}
               timeText={'끝'}
               pickerHandler={(text) => timeHandler(text, false)}
