@@ -24,25 +24,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const Schedule = ({ navigation, isToday, children }) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const toggleModal = async () => {
-    try {
-      setModalVisible(!isModalVisible);
-      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
-    } catch (e) {
-      console.log('toggleModal Error :', e);
-    }
-  };
+const ScheduleLayout = ({
+  navigation,
+  isToday,
+  children,
+  handleModal,
+  isModalVisible,
+  passModalData,
+  setPassModalData,
+}) => {
   return (
     <>
       <View style={{ flex: 1 }}>{children}</View>
-      <TouchableOpacity style={styles.addToDoButton} onPress={toggleModal}>
+      <TouchableOpacity style={styles.addToDoButton} onPress={handleModal}>
         <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
       </TouchableOpacity>
       <ToDoModal
         navigation={navigation}
-        modalHandler={() => toggleModal()}
+        modalHandler={handleModal}
+        passModalData={passModalData}
+        setPassModalData={setPassModalData}
         isModalVisible={isModalVisible}
         isToday={isToday}
       />
@@ -50,4 +51,4 @@ const Schedule = ({ navigation, isToday, children }) => {
   );
 };
 
-export default Schedule;
+export default ScheduleLayout;

@@ -48,8 +48,8 @@ export const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize:
       Dimensions.get('window').height > 667
-        ? fontPercentage(40)
-        : fontPercentage(24),
+        ? fontPercentage(30)
+        : fontPercentage(20),
     marginRight: 15,
     position: 'relative',
   },
