@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { connect } from 'react-redux';
-import { add, create } from 'redux/store';
+import { useDispatch } from 'react-redux';
+import { create, editToDoDispatch } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dbToAsyncStorage, dbToAsyncTomorrow } from 'utils/AsyncStorage';
 import Map from 'components/screen/Map';
@@ -27,7 +27,6 @@ import {
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
 } from 'constant/const';
-import { editToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { fontPercentage } from 'utils/responsive';
 import { checkEarlistTodo } from 'utils/AsyncStorage';
@@ -39,8 +38,6 @@ import {
 } from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
-  createToDo,
-  editToDoDispatch,
   modalHandler,
   isModalVisible,
   navigation,
@@ -48,6 +45,7 @@ export const ToDoModal = ({
   passModalData,
   setPassModalData,
 }) => {
+  const dispatch = useDispatch();
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -118,7 +116,7 @@ export const ToDoModal = ({
         isDone: false,
         isFavorite: false,
       };
-      createToDo(newData);
+      dispatch(create(newData));
       modalHandler();
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
@@ -234,9 +232,11 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    editToDoDispatch(
-      { todoTitle, todoStartTime, todoFinishTime, taskList },
-      id,
+    dispatch(
+      editToDoDispatch(
+        { todoTitle, todoStartTime, todoFinishTime, taskList },
+        id,
+      ),
     );
 
     //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
@@ -468,16 +468,6 @@ export const ToDoModal = ({
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return { toDos: state };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createToDo: (todo) => dispatch(create(todo)),
-    addToDo: (task, id) => dispatch(add({ task, id })),
-    editToDoDispatch: (data, id) => dispatch(editToDoDispatch({ data, id })),
-  };
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -602,4 +592,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);
+export default ToDoModal;
