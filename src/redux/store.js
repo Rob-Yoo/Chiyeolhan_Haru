@@ -9,35 +9,10 @@ const toDosSlice = createSlice({
       Object.assign(state, action.payload);
     },
     create: (state, action) => {
-      const [
-        id,
-        startTime,
-        finishTime,
-        title,
-        date,
-        toDos,
-        address,
-        longitude,
-        latitude,
-        location,
-        isDone = false,
-        isFavorite = false,
-      ] = action.payload;
-      state[`${id}`] = {
-        id,
-        startTime,
-        finishTime,
-        title,
-        date,
-        location,
-        longitude,
-        latitude,
-        location,
-        address,
-        isDone,
-        isfavorite: isFavorite,
-        toDos: [...toDos],
-      };
+      const newData = action.payload;
+      const id = action.payload.id;
+      state[id] = newData;
+      toDosUpdateDB(newData, id);
     },
     add: (state, action) => {
       const { targetId, taskTitle } = action.payload;

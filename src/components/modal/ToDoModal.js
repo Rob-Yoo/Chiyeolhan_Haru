@@ -15,14 +15,12 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { add, create } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
-import { dbService } from 'utils/firebase';
 import { dbToAsyncStorage, dbToAsyncTomorrow } from 'utils/AsyncStorage';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
 import {
-  UID,
   TODAY,
   TOMORROW,
   KEY_VALUE_GEOFENCE,
@@ -96,23 +94,6 @@ export const ToDoModal = ({
       checkEarlistTodo(todoStartTime);
     }
     try {
-      await dbService
-        .collection(`${UID}`)
-        .doc(`${todoId}`)
-        .set({
-          id: todoId,
-          title: todoTitle,
-          startTime: todoStartTime,
-          finishTime: todoFinishTime,
-          location,
-          address,
-          longitude,
-          latitude,
-          date: isToday ? TODAY : TOMORROW,
-          toDos: [...taskList],
-          isDone: false,
-          isFavorite: false,
-        });
       isToday
         ? dbToAsyncStorage(isChangeEarliest) //isChangeEarliest가 true이면 addGeofence 아니면 안함
         : dbToAsyncTomorrow();
@@ -123,19 +104,21 @@ export const ToDoModal = ({
         searchedList,
         setSearchedList,
       );
-      const todo = [
-        todoId,
-        todoStartTime,
-        todoFinishTime,
-        todoTitle,
-        isToday ? TODAY : TOMORROW,
-        taskList,
+      const newData = {
+        id: todoId,
+        title: todoTitle,
+        startTime: todoStartTime,
+        finishTime: todoFinishTime,
+        location,
         address,
         longitude,
         latitude,
-        location,
-      ];
-      createToDo(todo);
+        date: isToday ? TODAY : TOMORROW,
+        toDos: [...taskList],
+        isDone: false,
+        isFavorite: false,
+      };
+      createToDo(newData);
       modalHandler();
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
@@ -240,7 +223,7 @@ export const ToDoModal = ({
         toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleTodayTodoSubmit Error :', e);
+      console.log('handleTomorrowTodoSubmit Error :', e);
     }
   };
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
