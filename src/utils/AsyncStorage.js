@@ -9,6 +9,7 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW,
 } from 'constant/const';
+import { isEarliestTime } from './Time';
 
 // const setFirstSubmit = () => {
 //   AsyncStorage.setItem(KEY_VALUE_GEOFENCE1, 'true');
@@ -154,5 +155,23 @@ export const deleteAllSearchedData = async (data) => {
     return setData;
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
+  }
+};
+
+export const checkEarlistTodo = async (todoStartTime) => {
+  try {
+    console.log('check');
+    const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+    if (result != null) {
+      const data = JSON.parse(result);
+      if (data.length != 0) {
+        const earliestTime = data[0].startTime;
+        if (!isEarliestTime(earliestTime, todoStartTime)) {
+          isChangeEarliest = false;
+        }
+      }
+    }
+  } catch (e) {
+    console.log('toDoSubmit first try catch Error :', e);
   }
 };
