@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
@@ -15,11 +14,12 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { create, editToDoDispatch } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
-import { dbToAsyncStorage, dbToAsyncTomorrow } from 'utils/AsyncStorage';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
+import { makeNowTime } from 'utils/Time';
+import { handleFilterData } from 'utils/handleFilterData';
 import {
   TODAY,
   TOMORROW,
@@ -27,15 +27,17 @@ import {
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
 } from 'constant/const';
-import { makeNowTime } from 'utils/Time';
-import { fontPercentage } from 'utils/responsive';
-import { checkEarlistTodo } from 'utils/AsyncStorage';
-import { handleFilterData } from 'utils/handleFilterData';
+import {
+  checkEarlistTodo,
+  dbToAsyncStorage,
+  dbToAsyncTomorrow,
+} from 'utils/AsyncStorage';
 import {
   alertInValidSubmit,
   alertStartTimeError,
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
+import styles from 'components/modal/ToDoModalStyle';
 
 export const ToDoModal = ({
   modalHandler,
@@ -329,7 +331,7 @@ export const ToDoModal = ({
       <Modal
         navigation={navigation}
         isVisible={isModalVisible}
-        style={{ margin: 0, flex: 1 }}
+        style={styles.modalStyle}
         onModalHide={() => clearData()}
       >
         <TouchableOpacity
@@ -354,24 +356,18 @@ export const ToDoModal = ({
             </View>
 
             <ImageBackground
-              style={{
-                width: Dimensions.get('window').height > 667 ? 200 : 150,
-                height: Dimensions.get('window').height > 667 ? 200 : 150,
-                borderRadius: 100,
-              }}
+              style={styles.imageBackgroundMapStyle}
               source={{ uri: 'map' }}
             >
               <View
-                style={{
-                  width: Dimensions.get('window').height > 667 ? 200 : 150,
-                  height: Dimensions.get('window').height > 667 ? 200 : 150,
-                  borderRadius: 100,
-                  backgroundColor: 'rgba(0,0,0,0.3)',
-                  paddingHorizontal:
-                    Dimensions.get('window').height > 667 ? '33%' : '35%',
-                  paddingVertical: 40,
-                  marginBottom: 20,
-                }}
+                style={[
+                  styles.imageBackgroundStyle,
+                  {
+                    backgroundColor: locationName
+                      ? 'transparent'
+                      : 'rgba(0,0,0,0.3)',
+                  },
+                ]}
               >
                 {locationName ? (
                   <></>
@@ -468,128 +464,5 @@ export const ToDoModal = ({
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'transparent',
-  },
-  background: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  toDoModalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    margin: 0,
-  },
-  modalTopContainer: {
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: '#54BCB6',
-    height: Dimensions.get('window').height > 667 ? '40%' : '45%',
-    // height: 320,
-    borderRadius: 50,
-    marginTop: -10,
-  },
-  modalTextView: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 50,
-    marginTop: 20,
-  },
-  modalTopText: {
-    fontFamily: 'NotoSansKR-Bold',
-    color: '#FFFFFF',
-    fontSize: 20,
-  },
-  modalLocationText: {
-    fontFamily: 'NotoSansKR-Regular',
-    color: '#FFFFFF',
-    fontSize: fontPercentage(20),
-  },
-  modalInputContainer: {
-    backgroundColor: '#e2ece9',
-    marginTop: '40%',
-    height: Dimensions.get('window').height / 1.2,
-    // height: 750,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-  },
-  modalInput1: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginRight: 20,
-    width: 165,
-    height: 40,
-  },
-  modalInput2: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 165,
-    height: 40,
-    marginBottom: 10,
-  },
-  modalInputTitle: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: 40,
-    marginBottom: 10,
-  },
-  modalInputTask: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: 40,
-    marginBottom: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-  modalInputText: {
-    color: '#B7B7B7',
-    marginVertical: 10,
-  },
-  timePickerContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
-  todoInputContainer: {
-    alignItems: 'center',
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-  modalTaskContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: Dimensions.get('window').height > 667 ? 200 : 100,
-    marginBottom: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-});
 
 export default ToDoModal;
