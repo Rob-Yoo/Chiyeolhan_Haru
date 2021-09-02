@@ -46,7 +46,7 @@ const MyEventComponent = ({ event, position }) => {
   );
 };
 
-export const ScheduleComponent = ({ events, day }) => {
+export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
   let weekStart = new Date().getDay();
   let selectedDate = '';
@@ -78,7 +78,11 @@ export const ScheduleComponent = ({ events, day }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      onEventPress={(event) => console.log(event)}
+      onEventPress={(event) => {
+        if (event.color !== '#54BCB6') {
+          passToModalData(event);
+        }
+      }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
         if ((await deleteToDoAlert(event)) === 'true') {

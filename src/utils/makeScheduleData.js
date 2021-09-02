@@ -4,6 +4,8 @@ import { TODAY, TOMORROW } from 'constant/const';
 export const makeScheduleDate = (toDos, toDoArr, isToday) => {
   for (key in toDos) {
     const isDone = toDos[key].isDone;
+    const taskList = [...toDos[key].toDos];
+
     const startH = toDos[key].startTime.replace(/:\d\d/, '');
     const startM = toDos[key].startTime.replace(/\d\d:/, '');
     const endH = toDos[key].finishTime.replace(/:\d\d/, '');
@@ -22,6 +24,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
           new Date().getMinutes() >= startM
             ? '#54BCB6'
             : '#B9B9B9',
+        toDos: taskList,
       });
     } else if (!isToday && toDos[key].date === TOMORROW) {
       toDoArr.push({
@@ -32,6 +35,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         location: toDos[key].location,
         color: isDone ? '#54BCB6' : '#B9B9B9',
+        toDos: taskList,
       });
     }
   }

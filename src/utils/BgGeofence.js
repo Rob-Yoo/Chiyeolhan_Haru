@@ -42,7 +42,7 @@ export const addGeofenceTrigger = async () => {
       await BackgroundGeolocation.startGeofences();
     }
   } catch (error) {
-    console.log('addGeofenceTrigger Error :', error);
+    'addGeofenceTrigger Error :', error;
   }
 };
 
