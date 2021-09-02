@@ -160,17 +160,19 @@ export const deleteAllSearchedData = async (data) => {
 
 export const checkEarlistTodo = async (todoStartTime) => {
   try {
-    console.log('check');
     const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
     if (result != null) {
       const data = JSON.parse(result);
       if (data.length != 0) {
         const earliestTime = data[0].startTime;
         if (!isEarliestTime(earliestTime, todoStartTime)) {
-          isChangeEarliest = false;
+          return false;
+        } else {
+          return true;
         }
       }
     }
+    return true;
   } catch (e) {
     console.log('toDoSubmit first try catch Error :', e);
   }

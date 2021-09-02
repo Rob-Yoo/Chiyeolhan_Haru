@@ -48,6 +48,7 @@ export const ToDoModal = ({
   setPassModalData,
 }) => {
   const dispatch = useDispatch();
+  const [prevStartTime, setPrevStartTime] = useState(passModalData?.startTime);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -91,7 +92,8 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     if (isToday) {
-      checkEarlistTodo(todoStartTime);
+      isChangeEarliest = await checkEarlistTodo(todoStartTime);
+      console.log(isChangeEarliest);
     }
     try {
       isToday
@@ -227,22 +229,29 @@ export const ToDoModal = ({
     }
   };
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    console.log('here');
     const id = passModalData?.id;
+
     const currentTime = makeNowTime();
+    console.log(currentTime);
     if (!isTodoEdit && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
     }
     dispatch(
-      editToDoDispatch(
-        { todoTitle, todoStartTime, todoFinishTime, taskList },
+      editToDoDispatch({
+        todoTitle,
+        todoStartTime,
+        todoFinishTime,
+        taskList,
         id,
-      ),
+      }),
     );
-
+    let isChangeEarliest = true;
     //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
-    isToday && checkEarlistTodo(todoStartTime);
+    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
+    console.log(isChangeEarliest);
     isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
     modalHandler();
   };
@@ -302,6 +311,8 @@ export const ToDoModal = ({
       // }
     }
     if (isStart) {
+      setPrevStartTime(newTime);
+      console.log(`new TIme:${newTime}`);
       setValue('todoStartTime', newTime);
     } else {
       setValue('todoFinishTime', newTime);
@@ -398,7 +409,8 @@ export const ToDoModal = ({
             />
             <Text style={{ fontSize: 25 }}>~</Text>
             <TimePicker
-              isTodoEdit={{ isTodoEdit }}
+              isTodoEdit={isTodoEdit}
+              prevStartTime={prevStartTime}
               isStart={false}
               timeText={'끝'}
               pickerHandler={(text) => timeHandler(text, false)}

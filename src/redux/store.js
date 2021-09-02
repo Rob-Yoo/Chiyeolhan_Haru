@@ -27,9 +27,13 @@ const toDosSlice = createSlice({
     },
     //투두 수정
     editToDoDispatch: (state, action) => {
-      const { id: targetId } = action.payload;
-      const { taskList, todoFinishTime, todoStartTime, todoTitle } =
-        action.payload.data;
+      const {
+        taskList,
+        todoFinishTime,
+        todoStartTime,
+        todoTitle,
+        id: targetId,
+      } = action.payload;
       state[targetId].finishTime = todoFinishTime;
       state[targetId].startTime = todoStartTime;
       state[targetId].title = todoTitle;

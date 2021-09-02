@@ -65,8 +65,15 @@ Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
 
-export const TimePicker = (props) => {
-  const { isStart, timeText, pickerHandler, isToday, timeDate } = props;
+export const TimePicker = ({
+  isStart,
+  timeText,
+  pickerHandler,
+  isToday,
+  timeDate,
+  isTodoEdit = false,
+  prevStartTime = false,
+}) => {
   const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
   const timeObject = new Date();
@@ -106,9 +113,15 @@ export const TimePicker = (props) => {
     }
   };
 
-  const checkValidFinishTime = async (formatTime) => {
+  const checkValidFinishTime = async (
+    formatTime,
+    isTodoEdit = false,
+    prevStartTime,
+  ) => {
     try {
-      const startTime = await AsyncStorage.getItem(KEY_VALUE_START_TIME);
+      const startTime = isTodoEdit
+        ? prevStartTime
+        : await AsyncStorage.getItem(KEY_VALUE_START_TIME);
       if (startTime != null) {
         const timeDiff = getTimeDiff(startTime, formatTime);
         if (timeDiff >= 5) {
@@ -139,7 +152,7 @@ export const TimePicker = (props) => {
     if (isStart) {
       await checkValidStartTime(formatTime);
     } else {
-      await checkValidFinishTime(formatTime);
+      await checkValidFinishTime(formatTime, isTodoEdit, prevStartTime);
     }
   };
   useEffect(() => {
