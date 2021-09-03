@@ -29,14 +29,7 @@ export const ToDoModalInput = (props) => {
   const [task, setTask] = useState('');
 
   useEffect(() => {
-    console.log(`로드 ${prevTask}`);
-
-    if (prevTask) {
-      setTask(prevTask);
-      console.log(`modalinput ${task}/ prev ${prevTask}`);
-    } else {
-      console.log('prevTask없음');
-    }
+    prevTask && setTask(prevTask.item);
   }, []);
 
   const handleText = (text) => {
@@ -58,7 +51,10 @@ export const ToDoModalInput = (props) => {
         <TextInput
           onChangeText={(task) => handleText(task)}
           onSubmitEditing={() => {
-            taskSubmitHandler({ task, index: prevTask ? prevTask[1] : false });
+            taskSubmitHandler({
+              task,
+              index: prevTask ? prevTask.index : false,
+            });
             setTask('');
           }}
           style={styles.modalInputTask}

@@ -55,7 +55,7 @@ export const ToDoModal = ({
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const [isTodoEdit, setIsTodoEdit] = useState(false);
   const [taskList, setTaskList] = useState([]);
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState(false);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
@@ -312,6 +312,11 @@ export const ToDoModal = ({
     }
   };
 
+  const editSchedule = (item, index) => {
+    setTask({ item, index });
+    toggleIsVisible(inputIsVisible, setInputIsVisible);
+  };
+
   useEffect(() => {
     register('todoStartTime'),
       register('todoFinishTime'),
@@ -427,24 +432,25 @@ export const ToDoModal = ({
               {taskList.map((item, index) => (
                 <TouchableWithoutFeedback
                   key={index}
-                  onPress={() => {
-                    setTask([item, index]);
-                    toggleIsVisible(inputIsVisible, setInputIsVisible);
-                  }}
+                  onPress={() => editSchedule(item, index)}
                 >
                   <Text style={styles.modalInputText}>{item}</Text>
                 </TouchableWithoutFeedback>
               ))}
             </ScrollView>
-            <ToDoModalInput
-              taskListVisibleHandler={() =>
-                toggleIsVisible(inputIsVisible, setInputIsVisible)
-              }
-              taskSubmitHandler={taskSubmit}
-              inputIsVisible={inputIsVisible}
-              prevTask={task}
-              setPrevTask={setTask}
-            />
+            {task ? (
+              <ToDoModalInput
+                taskListVisibleHandler={() =>
+                  toggleIsVisible(inputIsVisible, setInputIsVisible)
+                }
+                taskSubmitHandler={taskSubmit}
+                inputIsVisible={inputIsVisible}
+                prevTask={task}
+                setPrevTask={setTask}
+              />
+            ) : (
+              <></>
+            )}
           </View>
           <Modal
             isVisible={mapIsVisible}
