@@ -7,6 +7,7 @@ import { dbService } from 'utils/firebase';
 import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
+import { makeNowTime } from 'utils/Time';
 
 const styles = StyleSheet.create({
   homeContainer: {
@@ -20,7 +21,31 @@ const PaintHome = ({ todoArr }) => {
   const [isData, setIsData] = useState(
     todoArr[0]?.id === undefined ? false : true,
   );
+  const [nowIndex, setNowIndex] = useState(0);
+  const getNowTimeIndex = () => {
+    let tempData = 999999;
+    let tempIndex = 0;
+    todoArr
+      .filter((item) => item.date === TODAY)
+      .map((item, index) => {
+        const nowH = makeNowTime().replace(/:\d\d/, '');
+        const startH = item.startTime.replace(/:\d\d/, '');
+        const nowM = makeNowTime().replace(/\d\d:/, '');
+        const startM = item.startTime.replace(/\d\d:/, '');
+        if (
+          item.finishTime > makeNowTime() &&
+          !item.isDone &&
+          tempData >
+            Math.abs((startH - nowH) * 1) * 60 + Math.abs((startM - nowM) * 1)
+        ) {
+          tempData =
+            Math.abs((startH - nowH) * 1) * 60 + Math.abs((startM - nowM) * 1);
+          tempIndex = index;
+        }
+      });
 
+    setNowIndex(tempIndex);
+  };
   if (Array.isArray(todoArr) && todoArr.length === 0) {
     todoArr = [
       {
@@ -38,6 +63,9 @@ const PaintHome = ({ todoArr }) => {
     ];
   }
   useEffect(() => {
+    getNowTimeIndex();
+  }, []);
+  useEffect(() => {
     setIsData(todoArr[0]?.id === 0 ? false : true);
   }, [todoArr]);
   return (
@@ -47,6 +75,7 @@ const PaintHome = ({ todoArr }) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
+        index={nowIndex}
       >
         {todoArr &&
           todoArr.map((item, index) => {
