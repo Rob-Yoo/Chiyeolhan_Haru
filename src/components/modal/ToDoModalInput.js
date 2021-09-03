@@ -39,7 +39,7 @@ export const ToDoModalInput = (props) => {
     <Modal
       style={{ margin: 0, alignItems: 'center' }}
       isVisible={inputIsVisible}
-      onModalHide={() => setPrevTask('')}
+      onModalHide={() => prevTask && setPrevTask('')}
       avoidKeyboard
     >
       <TouchableOpacity

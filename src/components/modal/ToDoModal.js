@@ -440,6 +440,7 @@ export const ToDoModal = ({
             </ScrollView>
             {task ? (
               <ToDoModalInput
+                key={task}
                 taskListVisibleHandler={() =>
                   toggleIsVisible(inputIsVisible, setInputIsVisible)
                 }
@@ -449,7 +450,15 @@ export const ToDoModal = ({
                 setPrevTask={setTask}
               />
             ) : (
-              <></>
+              <ToDoModalInput
+                key={task}
+                taskListVisibleHandler={() =>
+                  toggleIsVisible(inputIsVisible, setInputIsVisible)
+                }
+                taskSubmitHandler={taskSubmit}
+                inputIsVisible={inputIsVisible}
+                prevTask={false}
+              />
             )}
           </View>
           <Modal

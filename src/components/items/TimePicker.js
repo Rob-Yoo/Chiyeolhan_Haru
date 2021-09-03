@@ -159,8 +159,6 @@ export const TimePicker = ({
           : timeDate.getMinutes();
       setTime(`${hour}:${minute}`);
       pickerHandler(`${hour}:${minute}`);
-    } else {
-      console.log('아님');
     }
   }, []);
   const handleConfirm = (formatTime) => {
