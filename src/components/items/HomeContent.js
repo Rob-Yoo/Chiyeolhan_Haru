@@ -47,7 +47,6 @@ const PaintHome = ({ todoArr }) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
-        index={2}
       >
         {todoArr &&
           todoArr.map((item, index) => {

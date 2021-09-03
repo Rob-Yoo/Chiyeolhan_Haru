@@ -90,3 +90,16 @@ export const commonTimeExpression = (time) => {
   }
   return msg;
 };
+
+export const makeNowTime = () => {
+  const timeObject = new Date();
+  const hour =
+    timeObject.getHours() < 10
+      ? `0${timeObject.getHours()}`
+      : timeObject.getHours();
+  const min =
+    timeObject.getMinutes() < 10
+      ? `0${timeObject.getMinutes()}`
+      : timeObject.getMinutes();
+  return `${hour}:${min}`;
+};

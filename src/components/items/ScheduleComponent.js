@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { DAY, MONTH, YEAR } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
+import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
 
@@ -79,12 +80,22 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         borderColor: BACKGROUND_COLOR,
       }}
       onEventPress={(event) => {
-        if (event.color !== '#54BCB6') {
+        if (
+          (day !== 'today' || makeNowTime() < event.startTime) &&
+          event.color !== '#54BCB6'
+        ) {
           passToModalData(event);
         }
       }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
+        if (
+          !(
+            (day !== 'today' || makeNowTime() < event.startTime) &&
+            event.color !== '#54BCB6'
+          )
+        )
+          return;
         if ((await deleteToDoAlert(event)) === 'true') {
           dispatch(deleteToDoDispatch(targetId));
           if (day === 'today') {

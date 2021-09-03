@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
@@ -12,31 +11,35 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { connect } from 'react-redux';
-import { add, create } from 'redux/store';
+import { useDispatch } from 'react-redux';
+import { create, editToDoDispatch } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
-import { dbService } from 'utils/firebase';
-import { dbToAsyncStorage, dbToAsyncTomorrow } from 'utils/AsyncStorage';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
+import { makeNowTime } from 'utils/Time';
+import { handleFilterData } from 'utils/handleFilterData';
 import {
-  UID,
   TODAY,
   TOMORROW,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
 } from 'constant/const';
-import { handleFilterData } from 'utils/handleFilterData';
-import { isEarliestTime } from 'utils/Time';
-import { alertInValidSubmit, alertStartTimeError } from 'utils/TwoButtonAlert';
-import { fontPercentage } from '../../utils/responsive';
-import { alertNotFillIn } from '../../utils/TwoButtonAlert';
+import {
+  checkEarlistTodo,
+  dbToAsyncStorage,
+  dbToAsyncTomorrow,
+} from 'utils/AsyncStorage';
+import {
+  alertInValidSubmit,
+  alertStartTimeError,
+  alertNotFillIn,
+} from 'utils/TwoButtonAlert';
+import styles from 'components/modal/ToDoModalStyle';
 
 export const ToDoModal = ({
-  createToDo,
   modalHandler,
   isModalVisible,
   navigation,
@@ -44,6 +47,7 @@ export const ToDoModal = ({
   passModalData,
   setPassModalData,
 }) => {
+  const dispatch = useDispatch();
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -87,63 +91,34 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     if (isToday) {
-      try {
-        const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-        if (result != null) {
-          const data = JSON.parse(result);
-          if (data.length != 0) {
-            const earliestTime = data[0].startTime;
-            if (!isEarliestTime(earliestTime, todoStartTime)) {
-              isChangeEarliest = false;
-            }
-          }
-        }
-      } catch (e) {
-        console.log('toDoSubmit first try catch Error :', e);
-      }
+      isChangeEarliest = await checkEarlistTodo(todoStartTime);
     }
     try {
-      await dbService
-        .collection(`${UID}`)
-        .doc(`${todoId}`)
-        .set({
-          id: todoId,
-          title: todoTitle,
-          startTime: todoStartTime,
-          finishTime: todoFinishTime,
-          location,
-          address,
-          longitude,
-          latitude,
-          date: isToday ? TODAY : TOMORROW,
-          toDos: [...taskList],
-          isDone: false,
-          isFavorite: false,
-        });
-      if (isToday) {
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      } else {
-        dbToAsyncTomorrow();
-      }
+      isToday
+        ? dbToAsyncStorage(isChangeEarliest) //isChangeEarliest가 true이면 addGeofence 아니면 안함
+        : dbToAsyncTomorrow();
+
       await handleFilterData(
         location,
         'location',
         searchedList,
         setSearchedList,
       );
-      const todo = [
-        todoId,
-        todoStartTime,
-        todoFinishTime,
-        todoTitle,
-        isToday ? TODAY : TOMORROW,
-        taskList,
+      const newData = {
+        id: todoId,
+        title: todoTitle,
+        startTime: todoStartTime,
+        finishTime: todoFinishTime,
+        location,
         address,
         longitude,
         latitude,
-        location,
-      ];
-      createToDo(todo);
+        date: isToday ? TODAY : TOMORROW,
+        toDos: [...taskList],
+        isDone: false,
+        isFavorite: false,
+      };
+      dispatch(create(newData));
       modalHandler();
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
@@ -162,12 +137,20 @@ export const ToDoModal = ({
       const finishTime = toDo.finishTime;
       // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
       // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
-      if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+      if (
+        !isTodoEdit &&
+        startTime <= todoStartTime &&
+        todoStartTime <= finishTime
+      ) {
         isNeedAlert = true;
         return;
       }
 
-      if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
+      if (
+        !isTodoEdit &&
+        startTime <= todoFinishTime &&
+        todoFinishTime <= finishTime
+      ) {
         isNeedAlert = true;
         return;
       }
@@ -181,17 +164,7 @@ export const ToDoModal = ({
     todoTitle,
     isTodoEdit,
   ) => {
-    const timeObject = new Date();
-    const hour =
-      timeObject.getHours() < 10
-        ? `0${timeObject.getHours()}`
-        : timeObject.getHours();
-    const min =
-      timeObject.getMinutes() < 10
-        ? `0${timeObject.getMinutes()}`
-        : timeObject.getMinutes();
-    const currentTime = `${hour}:${min}`;
-
+    const currentTime = makeNowTime();
     if (!isTodoEdit && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
@@ -250,11 +223,38 @@ export const ToDoModal = ({
         toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleTodayTodoSubmit Error :', e);
+      console.log('handleTomorrowTodoSubmit Error :', e);
     }
   };
+  const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    const id = passModalData?.id;
+    const currentTime = makeNowTime();
+    if (!isTodoEdit && currentTime > todoStartTime) {
+      alertStartTimeError();
+      modalHandler();
+      return;
+    }
+    dispatch(
+      editToDoDispatch({
+        todoTitle,
+        todoStartTime,
+        todoFinishTime,
+        taskList,
+        id,
+      }),
+    );
+    let isChangeEarliest = true;
+    //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
+    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
+    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+    modalHandler();
+  };
 
-  const handleTodoSubmit = ({ todoStartTime, todoFinishTime, todoTitle }) => {
+  const handleTodoSubmit = async ({
+    todoStartTime,
+    todoFinishTime,
+    todoTitle,
+  }) => {
     if (Object.keys(locationData).length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
@@ -264,27 +264,18 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (isToday) {
-        handleTodayTodoSubmit(
-          todoStartTime,
-          todoFinishTime,
-          todoTitle,
-          isTodoEdit,
-        );
-      } else {
-        handleTomorrowTodoSubmit(
-          todoStartTime,
-          todoFinishTime,
-          todoTitle,
-          isTodoEdit,
-        );
+      if (!isTodoEdit && isToday) {
+        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (!isTodoEdit && !isToday) {
+        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (isTodoEdit) {
+        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
   };
 
   const taskSubmit = ({ index, task }) => {
     if (index === false) {
-      console.log('안인덱스로업데이트');
       setTaskList([...taskList, task]);
     } else {
       setTaskList([
@@ -292,13 +283,12 @@ export const ToDoModal = ({
         task,
         ...taskList.slice(index + 1),
       ]);
-      console.log('index로업뎃완료');
     }
 
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
 
-  const timeHandler = (text, isStart) => {
+  const timeHandler = async (text, isStart) => {
     let newTime;
     const restMin = text.slice(0, 4);
     const oneDigitMin = text.slice(4);
@@ -315,14 +305,12 @@ export const ToDoModal = ({
       // }
     }
     if (isStart) {
+      await AsyncStorage.setItem(KEY_VALUE_START_TIME, newTime);
       setValue('todoStartTime', newTime);
     } else {
       setValue('todoFinishTime', newTime);
     }
   };
-  useEffect(() => {
-    console.log(task);
-  }, [task]);
 
   useEffect(() => {
     register('todoStartTime'),
@@ -332,12 +320,14 @@ export const ToDoModal = ({
     register('todoId');
   }, [register]);
   useEffect(() => {
-    if (passModalData) {
+    if (passModalData !== undefined) {
       setLocationName(passModalData.location);
       setTitle(passModalData.description);
       setTaskList([...passModalData.toDos]);
       setLocationData(passModalData.location);
       setIsTodoEdit(true);
+    } else {
+      setIsTodoEdit(false);
     }
   }, [passModalData]);
   return (
@@ -345,7 +335,7 @@ export const ToDoModal = ({
       <Modal
         navigation={navigation}
         isVisible={isModalVisible}
-        style={{ margin: 0, flex: 1 }}
+        style={styles.modalStyle}
         onModalHide={() => clearData()}
       >
         <TouchableOpacity
@@ -370,24 +360,18 @@ export const ToDoModal = ({
             </View>
 
             <ImageBackground
-              style={{
-                width: Dimensions.get('window').height > 667 ? 200 : 150,
-                height: Dimensions.get('window').height > 667 ? 200 : 150,
-                borderRadius: 100,
-              }}
+              style={styles.imageBackgroundMapStyle}
               source={{ uri: 'map' }}
             >
               <View
-                style={{
-                  width: Dimensions.get('window').height > 667 ? 200 : 150,
-                  height: Dimensions.get('window').height > 667 ? 200 : 150,
-                  borderRadius: 100,
-                  backgroundColor: 'rgba(0,0,0,0.3)',
-                  paddingHorizontal:
-                    Dimensions.get('window').height > 667 ? '33%' : '35%',
-                  paddingVertical: 40,
-                  marginBottom: 20,
-                }}
+                style={[
+                  styles.imageBackgroundStyle,
+                  {
+                    backgroundColor: locationName
+                      ? 'transparent'
+                      : 'rgba(0,0,0,0.3)',
+                  },
+                ]}
               >
                 {locationName ? (
                   <></>
@@ -482,137 +466,5 @@ export const ToDoModal = ({
     </>
   );
 };
-const mapStateToProps = (state) => {
-  return { toDos: state };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createToDo: (todo) => dispatch(create(todo)),
-    addToDo: (task, id) => dispatch(add({ task, id })),
-  };
-};
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'transparent',
-  },
-  background: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  toDoModalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    margin: 0,
-  },
-  modalTopContainer: {
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: '#54BCB6',
-    height: Dimensions.get('window').height > 667 ? '40%' : '45%',
-    // height: 320,
-    borderRadius: 50,
-    marginTop: -10,
-  },
-  modalTextView: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 50,
-    marginTop: 20,
-  },
-  modalTopText: {
-    fontFamily: 'NotoSansKR-Bold',
-    color: '#FFFFFF',
-    fontSize: 20,
-  },
-  modalLocationText: {
-    fontFamily: 'NotoSansKR-Regular',
-    color: '#FFFFFF',
-    fontSize: fontPercentage(20),
-  },
-  modalInputContainer: {
-    backgroundColor: '#e2ece9',
-    marginTop: '40%',
-    height: Dimensions.get('window').height / 1.2,
-    // height: 750,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-  },
-  modalInput1: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginRight: 20,
-    width: 165,
-    height: 40,
-  },
-  modalInput2: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 165,
-    height: 40,
-    marginBottom: 10,
-  },
-  modalInputTitle: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: 40,
-    marginBottom: 10,
-  },
-  modalInputTask: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: 40,
-    marginBottom: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-  modalInputText: {
-    color: '#B7B7B7',
-    marginVertical: 10,
-  },
-  timePickerContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
-  todoInputContainer: {
-    alignItems: 'center',
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-  modalTaskContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: Dimensions.get('window').height > 667 ? 200 : 100,
-    marginBottom: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ToDoModal);
+export default ToDoModal;
