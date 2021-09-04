@@ -38,6 +38,7 @@ import {
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
 import styles from 'components/modal/ToDoModalStyle';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 export const ToDoModal = ({
   modalHandler,
@@ -465,6 +466,11 @@ export const ToDoModal = ({
             isVisible={mapIsVisible}
             animationIn="slideInRight"
             animationOut="slideOutRight"
+            style={{
+              width: SCREEN_WIDTH,
+              height: SCREEN_HEIGHT,
+              margin: 0,
+            }}
           >
             <Map
               modalHandler={() =>

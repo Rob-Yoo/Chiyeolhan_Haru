@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, ImageBackground } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -14,18 +14,13 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { noDataAlert } from 'utils/TwoButtonAlert';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
+  container: {},
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
   },
   iconFindLocation: {
     top: 140,
@@ -44,7 +39,6 @@ const CurrentMap = ({
   locationDataHandler,
   searchedList,
   setSearchedList,
-  navigation,
 }) => {
   const [isRenderData, setRenderData] = useState(false);
   const [locationData, setData] = useState({});
@@ -122,55 +116,51 @@ const CurrentMap = ({
   };
 
   return (
-    <View>
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          region={{
-            ...locationResult,
-            latitudeDelta: 0.004,
-            longitudeDelta: 0.004,
-          }}
-        >
-          {isRenderData ? (
-            <LocationData
-              locationData={locationData}
-              modalHandler={modalHandler}
-              locationDataHandler={locationDataHandler}
-            />
-          ) : (
-            <></>
-          )}
-          <View
-            style={{ flex: 0, position: 'relative', backgroundColor: 'red' }}
-          >
-            <MapSearch
-              _handlePlacesAPI={_handlePlacesAPI}
-              modalHandler={modalHandler}
-              searchedList={searchedList}
-              setSearchedList={setSearchedList}
-            />
-
-            <IconFindLocation
-              size={30}
-              name="icon-find-current-location"
-              style={styles.iconFindLocation}
-              color="#00000041"
-              onPress={() => handleFindCurrentLocation()}
-            />
-          </View>
-          <Marker
-            coordinate={{
-              latitude: locationResult.latitude,
-              longitude: locationResult.longitude,
-            }}
-            image={{
-              uri: isCurrentLocation ? 'customLocation' : 'customPin',
-            }}
+    <View style={styles.container}>
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        region={{
+          ...locationResult,
+          latitudeDelta: 0.004,
+          longitudeDelta: 0.004,
+        }}
+      >
+        {isRenderData ? (
+          <LocationData
+            locationData={locationData}
+            modalHandler={modalHandler}
+            locationDataHandler={locationDataHandler}
           />
-        </MapView>
-      </View>
+        ) : (
+          <></>
+        )}
+        <View style={{ flex: 0, position: 'relative', backgroundColor: 'red' }}>
+          <MapSearch
+            _handlePlacesAPI={_handlePlacesAPI}
+            modalHandler={modalHandler}
+            searchedList={searchedList}
+            setSearchedList={setSearchedList}
+          />
+
+          <IconFindLocation
+            size={30}
+            name="icon-find-current-location"
+            style={styles.iconFindLocation}
+            color="#00000041"
+            onPress={() => handleFindCurrentLocation()}
+          />
+        </View>
+        <Marker
+          coordinate={{
+            latitude: locationResult.latitude,
+            longitude: locationResult.longitude,
+          }}
+          image={{
+            uri: isCurrentLocation ? 'customLocation' : 'customPin',
+          }}
+        />
+      </MapView>
     </View>
   );
 };
