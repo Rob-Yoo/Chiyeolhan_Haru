@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -20,14 +26,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  iconFindLocation: {
-    top: 140,
-    right: -40,
-    padding: 7,
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  iconFindCurrentLocation: {
+    width: 45,
+    height: 45,
+
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 5.4,
+      height: 6,
+    },
+    shadowOpacity: 5,
+    shadowRadius: 2.84,
   },
 });
 
@@ -111,7 +120,6 @@ const CurrentMap = ({
       console.log('_handlePlacesAPI Error :', e);
     }
   };
-  console.log('MAP');
 
   return (
     <>
@@ -132,13 +140,13 @@ const CurrentMap = ({
           setSearchedList={setSearchedList}
         />
 
-        <IconFindLocation
+        {/* <IconFindLocation
           size={30}
           name="icon-find-current-location"
           style={styles.iconFindLocation}
           color="#00000041"
-          onPress={() => handleFindCurrentLocation()}
-        />
+         }
+        /> */}
 
         <Marker
           coordinate={{
@@ -150,6 +158,16 @@ const CurrentMap = ({
           }}
         />
       </MapView>
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 150, right: 10 }}
+        onPress={() => handleFindCurrentLocation()}
+      >
+        <ImageBackground
+          style={styles.iconFindCurrentLocation}
+          activeOpacity={1}
+          source={{ uri: 'iconFindCurrentLocation' }}
+        />
+      </TouchableOpacity>
       {/*Location Data*/}
       {!!locationData && (
         <LocationData
