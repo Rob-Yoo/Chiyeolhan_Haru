@@ -6,24 +6,25 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 const styles = StyleSheet.create({
   mapSearchContainer: {
     position: 'absolute',
     top: 0,
-    left: 0,
     width: '100%',
   },
   searchedHistoryContainer: {
     flex: 1,
     width: '100%',
-    height: 900,
+    height: 800,
     backgroundColor: '#fff',
   },
   icon: { marginRight: 10 },
@@ -44,33 +45,33 @@ const styles = StyleSheet.create({
   },
   searchInputContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
     height: 140,
     backgroundColor: '#54BCB6',
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     paddingTop: 20,
-    position: 'relative',
   },
-  searchInputView: {
-    flexDirection: 'row',
-    position: 'relative',
-    backgroundColor: '#fff',
-    width: '90%',
-    height: 50,
-    borderRadius: 10,
-  },
+  // searchInputView: {
+  //   backgroundColor: '#fff',
+  //   width: '90%',
+  //   height: 50,
+  //   borderRadius: 10,
+  // },
   searchInputViewBackButton: {
-    position: 'absolute',
-    top: 63,
-    left: 30,
     width: 30,
     height: 30,
     paddingTop: 5,
     marginLeft: 1,
   },
-  searchInputViewInput: { position: 'absolute', top: 70, left: 50 },
+  searchInputViewInput: {
+    backgroundColor: '#fff',
+    minWidth: SCREEN_WIDTH * 0.8,
+    height: SCREEN_HEIGHT * 0.06,
+    paddingLeft: 30,
+    borderRadius: 10,
+  },
   searchedDeleteAllText: {
     fontSize: 20,
     marginVertical: 25,
@@ -92,7 +93,7 @@ export const MapSearch = ({
   setSearchedList,
 }) => {
   const [inputText, setText] = useState('');
-  const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(false);
+  const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
 
   const toggleModal = () => {
@@ -115,38 +116,38 @@ export const MapSearch = ({
         style={{
           flex: 1,
           width: '100%',
-          height: searchedHistoryVisible ? 900 : 0,
+          height: searchedHistoryVisible ? SCREEN_HEIGHT : 0,
           backgroundColor: '#fff',
         }}
       >
         <View style={styles.searchInputContainer}>
-          <View style={styles.searchInputView}>
-            <IconGobackButton
-              name="icon-go-back-button"
-              size={20}
-              style={styles.searchInputViewBackButton}
-              onPress={() => {
-                searchedHistoryVisible ? toggleModal() : modalHandler();
-              }}
-            />
-            <TextInput
-              style={styles.searchInputViewInput}
-              ref={searchInput}
-              onTouchStart={() => {
-                if (searchedHistoryVisible === false)
-                  setSearchedHistroyVisible(true);
-              }}
-              value={inputText}
-              placeholder=" 장소, 버스, 지하철, 주소 검색"
-              onChangeText={(text) => setText(text)}
-              onSubmitEditing={() => {
-                _handlePlacesAPI(inputText);
-                toggleModal();
-              }}
-            />
-          </View>
+          {/* <View style={styles.searchInputView}> */}
+          <IconGobackButton
+            name="icon-go-back-button"
+            size={20}
+            style={styles.searchInputViewBackButton}
+            onPress={() => {
+              searchedHistoryVisible ? toggleModal() : modalHandler();
+            }}
+          />
+          <TextInput
+            style={styles.searchInputViewInput}
+            ref={searchInput}
+            onTouchStart={() => {
+              !searchedHistoryVisible && setSearchedHistroyVisible(true);
+            }}
+            value={inputText}
+            placeholder=" 장소, 버스, 지하철, 주소 검색"
+            onChangeText={(text) => setText(text)}
+            onSubmitEditing={() => {
+              _handlePlacesAPI(inputText);
+              toggleModal();
+            }}
+          />
+
+          {/* </View> */}
         </View>
-        {searchedHistoryVisible ? (
+        {searchedHistoryVisible && (
           <ScrollView style={{ paddingHorizontal: 20 }}>
             {searchedList?.map((item) => {
               return (
@@ -195,8 +196,6 @@ export const MapSearch = ({
               전체삭제
             </Text>
           </ScrollView>
-        ) : (
-          <></>
         )}
       </View>
     </View>

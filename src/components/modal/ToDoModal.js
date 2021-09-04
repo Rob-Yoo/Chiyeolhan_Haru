@@ -337,154 +337,151 @@ export const ToDoModal = ({
     }
   }, [passModalData]);
   return (
-    <>
-      <Modal
-        navigation={navigation}
-        isVisible={isModalVisible}
-        style={styles.modalStyle}
-        onModalHide={() => clearData()}
-      >
-        <TouchableOpacity
-          style={styles.background}
-          activeOpacity={1}
-          onPress={modalHandler}
-        />
-        <View style={styles.modalInputContainer}>
-          <View style={styles.modalTopContainer}>
-            <View style={styles.modalTextView}>
-              <Text style={styles.modalTopText} onPress={modalHandler}>
-                취소
-              </Text>
-              <TouchableOpacity>
-                <Text
-                  onPress={handleSubmit(handleTodoSubmit)}
-                  style={styles.modalTopText}
-                >
-                  완료
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <ImageBackground
-              style={styles.imageBackgroundMapStyle}
-              source={{ uri: 'map' }}
-            >
-              <View
-                style={[
-                  styles.imageBackgroundStyle,
-                  {
-                    backgroundColor: locationName
-                      ? 'transparent'
-                      : 'rgba(0,0,0,0.3)',
-                  },
-                ]}
-              >
-                {locationName ? (
-                  <></>
-                ) : (
-                  <IconQuestion
-                    name="icon-question"
-                    size={Dimensions.get('window').height > 667 ? 110 : 70}
-                    color={'#FFFFFF'}
-                    onPress={() =>
-                      toggleIsVisible(mapIsVisible, setMapIsVisible)
-                    }
-                  />
-                )}
-              </View>
-            </ImageBackground>
-            <Text style={styles.modalLocationText}>
-              {locationName ? locationName : '물음표를 눌러주세요'}
+    <Modal
+      navigation={navigation}
+      isVisible={isModalVisible}
+      style={styles.modalStyle}
+      onModalHide={() => clearData()}
+      style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
+    >
+      <TouchableOpacity
+        style={styles.background}
+        activeOpacity={1}
+        onPress={modalHandler}
+      />
+      <View style={styles.modalInputContainer}>
+        <View style={styles.modalTopContainer}>
+          <View style={styles.modalTextView}>
+            <Text style={styles.modalTopText} onPress={modalHandler}>
+              취소
             </Text>
-          </View>
-          <View style={styles.timePickerContainer}>
-            <TimePicker
-              isStart={true}
-              timeText={'시작'}
-              pickerHandler={(text) => timeHandler(text, true)}
-              isToday={isToday}
-              timeDate={passModalData?.startDate}
-            />
-            <Text style={{ fontSize: 25 }}>~</Text>
-            <TimePicker
-              isStart={false}
-              timeText={'끝'}
-              pickerHandler={(text) => timeHandler(text, false)}
-              timeDate={passModalData?.endDate}
-            />
-          </View>
-          <View style={styles.todoInputContainer}>
-            <TextInput
-              placeholder="제목을 입력해 주세요"
-              style={styles.modalInputTitle}
-              value={title}
-              ref={titleRef}
-              onChange={(e) => handleChange(e)}
-              onChangeText={setValue('todoTitle', title)}
-            />
-            <TouchableOpacity
-              style={styles.modalInputTask}
-              onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
-            >
-              <Text style={styles.modalInputText}>수행리스트</Text>
+            <TouchableOpacity>
+              <Text
+                onPress={handleSubmit(handleTodoSubmit)}
+                style={styles.modalTopText}
+              >
+                완료
+              </Text>
             </TouchableOpacity>
-
-            <ScrollView style={styles.modalTaskContainer}>
-              {taskList.map((item, index) => (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onPress={() => editSchedule(item, index)}
-                >
-                  <Text style={styles.modalInputText}>{item}</Text>
-                </TouchableWithoutFeedback>
-              ))}
-            </ScrollView>
-            {task ? (
-              <ToDoModalInput
-                key={task}
-                taskListVisibleHandler={() =>
-                  toggleIsVisible(inputIsVisible, setInputIsVisible)
-                }
-                taskSubmitHandler={taskSubmit}
-                inputIsVisible={inputIsVisible}
-                prevTask={task}
-                setPrevTask={setTask}
-              />
-            ) : (
-              <ToDoModalInput
-                key={task}
-                taskListVisibleHandler={() =>
-                  toggleIsVisible(inputIsVisible, setInputIsVisible)
-                }
-                taskSubmitHandler={taskSubmit}
-                inputIsVisible={inputIsVisible}
-                prevTask={false}
-              />
-            )}
           </View>
-          <Modal
-            isVisible={mapIsVisible}
-            animationIn="slideInRight"
-            animationOut="slideOutRight"
-            style={{
-              width: SCREEN_WIDTH,
-              height: SCREEN_HEIGHT,
-              margin: 0,
-            }}
+
+          <ImageBackground
+            style={styles.imageBackgroundMapStyle}
+            source={{ uri: 'map' }}
           >
-            <Map
-              modalHandler={() =>
-                toggleIsVisible(mapIsVisible, setMapIsVisible)
-              }
-              navigation={navigation}
-              locationDataHandler={(value) => getLocationData(value)}
-              searchedList={searchedList}
-              setSearchedList={setSearchedList}
-            />
-          </Modal>
+            <View
+              style={[
+                styles.imageBackgroundStyle,
+                {
+                  backgroundColor: locationName
+                    ? 'transparent'
+                    : 'rgba(0,0,0,0.3)',
+                },
+              ]}
+            >
+              {locationName ? (
+                <></>
+              ) : (
+                <IconQuestion
+                  name="icon-question"
+                  size={Dimensions.get('window').height > 667 ? 110 : 70}
+                  color={'#FFFFFF'}
+                  onPress={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
+                />
+              )}
+            </View>
+          </ImageBackground>
+          <Text style={styles.modalLocationText}>
+            {locationName ? locationName : '물음표를 눌러주세요'}
+          </Text>
         </View>
+        <View style={styles.timePickerContainer}>
+          <TimePicker
+            isStart={true}
+            timeText={'시작'}
+            pickerHandler={(text) => timeHandler(text, true)}
+            isToday={isToday}
+            timeDate={passModalData?.startDate}
+          />
+          <Text style={{ fontSize: 25 }}>~</Text>
+          <TimePicker
+            isStart={false}
+            timeText={'끝'}
+            pickerHandler={(text) => timeHandler(text, false)}
+            timeDate={passModalData?.endDate}
+          />
+        </View>
+        <View style={styles.todoInputContainer}>
+          <TextInput
+            placeholder="제목을 입력해 주세요"
+            style={styles.modalInputTitle}
+            value={title}
+            ref={titleRef}
+            onChange={(e) => handleChange(e)}
+            onChangeText={setValue('todoTitle', title)}
+          />
+          <TouchableOpacity
+            style={styles.modalInputTask}
+            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+          >
+            <Text style={styles.modalInputText}>수행리스트</Text>
+          </TouchableOpacity>
+
+          <ScrollView style={styles.modalTaskContainer}>
+            {taskList.map((item, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => editSchedule(item, index)}
+              >
+                <Text style={styles.modalInputText}>{item}</Text>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
+          {task ? (
+            <ToDoModalInput
+              key={task}
+              taskListVisibleHandler={() =>
+                toggleIsVisible(inputIsVisible, setInputIsVisible)
+              }
+              taskSubmitHandler={taskSubmit}
+              inputIsVisible={inputIsVisible}
+              prevTask={task}
+              setPrevTask={setTask}
+            />
+          ) : (
+            <ToDoModalInput
+              key={task}
+              taskListVisibleHandler={() =>
+                toggleIsVisible(inputIsVisible, setInputIsVisible)
+              }
+              taskSubmitHandler={taskSubmit}
+              inputIsVisible={inputIsVisible}
+              prevTask={false}
+            />
+          )}
+        </View>
+      </View>
+
+      {/* Map Modal*/}
+      <Modal
+        isVisible={mapIsVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
+        style={{
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+          margin: 0,
+        }}
+      >
+        <Map
+          modalHandler={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
+          navigation={navigation}
+          locationDataHandler={(value) => getLocationData(value)}
+          searchedList={searchedList}
+          setSearchedList={setSearchedList}
+        />
       </Modal>
-    </>
+    </Modal>
   );
 };
 

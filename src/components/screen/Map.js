@@ -14,13 +14,11 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { noDataAlert } from 'utils/TwoButtonAlert';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 const styles = StyleSheet.create({
-  container: {},
   map: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
+    width: '100%',
+    height: '100%',
   },
   iconFindLocation: {
     top: 140,
@@ -40,12 +38,11 @@ const CurrentMap = ({
   searchedList,
   setSearchedList,
 }) => {
-  const [isRenderData, setRenderData] = useState(false);
-  const [locationData, setData] = useState({});
+  const [locationData, setData] = useState(null);
   const [locationResult, setResult] = useState(location);
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
 
-  useEffect(() => {}, [locationResult]);
+  //useEffect(() => {}, [locationResult]);
   useEffect(() => {
     const getSearchedList = async () => {
       try {
@@ -99,7 +96,7 @@ const CurrentMap = ({
           setData({ location, latitude, longitude, address });
           setIscurrentLocation(false);
           await handleFilterData(text, 'search', searchedList, setSearchedList);
-          setRenderData(true);
+
           break;
         case 'ZERO_RESULTS':
           noDataAlert();
@@ -114,9 +111,10 @@ const CurrentMap = ({
       console.log('_handlePlacesAPI Error :', e);
     }
   };
+  console.log('MAP');
 
   return (
-    <View style={styles.container}>
+    <>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -126,31 +124,22 @@ const CurrentMap = ({
           longitudeDelta: 0.004,
         }}
       >
-        {isRenderData ? (
-          <LocationData
-            locationData={locationData}
-            modalHandler={modalHandler}
-            locationDataHandler={locationDataHandler}
-          />
-        ) : (
-          <></>
-        )}
-        <View style={{ flex: 0, position: 'relative', backgroundColor: 'red' }}>
-          <MapSearch
-            _handlePlacesAPI={_handlePlacesAPI}
-            modalHandler={modalHandler}
-            searchedList={searchedList}
-            setSearchedList={setSearchedList}
-          />
+        {/*Map Search*/}
+        <MapSearch
+          _handlePlacesAPI={_handlePlacesAPI}
+          modalHandler={modalHandler}
+          searchedList={searchedList}
+          setSearchedList={setSearchedList}
+        />
 
-          <IconFindLocation
-            size={30}
-            name="icon-find-current-location"
-            style={styles.iconFindLocation}
-            color="#00000041"
-            onPress={() => handleFindCurrentLocation()}
-          />
-        </View>
+        <IconFindLocation
+          size={30}
+          name="icon-find-current-location"
+          style={styles.iconFindLocation}
+          color="#00000041"
+          onPress={() => handleFindCurrentLocation()}
+        />
+
         <Marker
           coordinate={{
             latitude: locationResult.latitude,
@@ -161,7 +150,15 @@ const CurrentMap = ({
           }}
         />
       </MapView>
-    </View>
+      {/*Location Data*/}
+      {!!locationData && (
+        <LocationData
+          locationData={locationData}
+          modalHandler={modalHandler}
+          locationDataHandler={locationDataHandler}
+        />
+      )}
+    </>
   );
 };
 
