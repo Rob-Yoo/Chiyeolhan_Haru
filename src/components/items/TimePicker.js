@@ -148,7 +148,6 @@ export const TimePicker = (props) => {
     pickerHandler(formatTime);
     hideTimePicker();
   };
-  console.log(new Date());
 
   return (
     <View style={{ flexDirection: 'row' }}>

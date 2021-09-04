@@ -1,11 +1,11 @@
 import DeviceInfo from 'react-native-device-info';
 
 //async storage key
-export const KEY_VALUE_GEOFENCE = 'gefenceDataArray';
+export const KEY_VALUE_GEOFENCE = 'geofenceDataArray';
+export const KEY_VALUE_NEAR_BY = 'nearBySchedulesArray';
 export const KEY_VALUE_TOMORROW = 'tomorrowDataArray';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
-export const KEY_VALUE_TOO_EARLY = 'isTooEarly';
 // 기기 고유 ID
 export const UID = DeviceInfo.getUniqueId();
 
