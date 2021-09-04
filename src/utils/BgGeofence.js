@@ -124,7 +124,7 @@ const findNearBy = async (data, currentTime) => {
     console.log('findNearBy Error :', e);
   }
 
-  nextSchedules.forEach((nextSchedule) => {
+  nextSchedules.forEach(async (nextSchedule) => {
     const nextScheduleLocation = {
       lat: nextSchedule.latitude,
       lon: nextSchedule.longitude,
