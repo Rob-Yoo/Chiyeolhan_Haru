@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Button } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -65,8 +65,13 @@ Number.prototype.zf = function (len) {
   return this.toString().zf(len);
 };
 
-export const TimePicker = (props) => {
-  const { isStart, timeText, pickerHandler, isToday } = props;
+export const TimePicker = ({
+  isStart,
+  timeText,
+  pickerHandler,
+  isToday,
+  timeDate,
+}) => {
   const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
   const timeObject = new Date();
@@ -142,7 +147,22 @@ export const TimePicker = (props) => {
       await checkValidFinishTime(formatTime);
     }
   };
-
+  useEffect(() => {
+    if (timeDate) {
+      const hour =
+        timeDate.getHours() < 10
+          ? `0${timeDate.getHours()}`
+          : timeDate.getHours();
+      const minute =
+        timeDate.getMinutes() < 10
+          ? `0${timeDate.getMinutes()}`
+          : timeDate.getMinutes();
+      setTime(`${hour}:${minute}`);
+      pickerHandler(`${hour}:${minute}`);
+    } else {
+      console.log('아님');
+    }
+  }, []);
   const handleConfirm = (formatTime) => {
     setTime(formatTime);
     pickerHandler(formatTime);
@@ -163,7 +183,7 @@ export const TimePicker = (props) => {
         onCancel={hideTimePicker}
         locale="en_GB"
         //ios일때는 date android 일때는 value
-        date={new Date()}
+        date={timeDate ? timeDate : new Date()}
         minuteInterval={5}
       />
     </View>

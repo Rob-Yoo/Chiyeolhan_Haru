@@ -9,44 +9,35 @@ const toDosSlice = createSlice({
       Object.assign(state, action.payload);
     },
     create: (state, action) => {
-      const [
-        id,
-        startTime,
-        finishTime,
-        title,
-        date,
-        toDos,
-        address,
-        longitude,
-        latitude,
-        location,
-        isDone = false,
-        isFavorite = false,
-      ] = action.payload;
-      state[`${id}`] = {
-        id,
-        startTime,
-        finishTime,
-        title,
-        date,
-        location,
-        longitude,
-        latitude,
-        location,
-        address,
-        isDone,
-        isfavorite: isFavorite,
-        toDos: [...toDos],
-      };
+      const newData = action.payload;
+      const id = action.payload.id;
+      state[id] = newData;
+      toDosUpdateDB(newData, id);
     },
     add: (state, action) => {
       const { targetId, taskTitle } = action.payload;
       state[targetId].toDos.push(taskTitle);
       toDosUpdateDB(state[targetId], targetId);
     },
+    //수행리스트 수정
     edit: (state, action) => {
       const { targetId, taskTitle, index } = action.payload;
       state[targetId].toDos[index] = taskTitle;
+      toDosUpdateDB(state[targetId], targetId);
+    },
+    //투두 수정
+    editToDoDispatch: (state, action) => {
+      const {
+        taskList,
+        todoFinishTime,
+        todoStartTime,
+        todoTitle,
+        id: targetId,
+      } = action.payload;
+      state[targetId].finishTime = todoFinishTime;
+      state[targetId].startTime = todoStartTime;
+      state[targetId].title = todoTitle;
+      state[targetId].toDos = [...taskList];
       toDosUpdateDB(state[targetId], targetId);
     },
     //수행리스트 제거
@@ -62,6 +53,13 @@ const toDosSlice = createSlice({
   },
 });
 
-export const { create, add, init, edit, remove, deleteToDoDispatch } =
-  toDosSlice.actions;
+export const {
+  create,
+  add,
+  init,
+  edit,
+  remove,
+  deleteToDoDispatch,
+  editToDoDispatch,
+} = toDosSlice.actions;
 export default configureStore({ reducer: toDosSlice.reducer });

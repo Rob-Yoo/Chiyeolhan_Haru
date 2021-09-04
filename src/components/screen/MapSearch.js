@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     top: 20,
     right: 10,
   },
-  searchInputView: {
+  searchInputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
@@ -51,8 +51,26 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     paddingTop: 20,
+    position: 'relative',
   },
-  mapSearchInput: { position: 'absolute', top: 70, left: 50 },
+  searchInputView: {
+    flexDirection: 'row',
+    position: 'relative',
+    backgroundColor: '#fff',
+    width: '90%',
+    height: 50,
+    borderRadius: 10,
+  },
+  searchInputViewBackButton: {
+    position: 'absolute',
+    top: 63,
+    left: 30,
+    width: 30,
+    height: 30,
+    paddingTop: 5,
+    marginLeft: 1,
+  },
+  searchInputViewInput: { position: 'absolute', top: 70, left: 50 },
   searchedDeleteAllText: {
     fontSize: 20,
     marginVertical: 25,
@@ -92,113 +110,94 @@ export const MapSearch = ({
     setSearchedList(tempData);
   };
   return (
-    <View>
-      <View style={styles.mapSearchContainer}>
-        <View
-          style={{
-            flex: 1,
-            width: '100%',
-            height: searchedHistoryVisible ? 900 : 0,
-            backgroundColor: '#fff',
-          }}
-        >
+    <View style={styles.mapSearchContainer}>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          height: searchedHistoryVisible ? 900 : 0,
+          backgroundColor: '#fff',
+        }}
+      >
+        <View style={styles.searchInputContainer}>
           <View style={styles.searchInputView}>
-            <View
-              style={{
-                flexDirection: 'row',
-                position: 'relative',
-                backgroundColor: '#fff',
-                width: '90%',
-                height: 50,
-                borderRadius: 10,
+            <IconGobackButton
+              name="icon-go-back-button"
+              size={20}
+              style={styles.searchInputViewBackButton}
+              onPress={() => {
+                searchedHistoryVisible ? toggleModal() : modalHandler();
               }}
-            >
-              <IconGobackButton
-                name="icon-go-back-button"
-                size={20}
-                style={{
-                  position: 'absolute',
-                  top: 63,
-                  left: 30,
-                  width: 30,
-                  height: 30,
-                  paddingTop: 5,
-                  marginLeft: 1,
-                }}
-                onPress={() => {
-                  searchedHistoryVisible ? toggleModal() : modalHandler();
-                }}
-              />
-              <TextInput
-                style={styles.mapSearchInput}
-                ref={searchInput}
-                onTouchStart={() => {
-                  if (searchedHistoryVisible === false)
-                    setSearchedHistroyVisible(true);
-                }}
-                value={inputText}
-                placeholder=" 장소, 버스, 지하철, 주소 검색"
-                onChangeText={(text) => setText(text)}
-                onSubmitEditing={() => {
-                  _handlePlacesAPI(inputText);
-                  toggleModal();
-                }}
-              />
-            </View>
+            />
+            <TextInput
+              style={styles.searchInputViewInput}
+              ref={searchInput}
+              onTouchStart={() => {
+                if (searchedHistoryVisible === false)
+                  setSearchedHistroyVisible(true);
+              }}
+              value={inputText}
+              placeholder=" 장소, 버스, 지하철, 주소 검색"
+              onChangeText={(text) => setText(text)}
+              onSubmitEditing={() => {
+                _handlePlacesAPI(inputText);
+                toggleModal();
+              }}
+            />
           </View>
-          {searchedHistoryVisible ? (
-            <ScrollView style={{ paddingHorizontal: 20 }}>
-              {searchedList?.map((item) => {
-                return (
-                  <TouchableOpacity
-                    key={`${item.id}`}
-                    activeOpacity={1}
-                    onPress={() => {
-                      _handlePlacesAPI(item.text);
-                      toggleModal();
-                      searchInput.current.placeholder = `${item.text}`;
-                      setText(item.text);
-                    }}
-                  >
-                    <View style={styles.searcehdItem}>
-                      <Text style={styles.icon}>
-                        {item.type === 'location' ? (
-                          <IconSearchedLocation
-                            name="location"
-                            size={22}
-                            color={'#575757'}
-                          />
-                        ) : (
-                          <IconSearchedSearch
-                            name="icon-searched-search"
-                            size={22}
-                            color={'#575757'}
-                          />
-                        )}
-                      </Text>
-                      <Text style={styles.searchedText}>{item.text}</Text>
-                      <Text
-                        id={item.id}
-                        style={styles.searchedDeleteText}
-                        onPress={() => deleteHistory(item.id)}
-                      >
-                        삭제
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-              <Text
-                onPress={() => deleteAllHistory()}
-                style={styles.searchedDeleteAllText}
-              >
-                전체삭제
-              </Text>
-            </ScrollView>
-          ) : (
-            <></>
-          )}
         </View>
+        {searchedHistoryVisible ? (
+          <ScrollView style={{ paddingHorizontal: 20 }}>
+            {searchedList?.map((item) => {
+              return (
+                <TouchableOpacity
+                  key={`${item.id}`}
+                  activeOpacity={1}
+                  onPress={() => {
+                    _handlePlacesAPI(item.text);
+                    toggleModal();
+                    searchInput.current.placeholder = `${item.text}`;
+                    setText(item.text);
+                  }}
+                >
+                  <View style={styles.searcehdItem}>
+                    <Text style={styles.icon}>
+                      {item.type === 'location' ? (
+                        <IconSearchedLocation
+                          name="location"
+                          size={22}
+                          color={'#575757'}
+                        />
+                      ) : (
+                        <IconSearchedSearch
+                          name="icon-searched-search"
+                          size={22}
+                          color={'#575757'}
+                        />
+                      )}
+                    </Text>
+                    <Text style={styles.searchedText}>{item.text}</Text>
+                    <Text
+                      id={item.id}
+                      style={styles.searchedDeleteText}
+                      onPress={() => deleteHistory(item.id)}
+                    >
+                      삭제
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+            <Text
+              onPress={() => deleteAllHistory()}
+              style={styles.searchedDeleteAllText}
+            >
+              전체삭제
+            </Text>
+          </ScrollView>
+        ) : (
+          <></>
+        )}
       </View>
     </View>
   );

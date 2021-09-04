@@ -21,18 +21,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
   iconFindLocation: {
-    top: 0,
-    right: 4,
+    top: 140,
+    right: -40,
     padding: 7,
     position: 'absolute',
-    width: 40,
-    height: 40,
+    width: 100,
+    height: 100,
     borderRadius: 50,
   },
 });
@@ -121,7 +122,7 @@ const CurrentMap = ({
   };
 
   return (
-    <>
+    <View>
       <View style={styles.container}>
         <MapView
           style={styles.map}
@@ -131,58 +132,33 @@ const CurrentMap = ({
             latitudeDelta: 0.004,
             longitudeDelta: 0.004,
           }}
-          onPress={() => console.log('touch')}
         >
-          <View style={{ flex: 1, position: 'relative' }}>
+          {isRenderData ? (
+            <LocationData
+              locationData={locationData}
+              modalHandler={modalHandler}
+              locationDataHandler={locationDataHandler}
+            />
+          ) : (
+            <></>
+          )}
+          <View
+            style={{ flex: 0, position: 'relative', backgroundColor: 'red' }}
+          >
             <MapSearch
               _handlePlacesAPI={_handlePlacesAPI}
               modalHandler={modalHandler}
               searchedList={searchedList}
               setSearchedList={setSearchedList}
             />
-            <ImageBackground
-              source={{ uri: 'iconBackground' }}
-              style={{
-                top: 150,
-                right: 10,
-                padding: 7,
-                position: 'absolute',
-                width: 45,
-                height: 45,
-                shadowColor: '#00000029',
-                shadowOffset: {
-                  width: 0,
-                  height: 5,
-                },
-                shadowOpacity: 0.4,
-                shadowRadius: 1,
-              }}
-            >
-              <IconFindLocation
-                size={30}
-                name="icon-find-current-location"
-                style={styles.iconFindLocation}
-                color="#00000041"
-                onPress={() => handleFindCurrentLocation()}
-              />
-            </ImageBackground>
-          </View>
 
-          <View
-            style={{
-              flex: 1,
-              bottom: 0,
-            }}
-          >
-            {isRenderData ? (
-              <LocationData
-                locationData={locationData}
-                modalHandler={modalHandler}
-                locationDataHandler={locationDataHandler}
-              />
-            ) : (
-              <></>
-            )}
+            <IconFindLocation
+              size={30}
+              name="icon-find-current-location"
+              style={styles.iconFindLocation}
+              color="#00000041"
+              onPress={() => handleFindCurrentLocation()}
+            />
           </View>
           <Marker
             coordinate={{
@@ -195,7 +171,7 @@ const CurrentMap = ({
           />
         </MapView>
       </View>
-    </>
+    </View>
   );
 };
 

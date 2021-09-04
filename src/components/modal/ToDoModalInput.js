@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -19,18 +19,34 @@ const styles = StyleSheet.create({
 });
 
 export const ToDoModalInput = (props) => {
-  const [task, setTask] = useState('');
   const {
     inputIsVisible,
     taskSubmitHandler,
     taskListVisibleHandler,
-    taskListHandler,
+    prevTask,
+    setPrevTask,
   } = props;
+  const [task, setTask] = useState('');
 
+  useEffect(() => {
+    console.log(`로드 ${prevTask}`);
+
+    if (prevTask) {
+      setTask(prevTask);
+      console.log(`modalinput ${task}/ prev ${prevTask}`);
+    } else {
+      console.log('prevTask없음');
+    }
+  }, []);
+
+  const handleText = (text) => {
+    setTask(text);
+  };
   return (
     <Modal
       style={{ margin: 0, alignItems: 'center' }}
       isVisible={inputIsVisible}
+      onModalHide={() => setPrevTask('')}
       avoidKeyboard
     >
       <TouchableOpacity
@@ -40,19 +56,15 @@ export const ToDoModalInput = (props) => {
       />
       <View>
         <TextInput
-          onChangeText={(text) => {
-            taskListHandler(text);
-            setTask('');
-            setTask(text);
-          }}
+          onChangeText={(task) => handleText(task)}
           onSubmitEditing={() => {
-            taskSubmitHandler(task);
+            taskSubmitHandler({ task, index: prevTask ? prevTask[1] : false });
             setTask('');
           }}
           style={styles.modalInputTask}
           returnKeyType="done"
           value={task}
-        ></TextInput>
+        />
       </View>
     </Modal>
   );
