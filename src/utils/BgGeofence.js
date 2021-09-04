@@ -203,7 +203,7 @@ const exitAction = async (data, startTime, currentTime) => {
       } else {
         let successCount = 0;
         const toDoRef = dbService.collection(`${UID}`);
-        allNearBySchedules.forEach((schedule) => {
+        allNearBySchedules.forEach(async (schedule) => {
           if (currentTime <= schedule.startTime) {
             successCount = successCount + 1;
           } else {
