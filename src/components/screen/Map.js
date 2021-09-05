@@ -132,14 +132,6 @@ const CurrentMap = ({
           longitudeDelta: 0.004,
         }}
       >
-        {/*Map Search*/}
-        <MapSearch
-          _handlePlacesAPI={_handlePlacesAPI}
-          modalHandler={modalHandler}
-          searchedList={searchedList}
-          setSearchedList={setSearchedList}
-        />
-
         {/* <IconFindLocation
           size={30}
           name="icon-find-current-location"
@@ -176,6 +168,14 @@ const CurrentMap = ({
           locationDataHandler={locationDataHandler}
         />
       )}
+
+      {/*Map Search*/}
+      <MapSearch
+        _handlePlacesAPI={_handlePlacesAPI}
+        modalHandler={modalHandler}
+        searchedList={searchedList}
+        setSearchedList={setSearchedList}
+      />
     </>
   );
 };
