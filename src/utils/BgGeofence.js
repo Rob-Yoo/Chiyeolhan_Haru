@@ -1,18 +1,51 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
-import { UID, KEY_VALUE_GEOFENCE, KEY_VALUE_TOO_EARLY } from 'constant/const';
-import PushNotification from 'react-native-push-notification';
-import { getEarlyTimeDiff, getLateTimeDiff } from 'utils/Time';
 import {
-  successNotification,
-  arriveLateNotification,
-  arriveEarlyNotification,
-  arriveTooEarlyNotification,
-  notifyNextSchedule,
+  UID,
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_NEAR_BY,
+  CURRENT_TIME,
+} from 'constant/const';
+import PushNotification from 'react-native-push-notification';
+import { getEarlyTimeDiff, getLateTimeDiff, getTimeDiff } from 'utils/Time';
+import {
+  completeNotification,
+  notifHandler,
+  nearByNotification,
+  completeNearbyNotif,
 } from 'utils/Notification';
+import getDistance from 'haversine-distance';
 
-const addGeofence = async (latitude, longitude) => {
+const completeNotifHandler = (data) => {
+  if (data.length >= 2) {
+    const nextScheduleStartTime = data[1].startTime;
+    const nextScheduleLocation = data[1].location;
+    completeNotification(true, nextScheduleStartTime, nextScheduleLocation);
+  } else {
+    completeNotification(false);
+  }
+};
+
+const cmpltNearByNotifHandler = (nextSchedule, idx, data, currentTime) => {
+  let isLast = false;
+  let nextStartTime = '';
+  let nextLocation = '';
+  const finishTime = nextSchedule.finishTime;
+  const timeDiff = getTimeDiff(currentTime, finishTime);
+
+  console.log('data.length :', data.length);
+  if (data.length - 1 == idx) {
+    isLast = true;
+  } else {
+    nextStartTime = data[idx + 1].startTime;
+    nextLocation = data[idx + 1].location;
+  }
+  completeNearbyNotif(isLast, data, idx, nextStartTime, nextLocation, timeDiff);
+  console.log('완료 알림 예약 :', data[idx].location);
+};
+
+const addGeofence = async (latitude, longitude, data) => {
   try {
     await BackgroundGeolocation.addGeofence({
       identifier: `${UID}`,
@@ -22,7 +55,7 @@ const addGeofence = async (latitude, longitude) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    console.log('Adding Geofence Success!!');
+    console.log('Adding Geofence Success!!', data[0].location);
   } catch (e) {
     console.log('addGeofence Error :', e);
   }
@@ -35,7 +68,7 @@ export const addGeofenceTrigger = async () => {
     if (data.length != 0) {
       const lat = data[0].latitude;
       const lng = data[0].longitude;
-      await addGeofence(lat, lng);
+      await addGeofence(lat, lng, data);
     } else {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       console.log('[removeGeofence] success');
@@ -46,13 +79,15 @@ export const addGeofenceTrigger = async () => {
   }
 };
 
-export const geofenceUpdate = async (data) => {
+export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
   try {
     await BackgroundGeolocation.stop();
     console.log('stop geolocation success');
-    const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-    await toDoRef.update({ isDone: true });
-    const newDataArray = data.slice(1);
+    if (isSuccess) {
+      const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+      await toDoRef.update({ isDone: true });
+    }
+    const newDataArray = data.slice(index);
     await AsyncStorage.setItem(
       KEY_VALUE_GEOFENCE,
       JSON.stringify(newDataArray),
@@ -64,87 +99,188 @@ export const geofenceUpdate = async (data) => {
   }
 };
 
+const findNearBy = async (data, currentTime) => {
+  // 현재 일정 장소와 200m 이내에 있는 다음 일정 장소 찾기
+  let nearBySchedules = [];
+  let idx = 0;
+  const currentScheduleLocation = {
+    lat: data[0].latitude,
+    lon: data[0].longitude,
+  };
+  const toDoRef = dbService.collection(`${UID}`);
+  const nextSchedules = data.slice(1);
+
+  if (nextSchedules.length != 0) {
+    for (const nextSchedule of nextSchedules) {
+      console.log('nextSchedule :', nextSchedule.location);
+      const nextScheduleLocation = {
+        lat: nextSchedule.latitude,
+        lon: nextSchedule.longitude,
+      };
+      const distance = getDistance(
+        currentScheduleLocation,
+        nextScheduleLocation,
+      );
+      console.log(distance);
+      if (distance > 200) {
+        return;
+      } else {
+        try {
+          idx = idx + 1;
+          await toDoRef.doc(`${nextSchedule.id}`).update({ isDone: true });
+          const timeDiff = getEarlyTimeDiff(
+            nextSchedule.startTime,
+            currentTime,
+          );
+          nearByNotification(nextSchedule.id, timeDiff); // 각 일정들마다 도착 알림 예약
+          console.log('idx :', idx);
+          cmpltNearByNotifHandler(nextSchedule, idx, data, currentTime); // 각 일정들마다 완료 알림 예약
+          nearBySchedules.push(nextSchedule);
+          console.log('nearBySchedules First:', nearBySchedules);
+        } catch (e) {
+          console.log('findNearBy Error :', e);
+        }
+      }
+    }
+  }
+  console.log('nearBySchedules Second:', nearBySchedules);
+  return nearBySchedules;
+};
+
+const enterAction = async (data, startTime, finishTime, currentTime) => {
+  try {
+    if (startTime <= currentTime && currentTime < finishTime) {
+      const timeDiff = getLateTimeDiff(startTime, currentTime);
+      if (0 <= timeDiff && timeDiff <= 5) {
+        console.log('제 시간에 옴', currentTime);
+        notifHandler('ON_TIME');
+      } else {
+        console.log('늦게 옴', currentTime);
+        notifHandler('LATE');
+      }
+    } else if (currentTime >= finishTime) {
+      console.log('일정 끝시간보다 늦게 옴', currentTime);
+      notifHandler('FAIL');
+      await geofenceUpdate(data, false); // isDone으로 안바꾸고 다음 지오펜스 업데이트
+      return;
+    } else {
+      const timeDiff = getEarlyTimeDiff(startTime, currentTime);
+      console.log('일찍 옴', currentTime);
+      notifHandler('EARLY', timeDiff);
+    }
+
+    const nearBySchedules = await findNearBy(data, currentTime);
+    console.log('nearBySchedules Third:', nearBySchedules);
+    if (nearBySchedules.length != 0) {
+      // 다음 일정 장소가 현재 일정 장소의 200m 이내에 존재히면
+      const toDoRef = dbService.collection(`${UID}`);
+      const timeDiff = getTimeDiff(currentTime, data[0].finishTime);
+      completeNearbyNotif(
+        false,
+        data,
+        0,
+        data[1].startTime,
+        data[1].location,
+        timeDiff,
+      ); // 현재 일정의 완료 알림 예약
+      await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
+      await AsyncStorage.setItem(
+        KEY_VALUE_NEAR_BY,
+        JSON.stringify(nearBySchedules),
+      );
+    }
+  } catch (e) {
+    console.log('enterAction Error :', e);
+  }
+};
+
+const exitAction = async (data, startTime, currentTime) => {
+  try {
+    const result = await AsyncStorage.getItem(KEY_VALUE_NEAR_BY);
+
+    if (result == null) {
+      if (currentTime < startTime) {
+        console.log('일정 시작 시간보다 전에 나감');
+        PushNotification.cancelLocalNotification('3'); //arriveEarlyNotification 알림 사라짐
+      } else {
+        completeNotifHandler(data);
+        await geofenceUpdate(data);
+      }
+    } else {
+      const nearBySchedules = JSON.parse(result);
+      let allNearBySchedules = [];
+      const currentSchedule = [data[0]];
+      if (nearBySchedules.includes(data[0])) {
+        // 사용자가 현재 일정의 끝시간 이후에 새로운 일정을 추가하면 data[0]이 현재 일정이 아니라 다음 일정 중 하나가 된 상태임....
+        const idx = nearBySchedules.indexOf(data[0]);
+        allNearBySchedules = nearBySchedules.slice(idx);
+      } else {
+        allNearBySchedules = currentSchedule.concat(nearBySchedules);
+      }
+      console.log('allNearBySchedules :', allNearBySchedules);
+      const exitTimeCheck = (schedule) => currentTime > schedule.startTime;
+      const isAllFinish = allNearBySchedules.every(exitTimeCheck);
+      if (isAllFinish) {
+        const successNumber = allNearBySchedules.length;
+        console.log('successNumber :', successNumber);
+        await geofenceUpdate(data, false, successNumber); // 성공한 개수 만큼 async storage에서 지움
+      } else {
+        let successCount = 0;
+        const toDoRef = dbService.collection(`${UID}`);
+        for (const schedule of allNearBySchedules) {
+          console.log(
+            currentTime,
+            schedule.startTime,
+            currentTime >= schedule.startTime,
+          );
+          if (currentTime >= schedule.startTime) {
+            successCount = successCount + 1;
+          } else {
+            await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
+            console.log('isDone: false로 바뀜 :', schedule.location);
+            PushNotification.cancelLocalNotification(`${schedule.id}`); // 아직 isDone이 true가 아닌 일정들의 도착 알림 사라짐
+            console.log('도착 알림 사라짐');
+            PushNotification.cancelLocalNotification(`${schedule.id} + 0`); // 완료 알림도 사라짐
+            console.log('완료 알림 사라짐');
+          }
+        }
+        if (successCount != 0) {
+          console.log('successNumber :', successCount);
+          await geofenceUpdate(data, false, successCount); // 성공한 개수 만큼 async storage에서 지움
+        }
+      }
+      await AsyncStorage.removeItem(KEY_VALUE_NEAR_BY);
+    }
+  } catch (e) {
+    console.log('exitAction Error :', e);
+  }
+};
+
 const subscribeOnGeofence = async () => {
   console.log('onGeofence');
   BackgroundGeolocation.onGeofence(async (event) => {
     console.log(event.action);
     try {
       const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-      const isTooEarly = await AsyncStorage.getItem(KEY_VALUE_TOO_EARLY);
       const data = JSON.parse(item);
-      const time = new Date();
-      const hour =
-        time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      const min =
-        time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
-      const currentTime = `${hour}:${min}`;
+      // const time = new Date();
+      // const hour =
+      //   time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+      // const min =
+      //   time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+      // const currentTime = `${hour}:${min}`;
 
       if (data.length != 0) {
         const startTime = data[0].startTime;
         const finishTime = data[0].finishTime;
 
         if (event.action == 'ENTER') {
-          // 사용자가 지오펜스 안에 들어왔을 때
-          if (startTime <= currentTime && currentTime <= finishTime) {
-            const timeDiff = getLateTimeDiff(startTime, currentTime);
-            if (0 <= timeDiff && timeDiff <= 10) {
-              successNotification();
-              await geofenceUpdate(data);
-              console.log('제 시간에 옴', currentTime);
-            } else {
-              arriveLateNotification();
-              console.log('늦은 시간에 옴', currentTime);
-            }
-          } else {
-            const timeDiff = getEarlyTimeDiff(startTime, currentTime);
-            if (0 < timeDiff && timeDiff <= 10) {
-              // 일정보다 10분 내로 먼저 도착했을 경우
-              arriveEarlyNotification();
-              await geofenceUpdate(data);
-              console.log('좀 일찍 옴', currentTime);
-            } else if (timeDiff > 10) {
-              arriveTooEarlyNotification(timeDiff);
-              AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'true');
-              console.log('굉장히 일찍 옴', currentTime);
-            }
-          }
+          await enterAction(data, startTime, finishTime, CURRENT_TIME);
         }
-        // 사용자가 10분보다 일찍 왔을 때 그 후 동작은 EXIT에 의해서 처리됨
-        if (isTooEarly == 'true') {
-          if (event.action == 'EXIT') {
-            if (currentTime >= startTime) {
-              // 사용자가 엄청 일찍 들어와서 계속 그자리에 있다가 시작 시간 이후에 나간다면 일정을 완료한 것으로 간주하고 업데이트
-              console.log(
-                '굉장히 일찍 와서 계속 그 위치에서 일정까지 소화하고 나감',
-                currentTime,
-              );
-              if (data.length >= 2) {
-                const nextScheduleStartTime = data[1].startTime;
-                const nextScheduleLocation = data[1].location;
-                notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
-              }
-              await geofenceUpdate(data);
-              await AsyncStorage.setItem(KEY_VALUE_TOO_EARLY, 'false');
-            } else {
-              // 엄청 일찍 들어와서 시작시간 전에 나갈 경우
-              console.log(
-                '굉장히 일찍 왔지만 일정 시작전에 나간 경우 혹은 그냥 시작 시각 전에 그 주위에 있다가 트래킹이 된 경우',
-                currentTime,
-              );
-              PushNotification.cancelLocalNotification('4'); //arriveTooEarlyNotification 알림 사라짐
-            }
-          }
+
+        if (event.action == 'EXIT') {
+          await exitAction(data, startTime, CURRENT_TIME);
         }
-        // else {
-        //   if (event.action == 'EXIT') {
-        //     if (data.length >= 2) {
-        //       const nextScheduleStartTime = data[1].startTime;
-        //       const nextScheduleLocation = data[1].location;
-        //       notifyNextSchedule(nextScheduleStartTime, nextScheduleLocation);
-        //     }
-        //     //await geofenceUpdate(data);
-        //   }
-        // }
       }
     } catch (e) {
       console.log('subscribeOnGeofence Error :', e);

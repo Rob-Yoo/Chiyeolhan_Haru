@@ -2,7 +2,8 @@ import React from 'react';
 import WeekView from 'react-native-week-view';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { DAY, MONTH, YEAR } from 'constant/const';
+import AsyncStorage from '@react-native-community/async-storage';
+import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
@@ -51,6 +52,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
   let weekStart = new Date().getDay();
   let selectedDate = '';
+
   switch (day) {
     case 'today':
       selectedDate = new Date(YEAR, MONTH - 1, DAY);
@@ -89,6 +91,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
+        const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        const data = JSON.parse(item);
         if (
           !(
             (day !== 'today' || makeNowTime() < event.startTime) &&
@@ -99,7 +103,9 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         if ((await deleteToDoAlert(event)) === 'true') {
           dispatch(deleteToDoDispatch(targetId));
           if (day === 'today') {
-            //오늘 어싱크 스토리지 삭제해야됨
+            if (event.id == data[0].id) {
+              await geofenceUpdate(data, false);
+            }
           } else if (day === 'tomorrow') {
             deleteTomorrowAsyncStorageData(targetId);
           }
