@@ -4,6 +4,7 @@ import DeviceInfo from 'react-native-device-info';
 export const KEY_VALUE_GEOFENCE = 'geofenceDataArray';
 export const KEY_VALUE_NEAR_BY = 'nearBySchedulesArray';
 export const KEY_VALUE_TOMORROW = 'tomorrowDataArray';
+export const KEY_VALUE_TODAY = 'todayDataArray';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
 // 기기 고유 ID

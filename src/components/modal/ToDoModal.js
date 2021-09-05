@@ -154,7 +154,7 @@ export const ToDoModal = ({
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
       const result = isToday
-        ? await AsyncStorage.getItem(KEY_VALUE_GEOFENCE)
+        ? await AsyncStorage.getItem(KEY_VALUE_TODAY)
         : await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
       let isNeedAlert = false;
       if (result != null) {
