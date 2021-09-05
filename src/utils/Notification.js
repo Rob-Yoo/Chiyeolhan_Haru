@@ -30,7 +30,7 @@ export const arriveEarlyNotification = (time) => {
     id: '3',
     message:
       '일정 장소 부근에 일찍 도착하셨네요. 부지런한 당신의 치열한 하루를 응원합니다.', // (required)
-    date: new Date(Date.now() + 1000 * (time * 60 - 180)), // // 시작시간 3분전에 알림
+    date: new Date(Date.now() + 1000 * (time * 60)), // 시작 시간에 알림
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications(['3']);
@@ -105,9 +105,10 @@ export const nearByNotification = (id, time) => {
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications([`${id}`]);
+  console.log('도착 알림 등록 :', id);
 };
 
-export const notifHandler = (arriveType, timeDiff = 0) => {
+export const notifHandler = (arriveType, timeDiff) => {
   switch (arriveType) {
     case 'ON_TIME':
       arriveOnTimeNotification();
