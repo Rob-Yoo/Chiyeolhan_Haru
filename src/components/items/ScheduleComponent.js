@@ -2,7 +2,8 @@ import React from 'react';
 import WeekView from 'react-native-week-view';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { DAY, MONTH, YEAR } from 'constant/const';
+import AsyncStorage from '@react-native-community/async-storage';
+import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
@@ -52,6 +53,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
   let weekStart = new Date().getDay();
   let selectedDate = '';
+
   switch (day) {
     case 'today':
       selectedDate = new Date(YEAR, MONTH - 1, DAY);
@@ -90,21 +92,34 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
+        const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        const data = JSON.parse(item);
         if (
           !(
             (day !== 'today' || makeNowTime() < event.startTime) &&
             event.color !== '#54BCB6'
           )
-        )
+        ) {
+          console.log('no');
           return;
-        if ((await deleteToDoAlert(event)) === 'true') {
-          dispatch(deleteToDoDispatch(targetId));
-          if (day === 'today') {
-            deleteTodayAsyncStorageData(targetId);
-          } else if (day === 'tomorrow') {
-            deleteTomorrowAsyncStorageData(targetId);
-          }
         }
+        console.log('no here');
+        console.log(await deleteToDoAlert(event));
+
+        // if ((await deleteToDoAlert(event)) === 'true') {
+        //   await dispatch(deleteToDoDispatch(targetId));
+        //   await console.log('delete true');
+        //   if (day === 'today') {
+        //     if (event.id == data[0].id) {
+        //       await geofenceUpdate(data, false);
+        //     } else {
+        //       console.log('here');
+        //       deleteTodayAsyncStorageData(targetId);
+        //     }
+        //   } else if (day === 'tomorrow') {
+        //     deleteTomorrowAsyncStorageData(targetId);
+        //   }
+        // }
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{

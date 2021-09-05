@@ -49,6 +49,7 @@ const toDosSlice = createSlice({
     deleteToDoDispatch: (state, action) => {
       const targetId = action.payload;
       delete state[`${targetId}`];
+      console.log('store delete');
     },
   },
 });

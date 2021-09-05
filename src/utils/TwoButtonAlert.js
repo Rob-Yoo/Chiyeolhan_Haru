@@ -1,5 +1,7 @@
 import { Alert } from 'react-native';
 import { toDosDeleteDB } from 'utils/Database';
+import { geofenceUpdate } from 'utils/BgGeofence';
+
 export const alertStartTimePicker = (hideTimePicker) =>
   Alert.alert(
     `현재 시간보다 이전 시간대는\n선택할 수 없습니다.`,
@@ -86,7 +88,7 @@ export const alertInValidSubmit = () =>
     { cancelable: false },
   );
 
-export const deleteToDoAlert = async (event) =>
+export const deleteToDoAlert = async (event) => {
   new Promise((resolve) => {
     Alert.alert(
       `일정을 삭제 하시겠습니까?`,
@@ -98,12 +100,17 @@ export const deleteToDoAlert = async (event) =>
         {
           text: '확인',
           style: 'destructive',
-          onPress: () => {
-            toDosDeleteDB(event.id);
-            resolve('true');
+          onPress: async () => {
+            try {
+              resolve('true');
+              //await toDosDeleteDB(event.id);
+            } catch (e) {
+              console.log('deleteToDoAlert Error :', e);
+            }
           },
         },
       ],
       { cancelable: false },
     );
   });
+};
