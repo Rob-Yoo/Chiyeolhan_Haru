@@ -38,6 +38,7 @@ import {
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
 import styles from 'components/modal/ToDoModalStyle';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 export const ToDoModal = ({
   modalHandler,
@@ -53,9 +54,9 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
-  const [isTodoEdit, setIsTodoEdit] = useState(false);
+
   const [taskList, setTaskList] = useState([]);
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState(false);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
@@ -131,47 +132,30 @@ export const ToDoModal = ({
   };
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
+    console.log('checkvalid');
     let isNeedAlert = false;
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
       // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
       // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
-      if (
-        !isTodoEdit &&
-        startTime <= todoStartTime &&
-        todoStartTime <= finishTime
-      ) {
+      if (startTime <= todoStartTime && todoStartTime <= finishTime) {
         isNeedAlert = true;
-        return;
+        return isNeedAlert;
       }
-
-      if (
-        !isTodoEdit &&
-        startTime <= todoFinishTime &&
-        todoFinishTime <= finishTime
-      ) {
+      if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
         isNeedAlert = true;
-        return;
+        return isNeedAlert;
       }
     });
     return isNeedAlert;
   };
 
-  const handleTodayTodoSubmit = async (
-    todoStartTime,
-    todoFinishTime,
-    todoTitle,
-    isTodoEdit,
-  ) => {
-    const currentTime = makeNowTime();
-    if (!isTodoEdit && currentTime > todoStartTime) {
-      alertStartTimeError();
-      modalHandler();
-      return;
-    }
+  const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
-      const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      const result = isToday
+        ? await AsyncStorage.getItem(KEY_VALUE_GEOFENCE)
+        : await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
       let isNeedAlert = false;
       if (result != null) {
         const toDoArray = JSON.parse(result);
@@ -186,14 +170,32 @@ export const ToDoModal = ({
           modalHandler();
           alertInValidSubmit();
         } else {
-          toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
+          !passModalData
+            ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+            : todoEdit();
         }
       } else {
-        toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
+        !passModalData
+          ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+          : todoEdit;
       }
     } catch (e) {
       console.log('handleTodayTodoSubmit Error :', e);
     }
+  };
+
+  const handleTodayTodoSubmit = async (
+    todoStartTime,
+    todoFinishTime,
+    todoTitle,
+  ) => {
+    const currentTime = makeNowTime();
+    if (!!passModalData && currentTime > todoStartTime) {
+      alertStartTimeError();
+      modalHandler();
+      return;
+    }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
   const handleTomorrowTodoSubmit = async (
@@ -201,39 +203,22 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    try {
-      const result = await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
-      let isNeedAlert = false;
-      if (result != null) {
-        const toDoArray = JSON.parse(result);
-        if (toDoArray.length != 0) {
-          isNeedAlert = checkValidSubmit(
-            toDoArray,
-            todoStartTime,
-            todoFinishTime,
-          );
-        }
-        if (isNeedAlert) {
-          modalHandler();
-          alertInValidSubmit();
-        } else {
-          toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-        }
-      } else {
-        toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      }
-    } catch (e) {
-      console.log('handleTomorrowTodoSubmit Error :', e);
-    }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
+
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const id = passModalData?.id;
     const currentTime = makeNowTime();
-    if (!isTodoEdit && currentTime > todoStartTime) {
+    console.log('handleTedit');
+    if (!passModalData && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
     }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+  };
+
+  const todoEdit = async () => {
+    const id = passModalData?.id;
     dispatch(
       editToDoDispatch({
         todoTitle,
@@ -244,7 +229,6 @@ export const ToDoModal = ({
       }),
     );
     let isChangeEarliest = true;
-    //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
     isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
     isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
     modalHandler();
@@ -264,11 +248,11 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (!isTodoEdit && isToday) {
+      if (!passModalData && isToday) {
         handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!isTodoEdit && !isToday) {
+      } else if (!passModalData && !isToday) {
         handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (isTodoEdit) {
+      } else if (!!passModalData) {
         handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
@@ -312,6 +296,11 @@ export const ToDoModal = ({
     }
   };
 
+  const editSchedule = (item, index) => {
+    setTask({ item, index });
+    toggleIsVisible(inputIsVisible, setInputIsVisible);
+  };
+
   useEffect(() => {
     register('todoStartTime'),
       register('todoFinishTime'),
@@ -325,118 +314,112 @@ export const ToDoModal = ({
       setTitle(passModalData.description);
       setTaskList([...passModalData.toDos]);
       setLocationData(passModalData.location);
-      setIsTodoEdit(true);
-    } else {
-      setIsTodoEdit(false);
     }
   }, [passModalData]);
   return (
-    <>
-      <Modal
-        navigation={navigation}
-        isVisible={isModalVisible}
-        style={styles.modalStyle}
-        onModalHide={() => clearData()}
-      >
-        <TouchableOpacity
-          style={styles.background}
-          activeOpacity={1}
-          onPress={modalHandler}
-        />
-        <View style={styles.modalInputContainer}>
-          <View style={styles.modalTopContainer}>
-            <View style={styles.modalTextView}>
-              <Text style={styles.modalTopText} onPress={modalHandler}>
-                취소
-              </Text>
-              <TouchableOpacity>
-                <Text
-                  onPress={handleSubmit(handleTodoSubmit)}
-                  style={styles.modalTopText}
-                >
-                  완료
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <ImageBackground
-              style={styles.imageBackgroundMapStyle}
-              source={{ uri: 'map' }}
-            >
-              <View
-                style={[
-                  styles.imageBackgroundStyle,
-                  {
-                    backgroundColor: locationName
-                      ? 'transparent'
-                      : 'rgba(0,0,0,0.3)',
-                  },
-                ]}
-              >
-                {locationName ? (
-                  <></>
-                ) : (
-                  <IconQuestion
-                    name="icon-question"
-                    size={Dimensions.get('window').height > 667 ? 110 : 70}
-                    color={'#FFFFFF'}
-                    onPress={() =>
-                      toggleIsVisible(mapIsVisible, setMapIsVisible)
-                    }
-                  />
-                )}
-              </View>
-            </ImageBackground>
-            <Text style={styles.modalLocationText}>
-              {locationName ? locationName : '물음표를 눌러주세요'}
+    <Modal
+      navigation={navigation}
+      isVisible={isModalVisible}
+      style={styles.modalStyle}
+      onModalHide={() => clearData()}
+      style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
+    >
+      <TouchableOpacity
+        style={styles.background}
+        activeOpacity={1}
+        onPress={modalHandler}
+      />
+      <View style={styles.modalInputContainer}>
+        <View style={styles.modalTopContainer}>
+          <View style={styles.modalTextView}>
+            <Text style={styles.modalTopText} onPress={modalHandler}>
+              취소
             </Text>
-          </View>
-          <View style={styles.timePickerContainer}>
-            <TimePicker
-              isStart={true}
-              timeText={'시작'}
-              pickerHandler={(text) => timeHandler(text, true)}
-              isToday={isToday}
-              timeDate={passModalData?.startDate}
-            />
-            <Text style={{ fontSize: 25 }}>~</Text>
-            <TimePicker
-              isStart={false}
-              timeText={'끝'}
-              pickerHandler={(text) => timeHandler(text, false)}
-              timeDate={passModalData?.endDate}
-            />
-          </View>
-          <View style={styles.todoInputContainer}>
-            <TextInput
-              placeholder="제목을 입력해 주세요"
-              style={styles.modalInputTitle}
-              value={title}
-              ref={titleRef}
-              onChange={(e) => handleChange(e)}
-              onChangeText={setValue('todoTitle', title)}
-            />
-            <TouchableOpacity
-              style={styles.modalInputTask}
-              onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
-            >
-              <Text style={styles.modalInputText}>수행리스트</Text>
+            <TouchableOpacity>
+              <Text
+                onPress={handleSubmit(handleTodoSubmit)}
+                style={styles.modalTopText}
+              >
+                완료
+              </Text>
             </TouchableOpacity>
+          </View>
 
-            <ScrollView style={styles.modalTaskContainer}>
-              {taskList.map((item, index) => (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onPress={() => {
-                    setTask([item, index]);
-                    toggleIsVisible(inputIsVisible, setInputIsVisible);
-                  }}
-                >
-                  <Text style={styles.modalInputText}>{item}</Text>
-                </TouchableWithoutFeedback>
-              ))}
-            </ScrollView>
+          <ImageBackground
+            style={styles.imageBackgroundMapStyle}
+            source={{ uri: 'map' }}
+          >
+            <View
+              style={[
+                styles.imageBackgroundStyle,
+                {
+                  backgroundColor: locationName
+                    ? 'transparent'
+                    : 'rgba(0,0,0,0.3)',
+                },
+              ]}
+            >
+              {locationName ? (
+                <></>
+              ) : (
+                <IconQuestion
+                  name="icon-question"
+                  size={Dimensions.get('window').height > 667 ? 110 : 70}
+                  color={'#FFFFFF'}
+                  onPress={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
+                />
+              )}
+            </View>
+          </ImageBackground>
+          <Text style={styles.modalLocationText}>
+            {locationName ? locationName : '물음표를 눌러주세요'}
+          </Text>
+        </View>
+        <View style={styles.timePickerContainer}>
+          <TimePicker
+            isStart={true}
+            timeText={'시작'}
+            pickerHandler={(text) => timeHandler(text, true)}
+            isToday={isToday}
+            timeDate={passModalData?.startDate}
+          />
+          <Text style={{ fontSize: 25 }}>~</Text>
+          <TimePicker
+            isStart={false}
+            timeText={'끝'}
+            pickerHandler={(text) => timeHandler(text, false)}
+            timeDate={passModalData?.endDate}
+          />
+        </View>
+        <View style={styles.todoInputContainer}>
+          <TextInput
+            placeholder="제목을 입력해 주세요"
+            style={styles.modalInputTitle}
+            value={title}
+            ref={titleRef}
+            onChange={(e) => handleChange(e)}
+            onChangeText={setValue('todoTitle', title)}
+          />
+          <TouchableOpacity
+            style={styles.modalInputTask}
+            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+          >
+            <Text style={styles.modalInputText}>수행리스트</Text>
+          </TouchableOpacity>
+
+          <ScrollView style={styles.modalTaskContainer}>
+            {taskList.map((item, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => editSchedule(item, index)}
+              >
+                <Text style={styles.modalInputText}>{item}</Text>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
+          {task ? (
             <ToDoModalInput
+              key={task}
               taskListVisibleHandler={() =>
                 toggleIsVisible(inputIsVisible, setInputIsVisible)
               }
@@ -445,25 +428,40 @@ export const ToDoModal = ({
               prevTask={task}
               setPrevTask={setTask}
             />
-          </View>
-          <Modal
-            isVisible={mapIsVisible}
-            animationIn="slideInRight"
-            animationOut="slideOutRight"
-          >
-            <Map
-              modalHandler={() =>
-                toggleIsVisible(mapIsVisible, setMapIsVisible)
+          ) : (
+            <ToDoModalInput
+              key={task}
+              taskListVisibleHandler={() =>
+                toggleIsVisible(inputIsVisible, setInputIsVisible)
               }
-              navigation={navigation}
-              locationDataHandler={(value) => getLocationData(value)}
-              searchedList={searchedList}
-              setSearchedList={setSearchedList}
+              taskSubmitHandler={taskSubmit}
+              inputIsVisible={inputIsVisible}
+              prevTask={false}
             />
-          </Modal>
+          )}
         </View>
+      </View>
+
+      {/* Map Modal*/}
+      <Modal
+        isVisible={mapIsVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
+        style={{
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+          margin: 0,
+        }}
+      >
+        <Map
+          modalHandler={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
+          navigation={navigation}
+          locationDataHandler={(value) => getLocationData(value)}
+          searchedList={searchedList}
+          setSearchedList={setSearchedList}
+        />
       </Modal>
-    </>
+    </Modal>
   );
 };
 

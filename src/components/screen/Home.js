@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
 import { Provider } from 'react-redux';
@@ -10,7 +10,24 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
+/*Layout */
+export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  Dimensions.get('window');
+export const CONTENT_OFFSET = 16;
+export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
+export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
+
 const styles = StyleSheet.create({
+  homeBackground: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  homeContainer: {
+    width: CONTAINER_WIDTH,
+    height: CONTAINER_HEIGHT,
+  },
   homeHeader: {
     flex: 1.3,
     flexDirection: 'row',
@@ -28,26 +45,28 @@ const Home = ({ navigation }) => {
     <>
       <ImageBackground
         source={{ uri: 'homeBackground' }}
-        style={{ widht: '100%', height: '100%', paddingHorizontal: 20 }}
+        style={styles.homeBackground}
       >
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderText}>
-            <HomeTextItem />
-            <IconTaskListLeft />
+        <View style={styles.homeContainer}>
+          <View style={styles.homeHeader}>
+            <View style={styles.homeHeaderText}>
+              <HomeTextItem />
+              <IconTaskListLeft />
+            </View>
+            <ScheduleButton>
+              <IconGoToScheduleButton
+                name="icon-go-to-schedule-button"
+                size={40}
+                color={'#229892'}
+                onPress={goToScheduleToday}
+                style={styles.iconScheduleButton}
+              />
+            </ScheduleButton>
           </View>
-          <ScheduleButton>
-            <IconGoToScheduleButton
-              name="icon-go-to-schedule-button"
-              size={40}
-              color={'#229892'}
-              onPress={goToScheduleToday}
-              style={styles.iconScheduleButton}
-            />
-          </ScheduleButton>
+          <Provider store={toDosSlice}>
+            <HomeContent />
+          </Provider>
         </View>
-        <Provider store={toDosSlice}>
-          <HomeContent />
-        </Provider>
       </ImageBackground>
     </>
   );

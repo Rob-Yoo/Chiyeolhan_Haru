@@ -1,24 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
 const styles = StyleSheet.create({
-  locationDataSection: {
-    flex: 1,
-    alignItems: 'center',
-    position: 'absolute',
-    left: 20,
-    bottom: 30,
-  },
   locationInfoCard: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
-    width: 380,
+    width: '90%',
     height: 130,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#fff',
     borderRadius: 20,
     padding: 10,
+    maxHeight: 130,
+    marginBottom: 20,
+    position: 'absolute',
+    left: 20,
+    right: 0,
+    bottom: 20,
   },
   locationTitle: {
     fontFamily: 'NotoSansKR-Bold',
@@ -65,31 +62,29 @@ export const LocationData = ({
     locationDataHandler(locationData);
     modalHandler();
   };
-  const { latitude, location, address } = locationData;
+  const { location, address } = locationData;
   return (
-    <View style={styles.locationDataSection}>
-      <View style={styles.locationInfoCard} key={latitude}>
-        <View style={{ flex: 4 }}>
-          <Text style={styles.locationTitle}>{location}</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              flexWrap: 'nowrap',
-              paddingRight: 40,
-            }}
-          >
-            <Text style={styles.address}>도로명</Text>
-            <Text style={styles.addressText}>{address}</Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.locationFinButton}
-          onPress={searchedLocation}
+    <View style={styles.locationInfoCard}>
+      <View style={{ flex: 4 }}>
+        <Text style={styles.locationTitle}>{location}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            flexWrap: 'nowrap',
+            paddingRight: 40,
+          }}
         >
-          <Text style={styles.locationFinText}>완료</Text>
-        </TouchableOpacity>
+          <Text style={styles.address}>도로명</Text>
+          <Text style={styles.addressText}>{address}</Text>
+        </View>
       </View>
+      <TouchableOpacity
+        style={styles.locationFinButton}
+        onPress={searchedLocation}
+      >
+        <Text style={styles.locationFinText}>완료</Text>
+      </TouchableOpacity>
     </View>
   );
 };
