@@ -176,7 +176,7 @@ export const deleteSearchedData = async (data, updateData = false) => {
   }
 };
 
-export const deleteAllSearchedData = async (data) => {
+export const deleteAllSearchedData = async () => {
   try {
     await AsyncStorage.removeItem(KEY_VALUE_SEARCHED);
     const setData = await AsyncStorage.setItem(KEY_VALUE_SEARCHED, `[]`);

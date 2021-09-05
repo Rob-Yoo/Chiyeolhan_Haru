@@ -88,7 +88,34 @@ export const alertInValidSubmit = () =>
     { cancelable: false },
   );
 
-export const deleteToDoAlert = async (event) => {
+// export const deleteToDoAlert = async (event) => {
+//   new Promise((resolve) => {
+//     Alert.alert(
+//       `일정을 삭제 하시겠습니까?`,
+//       '',
+//       [
+//         {
+//           text: '취소',
+//         },
+//         {
+//           text: '확인',
+//           style: 'destructive',
+//           onPress: async () => {
+//             try {
+//               resolve('true');
+//               //await toDosDeleteDB(event.id);
+//             } catch (e) {
+//               console.log('deleteToDoAlert Error :', e);
+//             }
+//           },
+//         },
+//       ],
+//       { cancelable: false },
+//     );
+//   });
+// };
+
+export const deleteToDoAlert = async (event) =>
   new Promise((resolve) => {
     Alert.alert(
       `일정을 삭제 하시겠습니까?`,
@@ -103,7 +130,7 @@ export const deleteToDoAlert = async (event) => {
           onPress: async () => {
             try {
               resolve('true');
-              //await toDosDeleteDB(event.id);
+              await toDosDeleteDB(event.id);
             } catch (e) {
               console.log('deleteToDoAlert Error :', e);
             }
@@ -113,4 +140,3 @@ export const deleteToDoAlert = async (event) => {
       { cancelable: false },
     );
   });
-};

@@ -92,7 +92,11 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     if (isToday) {
-      isChangeEarliest = await checkEarlistTodo(todoStartTime);
+      try {
+        isChangeEarliest = await checkEarlistTodo(todoStartTime);
+      } catch (e) {
+        console.log('toDoSumbit second try catch Error :', e);
+      }
     }
     try {
       isToday
@@ -123,7 +127,7 @@ export const ToDoModal = ({
       modalHandler();
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
-      console.log('toDoSumbit second try catch Error :', e);
+      console.log('toDoSumbit third try catch Error :', e);
     }
   };
 
@@ -189,7 +193,7 @@ export const ToDoModal = ({
     todoTitle,
   ) => {
     const currentTime = makeNowTime();
-    if (!!passModalData && currentTime > todoStartTime) {
+    if (currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
