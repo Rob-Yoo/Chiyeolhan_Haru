@@ -88,7 +88,7 @@ export const alertInValidSubmit = () =>
     { cancelable: false },
   );
 
-export const deleteToDoAlert = async (event, data) => {
+export const deleteToDoAlert = async (event) => {
   new Promise((resolve) => {
     Alert.alert(
       `일정을 삭제 하시겠습니까?`,
@@ -102,9 +102,6 @@ export const deleteToDoAlert = async (event, data) => {
           style: 'destructive',
           onPress: async () => {
             try {
-              if (event.id == data[0].id) {
-                await geofenceUpdate(data, false);
-              }
               await toDosDeleteDB(event.id);
               resolve('true');
             } catch (e) {

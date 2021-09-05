@@ -100,10 +100,12 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           )
         )
           return;
-        if ((await deleteToDoAlert(event, data)) === 'true') {
+        if ((await deleteToDoAlert(event)) === 'true') {
           dispatch(deleteToDoDispatch(targetId));
           if (day === 'today') {
-            //오늘 어싱크 스토리지 삭제해야됨
+            if (event.id == data[0].id) {
+              await geofenceUpdate(data, false);
+            }
           } else if (day === 'tomorrow') {
             deleteTomorrowAsyncStorageData(targetId);
           }

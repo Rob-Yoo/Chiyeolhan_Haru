@@ -137,9 +137,11 @@ const findNearBy = async (data, currentTime) => {
         }
       }
     });
+    console.log('nearBySchedules Second:', nearBySchedules);
+    return nearBySchedules;
+  } else {
+    return nearBySchedules;
   }
-  console.log('nearBySchedules Second:', nearBySchedules);
-  return nearBySchedules;
 };
 
 const enterAction = async (data, startTime, finishTime, currentTime) => {
