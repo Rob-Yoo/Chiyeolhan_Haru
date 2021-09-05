@@ -23,9 +23,10 @@ import { handleFilterData } from 'utils/handleFilterData';
 import {
   TODAY,
   TOMORROW,
-  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_TODAY,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
+  CURRENT_TIME,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -189,8 +190,8 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    const currentTime = makeNowTime();
-    if (!!passModalData && currentTime > todoStartTime) {
+    // const currentTime = makeNowTime();
+    if (!!passModalData && CURRENT_TIME > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;

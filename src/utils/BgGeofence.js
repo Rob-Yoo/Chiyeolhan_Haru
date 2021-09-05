@@ -1,7 +1,12 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import { dbService } from 'utils/firebase';
-import { UID, KEY_VALUE_GEOFENCE, KEY_VALUE_NEAR_BY } from 'constant/const';
+import {
+  UID,
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_NEAR_BY,
+  CURRENT_TIME,
+} from 'constant/const';
 import PushNotification from 'react-native-push-notification';
 import { getEarlyTimeDiff, getLateTimeDiff, getTimeDiff } from 'utils/Time';
 import {
@@ -106,7 +111,7 @@ const findNearBy = async (data, currentTime) => {
   const nextSchedules = data.slice(1);
 
   if (nextSchedules.length != 0) {
-    nextSchedules.forEach(async (nextSchedule) => {
+    for (const nextSchedule of nextSchedules) {
       console.log('nextSchedule :', nextSchedule.location);
       const nextScheduleLocation = {
         lat: nextSchedule.latitude,
@@ -136,12 +141,10 @@ const findNearBy = async (data, currentTime) => {
           console.log('findNearBy Error :', e);
         }
       }
-    });
-    console.log('nearBySchedules Second:', nearBySchedules);
-    return nearBySchedules;
-  } else {
-    return nearBySchedules;
+    }
   }
+  console.log('nearBySchedules Second:', nearBySchedules);
+  return nearBySchedules;
 };
 
 const enterAction = async (data, startTime, finishTime, currentTime) => {
@@ -223,7 +226,7 @@ const exitAction = async (data, startTime, currentTime) => {
       } else {
         let successCount = 0;
         const toDoRef = dbService.collection(`${UID}`);
-        allNearBySchedules.forEach(async (schedule) => {
+        for (const schedule of allNearBySchedules) {
           if (currentTime <= schedule.startTime) {
             successCount = successCount + 1;
           } else {
@@ -234,7 +237,7 @@ const exitAction = async (data, startTime, currentTime) => {
             PushNotification.cancelLocalNotification(`${schedule.id} + 0`); // 완료 알림도 사라짐
             console.log('완료 알림 사라짐');
           }
-        });
+        }
         if (successNumber != 0) {
           console.log('successNumber :', successNumber);
           await geofenceUpdate(data, false, successNumber); // 성공한 개수 만큼 async storage에서 지움
@@ -254,23 +257,23 @@ const subscribeOnGeofence = async () => {
     try {
       const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
       const data = JSON.parse(item);
-      const time = new Date();
-      const hour =
-        time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      const min =
-        time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
-      const currentTime = `${hour}:${min}`;
+      // const time = new Date();
+      // const hour =
+      //   time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
+      // const min =
+      //   time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+      // const currentTime = `${hour}:${min}`;
 
       if (data.length != 0) {
         const startTime = data[0].startTime;
         const finishTime = data[0].finishTime;
 
         if (event.action == 'ENTER') {
-          await enterAction(data, startTime, finishTime, currentTime);
+          await enterAction(data, startTime, finishTime, CURRENT_TIME);
         }
 
         if (event.action == 'EXIT') {
-          await exitAction(data, startTime, currentTime);
+          await exitAction(data, startTime, CURRENT_TIME);
         }
       }
     } catch (e) {
