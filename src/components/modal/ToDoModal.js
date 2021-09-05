@@ -132,31 +132,56 @@ export const ToDoModal = ({
   };
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
+    console.log('checkvalid');
     let isNeedAlert = false;
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
       // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
       // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
-      if (
-        !!passModalData &&
-        startTime <= todoStartTime &&
-        todoStartTime <= finishTime
-      ) {
+      if (startTime <= todoStartTime && todoStartTime <= finishTime) {
         isNeedAlert = true;
-        return;
+        return isNeedAlert;
       }
-
-      if (
-        !!passModalData &&
-        startTime <= todoFinishTime &&
-        todoFinishTime <= finishTime
-      ) {
+      if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
         isNeedAlert = true;
-        return;
+        return isNeedAlert;
       }
     });
     return isNeedAlert;
+  };
+
+  const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
+    try {
+      const result = isToday
+        ? await AsyncStorage.getItem(KEY_VALUE_GEOFENCE)
+        : await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
+      let isNeedAlert = false;
+      if (result != null) {
+        const toDoArray = JSON.parse(result);
+        if (toDoArray.length != 0) {
+          isNeedAlert = checkValidSubmit(
+            toDoArray,
+            todoStartTime,
+            todoFinishTime,
+          );
+        }
+        if (isNeedAlert) {
+          modalHandler();
+          alertInValidSubmit();
+        } else {
+          !passModalData
+            ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+            : todoEdit();
+        }
+      } else {
+        !passModalData
+          ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+          : todoEdit;
+      }
+    } catch (e) {
+      console.log('handleTodayTodoSubmit Error :', e);
+    }
   };
 
   const handleTodayTodoSubmit = async (
@@ -170,30 +195,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    try {
-      const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-      let isNeedAlert = false;
-      if (result != null) {
-        const toDoArray = JSON.parse(result);
-        if (toDoArray.length != 0) {
-          isNeedAlert = checkValidSubmit(
-            toDoArray,
-            todoStartTime,
-            todoFinishTime,
-          );
-        }
-        if (isNeedAlert) {
-          modalHandler();
-          alertInValidSubmit();
-        } else {
-          toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-        }
-      } else {
-        toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      }
-    } catch (e) {
-      console.log('handleTodayTodoSubmit Error :', e);
-    }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
   const handleTomorrowTodoSubmit = async (
@@ -201,39 +203,22 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    try {
-      const result = await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
-      let isNeedAlert = false;
-      if (result != null) {
-        const toDoArray = JSON.parse(result);
-        if (toDoArray.length != 0) {
-          isNeedAlert = checkValidSubmit(
-            toDoArray,
-            todoStartTime,
-            todoFinishTime,
-          );
-        }
-        if (isNeedAlert) {
-          modalHandler();
-          alertInValidSubmit();
-        } else {
-          toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-        }
-      } else {
-        toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      }
-    } catch (e) {
-      console.log('handleTomorrowTodoSubmit Error :', e);
-    }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
+
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const id = passModalData?.id;
     const currentTime = makeNowTime();
+    console.log('handleTedit');
     if (!passModalData && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
     }
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+  };
+
+  const todoEdit = async () => {
+    const id = passModalData?.id;
     dispatch(
       editToDoDispatch({
         todoTitle,
@@ -244,7 +229,6 @@ export const ToDoModal = ({
       }),
     );
     let isChangeEarliest = true;
-    //오늘의 첫번째 일정일때는dbToAsyncStorage(true);
     isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
     isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
     modalHandler();
