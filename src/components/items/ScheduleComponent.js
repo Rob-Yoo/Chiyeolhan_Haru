@@ -8,6 +8,8 @@ import { deleteToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
+import { deleteTodayAsyncStorageData } from '../../utils/AsyncStorage';
+import { geofenceUpdate } from '../../utils/BgGeofence';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -52,7 +54,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
   let weekStart = new Date().getDay();
   let selectedDate = '';
-
   switch (day) {
     case 'today':
       selectedDate = new Date(YEAR, MONTH - 1, DAY);
@@ -100,15 +101,22 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           )
         )
           return;
-        if ((await deleteToDoAlert(event)) === 'true') {
-          dispatch(deleteToDoDispatch(targetId));
-          if (day === 'today') {
-            if (event.id == data[0].id) {
-              await geofenceUpdate(data, false);
+
+        try {
+          if ((await deleteToDoAlert(event)) === 'true') {
+            await dispatch(deleteToDoDispatch(targetId));
+            if (day === 'today') {
+              if (event.id == data[0].id) {
+                await geofenceUpdate(data, false);
+              } else {
+                deleteTodayAsyncStorageData(targetId);
+              }
+            } else if (day === 'tomorrow') {
+              deleteTomorrowAsyncStorageData(targetId);
             }
-          } else if (day === 'tomorrow') {
-            deleteTomorrowAsyncStorageData(targetId);
           }
+        } catch (e) {
+          console.log('long onPress delete Error', e);
         }
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
