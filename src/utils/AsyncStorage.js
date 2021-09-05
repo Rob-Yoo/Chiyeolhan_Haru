@@ -8,6 +8,7 @@ import {
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW,
+  KEY_VALUE_TODAY,
   CURRENT_TIME,
 } from 'constant/const';
 import { isEarliestTime } from './Time';
@@ -70,6 +71,14 @@ const setGeofenceData = async (array) => {
   }
 };
 
+const setTodayData = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_TODAY, array);
+  } catch (e) {
+    console.log('setGeofenceData Error :', e);
+  }
+};
+
 const setSearchedData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_SEARCHED, array);
@@ -95,6 +104,7 @@ const setSearchedData = async (array) => {
 export const dbToAsyncStorage = async (isChangeEarliest) => {
   try {
     const geofenceDataArray = [];
+    const todayToDoArray = [];
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', TODAY).get();
     data.forEach((result) => {
@@ -108,9 +118,18 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
           location: result.data().location,
         });
       }
+      todayToDoArray.push({
+        id: result.data().id,
+        startTime: result.data().startTime,
+        finishTime: result.data().finishTime,
+        latitude: result.data().latitude,
+        longitude: result.data().longitude,
+        location: result.data().location,
+      });
     });
     console.log(geofenceDataArray);
     await setGeofenceData(JSON.stringify(geofenceDataArray));
+    await setTodayData(JSON.stringify(todayToDoArray));
     if (isChangeEarliest) {
       await addGeofenceTrigger();
     }
