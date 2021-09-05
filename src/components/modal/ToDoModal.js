@@ -132,7 +132,6 @@ export const ToDoModal = ({
   };
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
-    console.log('checkvalid');
     let isNeedAlert = false;
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;

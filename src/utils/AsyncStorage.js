@@ -23,14 +23,41 @@ const setTomorrowData = async (array) => {
   }
 };
 
+const getItemFromAsync = (storageName) => {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(storageName, (err, result) => {
+      if (err) {
+        reject(err);
+      }
+
+      if (result === null) {
+        resolve(null);
+      }
+
+      resolve(JSON.parse(result));
+    });
+  });
+};
+
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
-    const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
+    const tomorrowData = await getItemFromAsync(KEY_VALUE_TOMORROW);
     await AsyncStorage.removeItem(KEY_VALUE_TOMORROW);
     const updateData = tomorrowData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
   } catch (e) {
     console.log('deleteTomorrowAsyncStorageData Error :', e);
+  }
+};
+
+export const deleteTodayAsyncStorageData = async (id) => {
+  try {
+    const todayData = await getItemFromAsync(KEY_VALUE_GEOFENCE);
+    await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
+    const updateData = todayData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(updateData));
+  } catch (e) {
+    console.log('deleteTodayAsyncStorageData Error :', e);
   }
 };
 

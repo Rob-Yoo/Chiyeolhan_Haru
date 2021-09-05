@@ -7,6 +7,7 @@ import { deleteToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
+import { deleteTodayAsyncStorageData } from '../../utils/AsyncStorage';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -99,7 +100,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         if ((await deleteToDoAlert(event)) === 'true') {
           dispatch(deleteToDoDispatch(targetId));
           if (day === 'today') {
-            //오늘 어싱크 스토리지 삭제해야됨
+            deleteTodayAsyncStorageData(targetId);
           } else if (day === 'tomorrow') {
             deleteTomorrowAsyncStorageData(targetId);
           }
