@@ -210,9 +210,10 @@ const exitAction = async (data, startTime, currentTime) => {
       const nearBySchedules = JSON.parse(result);
       let allNearBySchedules = [];
       const currentSchedule = [data[0]];
-      if (currentSchedule[0] == nearBySchedules[0]) {
-        // 사용자가 현재 일정의 끝시간 이후에 새로운 일정을 추가하면 data[0]이 현재 일정이 아니라 다음 일정이 된 상태임....
-        allNearBySchedules = nearBySchedules;
+      if (nearBySchedules.includes(data[0])) {
+        // 사용자가 현재 일정의 끝시간 이후에 새로운 일정을 추가하면 data[0]이 현재 일정이 아니라 다음 일정 중 하나가 된 상태임....
+        const idx = nearBySchedules.indexOf(data[0]);
+        allNearBySchedules = nearBySchedules.slice(idx);
       } else {
         allNearBySchedules = currentSchedule.concat(nearBySchedules);
       }
@@ -227,7 +228,12 @@ const exitAction = async (data, startTime, currentTime) => {
         let successCount = 0;
         const toDoRef = dbService.collection(`${UID}`);
         for (const schedule of allNearBySchedules) {
-          if (currentTime <= schedule.startTime) {
+          console.log(
+            currentTime,
+            schedule.startTime,
+            currentTime >= schedule.startTime,
+          );
+          if (currentTime >= schedule.startTime) {
             successCount = successCount + 1;
           } else {
             await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
@@ -238,9 +244,9 @@ const exitAction = async (data, startTime, currentTime) => {
             console.log('완료 알림 사라짐');
           }
         }
-        if (successNumber != 0) {
-          console.log('successNumber :', successNumber);
-          await geofenceUpdate(data, false, successNumber); // 성공한 개수 만큼 async storage에서 지움
+        if (successCount != 0) {
+          console.log('successNumber :', successCount);
+          await geofenceUpdate(data, false, successCount); // 성공한 개수 만큼 async storage에서 지움
         }
       }
       await AsyncStorage.removeItem(KEY_VALUE_NEAR_BY);
