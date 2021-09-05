@@ -54,7 +54,7 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
-  const [isTodoEdit, setIsTodoEdit] = useState(false);
+
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
   const [title, setTitle] = useState('');
@@ -139,7 +139,7 @@ export const ToDoModal = ({
       // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
       // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
       if (
-        !isTodoEdit &&
+        !!passModalData &&
         startTime <= todoStartTime &&
         todoStartTime <= finishTime
       ) {
@@ -148,7 +148,7 @@ export const ToDoModal = ({
       }
 
       if (
-        !isTodoEdit &&
+        !!passModalData &&
         startTime <= todoFinishTime &&
         todoFinishTime <= finishTime
       ) {
@@ -163,10 +163,9 @@ export const ToDoModal = ({
     todoStartTime,
     todoFinishTime,
     todoTitle,
-    isTodoEdit,
   ) => {
     const currentTime = makeNowTime();
-    if (!isTodoEdit && currentTime > todoStartTime) {
+    if (!!passModalData && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
@@ -230,7 +229,7 @@ export const ToDoModal = ({
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
     const id = passModalData?.id;
     const currentTime = makeNowTime();
-    if (!isTodoEdit && currentTime > todoStartTime) {
+    if (!passModalData && currentTime > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
@@ -265,11 +264,11 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (!isTodoEdit && isToday) {
+      if (!passModalData && isToday) {
         handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!isTodoEdit && !isToday) {
+      } else if (!passModalData && !isToday) {
         handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (isTodoEdit) {
+      } else if (!!passModalData) {
         handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
@@ -331,9 +330,6 @@ export const ToDoModal = ({
       setTitle(passModalData.description);
       setTaskList([...passModalData.toDos]);
       setLocationData(passModalData.location);
-      setIsTodoEdit(true);
-    } else {
-      setIsTodoEdit(false);
     }
   }, [passModalData]);
   return (

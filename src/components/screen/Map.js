@@ -120,7 +120,6 @@ const CurrentMap = ({
       console.log('_handlePlacesAPI Error :', e);
     }
   };
-
   return (
     <>
       <MapView
