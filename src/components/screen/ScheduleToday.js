@@ -13,8 +13,6 @@ const ScheduleToday = () => {
   const [passModalData, setPassModalData] = useState(undefined);
 
   const passToModalData = (event) => {
-    //async에있는 데이터를 타임테이블에서 투두 선택시 해당 투두( 모달로 넘겨준다
-    console.log(`passtomodalData ${JSON.stringify(event)}`);
     setPassModalData(event);
     toggleModal();
   };

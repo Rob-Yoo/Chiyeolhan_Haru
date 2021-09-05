@@ -74,6 +74,7 @@ export const TimePicker = ({
 }) => {
   const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
+  const [lowTime, setLowTime] = useState(new Date());
   const timeObject = new Date();
   const hour =
     timeObject.getHours() < 10
@@ -133,6 +134,7 @@ export const TimePicker = ({
   };
 
   const checkValidTime = async (timeData) => {
+    setLowTime(timeData);
     let formatTime = timeData.format('HH:mm');
     const restMin = formatTime.slice(0, 4);
     const oneDigitMin = formatTime.slice(4);
@@ -148,6 +150,7 @@ export const TimePicker = ({
     }
   };
   useEffect(() => {
+    setLowTime(timeDate);
     if (timeDate) {
       const hour =
         timeDate.getHours() < 10
@@ -159,8 +162,6 @@ export const TimePicker = ({
           : timeDate.getMinutes();
       setTime(`${hour}:${minute}`);
       pickerHandler(`${hour}:${minute}`);
-    } else {
-      console.log('아님');
     }
   }, []);
   const handleConfirm = (formatTime) => {
@@ -183,7 +184,7 @@ export const TimePicker = ({
         onCancel={hideTimePicker}
         locale="en_GB"
         //ios일때는 date android 일때는 value
-        date={timeDate ? timeDate : new Date()}
+        date={lowTime}
         minuteInterval={5}
       />
     </View>

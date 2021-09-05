@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, ImageBackground } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -16,25 +22,21 @@ import { handleFilterData } from 'utils/handleFilterData';
 import { noDataAlert } from 'utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: '100%',
+    height: '100%',
   },
-  iconFindLocation: {
-    top: 140,
-    right: -40,
-    padding: 7,
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  iconFindCurrentLocation: {
+    width: 45,
+    height: 45,
+
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 5.4,
+      height: 6,
+    },
+    shadowOpacity: 5,
+    shadowRadius: 2.84,
   },
 });
 
@@ -44,14 +46,12 @@ const CurrentMap = ({
   locationDataHandler,
   searchedList,
   setSearchedList,
-  navigation,
 }) => {
-  const [isRenderData, setRenderData] = useState(false);
-  const [locationData, setData] = useState({});
+  const [locationData, setData] = useState(null);
   const [locationResult, setResult] = useState(location);
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
 
-  useEffect(() => {}, [locationResult]);
+  //useEffect(() => {}, [locationResult]);
   useEffect(() => {
     const getSearchedList = async () => {
       try {
@@ -105,7 +105,7 @@ const CurrentMap = ({
           setData({ location, latitude, longitude, address });
           setIscurrentLocation(false);
           await handleFilterData(text, 'search', searchedList, setSearchedList);
-          setRenderData(true);
+
           break;
         case 'ZERO_RESULTS':
           noDataAlert();
@@ -120,58 +120,62 @@ const CurrentMap = ({
       console.log('_handlePlacesAPI Error :', e);
     }
   };
-
   return (
-    <View>
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          region={{
-            ...locationResult,
-            latitudeDelta: 0.004,
-            longitudeDelta: 0.004,
-          }}
-        >
-          {isRenderData ? (
-            <LocationData
-              locationData={locationData}
-              modalHandler={modalHandler}
-              locationDataHandler={locationDataHandler}
-            />
-          ) : (
-            <></>
-          )}
-          <View
-            style={{ flex: 0, position: 'relative', backgroundColor: 'red' }}
-          >
-            <MapSearch
-              _handlePlacesAPI={_handlePlacesAPI}
-              modalHandler={modalHandler}
-              searchedList={searchedList}
-              setSearchedList={setSearchedList}
-            />
+    <>
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        region={{
+          ...locationResult,
+          latitudeDelta: 0.004,
+          longitudeDelta: 0.004,
+        }}
+      >
+        {/* <IconFindLocation
+          size={30}
+          name="icon-find-current-location"
+          style={styles.iconFindLocation}
+          color="#00000041"
+         }
+        /> */}
 
-            <IconFindLocation
-              size={30}
-              name="icon-find-current-location"
-              style={styles.iconFindLocation}
-              color="#00000041"
-              onPress={() => handleFindCurrentLocation()}
-            />
-          </View>
-          <Marker
-            coordinate={{
-              latitude: locationResult.latitude,
-              longitude: locationResult.longitude,
-            }}
-            image={{
-              uri: isCurrentLocation ? 'customLocation' : 'customPin',
-            }}
-          />
-        </MapView>
-      </View>
-    </View>
+        <Marker
+          coordinate={{
+            latitude: locationResult.latitude,
+            longitude: locationResult.longitude,
+          }}
+          image={{
+            uri: isCurrentLocation ? 'customLocation' : 'customPin',
+          }}
+        />
+      </MapView>
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 150, right: 10 }}
+        onPress={() => handleFindCurrentLocation()}
+      >
+        <ImageBackground
+          style={styles.iconFindCurrentLocation}
+          activeOpacity={1}
+          source={{ uri: 'iconFindCurrentLocation' }}
+        />
+      </TouchableOpacity>
+      {/*Location Data*/}
+      {!!locationData && (
+        <LocationData
+          locationData={locationData}
+          modalHandler={modalHandler}
+          locationDataHandler={locationDataHandler}
+        />
+      )}
+
+      {/*Map Search*/}
+      <MapSearch
+        _handlePlacesAPI={_handlePlacesAPI}
+        modalHandler={modalHandler}
+        searchedList={searchedList}
+        setSearchedList={setSearchedList}
+      />
+    </>
   );
 };
 
