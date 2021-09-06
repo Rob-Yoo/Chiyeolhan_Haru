@@ -7,6 +7,11 @@ import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
+// import { getCurrentTime, getTimeDiff } from 'utils/Time';
+// import AsyncStorage from '@react-native-community/async-storage';
+// import { dbService } from 'utils/firebase';
+// import { KEY_VALUE_GEOFENCE, UID, TODAY } from 'constant/const';
+// import { geofenceUpdate } from 'utils/BgGeofence';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -41,6 +46,17 @@ const styles = StyleSheet.create({
 
 const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
+  // const checkGeofenceSchedule = async () => {
+  //   const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+  //   if (item != null) {
+  //     let isFail = false;
+  //     const geofenceData = JSON.parse(item);
+  //     if (geofenceData.length != 0) {
+  //       const currentTime = getCurrentTime();
+  //       if (geofenceData[0].finishTime)
+  //     }
+  //   }
+  // };
   return (
     <>
       <ImageBackground

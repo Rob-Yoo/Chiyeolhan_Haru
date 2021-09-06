@@ -12,13 +12,12 @@ import {
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { create, editToDoDispatch } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
+import { create, editToDoDispatch } from 'redux/store';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
-import { makeNowTime } from 'utils/Time';
 import { handleFilterData } from 'utils/handleFilterData';
 import {
   TODAY,
@@ -26,7 +25,6 @@ import {
   KEY_VALUE_TODAY,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
-  CURRENT_TIME,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -40,6 +38,7 @@ import {
 } from 'utils/TwoButtonAlert';
 import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
+import { getCurrentTime } from 'utils/Time';
 
 export const ToDoModal = ({
   modalHandler,
@@ -193,7 +192,7 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    if (!!passModalData && CURRENT_TIME > todoStartTime) {
+    if (!!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
@@ -210,9 +209,8 @@ export const ToDoModal = ({
   };
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const currentTime = makeNowTime();
     console.log('handleTedit');
-    if (!passModalData && currentTime > todoStartTime) {
+    if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;

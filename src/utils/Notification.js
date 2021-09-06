@@ -49,6 +49,7 @@ export const failNotification = () => {
 
 export const completeNotification = (
   isNextSchedule,
+  time,
   startTime = null,
   location = null,
 ) => {
@@ -64,7 +65,7 @@ export const completeNotification = (
     //... You can use all the options from localNotifications
     id: '5',
     message: `${msg}`, // (required)
-    date: new Date(Date.now() + 1000),
+    date: new Date(Date.now() + 1000 * (time * 60)),
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications(['5']);
