@@ -8,8 +8,8 @@ import { deleteToDoDispatch } from 'redux/store';
 import { makeNowTime } from 'utils/Time';
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
-import { deleteTodayAsyncStorageData } from '../../utils/AsyncStorage';
-import { geofenceUpdate } from '../../utils/BgGeofence';
+import { deleteTodayAsyncStorageData } from 'utils/AsyncStorage';
+import { geofenceUpdate } from 'utils/BgGeofence';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({

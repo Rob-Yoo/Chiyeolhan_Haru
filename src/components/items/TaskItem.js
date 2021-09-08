@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { edit } from 'redux/store';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 import { remove } from 'redux/store';
-import { deleteToDoTaskList } from '../../utils/TwoButtonAlert';
+import { deleteToDoTaskList } from 'utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -66,34 +66,32 @@ const styles = StyleSheet.create({
 });
 
 export const Task = (props) => {
-  // text: taskText, targetId, index } = props;
-  const { targetId, index } = props;
-  const taskText = useSelector((state) => state[targetId]?.toDos[index]);
-
-  const [taskTitle, setTaskTitle] = useState(taskText);
+  const { text: taskText, targetId, index } = props;
+  const todosSelector = useSelector((state) => state[targetId]?.toDos);
+  const [taskTitle, setTaskTitle] = useState(todosSelector[index]);
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
   const editTaskList = (targetId, taskTitle) => {
-    console.log(`taskitem:${targetId}`);
     dispatch(edit({ targetId, taskTitle, index }));
   };
   const deleteTaskList = (targetId, index) => {
-    console.log(`taskitem delete:${targetId}`);
     dispatch(remove({ targetId, index }));
   };
-
   const submitTask = () => {
     if (taskTitle.length > 0) editTaskList(targetId, taskTitle);
     else if (taskTitle.length === 0) deleteTaskList(targetId, index);
     toggleIsVisible();
   };
-
   const handleDeleteTaskList = () => {
     deleteTaskList(targetId, index);
   };
+  useEffect(() => {
+    setTaskTitle(todosSelector[index]);
+  }, [todosSelector]);
+
   return (
     <>
       <View style={styles.taskContainer}>
@@ -119,7 +117,9 @@ export const Task = (props) => {
             }}
           >
             <Text style={styles.taskText}>
-              {taskText.length > 17 ? `${taskText.substr(0, 11)}...` : taskText}
+              {taskText?.length > 17
+                ? `${taskText.substr(0, 11)}...`
+                : taskText}
             </Text>
           </View>
         </TouchableHighlight>

@@ -1,6 +1,5 @@
 import { Alert } from 'react-native';
 import { toDosDeleteDB } from 'utils/Database';
-import { geofenceUpdate } from 'utils/BgGeofence';
 
 export const alertStartTimePicker = (hideTimePicker) =>
   Alert.alert(
