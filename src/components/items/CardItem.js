@@ -8,13 +8,13 @@ import {
   heightPercentage,
   widthPercentage,
 } from 'utils/responsive';
-import { makeNowTime } from '../../utils/Time';
+import { makeNowTime } from 'utils/Time';
 export const styles = StyleSheet.create({
   card: {
     maxHeight:
       Dimensions.get('screen').height > 667
-        ? Dimensions.get('screen').height / 4
-        : Dimensions.get('screen').height / 3.5,
+        ? Dimensions.get('screen').height / 3.5
+        : Dimensions.get('screen').height / 3,
     padding: 20,
     marginHorizontal: 10,
     borderRadius: 20,

@@ -103,7 +103,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           return;
 
         try {
-          if ((await deleteToDoAlert(event)) === 'true') {
+          if ((await deleteToDoAlert(event.id)) === 'true') {
             await dispatch(deleteToDoDispatch(targetId));
             if (day === 'today') {
               if (event.id == data[0].id) {

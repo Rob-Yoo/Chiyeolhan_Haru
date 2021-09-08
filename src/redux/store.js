@@ -44,12 +44,12 @@ const toDosSlice = createSlice({
     remove: (state, action) => {
       const { targetId, index } = action.payload;
       state[targetId].toDos.splice(index, 1);
+      toDosUpdateDB(state[targetId], targetId);
     },
     //투두 제거
     deleteToDoDispatch: (state, action) => {
       const targetId = action.payload;
       delete state[`${targetId}`];
-      console.log('store delete');
     },
   },
 });

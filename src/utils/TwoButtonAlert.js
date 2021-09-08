@@ -115,7 +115,7 @@ export const alertInValidSubmit = () =>
 //   });
 // };
 
-export const deleteToDoAlert = async (event) =>
+export const deleteToDoAlert = async (id) =>
   new Promise((resolve) => {
     Alert.alert(
       `일정을 삭제 하시겠습니까?`,
@@ -130,9 +130,34 @@ export const deleteToDoAlert = async (event) =>
           onPress: async () => {
             try {
               resolve('true');
-              await toDosDeleteDB(event.id);
+              await toDosDeleteDB(id);
             } catch (e) {
               console.log('deleteToDoAlert Error :', e);
+            }
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  });
+
+export const deleteToDoTaskList = async () =>
+  new Promise((resolve) => {
+    Alert.alert(
+      `수행 리스트를 삭제 하시겠습니까?`,
+      '',
+      [
+        {
+          text: '취소',
+        },
+        {
+          text: '확인',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              resolve('true');
+            } catch (e) {
+              console.log('deleteToDoTask Error :', e);
             }
           },
         },

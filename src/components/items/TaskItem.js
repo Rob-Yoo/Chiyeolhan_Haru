@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -6,10 +6,11 @@ import {
   Text,
   TouchableHighlight,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { edit } from 'redux/store';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 import { remove } from 'redux/store';
+import { deleteToDoTaskList } from '../../utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
   taskHeader: {
@@ -62,28 +63,16 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  removeButtonText: {
-    color: '#788382',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#707070',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    fontWeight: '300',
-  },
 });
 
 export const Task = (props) => {
-  const { text: taskText, targetId, index } = props;
+  // text: taskText, targetId, index } = props;
+  const { targetId, index } = props;
+  const taskText = useSelector((state) => state[targetId]?.toDos[index]);
+
   const [taskTitle, setTaskTitle] = useState(taskText);
   const [isVisible, setIsVisible] = useState(false);
-  const [isVisibleRemoveButton, setIsVisibleRemoveButton] = useState(false);
-
   const dispatch = useDispatch();
-
-  const toggleRemoveButton = () => {
-    setIsVisibleRemoveButton(!isVisibleRemoveButton);
-  };
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
@@ -92,6 +81,7 @@ export const Task = (props) => {
     dispatch(edit({ targetId, taskTitle, index }));
   };
   const deleteTaskList = (targetId, index) => {
+    console.log(`taskitem delete:${targetId}`);
     dispatch(remove({ targetId, index }));
   };
 
@@ -101,12 +91,24 @@ export const Task = (props) => {
     toggleIsVisible();
   };
 
+  const handleDeleteTaskList = () => {
+    deleteTaskList(targetId, index);
+  };
   return (
     <>
       <View style={styles.taskContainer}>
         <TouchableHighlight
-          onLongPress={() => toggleRemoveButton()}
-          onPress={() => toggleIsVisible()}
+          onLongPress={async () => {
+            try {
+              if (targetId !== 0) {
+                if ((await deleteToDoTaskList(targetId)) === 'true')
+                  handleDeleteTaskList(targetId, index);
+              }
+            } catch (e) {
+              console.log('task list delete error', e);
+            }
+          }}
+          onPress={() => !!taskText && toggleIsVisible()}
           style={styles.task}
         >
           <View
@@ -119,19 +121,6 @@ export const Task = (props) => {
             <Text style={styles.taskText}>
               {taskText.length > 17 ? `${taskText.substr(0, 11)}...` : taskText}
             </Text>
-            {isVisibleRemoveButton ? (
-              <Text
-                style={styles.removeButtonText}
-                onPress={() => {
-                  deleteTaskList(targetId, index);
-                  toggleRemoveButton();
-                }}
-              >
-                삭제
-              </Text>
-            ) : (
-              <></>
-            )}
           </View>
         </TouchableHighlight>
 

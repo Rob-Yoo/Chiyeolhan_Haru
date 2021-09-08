@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { init } from 'redux/store';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
@@ -94,6 +94,32 @@ const PaintHome = ({ todoArr }) => {
             );
           })}
       </Swiper>
+      {isData ? (
+        <></>
+      ) : (
+        <View
+          style={{
+            backgroundColor: '#000',
+            flex: 1,
+            width: Dimensions.get('screen').height > 667 ? 270 : 230,
+            height:
+              Dimensions.get('screen').height > 667
+                ? Dimensions.get('screen').height * 0.285
+                : Dimensions.get('screen').height * 0.334,
+            position: 'absolute',
+            top: 0,
+            left: 10,
+            opacity: 0.3,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 20,
+          }}
+        >
+          <Text style={{ color: '#fff', fontSize: 20 }}>
+            현재일정이 없습니다
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
