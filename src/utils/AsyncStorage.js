@@ -63,7 +63,6 @@ const getItemFromAsync = (storageName) => {
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
     const tomorrowData = await getItemFromAsync(KEY_VALUE_TOMORROW);
-    await AsyncStorage.removeItem(KEY_VALUE_TOMORROW);
     const updateData = tomorrowData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
   } catch (e) {
@@ -74,7 +73,6 @@ export const deleteTomorrowAsyncStorageData = async (id) => {
 export const deleteGeofenceAsyncStorageData = async (id) => {
   try {
     const geofenceData = await getItemFromAsync(KEY_VALUE_GEOFENCE);
-    await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
     const updateGeofenceData = geofenceData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
       KEY_VALUE_GEOFENCE,
@@ -88,7 +86,6 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
     const todayData = await getItemFromAsync(KEY_VALUE_TODAY);
-    await AsyncStorage.removeItem(KEY_VALUE_TODAY);
     const updateTodayData = todayData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY,
@@ -106,7 +103,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', TODAY).get();
     data.forEach((result) => {
-      if (result.data().finishTime > getCurrentTime()) {
+      if (result.data().startTime > getCurrentTime()) {
         geofenceDataArray.push({
           id: result.data().id,
           startTime: result.data().startTime,

@@ -248,11 +248,6 @@ const exitAction = async (data, startTime, currentTime) => {
       } else {
         let successCount = 0;
         for (const schedule of allNearBySchedules) {
-          console.log(
-            currentTime,
-            schedule.startTime,
-            currentTime >= schedule.startTime,
-          );
           if (currentTime >= schedule.startTime) {
             successCount = successCount + 1;
           } else {
@@ -282,12 +277,6 @@ const subscribeOnGeofence = () => {
     try {
       const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
       const data = JSON.parse(item);
-      // const time = new Date();
-      // const hour =
-      //   time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
-      // const min =
-      //   time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
-      // const currentTime = `${hour}:${min}`;
 
       if (data.length != 0) {
         const startTime = data[0].startTime;

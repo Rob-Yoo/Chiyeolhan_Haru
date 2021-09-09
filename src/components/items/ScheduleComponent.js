@@ -96,19 +96,19 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         const finishTime = event.finishTime;
 
         if (day !== 'today' || currentTime < startTime) {
-          try {
-            const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-            const data = JSON.parse(item);
-            const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-            const currentSchedule = await toDoRef.get();
-            if (currentSchedule.data().isDone == true) {
-              denyEditToDoAlert('ARRIVE_EARLY');
-            } else {
-              passToModalData(event);
-            }
-          } catch (e) {
-            console.log('onEventPress Edit :', e);
-          }
+          // try {
+          //   const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+          //   const data = JSON.parse(item);
+          //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+          //   const currentSchedule = await toDoRef.get();
+          //   if (currentSchedule.data().isDone == true) {
+          //     denyEditToDoAlert('ARRIVE_EARLY');
+          //   } else {
+          passToModalData(event);
+          //   }
+          // } catch (e) {
+          //   console.log('onEventPress Edit :', e);
+          // }
         } else if (currentTime >= startTime) {
           if (startTime <= currentTime && currentTime < finishTime) {
             denyEditToDoAlert('CURRENT');
@@ -132,30 +132,30 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
             denyDeleteToDoAlert('PREVIOUS');
           }
         } else {
-          const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-          const currentSchedule = await toDoRef.get();
-          if (currentSchedule.data().isDone == true) {
-            denyDeleteToDoAlert('ARRIVE_EARLY');
-          } else {
-            try {
-              if ((await deleteToDoAlert(event)) === 'true') {
-                await dispatch(deleteToDoDispatch(targetId));
-                if (day === 'today') {
-                  if (event.id == data[0].id) {
-                    await geofenceUpdate(data, false);
-                    deleteTodayAsyncStorageData(targetId);
-                  } else {
-                    deleteGeofenceAsyncStorageData(targetId);
-                    deleteTodayAsyncStorageData(targetId);
-                  }
-                } else if (day === 'tomorrow') {
-                  deleteTomorrowAsyncStorageData(targetId);
+          // const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+          // const currentSchedule = await toDoRef.get();
+          // if (currentSchedule.data().isDone == true) {
+          //   denyDeleteToDoAlert('ARRIVE_EARLY');
+          // } else {
+          try {
+            if ((await deleteToDoAlert(event)) === 'true') {
+              await dispatch(deleteToDoDispatch(targetId));
+              if (day === 'today') {
+                if (event.id == data[0].id) {
+                  await geofenceUpdate(data, false);
+                  deleteTodayAsyncStorageData(targetId);
+                } else {
+                  deleteGeofenceAsyncStorageData(targetId);
+                  deleteTodayAsyncStorageData(targetId);
                 }
+              } else if (day === 'tomorrow') {
+                deleteTomorrowAsyncStorageData(targetId);
               }
-            } catch (e) {
-              console.log('long onPress delete Error', e);
             }
+          } catch (e) {
+            console.log('long onPress delete Error', e);
           }
+          // }
         }
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}

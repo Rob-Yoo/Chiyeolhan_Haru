@@ -140,8 +140,7 @@ export const ToDoModal = ({
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
-      // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
-      // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
+
       if (startTime <= todoStartTime && todoStartTime <= finishTime) {
         isNeedAlert = true;
         return isNeedAlert;
@@ -152,6 +151,23 @@ export const ToDoModal = ({
       }
     });
     return isNeedAlert;
+  };
+
+  const todoEdit = async () => {
+    const id = passModalData?.id;
+    dispatch(
+      editToDoDispatch({
+        todoTitle,
+        todoStartTime,
+        todoFinishTime,
+        taskList,
+        id,
+      }),
+    );
+    let isChangeEarliest = true;
+    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
+    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+    modalHandler();
   };
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -209,30 +225,13 @@ export const ToDoModal = ({
   };
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    console.log('handleTedit');
+    console.log('handleEdit');
     if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
     }
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
-  };
-
-  const todoEdit = async () => {
-    const id = passModalData?.id;
-    dispatch(
-      editToDoDispatch({
-        todoTitle,
-        todoStartTime,
-        todoFinishTime,
-        taskList,
-        id,
-      }),
-    );
-    let isChangeEarliest = true;
-    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
-    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
-    modalHandler();
   };
 
   const handleTodoSubmit = async ({
