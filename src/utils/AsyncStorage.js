@@ -9,57 +9,14 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW,
   KEY_VALUE_TODAY,
-  CURRENT_TIME,
 } from 'constant/const';
-import { isEarliestTime } from './Time';
-
-// const setFirstSubmit = () => {
-//   AsyncStorage.setItem(KEY_VALUE_GEOFENCE1, 'true');
-// };
+import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
 const setTomorrowData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW, array);
   } catch (e) {
     console.log('setTomorrowData Error :', e);
-  }
-};
-
-const getItemFromAsync = (storageName) => {
-  return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(storageName, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-
-      if (result === null) {
-        resolve(null);
-      }
-
-      resolve(JSON.parse(result));
-    });
-  });
-};
-
-export const deleteTomorrowAsyncStorageData = async (id) => {
-  try {
-    const tomorrowData = await getItemFromAsync(KEY_VALUE_TOMORROW);
-    await AsyncStorage.removeItem(KEY_VALUE_TOMORROW);
-    const updateData = tomorrowData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
-  } catch (e) {
-    console.log('deleteTomorrowAsyncStorageData Error :', e);
-  }
-};
-
-export const deleteTodayAsyncStorageData = async (id) => {
-  try {
-    const todayData = await getItemFromAsync(KEY_VALUE_GEOFENCE);
-    await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
-    const updateData = todayData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(updateData));
-  } catch (e) {
-    console.log('deleteTodayAsyncStorageData Error :', e);
   }
 };
 
@@ -87,19 +44,57 @@ const setSearchedData = async (array) => {
   }
 };
 
-// export const checkFirstSubmit = async () => {
-//   try {
-//     const isFirstLaunched = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE1);
-//     if (isFirstLaunched === null) {
-//       setFirstSubmit();
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.log(' [add first geofence] :' + error);
-//     return false;
-//   }
-// };
+const getItemFromAsync = (storageName) => {
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(storageName, (err, result) => {
+      if (err) {
+        reject(err);
+      }
+
+      if (result === null) {
+        resolve(null);
+      }
+
+      resolve(JSON.parse(result));
+    });
+  });
+};
+
+export const deleteTomorrowAsyncStorageData = async (id) => {
+  try {
+    const tomorrowData = await getItemFromAsync(KEY_VALUE_TOMORROW);
+    const updateData = tomorrowData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
+  } catch (e) {
+    console.log('deleteTomorrowAsyncStorageData Error :', e);
+  }
+};
+
+export const deleteGeofenceAsyncStorageData = async (id) => {
+  try {
+    const geofenceData = await getItemFromAsync(KEY_VALUE_GEOFENCE);
+    const updateGeofenceData = geofenceData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(
+      KEY_VALUE_GEOFENCE,
+      JSON.stringify(updateGeofenceData),
+    );
+  } catch (e) {
+    console.log('deleteGeofenceAsyncStorageData Error :', e);
+  }
+};
+
+export const deleteTodayAsyncStorageData = async (id) => {
+  try {
+    const todayData = await getItemFromAsync(KEY_VALUE_TODAY);
+    const updateTodayData = todayData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(
+      KEY_VALUE_TODAY,
+      JSON.stringify(updateTodayData),
+    );
+  } catch (e) {
+    console.log('deleteTodayAsyncStorageData Error :', e);
+  }
+};
 
 export const dbToAsyncStorage = async (isChangeEarliest) => {
   try {
@@ -108,7 +103,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', TODAY).get();
     data.forEach((result) => {
-      if (result.data().finishTime > CURRENT_TIME) {
+      if (result.data().startTime > getCurrentTime()) {
         geofenceDataArray.push({
           id: result.data().id,
           startTime: result.data().startTime,
@@ -172,8 +167,8 @@ export const saveSearchedData = async (searchedObject) => {
       const newSearchedArray = searchedArray;
       await setSearchedData(JSON.stringify(newSearchedArray));
     }
-    const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-    console.log(JSON.parse(newData));
+    // const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
+    // console.log(JSON.parse(newData));
   } catch (e) {
     console.log('searchedHistory Error :', e);
   }

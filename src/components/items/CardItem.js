@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { DAY, MONTH } from 'constant/const';
-
+import { getCurrentTime } from 'utils/Time';
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
 } from 'utils/responsive';
-import { makeNowTime } from 'utils/Time';
 export const styles = StyleSheet.create({
   card: {
     maxHeight:
@@ -91,7 +90,7 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
-    if (isDone && makeNowTime() >= finishTime) {
+    if (isDone && getCurrentTime() >= finishTime) {
       setWidth('100%');
     } else {
       const date = new Date();

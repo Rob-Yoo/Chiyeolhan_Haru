@@ -101,7 +101,7 @@ export const TimePicker = ({
           await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
           handleConfirm(formatTime);
         } else {
-          alertStartTimePicker(hideTimePicker);
+          alertStartTimePicker();
         }
       } else {
         await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
@@ -120,13 +120,10 @@ export const TimePicker = ({
         if (timeDiff >= 5) {
           handleConfirm(formatTime);
         } else {
-          alertFinsihTimePicker(
-            '시작시간보다 뒤로 설정해주세요.',
-            hideTimePicker,
-          );
+          alertFinsihTimePicker('시작시간보다 뒤로 설정해주세요.');
         }
       } else {
-        alertFinsihTimePicker('시작시간부터 설정해주세요.', hideTimePicker);
+        alertFinsihTimePicker('시작시간부터 설정해주세요.');
       }
     } catch (e) {
       console.log('checkValidFinishTime Error :', e);
