@@ -15,6 +15,7 @@ import {
   deleteTomorrowAsyncStorageData,
   deleteTodayAsyncStorageData,
   deleteGeofenceAsyncStorageData,
+  getDataFromAsync,
 } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
@@ -119,8 +120,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
-        const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-        const data = JSON.parse(item);
+        const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
         const currentTime = getCurrentTime();
         const startTime = event.startTime;
         const finishTime = event.finishTime;

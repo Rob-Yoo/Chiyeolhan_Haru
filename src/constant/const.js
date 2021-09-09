@@ -7,6 +7,8 @@ export const KEY_VALUE_TOMORROW = 'tomorrowDataArray';
 export const KEY_VALUE_TODAY = 'todayDataArray';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
+export const KEY_VALUE_EARLY = 'isEarly';
+export const KEY_VALUE_PROGRESSING = 'progressingSchedule';
 // 기기 고유 ID
 export const UID = DeviceInfo.getUniqueId();
 
@@ -18,9 +20,6 @@ export const GOOGLE_PARARMS =
 
 // Date 관련
 const date = new Date();
-const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-const min =
-  date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
 export const YEAR = date.getFullYear();
 export const MONTH = date.getMonth() + 1;
 export const DAY = date.getDate();

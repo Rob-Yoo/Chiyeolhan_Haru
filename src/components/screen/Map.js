@@ -12,6 +12,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
+import { getDataFromAsync } from 'utils/AsyncStorage';
 import IconFindLocation from '#assets/icons/icon-find-current-location.js';
 import {
   GOOGLE_API_URL,
@@ -55,8 +56,8 @@ const CurrentMap = ({
   useEffect(() => {
     const getSearchedList = async () => {
       try {
-        const searchedData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-        setSearchedList(JSON.parse(searchedData));
+        const searchedData = await getDataFromAsync(KEY_VALUE_SEARCHED);
+        setSearchedList(searchedData);
       } catch (e) {
         console.log('getSearchedList Error :', e);
       }

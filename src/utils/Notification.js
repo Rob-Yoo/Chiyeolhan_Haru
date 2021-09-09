@@ -47,44 +47,12 @@ export const failNotification = () => {
   PushNotification.removeDeliveredNotifications(['4']);
 };
 
-export const completeNotification = (
-  isNextSchedule,
-  time,
-  startTime = null,
-  location = null,
-) => {
-  let msg;
-  if (isNextSchedule) {
-    const timeNotify = commonTimeExpression(startTime); // ex) 09:05 -> 오전 9시 5분
-    msg = `수고하셨습니다. ${timeNotify}에 ${location}에서 다음 일정이 예정되어 있습니다.`;
-  } else {
-    msg = '수고하셨습니다.';
-  }
-
-  PushNotification.localNotificationSchedule({
-    //... You can use all the options from localNotifications
-    id: '5',
-    message: `${msg}`, // (required)
-    date: new Date(Date.now() + 1000 * (time * 60)),
-    allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-  });
-  PushNotification.removeDeliveredNotifications(['5']);
-};
-
-export const completeNearbyNotif = (
-  isLast,
-  data,
-  idx,
-  startTime,
-  location,
-  time,
-) => {
+export const completeNearbyNotif = (isLast, data, idx, time) => {
   let msg;
   if (isLast) {
     msg = '수고하셨습니다.';
   } else {
-    const timeNotify = commonTimeExpression(startTime); // ex) 09:05 -> 오전 9시 5분
-    msg = `수고하셨습니다. ${timeNotify}에 ${location}에서 다음 일정이 예정되어 있습니다.`;
+    msg = `수고하셨습니다. 다음 일정 화이팅!`;
   }
 
   PushNotification.localNotificationSchedule({
@@ -95,6 +63,24 @@ export const completeNearbyNotif = (
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications([`${data[idx].id} + 0`]);
+};
+
+export const completeNotification = (isNextSchedule, time, currentSchedule) => {
+  let msg;
+  if (isNextSchedule) {
+    msg = `수고하셨습니다. 다음 일정 화이팅!`;
+  } else {
+    msg = '수고하셨습니다.';
+  }
+
+  PushNotification.localNotificationSchedule({
+    //... You can use all the options from localNotifications
+    id: `${currentSchedule.id} + 1`,
+    message: `${msg}`, // (required)
+    date: new Date(Date.now() + 1000 * (time * 60)),
+    allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+  });
+  PushNotification.removeDeliveredNotifications([`${currentSchedule.id} + 1`]);
 };
 
 export const nearByNotification = (id, time) => {
