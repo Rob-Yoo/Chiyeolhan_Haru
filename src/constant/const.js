@@ -28,4 +28,3 @@ export const TODAY =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY}` : DAY);
 export const TOMORROW =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY + 1 < 10 ? `0${DAY + 1}` : DAY + 1);
-export const CURRENT_TIME = `${hour}:${min}`;

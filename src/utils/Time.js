@@ -100,7 +100,7 @@ export const commonTimeExpression = (time) => {
   return msg;
 };
 
-export const makeNowTime = () => {
+export const getCurrentTime = () => {
   const timeObject = new Date();
   const hour =
     timeObject.getHours() < 10

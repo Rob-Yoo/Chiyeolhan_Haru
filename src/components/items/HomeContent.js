@@ -6,8 +6,8 @@ import Swiper from 'react-native-swiper';
 import { dbService } from 'utils/firebase';
 import { UID, TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
+import { getCurrentTime } from 'utils/Time';
 import { renderPagination } from 'components/items/renderPagination';
-import { makeNowTime } from 'utils/Time';
 
 const styles = StyleSheet.create({
   homeContainer: {
@@ -28,12 +28,12 @@ const PaintHome = ({ todoArr }) => {
     todoArr
       .filter((item) => item.date === TODAY)
       .map((item, index) => {
-        const nowH = makeNowTime().replace(/:\d\d/, '');
+        const nowH = getCurrentTime().replace(/:\d\d/, '');
         const startH = item.startTime.replace(/:\d\d/, '');
-        const nowM = makeNowTime().replace(/\d\d:/, '');
+        const nowM = getCurrentTime().replace(/\d\d:/, '');
         const startM = item.startTime.replace(/\d\d:/, '');
         if (
-          item.finishTime > makeNowTime() &&
+          item.finishTime > getCurrentTime() &&
           !item.isDone &&
           tempData >
             Math.abs((startH - nowH) * 1) * 60 + Math.abs((startM - nowM) * 1)

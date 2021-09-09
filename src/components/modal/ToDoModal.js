@@ -12,13 +12,12 @@ import {
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { create, editToDoDispatch } from 'redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
+import { create, editToDoDispatch } from 'redux/store';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
-import { makeNowTime } from 'utils/Time';
 import { handleFilterData } from 'utils/handleFilterData';
 import {
   TODAY,
@@ -26,7 +25,6 @@ import {
   KEY_VALUE_TODAY,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW,
-  CURRENT_TIME,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -40,6 +38,7 @@ import {
 } from 'utils/TwoButtonAlert';
 import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
+import { getCurrentTime } from 'utils/Time';
 
 export const ToDoModal = ({
   modalHandler,
@@ -141,8 +140,7 @@ export const ToDoModal = ({
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
-      // const startToFinTimeDiff = getTimeDiff(finishTime, todoStartTime);
-      // const finToStartTimeDiff = getTimeDiff(todoFinishTime, startTime);
+
       if (startTime <= todoStartTime && todoStartTime <= finishTime) {
         isNeedAlert = true;
         return isNeedAlert;
@@ -153,6 +151,23 @@ export const ToDoModal = ({
       }
     });
     return isNeedAlert;
+  };
+
+  const todoEdit = async () => {
+    const id = passModalData?.id;
+    dispatch(
+      editToDoDispatch({
+        todoTitle,
+        todoStartTime,
+        todoFinishTime,
+        taskList,
+        id,
+      }),
+    );
+    let isChangeEarliest = true;
+    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
+    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+    modalHandler();
   };
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -193,7 +208,7 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    if (!!passModalData && CURRENT_TIME > todoStartTime) {
+    if (!!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
@@ -210,31 +225,13 @@ export const ToDoModal = ({
   };
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const currentTime = makeNowTime();
-    console.log('handleTedit');
-    if (!passModalData && currentTime > todoStartTime) {
+    console.log('handleEdit');
+    if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
       return;
     }
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
-  };
-
-  const todoEdit = async () => {
-    const id = passModalData?.id;
-    dispatch(
-      editToDoDispatch({
-        todoTitle,
-        todoStartTime,
-        todoFinishTime,
-        taskList,
-        id,
-      }),
-    );
-    let isChangeEarliest = true;
-    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
-    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
-    modalHandler();
   };
 
   const handleTodoSubmit = async ({

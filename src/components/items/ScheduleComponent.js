@@ -3,13 +3,21 @@ import WeekView from 'react-native-week-view';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
+import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE, UID } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
-import { makeNowTime } from 'utils/Time';
-import { deleteToDoAlert } from 'utils/TwoButtonAlert';
-import { deleteTomorrowAsyncStorageData } from 'utils/AsyncStorage';
-import { deleteTodayAsyncStorageData } from '../../utils/AsyncStorage';
-import { geofenceUpdate } from '../../utils/BgGeofence';
+import { dbService } from 'utils/firebase';
+import {
+  deleteToDoAlert,
+  denyDeleteToDoAlert,
+  denyEditToDoAlert,
+} from 'utils/TwoButtonAlert';
+import {
+  deleteTomorrowAsyncStorageData,
+  deleteTodayAsyncStorageData,
+  deleteGeofenceAsyncStorageData,
+} from 'utils/AsyncStorage';
+import { geofenceUpdate } from 'utils/BgGeofence';
+import { getCurrentTime } from 'utils/Time';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -82,41 +90,72 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      onEventPress={(event) => {
-        if (
-          (day !== 'today' || makeNowTime() < event.startTime) &&
-          event.color !== '#54BCB6'
-        ) {
+      onEventPress={async (event) => {
+        const currentTime = getCurrentTime();
+        const startTime = event.startTime;
+        const finishTime = event.finishTime;
+
+        if (day !== 'today' || currentTime < startTime) {
+          // try {
+          //   const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+          //   const data = JSON.parse(item);
+          //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+          //   const currentSchedule = await toDoRef.get();
+          //   if (currentSchedule.data().isDone == true) {
+          //     denyEditToDoAlert('ARRIVE_EARLY');
+          //   } else {
           passToModalData(event);
+          //   }
+          // } catch (e) {
+          //   console.log('onEventPress Edit :', e);
+          // }
+        } else if (currentTime >= startTime) {
+          if (startTime <= currentTime && currentTime < finishTime) {
+            denyEditToDoAlert('CURRENT');
+          } else {
+            denyEditToDoAlert('PREVIOUS');
+          }
         }
       }}
       onEventLongPress={async (event) => {
         const targetId = event.id;
         const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         const data = JSON.parse(item);
-        if (
-          !(
-            (day !== 'today' || makeNowTime() < event.startTime) &&
-            event.color !== '#54BCB6'
-          )
-        )
-          return;
+        const currentTime = getCurrentTime();
+        const startTime = event.startTime;
+        const finishTime = event.finishTime;
 
-        try {
-          if ((await deleteToDoAlert(event)) === 'true') {
-            await dispatch(deleteToDoDispatch(targetId));
-            if (day === 'today') {
-              if (event.id == data[0].id) {
-                await geofenceUpdate(data, false);
-              } else {
-                deleteTodayAsyncStorageData(targetId);
-              }
-            } else if (day === 'tomorrow') {
-              deleteTomorrowAsyncStorageData(targetId);
-            }
+        if (!(day !== 'today' || currentTime < startTime)) {
+          if (startTime <= currentTime && currentTime < finishTime) {
+            denyDeleteToDoAlert('CURRENT');
+          } else {
+            denyDeleteToDoAlert('PREVIOUS');
           }
-        } catch (e) {
-          console.log('long onPress delete Error', e);
+        } else {
+          // const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+          // const currentSchedule = await toDoRef.get();
+          // if (currentSchedule.data().isDone == true) {
+          //   denyDeleteToDoAlert('ARRIVE_EARLY');
+          // } else {
+          try {
+            if ((await deleteToDoAlert(event)) === 'true') {
+              await dispatch(deleteToDoDispatch(targetId));
+              if (day === 'today') {
+                if (event.id == data[0].id) {
+                  await geofenceUpdate(data, false);
+                  deleteTodayAsyncStorageData(targetId);
+                } else {
+                  deleteGeofenceAsyncStorageData(targetId);
+                  deleteTodayAsyncStorageData(targetId);
+                }
+              } else if (day === 'tomorrow') {
+                deleteTomorrowAsyncStorageData(targetId);
+              }
+            }
+          } catch (e) {
+            console.log('long onPress delete Error', e);
+          }
+          // }
         }
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
