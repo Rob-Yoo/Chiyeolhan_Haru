@@ -3,7 +3,6 @@ import { getCurrentTime } from 'utils/Time';
 
 export const makeScheduleDate = (toDos, toDoArr, isToday) => {
   for (key in toDos) {
-    console.log(toDos[key]);
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
       isToday &&

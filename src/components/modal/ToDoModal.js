@@ -134,8 +134,6 @@ export const ToDoModal = ({
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
     let isNeedAlert = false;
-    console.log('checkValid');
-    console.log(toDoArray);
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
@@ -144,7 +142,6 @@ export const ToDoModal = ({
         startTime <= todoStartTime &&
         todoStartTime <= finishTime
       ) {
-        console.log(passModalData.id, toDo.id);
         isNeedAlert = true;
         return isNeedAlert;
       }
@@ -162,11 +159,6 @@ export const ToDoModal = ({
 
   const todoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
     const id = passModalData?.id;
-    console.log('todoEdit');
-    console.log(todoStartTime);
-    console.log(todoFinishTime);
-    console.log(todoTitle);
-    console.log('!!');
     dispatch(
       editToDoDispatch({
         todoTitle,
@@ -203,7 +195,7 @@ export const ToDoModal = ({
         } else {
           !passModalData
             ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-            : await todoEdit();
+            : await todoEdit(todoStartTime, todoFinishTime, todoTitle);
         }
       } else {
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
@@ -235,8 +227,6 @@ export const ToDoModal = ({
   };
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    console.log('handleEdit');
-    console.log(todoTitle, todoStartTime, todoFinishTime);
     if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
