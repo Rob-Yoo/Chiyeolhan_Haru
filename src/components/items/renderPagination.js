@@ -11,14 +11,11 @@ import { ModalLayout } from 'components/items/layout/ModalLayout';
 
 const styles = StyleSheet.create({
   taskHeader: {
-    top: 0,
     paddingHorizontal: 40,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 20,
     marginBottom: 10,
-    flexShrink: 0,
   },
 
   task: {
@@ -54,7 +51,7 @@ const styles = StyleSheet.create({
 
 export const Pagination = ({ taskList, targetId }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [taskTitle, setTaskTitle] = useState('');
+  const [taskTitle, setTaskTitle] = useState(null);
   const dispatch = useDispatch();
 
   const toggleIsVisible = () => {
@@ -83,7 +80,7 @@ export const Pagination = ({ taskList, targetId }) => {
           name="icon-tasklist-add-button"
           size={19}
           color={'#229892'}
-          onPress={() => toggleIsVisible()}
+          onPress={() => targetId !== 0 && toggleIsVisible()}
         />
       </View>
       <ScrollView
@@ -141,7 +138,7 @@ export const Pagination = ({ taskList, targetId }) => {
 };
 
 export const renderPagination = (index, total, context) => {
-  const taskList = context.props.toDos[index].toDos;
-  const targetId = context.props.toDos[index].id;
+  const taskList = context?.props?.toDos[index].toDos;
+  const targetId = context?.props?.toDos[index].id;
   return <Pagination taskList={taskList} targetId={targetId} />;
 };

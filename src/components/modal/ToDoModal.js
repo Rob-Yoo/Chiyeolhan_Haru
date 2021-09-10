@@ -134,15 +134,25 @@ export const ToDoModal = ({
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
     let isNeedAlert = false;
+    console.log('checkValid');
+    console.log(toDoArray);
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
-
-      if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+      if (
+        passModalData?.id !== toDo.id &&
+        startTime <= todoStartTime &&
+        todoStartTime <= finishTime
+      ) {
+        console.log(passModalData.id, toDo.id);
         isNeedAlert = true;
         return isNeedAlert;
       }
-      if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
+      if (
+        passModalData?.id !== toDo.id &&
+        startTime <= todoFinishTime &&
+        todoFinishTime <= finishTime
+      ) {
         isNeedAlert = true;
         return isNeedAlert;
       }
@@ -150,8 +160,13 @@ export const ToDoModal = ({
     return isNeedAlert;
   };
 
-  const todoEdit = async () => {
+  const todoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
     const id = passModalData?.id;
+    console.log('todoEdit');
+    console.log(todoStartTime);
+    console.log(todoFinishTime);
+    console.log(todoTitle);
+    console.log('!!');
     dispatch(
       editToDoDispatch({
         todoTitle,
@@ -221,6 +236,7 @@ export const ToDoModal = ({
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
     console.log('handleEdit');
+    console.log(todoTitle, todoStartTime, todoFinishTime);
     if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
       modalHandler();
@@ -297,13 +313,7 @@ export const ToDoModal = ({
   };
 
   useEffect(() => {
-    register('todoStartTime'),
-      register('todoFinishTime'),
-      register('todoTitle'),
-      register('todoTask');
-    register('todoId');
-  }, [register]);
-  useEffect(() => {
+    //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
       setLocationName(passModalData.location);
       setTitle(passModalData.description);
@@ -311,6 +321,14 @@ export const ToDoModal = ({
       setLocationData(passModalData.location);
     }
   }, [passModalData]);
+  useEffect(() => {
+    register('todoStartTime'),
+      register('todoFinishTime'),
+      register('todoTitle'),
+      register('todoTask'),
+      register('todoId');
+  }, [register]);
+
   return (
     <Modal
       navigation={navigation}

@@ -3,9 +3,8 @@ import WeekView from 'react-native-week-view';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE, UID } from 'constant/const';
+import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
-import { dbService } from 'utils/firebase';
 import {
   deleteToDoAlert,
   denyDeleteToDoAlert,

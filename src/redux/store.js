@@ -43,13 +43,15 @@ const toDosSlice = createSlice({
     //수행리스트 제거
     remove: (state, action) => {
       const { targetId, index } = action.payload;
-      state[targetId].toDos.splice(index, 1);
+      const todos = state[targetId].toDos;
+      state[targetId].toDos = todos.filter((item, i) => i !== index);
+      toDosUpdateDB(state[targetId], targetId);
     },
     //투두 제거
     deleteToDoDispatch: (state, action) => {
       const targetId = action.payload;
-      delete state[`${targetId}`];
-      console.log('store delete');
+      delete state[targetId];
+      toDosUpdateDB(state[targetId], targetId);
     },
   },
 });
