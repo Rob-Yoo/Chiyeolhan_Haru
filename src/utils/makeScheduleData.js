@@ -3,16 +3,17 @@ import { getCurrentTime } from 'utils/Time';
 
 export const makeScheduleDate = (toDos, toDoArr, isToday) => {
   for (key in toDos) {
+    console.log(toDos[key]);
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
       isToday &&
       toDos[key].date === TODAY
     ) {
       const isDone = toDos[key].isDone;
-      const startH = toDos[key].startTime.replace(/:\d\d/, '');
-      const startM = toDos[key].startTime.replace(/\d\d:/, '');
-      const endH = toDos[key].finishTime.replace(/:\d\d/, '');
-      const endM = toDos[key].finishTime.replace(/\d\d:/, '');
+      const startH = toDos[key].startTime?.replace(/:\d\d/, '');
+      const startM = toDos[key].startTime?.replace(/\d\d:/, '');
+      const endH = toDos[key].finishTime?.replace(/:\d\d/, '');
+      const endM = toDos[key].finishTime?.replace(/\d\d:/, '');
       toDoArr.push({
         id: toDos[key].id,
         description: toDos[key].title,

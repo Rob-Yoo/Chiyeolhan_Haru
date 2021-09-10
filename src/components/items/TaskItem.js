@@ -101,6 +101,7 @@ export const Task = (props) => {
     <>
       <View style={styles.taskContainer}>
         <TouchableHighlight
+          underlayColor="rgba(0, 0, 0, 0.2)"
           onLongPress={async () => {
             try {
               if (targetId !== 0) {
@@ -111,7 +112,7 @@ export const Task = (props) => {
               console.log('task list delete error', e);
             }
           }}
-          onPress={() => !!taskText && toggleIsVisible()}
+          onPress={() => targetId !== 0 && toggleIsVisible()}
           style={styles.task}
         >
           <View

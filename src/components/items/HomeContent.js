@@ -82,7 +82,7 @@ const PaintHome = ({ todoArr }) => {
         longitude: '',
         startTime: '',
         title: '',
-        toDos: [' '],
+        toDos: null,
       },
     ];
   }
