@@ -1,5 +1,5 @@
 import PushNotification from 'react-native-push-notification';
-import { commonTimeExpression } from 'utils/Time';
+// import { commonTimeExpression } from 'utils/Time';
 
 export const arriveOnTimeNotification = () => {
   PushNotification.localNotificationSchedule({
@@ -24,16 +24,16 @@ export const arriveLateNotification = () => {
   PushNotification.removeDeliveredNotifications(['2']);
 };
 
-export const arriveEarlyNotification = (time) => {
+export const arriveEarlyNotification = (time, currentSchedule) => {
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
-    id: '3',
+    id: `${currentSchedule.id} + 3`,
     message:
       '일정 장소 부근에 일찍 도착하셨네요. 부지런한 당신의 치열한 하루를 응원합니다.', // (required)
     date: new Date(Date.now() + 1000 * (time * 60)), // 시작 시간에 알림
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
-  PushNotification.removeDeliveredNotifications(['3']);
+  PushNotification.removeDeliveredNotifications([`${currentSchedule.id} + 3`]);
 };
 
 export const failNotification = () => {
@@ -83,7 +83,7 @@ export const completeNotification = (isNextSchedule, time, currentSchedule) => {
   PushNotification.removeDeliveredNotifications([`${currentSchedule.id} + 1`]);
 };
 
-export const nearByNotification = (id, time) => {
+export const arriveNearByNotif = (id, time) => {
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
     id: `${id}`,
@@ -92,10 +92,13 @@ export const nearByNotification = (id, time) => {
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications([`${id}`]);
-  console.log('도착 알림 등록 :', id);
 };
 
-export const notifHandler = (arriveType, timeDiff) => {
+export const notifHandler = (
+  arriveType,
+  timeDiff = 0,
+  currentSchedule = null,
+) => {
   switch (arriveType) {
     case 'ON_TIME':
       arriveOnTimeNotification();
@@ -104,7 +107,7 @@ export const notifHandler = (arriveType, timeDiff) => {
       arriveLateNotification();
       break;
     case 'EARLY':
-      arriveEarlyNotification(timeDiff);
+      arriveEarlyNotification(timeDiff, currentSchedule);
       break;
     case 'FAIL':
       failNotification();
