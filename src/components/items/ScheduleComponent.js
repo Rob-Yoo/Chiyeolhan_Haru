@@ -138,7 +138,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           // } else {
           try {
             if ((await deleteToDoAlert(event)) === 'true') {
-              await dispatch(deleteToDoDispatch(targetId));
               if (day === 'today') {
                 if (event.id == data[0].id) {
                   await geofenceUpdate(data, false);
@@ -150,6 +149,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
               } else if (day === 'tomorrow') {
                 deleteTomorrowAsyncStorageData(targetId);
               }
+              await dispatch(deleteToDoDispatch(targetId));
             }
           } catch (e) {
             console.log('long onPress delete Error', e);

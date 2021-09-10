@@ -91,7 +91,7 @@ export const deleteToDoAlert = async (id) =>
           onPress: async () => {
             try {
               resolve('true');
-              await toDosDeleteDB(id);
+              //await toDosDeleteDB(id);
             } catch (e) {
               console.log('deleteToDoAlert Error :', e);
             }

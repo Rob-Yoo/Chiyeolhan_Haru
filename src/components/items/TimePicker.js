@@ -87,8 +87,7 @@ export const TimePicker = ({
   const currentTime = `${hour}:${min}`;
 
   const showTimePicker = () => {
-    //수정시 시간은 변경 못 하게
-    !timeDate && setVisible(true);
+    setVisible(true);
   };
 
   const hideTimePicker = () => {

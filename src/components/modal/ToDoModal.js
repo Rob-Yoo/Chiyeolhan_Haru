@@ -168,11 +168,15 @@ export const ToDoModal = ({
         id,
       }),
     );
-    const isChangeEarliest = isToday
-      ? await checkEarlistTodo(todoStartTime)
-      : true;
-    isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
-    modalHandler();
+    try {
+      const isChangeEarliest = isToday
+        ? await checkEarlistTodo(todoStartTime)
+        : true;
+      isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+      modalHandler();
+    } catch (e) {
+      console.log('todoModal todoEdit Error', e);
+    }
   };
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -250,10 +254,13 @@ export const ToDoModal = ({
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
       if (!passModalData && isToday) {
+        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
         handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
       } else if (!passModalData && !isToday) {
+        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
         handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!!passModalData) {
+      } else if (passModalData) {
+        //모달에 데이터가 있을때, 즉 일정을 수정할때
         handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
