@@ -30,6 +30,7 @@ import {
   checkEarlistTodo,
   dbToAsyncStorage,
   dbToAsyncTomorrow,
+  getDataFromAsync,
 } from 'utils/AsyncStorage';
 import {
   alertInValidSubmit,
@@ -88,20 +89,15 @@ export const ToDoModal = ({
       `${date.getFullYear()}` +
       `${isToday ? TODAY : TOMORROW}` +
       `${todoStartTime}`;
-    let isChangeEarliest = true;
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
-    if (isToday) {
-      try {
-        isChangeEarliest = await checkEarlistTodo(todoStartTime);
-      } catch (e) {
-        console.log('toDoSumbit second try catch Error :', e);
-      }
-    }
     try {
-      isToday
-        ? dbToAsyncStorage(isChangeEarliest) //isChangeEarliest가 true이면 addGeofence 아니면 안함
-        : dbToAsyncTomorrow();
+      if (isToday) {
+        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+      } else {
+        dbToAsyncTomorrow();
+      }
 
       await handleFilterData(
         location,
@@ -109,6 +105,7 @@ export const ToDoModal = ({
         searchedList,
         setSearchedList,
       );
+
       const newData = {
         id: todoId,
         title: todoTitle,
@@ -127,7 +124,7 @@ export const ToDoModal = ({
       modalHandler();
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
-      console.log('toDoSumbit third try catch Error :', e);
+      console.log('toDoSumbit Error :', e);
     }
   };
 
@@ -179,23 +176,20 @@ export const ToDoModal = ({
         id,
       }),
     );
-    let isChangeEarliest = true;
-    isChangeEarliest = isToday ? await checkEarlistTodo(todoStartTime) : true;
+    const isChangeEarliest = isToday
+      ? await checkEarlistTodo(todoStartTime)
+      : true;
     isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
     modalHandler();
   };
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
-      console.log(
-        `handleAlert ${todoTitle} ${todoStartTime} ${todoFinishTime}`,
-      );
-      const result = isToday
-        ? await AsyncStorage.getItem(KEY_VALUE_TODAY)
-        : await AsyncStorage.getItem(KEY_VALUE_TOMORROW);
+      const toDoArray = isToday
+        ? await getDataFromAsync(KEY_VALUE_TODAY)
+        : await getDataFromAsync(KEY_VALUE_TOMORROW);
       let isNeedAlert = false;
-      if (result != null) {
-        const toDoArray = JSON.parse(result);
+      if (toDoArray != null) {
         if (toDoArray.length != 0) {
           isNeedAlert = checkValidSubmit(
             toDoArray,
@@ -208,13 +202,11 @@ export const ToDoModal = ({
           alertInValidSubmit();
         } else {
           !passModalData
-            ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-            : todoEdit(todoStartTime, todoFinishTime, todoTitle);
+            ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+            : await todoEdit();
         }
       } else {
-        !passModalData
-          ? toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-          : todoEdit(todoStartTime, todoFinishTime, todoTitle);
+        await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
       console.log('handleTodayTodoSubmit Error :', e);

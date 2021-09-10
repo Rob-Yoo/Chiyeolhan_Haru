@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { addGeofenceTrigger } from 'utils/BgGeofence';
+import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
 import {
   TODAY,
@@ -9,6 +9,7 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW,
   KEY_VALUE_TODAY,
+  KEY_VALUE_PROGRESSING,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
@@ -44,25 +45,44 @@ const setSearchedData = async (array) => {
   }
 };
 
-const getItemFromAsync = (storageName) => {
-  return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(storageName, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-
-      if (result === null) {
-        resolve(null);
-      }
-
-      resolve(JSON.parse(result));
-    });
-  });
+const setProgressingSchedule = async (schedule) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_PROGRESSING, schedule);
+    console.log(schedule);
+  } catch (e) {
+    console.log('setSearchedData Error :', e);
+  }
 };
+
+export const getDataFromAsync = async (storageName) => {
+  try {
+    const item = await AsyncStorage.getItem(storageName);
+    if (item == null) {
+      return null;
+    } else {
+      return JSON.parse(item);
+    }
+  } catch (e) {
+    console.log('getDataFromAsync Error :', e);
+  }
+};
+// return new Promise((resolve, reject) => {
+//   AsyncStorage.getItem(storageName, (err, result) => {
+//     if (err) {
+//       reject(err);
+//     }
+
+//     if (result === null) {
+//       resolve(null);
+//     }
+
+//     resolve(JSON.parse(result));
+//   });
+// });
 
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
-    const tomorrowData = await getItemFromAsync(KEY_VALUE_TOMORROW);
+    const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW);
     const updateData = tomorrowData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
   } catch (e) {
@@ -72,7 +92,7 @@ export const deleteTomorrowAsyncStorageData = async (id) => {
 
 export const deleteGeofenceAsyncStorageData = async (id) => {
   try {
-    const geofenceData = await getItemFromAsync(KEY_VALUE_GEOFENCE);
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const updateGeofenceData = geofenceData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
       KEY_VALUE_GEOFENCE,
@@ -85,7 +105,7 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
-    const todayData = await getItemFromAsync(KEY_VALUE_TODAY);
+    const todayData = await getDataFromAsync(KEY_VALUE_TODAY);
     const updateTodayData = todayData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY,
@@ -96,38 +116,68 @@ export const deleteTodayAsyncStorageData = async (id) => {
   }
 };
 
-export const dbToAsyncStorage = async (isChangeEarliest) => {
+const setTodayToDoArray = async (todayToDos) => {
+  const todayToDoArray = [];
   try {
-    const geofenceDataArray = [];
-    const todayToDoArray = [];
-    const todosRef = dbService.collection(`${UID}`);
-    const data = await todosRef.where('date', '==', TODAY).get();
-    data.forEach((result) => {
-      if (result.data().startTime > getCurrentTime()) {
-        geofenceDataArray.push({
-          id: result.data().id,
-          startTime: result.data().startTime,
-          finishTime: result.data().finishTime,
-          latitude: result.data().latitude,
-          longitude: result.data().longitude,
-          location: result.data().location,
-        });
-      }
+    todayToDos.forEach((todo) => {
       todayToDoArray.push({
-        id: result.data().id,
-        startTime: result.data().startTime,
-        finishTime: result.data().finishTime,
-        latitude: result.data().latitude,
-        longitude: result.data().longitude,
-        location: result.data().location,
+        id: todo.data().id,
+        startTime: todo.data().startTime,
+        finishTime: todo.data().finishTime,
       });
     });
-    console.log(geofenceDataArray);
-    await setGeofenceData(JSON.stringify(geofenceDataArray));
     await setTodayData(JSON.stringify(todayToDoArray));
-    if (isChangeEarliest) {
-      await addGeofenceTrigger();
+  } catch (e) {
+    console.log('setTodayToDoArray Error :', e);
+  }
+};
+
+const setGeofenceDataArray = async (todayToDos) => {
+  const geofenceDataArray = [];
+  const currentTime = getCurrentTime();
+  let progressingSchedule;
+
+  try {
+    todayToDos.forEach((todo) => {
+      if (
+        todo.data().startTime <= currentTime &&
+        currentTime <= todo.data().finishTime
+      ) {
+        progressingSchedule = {
+          id: todo.data().id,
+          latitude: todo.data().latitude,
+          longitude: todo.data().longitude,
+        };
+      }
+      if (todo.data().startTime > currentTime) {
+        geofenceDataArray.push({
+          id: todo.data().id,
+          startTime: todo.data().startTime,
+          finishTime: todo.data().finishTime,
+          latitude: todo.data().latitude,
+          longitude: todo.data().longitude,
+          location: todo.data().location,
+        });
+      }
+    });
+    await setGeofenceData(JSON.stringify(geofenceDataArray));
+    if (progressingSchedule) {
+      await setProgressingSchedule(JSON.stringify(progressingSchedule));
     }
+    console.log(geofenceDataArray);
+  } catch (e) {
+    console.log('setGeofenceDataArray Error :', e);
+  }
+};
+
+export const dbToAsyncStorage = async (isChangeEarliest) => {
+  try {
+    const todosRef = dbService.collection(`${UID}`);
+    const todayToDos = await todosRef.where('date', '==', TODAY).get();
+
+    await setTodayToDoArray(todayToDos);
+    await setGeofenceDataArray(todayToDos);
+    await geofenceScheduler(isChangeEarliest, 'ADD');
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
   }
@@ -156,13 +206,12 @@ export const dbToAsyncTomorrow = async () => {
 
 export const saveSearchedData = async (searchedObject) => {
   try {
-    const data = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-    if (data === null) {
+    const searchedArray = await getDataFromAsync(KEY_VALUE_SEARCHED);
+    if (searchedArray == null) {
       const searchedDataArray = [];
       searchedDataArray.push(searchedObject);
       setSearchedData(JSON.stringify(searchedDataArray));
     } else {
-      let searchedArray = JSON.parse(data);
       searchedArray.unshift(searchedObject);
       const newSearchedArray = searchedArray;
       await setSearchedData(JSON.stringify(newSearchedArray));
@@ -202,20 +251,19 @@ export const deleteAllSearchedData = async () => {
 
 export const checkEarlistTodo = async (todoStartTime) => {
   try {
-    const result = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-    if (result != null) {
-      const data = JSON.parse(result);
+    const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    if (data != null) {
       if (data.length != 0) {
         const earliestTime = data[0].startTime;
-        if (!isEarliestTime(earliestTime, todoStartTime)) {
-          return false;
-        } else {
+        if (isEarliestTime(earliestTime, todoStartTime)) {
           return true;
+        } else {
+          return false;
         }
       }
     }
     return true;
   } catch (e) {
-    console.log('toDoSubmit first try catch Error :', e);
+    console.log('checkEarlistTodo Error :', e);
   }
 };
