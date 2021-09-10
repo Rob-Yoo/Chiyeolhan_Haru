@@ -67,8 +67,12 @@ const styles = StyleSheet.create({
 
 export const Task = (props) => {
   const { text: taskText, targetId, index } = props;
-  const todosSelector = useSelector((state) => state[targetId]?.toDos);
-  const [taskTitle, setTaskTitle] = useState(todosSelector[index]);
+  const todosSelector = useSelector(
+    (state) => targetId !== 0 && state[targetId]?.toDos,
+  );
+  const [taskTitle, setTaskTitle] = useState(
+    targetId !== 0 ? todosSelector[index] : null,
+  );
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
   const toggleIsVisible = () => {
@@ -88,8 +92,9 @@ export const Task = (props) => {
   const handleDeleteTaskList = () => {
     deleteTaskList(targetId, index);
   };
+
   useEffect(() => {
-    setTaskTitle(todosSelector[index]);
+    todosSelector !== 0 && setTaskTitle(todosSelector[index]);
   }, [todosSelector]);
 
   return (

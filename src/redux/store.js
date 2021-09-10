@@ -50,7 +50,8 @@ const toDosSlice = createSlice({
     //투두 제거
     deleteToDoDispatch: (state, action) => {
       const targetId = action.payload;
-      delete state[`${targetId}`];
+      delete state[targetId];
+      toDosUpdateDB(state[targetId], targetId);
     },
   },
 });

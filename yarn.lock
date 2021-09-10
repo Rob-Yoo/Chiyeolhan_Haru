@@ -5668,10 +5668,9 @@ react-native-screens@^3.4.0:
   dependencies:
     warn-once "^0.1.0"
 
-react-native-swiper@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.6.0.tgz#59fdbdf95addee49630312f27077622c27776819"
-  integrity sha512-OnkTTZi+9uZUgy0uz1I9oYDhCU3z36lZn+LFsk9FXPRelxb/KeABzvPs3r3SrHWy1aA67KGtSFj0xNK2QD0NJQ==
+"react-native-swiper@https://github.com/6mn12j/react-native-swiper.git":
+  version "1.6.0-rc.2"
+  resolved "https://github.com/6mn12j/react-native-swiper.git#5827a80002738abd1c0dc08428303c79bbc840c0"
   dependencies:
     prop-types "^15.5.10"
 
