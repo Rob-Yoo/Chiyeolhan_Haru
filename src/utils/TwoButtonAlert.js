@@ -36,46 +36,6 @@ export const alertInValidSubmit = () =>
     { cancelable: false },
   );
 
-export const denyDeleteToDoAlert = (denyType) => {
-  switch (denyType) {
-    case 'CURRENT':
-      Alert.alert(
-        '현재 진행 중인 일정은 삭제할 수 없습니다.',
-        '',
-        [{ text: '확인' }],
-        { cancelable: false },
-      );
-      break;
-    case 'PREVIOUS':
-      Alert.alert('지난 일정은 삭제할 수 없습니다.', '', [{ text: '확인' }], {
-        cancelable: false,
-      });
-      break;
-    default:
-      console.log('denyType Missing');
-  }
-};
-
-export const denyEditToDoAlert = (denyType) => {
-  switch (denyType) {
-    case 'CURRENT':
-      Alert.alert(
-        '현재 진행 중인 일정은 수정할 수 없습니다.',
-        '',
-        [{ text: '확인' }],
-        { cancelable: false },
-      );
-      break;
-    case 'PREVIOUS':
-      Alert.alert('지난 일정은 수정할 수 없습니다.', '', [{ text: '확인' }], {
-        cancelable: false,
-      });
-      break;
-    default:
-      console.log('denyType Missing');
-  }
-};
-
 export const deleteToDoAlert = async (id) =>
   new Promise((resolve) => {
     Alert.alert(
@@ -91,7 +51,6 @@ export const deleteToDoAlert = async (id) =>
           onPress: async () => {
             try {
               resolve('true');
-              //await toDosDeleteDB(id);
             } catch (e) {
               console.log('deleteToDoAlert Error :', e);
             }

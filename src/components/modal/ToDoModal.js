@@ -118,7 +118,6 @@ export const ToDoModal = ({
         date: isToday ? TODAY : TOMORROW,
         toDos: [...taskList],
         isDone: false,
-        isFavorite: false,
       };
       dispatch(create(newData));
       modalHandler();
