@@ -10,6 +10,7 @@ import {
   KEY_VALUE_TOMORROW,
   KEY_VALUE_TODAY,
   KEY_VALUE_PROGRESSING,
+  KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
@@ -51,6 +52,14 @@ const setProgressingSchedule = async (schedule) => {
     console.log(schedule);
   } catch (e) {
     console.log('setSearchedData Error :', e);
+  }
+};
+
+export const setFavoriteData = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_FAVORITE, JSON.stringify(array));
+  } catch (e) {
+    console.log('setFavoriteData Error :', e);
   }
 };
 

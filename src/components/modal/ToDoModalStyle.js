@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 10,
   },
   todoInputContainer: {

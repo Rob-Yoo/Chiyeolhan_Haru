@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { toDosUpdateDB } from 'utils/Database';
+import { toDosUpdateDB, toDosDeleteDB } from 'utils/Database';
 
 const toDosSlice = createSlice({
   name: 'toDoReducer',
@@ -51,7 +51,7 @@ const toDosSlice = createSlice({
     deleteToDoDispatch: (state, action) => {
       const targetId = action.payload;
       delete state[targetId];
-      toDosUpdateDB(state[targetId], targetId);
+      toDosDeleteDB(targetId);
     },
   },
 });

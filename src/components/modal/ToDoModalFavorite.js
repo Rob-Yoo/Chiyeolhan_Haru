@@ -13,7 +13,7 @@ import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { create, editToDoDispatch } from 'redux/store';
+import { create } from 'redux/store';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
@@ -42,7 +42,7 @@ import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime } from 'utils/Time';
 
-export const ToDoModal = ({
+export const ToDoModalFavorite = ({
   modalHandler,
   isModalVisible,
   navigation,
@@ -52,7 +52,7 @@ export const ToDoModal = ({
 }) => {
   const dispatch = useDispatch();
   const [locationName, setLocationName] = useState('');
-  const [locationData, setLocationData] = useState({});
+  const [locationData, setLocationData] = useState(passModalData);
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
@@ -158,28 +158,6 @@ export const ToDoModal = ({
     return isNeedAlert;
   };
 
-  const todoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const id = passModalData?.id;
-    dispatch(
-      editToDoDispatch({
-        todoTitle,
-        todoStartTime,
-        todoFinishTime,
-        taskList,
-        id,
-      }),
-    );
-    try {
-      const isChangeEarliest = isToday
-        ? await checkEarlistTodo(todoStartTime)
-        : true;
-      isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
-      modalHandler();
-    } catch (e) {
-      console.log('todoModal todoEdit Error', e);
-    }
-  };
-
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
       const toDoArray = isToday
@@ -198,9 +176,7 @@ export const ToDoModal = ({
           modalHandler();
           alertInValidSubmit();
         } else {
-          !passModalData
-            ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-            : await todoEdit(todoStartTime, todoFinishTime, todoTitle);
+          await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
         }
       } else {
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
@@ -223,29 +199,12 @@ export const ToDoModal = ({
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
-  const handleTomorrowTodoSubmit = async (
-    todoStartTime,
-    todoFinishTime,
-    todoTitle,
-  ) => {
-    handleAlert(todoStartTime, todoFinishTime, todoTitle);
-  };
-
-  const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    if (!passModalData && getCurrentTime() > todoStartTime) {
-      alertStartTimeError();
-      modalHandler();
-      return;
-    }
-    handleAlert(todoStartTime, todoFinishTime, todoTitle);
-  };
-
   const handleTodoSubmit = async ({
     todoStartTime,
     todoFinishTime,
     todoTitle,
   }) => {
-    if (Object.keys(locationData).length == 0) {
+    if (Object.keys(locationData)?.length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
       alertNotFillIn('일정의 시작시간을 등록해주세요.');
@@ -254,16 +213,7 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (!passModalData && isToday) {
-        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
-        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!passModalData && !isToday) {
-        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
-        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (passModalData) {
-        //모달에 데이터가 있을때, 즉 일정을 수정할때
-        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
-      }
+      handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
     }
   };
 
@@ -315,14 +265,12 @@ export const ToDoModal = ({
   };
 
   useEffect(() => {
-    //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
       setLocationName(passModalData.location);
-      setLocationData(passModalData.location);
-      setTitle(passModalData.description);
-      setTaskList([...passModalData.toDos]);
+      setLocationData(passModalData);
     }
   }, [passModalData]);
+
   useEffect(() => {
     register('todoStartTime'),
       register('todoFinishTime'),
@@ -483,5 +431,4 @@ export const ToDoModal = ({
     </Modal>
   );
 };
-
-export default ToDoModal;
+export default ToDoModalFavorite;

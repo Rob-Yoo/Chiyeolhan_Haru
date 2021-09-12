@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
-import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE_START_TIME } from 'constant/const';
 
 const styles = StyleSheet.create({
   addToDoButton: {

@@ -9,6 +9,7 @@ export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
 export const KEY_VALUE_EARLY = 'isEarly';
 export const KEY_VALUE_PROGRESSING = 'progressingSchedule';
+export const KEY_VALUE_FAVORITE = 'favoriteDataArray';
 // 기기 고유 ID
 export const UID = DeviceInfo.getUniqueId();
 
