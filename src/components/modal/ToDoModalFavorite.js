@@ -186,6 +186,14 @@ export const ToDoModalFavorite = ({
     }
   };
 
+  const handleTomorrowTodoSubmit = async (
+    todoStartTime,
+    todoFinishTime,
+    todoTitle,
+  ) => {
+    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+  };
+
   const handleTodayTodoSubmit = async (
     todoStartTime,
     todoFinishTime,
@@ -213,7 +221,11 @@ export const ToDoModalFavorite = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      if (isToday) {
+        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else {
+        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      }
     }
   };
 

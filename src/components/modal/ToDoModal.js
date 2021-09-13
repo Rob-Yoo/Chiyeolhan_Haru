@@ -309,9 +309,12 @@ export const ToDoModal = ({
     setTask({ item, index });
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
-  const gotoFavorite = () => {
+  const gotoFavorite = (isToday) => {
     modalHandler();
-    navigation.navigate('ModalStack', { screen: 'Favorite' });
+    navigation.navigate('ModalStack', {
+      screen: 'Favorite',
+      params: { isToday: isToday },
+    });
   };
 
   useEffect(() => {
@@ -405,7 +408,7 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
           />
-          <TouchableWithoutFeedback onPress={() => gotoFavorite()}>
+          <TouchableWithoutFeedback onPress={() => gotoFavorite(isToday)}>
             <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
           </TouchableWithoutFeedback>
         </View>

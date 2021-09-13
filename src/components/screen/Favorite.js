@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
 const defaultRender = () => {
   let defaultArray = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     defaultArray.push(
       <View
         key={`DEFAULT${i}`}
@@ -79,7 +79,8 @@ const defaultRender = () => {
   return defaultArray;
 };
 
-export const Favorite = ({ navigation }) => {
+export const Favorite = ({ navigation, route }) => {
+  const { isToday } = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
   const [favorite, setFavorite] = useState(null);
@@ -111,11 +112,19 @@ export const Favorite = ({ navigation }) => {
   }
   return (
     <>
+      {/* <View
+        style={{
+          flex: 1,
+          backgroundColor: '#54BCB6',
+          height: '80%',
+        }}
+      > */}
       <View
         style={{
           flex: 1,
-          paddingTop: 80,
+          // paddingTop: 80,
           alignItems: 'center',
+          backgroundColor: '#54BCB6',
           justifyContent: 'space-between',
         }}
       >
@@ -129,11 +138,11 @@ export const Favorite = ({ navigation }) => {
           }}
           onPress={() => navigation.goBack()}
         >
-          <IconGobackButton
-            name="icon-go-back-button"
-            size={25}
-            style={styles.searchInputViewBackButton}
-          />
+          {/* <IconGobackButton
+              name="icon-go-back-button"
+              size={25}
+              style={styles.searchInputViewBackButton}
+            /> */}
         </TouchableOpacity>
 
         <ScrollView
@@ -157,7 +166,6 @@ export const Favorite = ({ navigation }) => {
                   borderRadius: 20,
                   margin: 10,
                   shadowColor: '#00000029',
-
                   shadowOpacity: 0.5,
                   shadowRadius: 8,
                   alignItems: 'center',
@@ -171,13 +179,16 @@ export const Favorite = ({ navigation }) => {
                   color={'#B1E4E2'}
                   size={120}
                 />
-                <Text>{item.location}</Text>
+                <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
+                  {item.location}
+                </Text>
               </TouchableOpacity>
             );
           })}
           {defaultRender()}
         </ScrollView>
       </View>
+      {/* </View> */}
 
       <ToDoModalFavorite
         navigation={navigation}
@@ -185,7 +196,7 @@ export const Favorite = ({ navigation }) => {
         passModalData={passModalData}
         setPassModalData={setPassModalData}
         isModalVisible={isModalVisible}
-        isToday={true}
+        isToday={isToday}
       />
     </>
   );

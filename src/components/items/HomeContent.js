@@ -39,15 +39,15 @@ const PaintHome = ({ todoArr }) => {
           item.startTime < getCurrentTime() &&
           item.finishTime > getCurrentTime()
         ) {
-          const 시작시간빼기지금시간 =
+          //시작시간빼기지금시간
+          const startTimeDiff =
             Math.abs((startH - nowH) * 1) * 60 + Math.abs((startM - nowM) * 1);
-          const 끝나는시간빼기지금시간 =
+          //끝나는시간빼기지금시간
+          const finishTimeDiff =
             Math.abs((finishH - nowH) * 1) * 60 +
             Math.abs((finishM - nowM) * 1);
-          if (
-            tempData > Math.min(시작시간빼기지금시간, 끝나는시간빼기지금시간)
-          ) {
-            tempData = Math.min(시작시간빼기지금시간, 끝나는시간빼기지금시간);
+          if (tempData > Math.min(startTimeDiff, finishTimeDiff)) {
+            tempData = Math.min(startTimeDiff, finishTimeDiff);
             tempIndex = index;
           }
         } else {
