@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
-import AsyncStorage from '@react-native-community/async-storage';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { GOOGLE_PLACES_API_KEY } from '@env';
 import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
 import { getDataFromAsync } from 'utils/AsyncStorage';
-import IconFindLocation from '#assets/icons/icon-find-current-location.js';
 import {
   GOOGLE_API_URL,
   GOOGLE_PARARMS,
@@ -21,6 +13,8 @@ import {
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { noDataAlert } from 'utils/TwoButtonAlert';
+import { KEY_VALUE_FAVORITE } from '../../constant/const';
+import { setFavoriteData } from '../../utils/AsyncStorage';
 
 const styles = StyleSheet.create({
   map: {
@@ -41,6 +35,75 @@ const styles = StyleSheet.create({
   },
 });
 
+const filterFavoriteReturnStarColor = async (latitude, longitude) => {
+  // await AsyncStorage.removeItem(KEY_VALUE_FAVORITE);
+  const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
+  if (favoriteArray === null) return '#575757';
+  const isfavoriteColor =
+    favoriteArray.filter((item) => {
+      return item.latitude === latitude && item.longitude === longitude;
+    }).length !== 0
+      ? '#FECC02'
+      : '#575757';
+  return isfavoriteColor;
+};
+
+const handleFavorite = async (locationData, setIsFavoriteColor) => {
+  //검색한 locationData의 값과 asyncFavorite 의 위도와 경도를 비교해서
+  //favorite으로 저장해놨다면 (asyncFavorite에 있다면) 해당 값을 리턴
+  try {
+    if (locationData !== null) {
+      const favoriteAsyncData = await getDataFromAsync(KEY_VALUE_FAVORITE);
+      const updateData = {
+        location: locationData.location,
+        longitude: locationData.longitude,
+        latitude: locationData.latitude,
+        address: locationData.address,
+      };
+      if (favoriteAsyncData === null) {
+        //제일 처음 데이터가 없을때는 데이터를 넣고 걍 페이보릿색으로 바꿔주고 리턴
+        await setFavoriteData([locationData]);
+        return setIsFavoriteColor('#FECC02');
+      }
+
+      if (
+        favoriteAsyncData.some(
+          (item) =>
+            item.longitude === locationData.longitude &&
+            item.latitude === locationData.latitude,
+        )
+      ) {
+        //favorite 이란 얘기임
+        const tempData = favoriteAsyncData.filter(
+          (item) =>
+            !(
+              item.latitude === locationData.latitude &&
+              item.longitude === locationData.longitude
+            ),
+        );
+        await setFavoriteData(tempData);
+        return setIsFavoriteColor(
+          await filterFavoriteReturnStarColor(
+            locationData.latitude,
+            locationData.longitude,
+          ),
+        );
+      } else {
+        //favorite가 아니란 얘기임
+        await setFavoriteData([updateData, ...favoriteAsyncData]);
+        return setIsFavoriteColor(
+          await filterFavoriteReturnStarColor(
+            locationData.latitude,
+            locationData.longitude,
+          ),
+        );
+      }
+    }
+  } catch (e) {
+    console.log('handleFavorite Error', e);
+  }
+};
+
 const CurrentMap = ({
   location,
   modalHandler,
@@ -51,8 +114,8 @@ const CurrentMap = ({
   const [locationData, setData] = useState(null);
   const [locationResult, setResult] = useState(location);
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
+  const [isFavoriteColor, setIsFavoriteColor] = useState('#575757');
 
-  //useEffect(() => {}, [locationResult]);
   useEffect(() => {
     const getSearchedList = async () => {
       try {
@@ -104,7 +167,11 @@ const CurrentMap = ({
             longitude,
           });
           setData({ location, latitude, longitude, address });
-          setIscurrentLocation(false);
+          //필터 돌려서 즐겨찾기 색 넘겨주는 함수
+          setIsFavoriteColor(
+            await filterFavoriteReturnStarColor(latitude, longitude),
+          );
+          //검색기록 필터
           await handleFilterData(text, 'search', searchedList, setSearchedList);
 
           break;
@@ -123,6 +190,7 @@ const CurrentMap = ({
   };
   return (
     <>
+      {/*MapView*/}
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -132,14 +200,6 @@ const CurrentMap = ({
           longitudeDelta: 0.004,
         }}
       >
-        {/* <IconFindLocation
-          size={30}
-          name="icon-find-current-location"
-          style={styles.iconFindLocation}
-          color="#00000041"
-         }
-        /> */}
-
         <Marker
           coordinate={{
             latitude: locationResult.latitude,
@@ -150,6 +210,8 @@ const CurrentMap = ({
           }}
         />
       </MapView>
+      {/*MapView End*/}
+
       <TouchableOpacity
         style={{ position: 'absolute', top: 150, right: 10 }}
         onPress={() => handleFindCurrentLocation()}
@@ -160,6 +222,7 @@ const CurrentMap = ({
           source={{ uri: 'iconFindCurrentLocation' }}
         />
       </TouchableOpacity>
+
       {/*Location Data*/}
       {!!locationData && (
         <LocationData
@@ -175,6 +238,8 @@ const CurrentMap = ({
         modalHandler={modalHandler}
         searchedList={searchedList}
         setSearchedList={setSearchedList}
+        isFavoriteColor={isFavoriteColor}
+        handleFavorite={() => handleFavorite(locationData, setIsFavoriteColor)}
       />
     </>
   );

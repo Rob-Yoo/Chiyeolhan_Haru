@@ -1,15 +1,16 @@
 import React from 'react';
-import Map from 'components/screen/Map';
-//import Favorite from 'components/screen/Favorite';
-import ToDoModal from 'components/modal/ToDoModal';
+
+import { Favorite } from 'components/screen/Favorite';
+//import Map from 'components/screen/Map';
+//import ToDoModal from 'components/modal/ToDoModal';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
 export const ModalStack = ({ navigation }) => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* <Stack.Screen
         name="TodoModal"
         component={ToDoModal}
         navigation={navigation}
@@ -20,12 +21,13 @@ export const ModalStack = ({ navigation }) => {
         component={Map}
         navigation={navigation}
         options={{ headerShown: false }}
-      />
-      {/* <Stack.Screen
+      /> */}
+      <Stack.Screen
         name="Favorite"
         component={Favorite}
         navigation={navigation}
-      /> */}
+        header
+      />
     </Stack.Navigator>
   );
 };

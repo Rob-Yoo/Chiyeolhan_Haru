@@ -6,7 +6,7 @@ import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE_START_TIME } from 'constant/const';
 
-const ScheduleTomorrow = () => {
+const ScheduleTomorrow = ({ navigation }) => {
   const tmorrowData = [];
   const storeData = useSelector((state) => state);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -34,6 +34,7 @@ const ScheduleTomorrow = () => {
         isModalVisible={isModalVisible}
         passModalData={passModalData}
         setPassModalData={setPassModalData}
+        navigation={navigation}
       >
         <ScheduleComponent
           day={'tomorrow'}
