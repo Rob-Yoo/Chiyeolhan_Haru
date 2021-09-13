@@ -90,8 +90,13 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
+    if (!isDone) {
+      setWidth('0%');
+      return;
+    }
     if (isDone && getCurrentTime() >= finishTime) {
       setWidth('100%');
+      return;
     } else {
       const date = new Date();
       const hour =
