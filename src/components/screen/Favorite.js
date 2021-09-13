@@ -11,6 +11,7 @@ import { getDataFromAsync } from 'utils/AsyncStorage';
 import ToDoModalFavorite from 'components/modal/ToDoModalFavorite';
 
 import IconQuestion from '#assets/icons/icon-question';
+import IconAngleDown from '#assets/icons/icon-angle-down';
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
 
 const defaultRender = () => {
   let defaultArray = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 6; i++) {
     defaultArray.push(
       <View
         key={`DEFAULT${i}`}
@@ -81,13 +82,17 @@ const defaultRender = () => {
 
 export const Favorite = ({ navigation, route }) => {
   const { isToday } = route.params;
+  const scrollViewRef = useRef();
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
   const [favorite, setFavorite] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const scrollToEndFavorite = () => scrollViewRef.current.scrollToEnd();
 
   const getFavoriteAsync = async () => {
     try {
@@ -101,7 +106,6 @@ export const Favorite = ({ navigation, route }) => {
     getFavoriteAsync();
   }, []);
 
-  const scrollView = useRef();
   const pressFavorite = (favorite) => {
     setPassModalData(favorite);
     toggleModal();
@@ -145,48 +149,67 @@ export const Favorite = ({ navigation, route }) => {
             /> */}
         </TouchableOpacity>
 
-        <ScrollView
-          ref={scrollView}
-          contentContainerStyle={{
-            flex: 1,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              flexGrow: 1,
+            }}
+            style={styles.modalTopContainer}
+          >
+            {favorite?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => pressFavorite(item, index)}
+                  key={`FAVORITE${index}`}
+                  style={{
+                    width: '44%',
+                    height: 160,
+                    backgroundColor: '#fff',
+                    borderRadius: 20,
+                    margin: 10,
+                    shadowColor: '#00000029',
+                    shadowOpacity: 0.5,
+                    shadowRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                  }}
+                >
+                  <IconSearchedLocation
+                    name="location"
+                    style={{ position: 'absolute' }}
+                    color={'#B1E4E2'}
+                    size={120}
+                  />
+                  <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
+                    {item.location}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+            {defaultRender()}
+          </ScrollView>
+        </View>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: 60,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-          style={styles.modalTopContainer}
         >
-          {favorite?.map((item, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() => pressFavorite(item, index)}
-                key={`FAVORITE${index}`}
-                style={{
-                  width: '44%',
-                  height: 160,
-                  backgroundColor: '#fff',
-                  borderRadius: 20,
-                  margin: 10,
-                  shadowColor: '#00000029',
-                  shadowOpacity: 0.5,
-                  shadowRadius: 8,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 10,
-                }}
-              >
-                <IconSearchedLocation
-                  name="location"
-                  style={{ position: 'absolute' }}
-                  color={'#B1E4E2'}
-                  size={120}
-                />
-                <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
-                  {item.location}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-          {defaultRender()}
-        </ScrollView>
+          <IconAngleDown
+            onPress={() => scrollToEndFavorite()}
+            name="icon-angle-down"
+            size={20}
+          />
+        </View>
       </View>
       {/* </View> */}
 
