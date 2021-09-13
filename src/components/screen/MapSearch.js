@@ -6,13 +6,13 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  KeyboardAvoidingView,
 } from 'react-native';
 import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
+import IconStarBorder from '#assets/icons/icon-star-border';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
 const styles = StyleSheet.create({
@@ -60,17 +60,16 @@ const styles = StyleSheet.create({
   //   borderRadius: 10,
   // },
   searchInputViewBackButton: {
-    width: 30,
+    width: '10%',
     height: 30,
     paddingTop: 5,
-    marginLeft: 1,
+    paddingHorizontal: 10,
   },
   searchInputViewInput: {
-    backgroundColor: '#fff',
-    minWidth: SCREEN_WIDTH * 0.8,
-    height: SCREEN_HEIGHT * 0.06,
-    paddingLeft: 30,
+    width: '80%',
+    height: SCREEN_HEIGHT * 0.05,
     borderRadius: 10,
+    fontSize: 19,
   },
   searchedDeleteAllText: {
     fontSize: 20,
@@ -91,6 +90,8 @@ export const MapSearch = ({
   modalHandler,
   searchedList,
   setSearchedList,
+  isFavoriteColor,
+  handleFavorite,
 }) => {
   const [inputText, setText] = useState('');
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
@@ -121,31 +122,46 @@ export const MapSearch = ({
         }}
       >
         <View style={styles.searchInputContainer}>
-          {/* <View style={styles.searchInputView}> */}
-          <IconGobackButton
-            name="icon-go-back-button"
-            size={20}
-            style={styles.searchInputViewBackButton}
-            onPress={() => {
-              searchedHistoryVisible ? toggleModal() : modalHandler();
+          <View
+            style={{
+              width: '90%',
+              backgroundColor: '#fff',
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderRadius: 10,
+              paddingHorizontal: 10,
             }}
-          />
-          <TextInput
-            style={styles.searchInputViewInput}
-            ref={searchInput}
-            onTouchStart={() => {
-              !searchedHistoryVisible && setSearchedHistroyVisible(true);
-            }}
-            value={inputText}
-            placeholder=" 장소, 버스, 지하철, 주소 검색"
-            onChangeText={(text) => setText(text)}
-            onSubmitEditing={() => {
-              _handlePlacesAPI(inputText);
-              toggleModal();
-            }}
-          />
-
-          {/* </View> */}
+          >
+            <IconGobackButton
+              name="icon-go-back-button"
+              size={18}
+              style={styles.searchInputViewBackButton}
+              onPress={() => {
+                searchedHistoryVisible ? toggleModal() : modalHandler();
+              }}
+            />
+            <TextInput
+              style={styles.searchInputViewInput}
+              ref={searchInput}
+              onTouchStart={() => {
+                !searchedHistoryVisible && setSearchedHistroyVisible(true);
+              }}
+              value={inputText}
+              placeholder=" 장소, 버스, 지하철, 주소 검색"
+              onChangeText={(text) => setText(text)}
+              onSubmitEditing={() => {
+                _handlePlacesAPI(inputText);
+                toggleModal();
+              }}
+            />
+            <IconStarBorder
+              name="icon-favorite"
+              size={23}
+              color={isFavoriteColor}
+              style={{ paddingHorizontal: 10, width: '10%' }}
+              onPress={() => handleFavorite()}
+            />
+          </View>
         </View>
         {searchedHistoryVisible && (
           <ScrollView style={{ paddingHorizontal: 20 }}>
