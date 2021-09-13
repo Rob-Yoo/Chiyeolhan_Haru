@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
+import PushNotification from 'react-native-push-notification';
 import {
   TODAY,
   TOMORROW,
@@ -8,6 +9,7 @@ import {
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW,
+  KEY_VALUE_NEAR_BY,
   KEY_VALUE_TODAY,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_FAVORITE,
@@ -92,8 +94,11 @@ export const getDataFromAsync = async (storageName) => {
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
     const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW);
-    const updateData = tomorrowData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, JSON.stringify(updateData));
+    const newTomorrowData = tomorrowData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(
+      KEY_VALUE_TOMORROW,
+      JSON.stringify(newTomorrowData),
+    );
   } catch (e) {
     console.log('deleteTomorrowAsyncStorageData Error :', e);
   }
@@ -102,11 +107,24 @@ export const deleteTomorrowAsyncStorageData = async (id) => {
 export const deleteGeofenceAsyncStorageData = async (id) => {
   try {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-    const updateGeofenceData = geofenceData.filter((item) => item.id !== id);
+    const nearBySchedule = await getDataFromAsync(KEY_VALUE_NEAR_BY);
+    const newGeofenceData = geofenceData.filter((item) => item.id !== id);
+
     await AsyncStorage.setItem(
       KEY_VALUE_GEOFENCE,
-      JSON.stringify(updateGeofenceData),
+      JSON.stringify(newGeofenceData),
     );
+
+    if (nearBySchedule) {
+      const newNearBySchedule = nearBySchedule.filter((item) => item.id !== id);
+      await AsyncStorage.setItem(
+        KEY_VALUE_NEAR_BY,
+        JSON.stringify(newNearBySchedule),
+      );
+    }
+
+    PushNotification.cancelLocalNotification(`${id} + 3`); //삭제하려는 일정의 arriveEarlyNotification 알림 사라짐
+    PushNotification.cancelLocalNotification(`${id} + 4`); //삭제하려는 일정 완료 알림 사라짐
   } catch (e) {
     console.log('deleteGeofenceAsyncStorageData Error :', e);
   }
@@ -115,11 +133,8 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
     const todayData = await getDataFromAsync(KEY_VALUE_TODAY);
-    const updateTodayData = todayData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(
-      KEY_VALUE_TODAY,
-      JSON.stringify(updateTodayData),
-    );
+    const newTodayData = todayData.filter((item) => item.id !== id);
+    await AsyncStorage.setItem(KEY_VALUE_TODAY, JSON.stringify(newTodayData));
   } catch (e) {
     console.log('deleteTodayAsyncStorageData Error :', e);
   }
@@ -156,6 +171,9 @@ const setGeofenceDataArray = async (todayToDos) => {
           id: todo.data().id,
           latitude: todo.data().latitude,
           longitude: todo.data().longitude,
+          location: todo.data().location,
+          startTime: todo.data().startTime,
+          finishTime: todo.data().finishTime,
         };
       }
       if (todo.data().startTime > currentTime) {
@@ -186,7 +204,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
 
     await setTodayToDoArray(todayToDos);
     await setGeofenceDataArray(todayToDos);
-    await geofenceScheduler(isChangeEarliest, 'ADD');
+    await geofenceScheduler(isChangeEarliest);
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
   }
