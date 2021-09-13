@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 //import toDosSlice from 'redux/store';
 import * as SplashScreen from 'expo-splash-screen';
@@ -8,6 +9,7 @@ import { Provider } from 'react-redux';
 import { initBgGeofence } from 'utils/BgGeofence';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import store from 'redux/store';
+import { KEY_VALUE_GEOFENCE } from 'constant/const';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -21,10 +23,10 @@ const App = () => {
     ) {
       setIsTerminate(false);
       try {
-        const status = await BackgroundGeolocation.requestPermission();
+        await BackgroundGeolocation.requestPermission();
         console.log('success');
       } catch (e) {
-        console.log('requestPermission Deny in App component :', e);
+        console.log('requestPermission Deny:', e);
       }
     }
 
@@ -34,16 +36,14 @@ const App = () => {
   useEffect(() => {
     const prepare = async () => {
       try {
-        //keep the splash screen visible while we fetch resources
+        const data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         await SplashScreen.preventAutoHideAsync();
-        const result = await initBgGeofence();
+        const result = await initBgGeofence(data);
         setIsTerminate(result);
-        //Pre-load fonts, make any API calls you need to do here
       } catch (e) {
         console.warn(e);
         await SplashScreen.hideAsync();
       } finally {
-        //Tell ther application to render});
         setAppIsReady(true);
         await SplashScreen.hideAsync();
       }

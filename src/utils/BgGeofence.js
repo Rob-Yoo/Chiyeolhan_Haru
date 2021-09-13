@@ -69,7 +69,7 @@ export const addGeofenceTrigger = async () => {
     } else {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       console.log('[removeGeofence] success');
-      await BackgroundGeolocation.startGeofences();
+      await BackgroundGeolocation.stop();
     }
   } catch (error) {
     'addGeofenceTrigger Error :', error;
@@ -105,9 +105,9 @@ export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
       await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
     }
 
-    await addGeofenceTrigger();
-
     await BackgroundGeolocation.startGeofences();
+
+    await addGeofenceTrigger();
   } catch (e) {
     console.log('geofenceUpdate Error :', e);
   }
@@ -283,7 +283,7 @@ const subscribeOnGeofence = async () => {
   });
 };
 
-export const initBgGeofence = async () => {
+export const initBgGeofence = async (data) => {
   try {
     const state = await BackgroundGeolocation.ready({
       // Geolocation Config
@@ -311,7 +311,10 @@ export const initBgGeofence = async () => {
       startOnBoot: true, // <-- Auto start tracking when device is powered-up.
     });
     await subscribeOnGeofence();
-    await BackgroundGeolocation.startGeofences();
+
+    if (data !== null) {
+      await BackgroundGeolocation.startGeofences();
+    }
     return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);

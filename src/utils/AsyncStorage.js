@@ -8,16 +8,16 @@ import {
   UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_SEARCHED,
-  KEY_VALUE_TOMORROW,
+  KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_NEAR_BY,
-  KEY_VALUE_TODAY,
+  KEY_VALUE_TODAY_DATA,
   KEY_VALUE_PROGRESSING,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
 const setTomorrowData = async (array) => {
   try {
-    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, array);
+    await AsyncStorage.setItem(KEY_VALUE_TOMORROW_DATA, array);
   } catch (e) {
     console.log('setTomorrowData Error :', e);
   }
@@ -33,7 +33,7 @@ const setGeofenceData = async (array) => {
 
 const setTodayData = async (array) => {
   try {
-    await AsyncStorage.setItem(KEY_VALUE_TODAY, array);
+    await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, array);
   } catch (e) {
     console.log('setGeofenceData Error :', e);
   }
@@ -84,10 +84,10 @@ export const getDataFromAsync = async (storageName) => {
 
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
-    const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW);
+    const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
     const newTomorrowData = tomorrowData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
-      KEY_VALUE_TOMORROW,
+      KEY_VALUE_TOMORROW_DATA,
       JSON.stringify(newTomorrowData),
     );
   } catch (e) {
@@ -123,9 +123,12 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
-    const todayData = await getDataFromAsync(KEY_VALUE_TODAY);
+    const todayData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
     const newTodayData = todayData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(KEY_VALUE_TODAY, JSON.stringify(newTodayData));
+    await AsyncStorage.setItem(
+      KEY_VALUE_TODAY_DATA,
+      JSON.stringify(newTodayData),
+    );
   } catch (e) {
     console.log('deleteTodayAsyncStorageData Error :', e);
   }

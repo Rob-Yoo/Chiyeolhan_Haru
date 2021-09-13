@@ -9,7 +9,6 @@ import {
 import PushNotification from 'react-native-push-notification';
 import { dbService } from 'utils/firebase';
 import { geofenceUpdate } from 'utils/BgGeofence';
-import getDistance from 'haversine-distance';
 
 const getDataFromAsync = async (storageName) => {
   try {
