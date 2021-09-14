@@ -42,13 +42,19 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({ navigation }) => {
-  const [visibleBtn, setVisibleBtn] = useState(false);
+  const [visibleBtn, setVisibleBtn] = useState('');
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
 
   useEffect(() => {
-    const resetButton = checkGeofenceSchedule();
-    setVisibleBtn(resetButton);
-    checkTodayChange();
+    // 날짜가 바켰는 지 체크
+    const dayChange = checkTodayChange();
+    // 지난 일정 중 isDone이 false인 일정이 있는지 체크
+    const failSchedule = checkGeofenceSchedule();
+    if (dayChange) {
+      setVisibleBtn('DAY_CHANGE');
+    } else if (failSchedule) {
+      setVisibleBtn('FAIL');
+    }
   }, []);
 
   return (
