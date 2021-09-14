@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
@@ -7,11 +7,8 @@ import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
-// import { getCurrentTime, getTimeDiff } from 'utils/Time';
-// import AsyncStorage from '@react-native-community/async-storage';
-// import { dbService } from 'utils/firebase';
-// import { KEY_VALUE_GEOFENCE, UID, TODAY } from 'constant/const';
-// import { geofenceUpdate } from 'utils/BgGeofence';
+import { checkTodayChange } from 'utils/AsyncStorage';
+import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -45,18 +42,15 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({ navigation }) => {
+  const [visibleBtn, setVisibleBtn] = useState(false);
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-  // const checkGeofenceSchedule = async () => {
-  //   const item = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-  //   if (item != null) {
-  //     let isFail = false;
-  //     const geofenceData = JSON.parse(item);
-  //     if (geofenceData.length != 0) {
-  //       const currentTime = getCurrentTime();
-  //       if (geofenceData[0].finishTime)
-  //     }
-  //   }
-  // };
+
+  useEffect(() => {
+    const resetButton = checkGeofenceSchedule();
+    setVisibleBtn(resetButton);
+    checkTodayChange();
+  }, []);
+
   return (
     <>
       <ImageBackground

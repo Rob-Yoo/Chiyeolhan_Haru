@@ -36,7 +36,10 @@ const App = () => {
   useEffect(() => {
     const prepare = async () => {
       try {
-        const data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        let data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        if (data !== null) {
+          data = JSON.parse(data);
+        }
         await SplashScreen.preventAutoHideAsync();
         const result = await initBgGeofence(data);
         setIsTerminate(result);

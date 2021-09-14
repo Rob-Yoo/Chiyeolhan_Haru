@@ -10,11 +10,11 @@ import {
   GOOGLE_API_URL,
   GOOGLE_PARARMS,
   KEY_VALUE_SEARCHED,
+  KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { handleFilterData } from 'utils/handleFilterData';
 import { noDataAlert } from 'utils/TwoButtonAlert';
-import { KEY_VALUE_FAVORITE } from '../../constant/const';
-import { setFavoriteData } from '../../utils/AsyncStorage';
+import { setFavoriteData } from 'utils/AsyncStorage';
 
 const styles = StyleSheet.create({
   map: {

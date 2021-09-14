@@ -7,6 +7,7 @@ import {
   TOMORROW,
   UID,
   KEY_VALUE_GEOFENCE,
+  KEY_VALUE_TODAY,
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_NEAR_BY,
@@ -74,7 +75,7 @@ export const getDataFromAsync = async (storageName) => {
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync Error :', e);
+    console.log('getDataFromAsync Error in AsyncStorage:', e);
   }
 };
 // return new Promise((resolve, reject) => {
@@ -276,6 +277,32 @@ export const deleteAllSearchedData = async () => {
     return setData;
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
+  }
+};
+
+export const checkTodayChange = async () => {
+  try {
+    const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
+    const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
+
+    if (today === null) {
+      await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+    } else if (today !== TODAY) {
+      // 오늘이 지나면
+      await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+      // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
+      await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, tomorrowData);
+      await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, tomorrowData);
+      await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
+
+      const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      await geofenceUpdate(JSON.parse(geofenceData), false, 0);
+      console.log('바뀐 geofenceData :', geofenceData);
+    } else {
+      console.log('날짜가 바뀌지 않았음');
+    }
+  } catch (e) {
+    console.log('checkTodayChange Error :', e);
   }
 };
 

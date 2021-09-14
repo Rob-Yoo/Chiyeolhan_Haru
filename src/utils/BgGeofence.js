@@ -31,7 +31,7 @@ const getDataFromAsync = async (storageName) => {
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync Error :', e);
+    console.log('getDataFromAsync in BgGeofence Error :', e);
   }
 };
 
@@ -54,12 +54,14 @@ const addGeofence = async (latitude, longitude, data) => {
       notifyOnExit: true,
     });
     console.log('Adding Geofence Success!!', data[0].location);
+    await BackgroundGeolocation.startGeofences();
+    console.log('start Geofence');
   } catch (e) {
     console.log('addGeofence Error :', e);
   }
 };
 
-export const addGeofenceTrigger = async () => {
+const addGeofenceTrigger = async () => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data.length != 0) {
@@ -70,6 +72,7 @@ export const addGeofenceTrigger = async () => {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       console.log('[removeGeofence] success');
       await BackgroundGeolocation.stop();
+      console.log('stop geofence tracking');
     }
   } catch (error) {
     'addGeofenceTrigger Error :', error;
@@ -104,8 +107,6 @@ export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
     if (progressing) {
       await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
     }
-
-    await BackgroundGeolocation.startGeofences();
 
     await addGeofenceTrigger();
   } catch (e) {
@@ -285,37 +286,43 @@ const subscribeOnGeofence = async () => {
 
 export const initBgGeofence = async (data) => {
   try {
-    const state = await BackgroundGeolocation.ready({
-      // Geolocation Config
-      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-      locationAuthorizationRequest: 'Always',
-      backgroundPermissionRationale: {
-        // Android only
-        title: '위치 서비스 이용 제한',
-        message:
-          '원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 {backgroundPermissionOptionLabel}으로 설정해주세요.',
-        positiveAction: '설정',
-        negativeAction: '취소',
-      },
-      locationAuthorizationAlert: {
-        // ios only
-        titleWhenNotEnabled: '위치 서비스 이용 제한',
-        titleWhenOff: '위치 서비스 이용 제한',
-        instructions:
-          "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
-        settingsButton: '설정',
-        cancelButton: '취소',
-      },
-      // Application config
-      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-    });
-    await subscribeOnGeofence();
-
-    if (data !== null) {
+    if (data == null) {
+      const state = await BackgroundGeolocation.ready({
+        // Geolocation Config
+        desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+        locationAuthorizationRequest: 'Always',
+        backgroundPermissionRationale: {
+          // Android only
+          title: '위치 서비스 이용 제한',
+          message:
+            '원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 {backgroundPermissionOptionLabel}으로 설정해주세요.',
+          positiveAction: '설정',
+          negativeAction: '취소',
+        },
+        locationAuthorizationAlert: {
+          // ios only
+          titleWhenNotEnabled: '위치 서비스 이용 제한',
+          titleWhenOff: '위치 서비스 이용 제한',
+          instructions:
+            "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
+          settingsButton: '설정',
+          cancelButton: '취소',
+        },
+        // Application config
+        stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+        startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+      });
+      await subscribeOnGeofence();
       await BackgroundGeolocation.startGeofences();
     }
-    return state.didLaunchInBackground;
+    if (data.length > 0 || data !== null) {
+      await subscribeOnGeofence();
+
+      await BackgroundGeolocation.startGeofences();
+      return state.didLaunchInBackground;
+    } else {
+      return false;
+    }
   } catch (e) {
     console.log('initBgGeofence Error :', e);
   }
