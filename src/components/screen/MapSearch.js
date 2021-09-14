@@ -163,56 +163,64 @@ export const MapSearch = ({
             />
           </View>
         </View>
-        {searchedHistoryVisible && (
-          <ScrollView style={{ paddingHorizontal: 20 }}>
-            {searchedList?.map((item) => {
-              return (
-                <TouchableOpacity
-                  key={`${item.id}`}
-                  activeOpacity={1}
-                  onPress={() => {
-                    _handlePlacesAPI(item.text);
-                    toggleModal();
-                    searchInput.current.placeholder = `${item.text}`;
-                    setText(item.text);
-                  }}
-                >
-                  <View style={styles.searcehdItem}>
-                    <Text style={styles.icon}>
-                      {item.type === 'location' ? (
-                        <IconSearchedLocation
-                          name="location"
-                          size={22}
-                          color={'#575757'}
-                        />
-                      ) : (
-                        <IconSearchedSearch
-                          name="icon-searched-search"
-                          size={22}
-                          color={'#575757'}
-                        />
-                      )}
-                    </Text>
-                    <Text style={styles.searchedText}>{item.text}</Text>
-                    <Text
-                      id={item.id}
-                      style={styles.searchedDeleteText}
-                      onPress={() => deleteHistory(item.id)}
-                    >
-                      삭제
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-            <Text
-              onPress={() => deleteAllHistory()}
-              style={styles.searchedDeleteAllText}
+        <View style={{ flex: 1 }}>
+          {searchedHistoryVisible && (
+            <ScrollView
+              bounces={false}
+              contentContainerStyle={{
+                flexGrow: 1,
+              }}
+              style={{ paddingHorizontal: 20 }}
             >
-              전체삭제
-            </Text>
-          </ScrollView>
-        )}
+              {searchedList?.map((item) => {
+                return (
+                  <TouchableOpacity
+                    key={`${item.id}`}
+                    activeOpacity={1}
+                    onPress={() => {
+                      _handlePlacesAPI(item.text);
+                      toggleModal();
+                      searchInput.current.placeholder = `${item.text}`;
+                      setText(item.text);
+                    }}
+                  >
+                    <View style={styles.searcehdItem}>
+                      <Text style={styles.icon}>
+                        {item.type === 'location' ? (
+                          <IconSearchedLocation
+                            name="location"
+                            size={22}
+                            color={'#575757'}
+                          />
+                        ) : (
+                          <IconSearchedSearch
+                            name="icon-searched-search"
+                            size={22}
+                            color={'#575757'}
+                          />
+                        )}
+                      </Text>
+                      <Text style={styles.searchedText}>{item.text}</Text>
+                      <Text
+                        id={item.id}
+                        style={styles.searchedDeleteText}
+                        onPress={() => deleteHistory(item.id)}
+                      >
+                        삭제
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+              <Text
+                onPress={() => deleteAllHistory()}
+                style={styles.searchedDeleteAllText}
+              >
+                전체삭제
+              </Text>
+            </ScrollView>
+          )}
+        </View>
       </View>
     </View>
   );

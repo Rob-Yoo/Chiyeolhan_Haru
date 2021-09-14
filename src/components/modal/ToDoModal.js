@@ -428,7 +428,12 @@ export const ToDoModal = ({
             <Text style={styles.modalInputText}>수행리스트</Text>
           </TouchableOpacity>
 
-          <ScrollView style={styles.modalTaskContainer}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}
+            style={styles.modalTaskContainer}
+          >
             {taskList.map((item, index) => (
               <TouchableWithoutFeedback
                 key={index}
