@@ -244,6 +244,10 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
+    if (isToday && todoStartTime < getCurrentTime()) {
+      modalHandler();
+      return;
+    }
     if (Object.keys(locationData).length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
@@ -413,17 +417,26 @@ export const ToDoModal = ({
         </View>
 
         <View style={styles.todoInputContainer}>
-          <TextInput
-            placeholder="제목을 입력해 주세요"
-            style={styles.modalInputTitle}
-            value={title}
-            ref={titleRef}
-            onChange={(e) => handleChange(e)}
-            onChangeText={setValue('todoTitle', title)}
-          />
+          {passModalData && passModalData.startDate < new Date() ? (
+            <View style={styles.modalInputTitle}>
+              <Text>{title}</Text>
+            </View>
+          ) : (
+            <TextInput
+              placeholder="제목을 입력해 주세요"
+              style={styles.modalInputTitle}
+              value={title}
+              ref={titleRef}
+              onChange={(e) => handleChange(e)}
+              onChangeText={setValue('todoTitle', title)}
+            />
+          )}
           <TouchableOpacity
             style={styles.modalInputTask}
-            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+            onPress={() =>
+              !(isToday && passModalData?.startDate < new Date()) &&
+              toggleIsVisible(inputIsVisible, setInputIsVisible)
+            }
           >
             <Text style={styles.modalInputText}>수행리스트</Text>
           </TouchableOpacity>
@@ -437,7 +450,10 @@ export const ToDoModal = ({
             {taskList.map((item, index) => (
               <TouchableWithoutFeedback
                 key={index}
-                onPress={() => editSchedule(item, index)}
+                onPress={() =>
+                  !(isToday && passModalData?.startDate < new Date()) &&
+                  editSchedule(item, index)
+                }
               >
                 <Text style={styles.modalInputText}>{item}</Text>
               </TouchableWithoutFeedback>
