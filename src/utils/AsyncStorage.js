@@ -7,10 +7,11 @@ import {
   TOMORROW,
   UID,
   KEY_VALUE_GEOFENCE,
-  KEY_VALUE_SEARCHED,
-  KEY_VALUE_TOMORROW,
-  KEY_VALUE_NEAR_BY,
   KEY_VALUE_TODAY,
+  KEY_VALUE_SEARCHED,
+  KEY_VALUE_TOMORROW_DATA,
+  KEY_VALUE_NEAR_BY,
+  KEY_VALUE_TODAY_DATA,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
@@ -18,7 +19,7 @@ import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
 const setTomorrowData = async (array) => {
   try {
-    await AsyncStorage.setItem(KEY_VALUE_TOMORROW, array);
+    await AsyncStorage.setItem(KEY_VALUE_TOMORROW_DATA, array);
   } catch (e) {
     console.log('setTomorrowData Error :', e);
   }
@@ -34,7 +35,7 @@ const setGeofenceData = async (array) => {
 
 const setTodayData = async (array) => {
   try {
-    await AsyncStorage.setItem(KEY_VALUE_TODAY, array);
+    await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, array);
   } catch (e) {
     console.log('setGeofenceData Error :', e);
   }
@@ -71,32 +72,20 @@ export const getDataFromAsync = async (storageName) => {
     if (item == null) {
       return null;
     } else {
+      console.log(storageName, item);
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync Error :', e);
+    console.log('getDataFromAsync Error in AsyncStorage:', e);
   }
 };
-// return new Promise((resolve, reject) => {
-//   AsyncStorage.getItem(storageName, (err, result) => {
-//     if (err) {
-//       reject(err);
-//     }
-
-//     if (result === null) {
-//       resolve(null);
-//     }
-
-//     resolve(JSON.parse(result));
-//   });
-// });
 
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
-    const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW);
+    const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
     const newTomorrowData = tomorrowData.filter((item) => item.id !== id);
     await AsyncStorage.setItem(
-      KEY_VALUE_TOMORROW,
+      KEY_VALUE_TOMORROW_DATA,
       JSON.stringify(newTomorrowData),
     );
   } catch (e) {
@@ -132,9 +121,12 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
-    const todayData = await getDataFromAsync(KEY_VALUE_TODAY);
+    const todayData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
     const newTodayData = todayData.filter((item) => item.id !== id);
-    await AsyncStorage.setItem(KEY_VALUE_TODAY, JSON.stringify(newTodayData));
+    await AsyncStorage.setItem(
+      KEY_VALUE_TODAY_DATA,
+      JSON.stringify(newTodayData),
+    );
   } catch (e) {
     console.log('deleteTodayAsyncStorageData Error :', e);
   }
@@ -273,6 +265,32 @@ export const deleteAllSearchedData = async () => {
     return setData;
   } catch (e) {
     console.log('deleteSearchedData Error :', e);
+  }
+};
+
+export const checkTodayChange = async () => {
+  try {
+    const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
+    const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
+
+    if (today === null) {
+      await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+    } else if (today !== TODAY) {
+      // 오늘이 지나면
+      await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+      // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
+      await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, tomorrowData);
+      await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, tomorrowData);
+      await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
+
+      const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      await geofenceUpdate(JSON.parse(geofenceData), false, 0);
+      console.log('바뀐 geofenceData :', geofenceData);
+    } else {
+      console.log('날짜가 바뀌지 않았음');
+    }
+  } catch (e) {
+    console.log('checkTodayChange Error :', e);
   }
 };
 

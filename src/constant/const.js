@@ -3,8 +3,9 @@ import DeviceInfo from 'react-native-device-info';
 //async storage key
 export const KEY_VALUE_GEOFENCE = 'geofenceDataArray';
 export const KEY_VALUE_NEAR_BY = 'nearBySchedulesArray';
-export const KEY_VALUE_TOMORROW = 'tomorrowDataArray';
-export const KEY_VALUE_TODAY = 'todayDataArray';
+export const KEY_VALUE_TOMORROW_DATA = 'tomorrowDataArray';
+export const KEY_VALUE_TODAY = 'today';
+export const KEY_VALUE_TODAY_DATA = 'todayDataArray';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_SEARCHED = 'searchedDataArray';
 export const KEY_VALUE_EARLY = 'isEarly';

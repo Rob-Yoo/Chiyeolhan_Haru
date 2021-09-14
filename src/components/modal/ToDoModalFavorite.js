@@ -23,9 +23,9 @@ import { handleFilterData } from 'utils/handleFilterData';
 import {
   TODAY,
   TOMORROW,
-  KEY_VALUE_TODAY,
+  KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
-  KEY_VALUE_TOMORROW,
+  KEY_VALUE_TOMORROW_DATA,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -161,8 +161,8 @@ export const ToDoModalFavorite = ({
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
       const toDoArray = isToday
-        ? await getDataFromAsync(KEY_VALUE_TODAY)
-        : await getDataFromAsync(KEY_VALUE_TOMORROW);
+        ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
+        : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
       let isNeedAlert = false;
       if (toDoArray != null) {
         if (toDoArray.length != 0) {

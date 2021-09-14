@@ -5,11 +5,12 @@ import {
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_EARLY,
   KEY_VALUE_PROGRESSING,
+  TODAY,
 } from 'constant/const';
 import PushNotification from 'react-native-push-notification';
 import { dbService } from 'utils/firebase';
 import { geofenceUpdate } from 'utils/BgGeofence';
-import getDistance from 'haversine-distance';
+import { getCurrentTime } from 'utils/Time';
 
 const getDataFromAsync = async (storageName) => {
   try {
@@ -21,6 +22,33 @@ const getDataFromAsync = async (storageName) => {
     }
   } catch (e) {
     console.log('getDataFromAsync Error :', e);
+  }
+};
+
+export const checkGeofenceSchedule = async () => {
+  try {
+    let isNeedUpdate = false;
+    const currentTime = getCurrentTime();
+    const todosRef = dbService.collection(`${UID}`);
+    const data = await todosRef
+      .where('date', '==', TODAY)
+      .where('isDone', '==', false)
+      .get();
+
+    data.forEach((schedule) => {
+      // isDone이 false인 일정들 중 끝 시간이 지난 일정이 있으면 사용자가 직접 포그라운드에서 업데이트를 시켜줘야함
+      if (schedule.data().finishTime < currentTime) {
+        isNeedUpdate = true;
+        return;
+      }
+    });
+    console.log(
+      '사용자가 안들어와서 직접 들어와서 업데이트 시켜줘야하나요? ',
+      isNeedUpdate,
+    );
+    return isNeedUpdate;
+  } catch (e) {
+    console.log('checkGeofenceSchedule Error :', e);
   }
 };
 
