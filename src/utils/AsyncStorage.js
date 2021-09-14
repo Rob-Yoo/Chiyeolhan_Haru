@@ -72,25 +72,13 @@ export const getDataFromAsync = async (storageName) => {
     if (item == null) {
       return null;
     } else {
+      console.log(storageName, item);
       return JSON.parse(item);
     }
   } catch (e) {
     console.log('getDataFromAsync Error in AsyncStorage:', e);
   }
 };
-// return new Promise((resolve, reject) => {
-//   AsyncStorage.getItem(storageName, (err, result) => {
-//     if (err) {
-//       reject(err);
-//     }
-
-//     if (result === null) {
-//       resolve(null);
-//     }
-
-//     resolve(JSON.parse(result));
-//   });
-// });
 
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
