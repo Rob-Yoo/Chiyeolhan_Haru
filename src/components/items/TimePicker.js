@@ -87,6 +87,7 @@ export const TimePicker = ({
   const currentTime = `${hour}:${min}`;
 
   const showTimePicker = () => {
+    if (timeDate < new Date()) return;
     setVisible(true);
   };
 
