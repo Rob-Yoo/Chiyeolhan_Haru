@@ -144,54 +144,25 @@ export const ToDoModal = ({
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
     let isNeedAlert = false;
 
-    toDoArray.forEach((toDo) => {
+    for (const toDo of toDoArray) {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
-      if (
-        (passModalData?.id !== toDo.id && todoStartTime === startTime) ||
-        todoStartTime === finishTime ||
-        todoFinishTime === startTime ||
-        todoFinishTime === finishTime
-      ) {
-        isNeedAlert = true;
-        return isNeedAlert;
-      }
-      if (
-        passModalData?.id !== toDo.id &&
-        todoStartTime <= startTime &&
-        todoFinishTime >= finishTime
-      ) {
-        isNeedAlert = true;
-        return isNeedAlert;
-      }
-      if (
-        passModalData?.id !== toDo.id &&
-        startTime <= todoStartTime &&
-        finishTime >= todoFinishTime
-      ) {
-        isNeedAlert = true;
-        return isNeedAlert;
-      }
 
-      if (
-        passModalData?.id !== toDo.id &&
-        todoStartTime <= finishTime &&
-        todoStartTime >= startTime &&
-        todoFinishTime >= finishTime
-      ) {
-        isNeedAlert = true;
-        return isNeedAlert;
+      if (passModalData?.id !== toDo.id) {
+        if (todoStartTime < startTime && startTime < todoFinishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (todoStartTime < finishTime && finishTime < todoFinishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+          isNeedAlert = true;
+          break;
+        }
       }
-      if (
-        passModalData?.id !== toDo.id &&
-        todoStartTime <= startTime &&
-        todoFinishTime >= startTime &&
-        todoFinishTime <= finishTime
-      ) {
-        isNeedAlert = true;
-        return isNeedAlert;
-      }
-    });
+    }
 
     return isNeedAlert;
   };
@@ -220,7 +191,6 @@ export const ToDoModal = ({
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
-      console.log('handleAlert', isToday);
       const toDoArray = isToday
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
