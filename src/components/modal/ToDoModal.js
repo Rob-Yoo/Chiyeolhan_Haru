@@ -84,7 +84,10 @@ export const ToDoModal = ({
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const { latitude, location, longitude, address } = locationData;
+    const { latitude, location, longitude, address } =
+      passModalData === undefined || passModalData?.description
+        ? locationData
+        : passModalData;
     const date = new Date();
     const todoId =
       `${date.getFullYear()}` +
@@ -197,7 +200,8 @@ export const ToDoModal = ({
           modalHandler();
           alertInValidSubmit();
         } else {
-          !passModalData
+          //passModalData
+          !passModalData?.description
             ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
             : await todoEdit(todoStartTime, todoFinishTime, todoTitle);
         }
@@ -205,7 +209,7 @@ export const ToDoModal = ({
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleTodayTodoSubmit Error :', e);
+      console.log('handleAlert Error :', e);
     }
   };
 
@@ -257,13 +261,13 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (!passModalData && isToday) {
+      if (!passModalData?.description && isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
         handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!passModalData && !isToday) {
+      } else if (!passModalData?.description && !isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
         handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (passModalData) {
+      } else if (passModalData?.description) {
         //모달에 데이터가 있을때, 즉 일정을 수정할때
         handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
@@ -323,10 +327,13 @@ export const ToDoModal = ({
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
-      setLocationName(passModalData.location);
-      setLocationData(passModalData.location);
-      setTitle(passModalData.description);
-      setTaskList([...passModalData.toDos]);
+      if (passModalData.description) {
+        //데이터 수정 시
+        setTitle(passModalData?.description);
+        setTaskList([...passModalData?.toDos]);
+      }
+      setLocationName(passModalData?.location);
+      setLocationData(passModalData?.location);
     }
   }, [passModalData]);
   useEffect(() => {
@@ -336,7 +343,6 @@ export const ToDoModal = ({
       register('todoTask'),
       register('todoId');
   }, [register]);
-
   return (
     <Modal
       navigation={navigation}

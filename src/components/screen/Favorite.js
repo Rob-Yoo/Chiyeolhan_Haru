@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 import { KEY_VALUE_FAVORITE } from 'constant/const';
 import { getDataFromAsync } from 'utils/AsyncStorage';
-import ToDoModalFavorite from 'components/modal/ToDoModalFavorite';
 
 import IconQuestion from '#assets/icons/icon-question';
 import IconAngleDown from '#assets/icons/icon-angle-down';
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
+import ToDoModal from '../modal/ToDoModal';
 
 const styles = StyleSheet.create({
   modalInputContainer: {
@@ -213,7 +213,7 @@ export const Favorite = ({ navigation, route }) => {
       </View>
       {/* </View> */}
 
-      <ToDoModalFavorite
+      <ToDoModal
         navigation={navigation}
         modalHandler={() => toggleModal()}
         passModalData={passModalData}
