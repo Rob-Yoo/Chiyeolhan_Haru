@@ -123,94 +123,78 @@ export const Favorite = ({ navigation, route }) => {
           height: '80%',
         }}
       > */}
-      <View
+      {/* <View
         style={{
           flex: 1,
           // paddingTop: 80,
           alignItems: 'center',
-          backgroundColor: '#54BCB6',
+          backgroundColor: 'transparent',
           justifyContent: 'space-between',
         }}
-      >
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            top: 100,
-            left: 10,
-            width: 50,
-            height: 50,
-          }}
-          onPress={() => navigation.goBack()}
-        >
-          {/* <IconGobackButton
-              name="icon-go-back-button"
-              size={25}
-              style={styles.searchInputViewBackButton}
-            /> */}
-        </TouchableOpacity>
+      > */}
 
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            ref={scrollViewRef}
-            contentContainerStyle={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              flexGrow: 1,
-            }}
-            style={styles.modalTopContainer}
-          >
-            {favorite?.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => pressFavorite(item, index)}
-                  key={`FAVORITE${index}`}
-                  style={{
-                    width: '44%',
-                    height: 160,
-                    backgroundColor: '#fff',
-                    borderRadius: 20,
-                    margin: 10,
-                    shadowColor: '#00000029',
-                    shadowOpacity: 0.5,
-                    shadowRadius: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 10,
-                  }}
-                >
-                  <IconSearchedLocation
-                    name="location"
-                    style={{ position: 'absolute' }}
-                    color={'#B1E4E2'}
-                    size={120}
-                  />
-                  <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
-                    {item.location}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-            {defaultRender()}
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            backgroundColor: '#fff',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: 60,
-            alignItems: 'center',
-            justifyContent: 'center',
+      <View style={{ height: '100%' }}>
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            flexGrow: 1,
           }}
+          style={styles.modalTopContainer}
         >
-          <IconAngleDown
-            onPress={() => scrollToEndFavorite()}
-            name="icon-angle-down"
-            size={20}
-          />
-        </View>
+          {favorite?.map((item, index) => {
+            return (
+              <TouchableOpacity
+                onPress={() => pressFavorite(item, index)}
+                key={`FAVORITE${index}`}
+                style={{
+                  width: '44%',
+                  height: 160,
+                  backgroundColor: '#fff',
+                  borderRadius: 20,
+                  margin: 10,
+                  shadowColor: '#00000029',
+                  shadowOpacity: 0.5,
+                  shadowRadius: 8,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 10,
+                }}
+              >
+                <IconSearchedLocation
+                  name="location"
+                  style={{ position: 'absolute' }}
+                  color={'#B1E4E2'}
+                  size={120}
+                />
+                <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
+                  {item.location}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+          {defaultRender()}
+        </ScrollView>
       </View>
+      <View
+        style={{
+          backgroundColor: '#fff',
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          height: 60,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <IconAngleDown
+          onPress={() => scrollToEndFavorite()}
+          name="icon-angle-down"
+          size={20}
+        />
+      </View>
+      {/* </View> */}
       {/* </View> */}
 
       <ToDoModal
@@ -220,6 +204,11 @@ export const Favorite = ({ navigation, route }) => {
         setPassModalData={setPassModalData}
         isModalVisible={isModalVisible}
         isToday={isToday}
+        navigateFavorite={() =>
+          navigation.navigate('ScheduleToday', {
+            screen: 'ScheduleToday',
+          })
+        }
       />
     </>
   );

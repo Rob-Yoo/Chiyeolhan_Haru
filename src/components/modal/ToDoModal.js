@@ -49,6 +49,7 @@ export const ToDoModal = ({
   isToday,
   passModalData,
   setPassModalData,
+  navigateFavorite = null,
 }) => {
   const dispatch = useDispatch();
   const [locationName, setLocationName] = useState('');
@@ -124,7 +125,12 @@ export const ToDoModal = ({
         isDone: false,
       };
       dispatch(create(newData));
+
+      if (passModalData && passModalData.description === undefined) {
+        navigateFavorite();
+      }
       modalHandler();
+
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
       console.log('toDoSumbit Error :', e);
