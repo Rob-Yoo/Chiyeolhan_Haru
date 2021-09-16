@@ -34,7 +34,6 @@ export const checkGeofenceSchedule = async () => {
       .where('date', '==', TODAY)
       .where('isDone', '==', false)
       .get();
-
     data.forEach((schedule) => {
       // isDone이 false인 일정들 중 끝 시간이 지난 일정이 있으면 사용자가 직접 포그라운드에서 업데이트를 시켜줘야함
       if (schedule.data().finishTime < currentTime) {

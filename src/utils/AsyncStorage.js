@@ -16,6 +16,7 @@ import {
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
+import { geofenceUpdate } from 'utils/BgGeofence';
 
 const setTomorrowData = async (array) => {
   try {
@@ -72,7 +73,6 @@ export const getDataFromAsync = async (storageName) => {
     if (item == null) {
       return null;
     } else {
-      console.log(storageName, item);
       return JSON.parse(item);
     }
   } catch (e) {
@@ -270,6 +270,7 @@ export const deleteAllSearchedData = async () => {
 
 export const checkTodayChange = async () => {
   try {
+    let isNeedUpdate = false;
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
     const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
 
@@ -282,13 +283,13 @@ export const checkTodayChange = async () => {
       await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, tomorrowData);
       await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, tomorrowData);
       await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
-
       const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-      await geofenceUpdate(JSON.parse(geofenceData), false, 0);
       console.log('바뀐 geofenceData :', geofenceData);
+      isNeedUpdate = true;
     } else {
       console.log('날짜가 바뀌지 않았음');
     }
+    return isNeedUpdate;
   } catch (e) {
     console.log('checkTodayChange Error :', e);
   }
