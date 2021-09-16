@@ -346,7 +346,7 @@ export const ToDoModal = ({
     register('todoStartTime'),
       register('todoFinishTime'),
       register('todoTitle'),
-      register('todoTask'),
+      register('todoTask', { min: 1 }),
       register('todoId');
   }, [register]);
   return (
