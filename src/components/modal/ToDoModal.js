@@ -143,26 +143,56 @@ export const ToDoModal = ({
 
   const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
     let isNeedAlert = false;
+
     toDoArray.forEach((toDo) => {
       const startTime = toDo.startTime;
       const finishTime = toDo.finishTime;
       if (
-        passModalData?.id !== toDo.id &&
-        startTime <= todoStartTime &&
-        todoStartTime <= finishTime
+        (passModalData?.id !== toDo.id && todoStartTime === startTime) ||
+        todoStartTime === finishTime ||
+        todoFinishTime === startTime ||
+        todoFinishTime === finishTime
       ) {
         isNeedAlert = true;
         return isNeedAlert;
       }
       if (
         passModalData?.id !== toDo.id &&
-        startTime <= todoFinishTime &&
+        todoStartTime <= startTime &&
+        todoFinishTime >= finishTime
+      ) {
+        isNeedAlert = true;
+        return isNeedAlert;
+      }
+      if (
+        passModalData?.id !== toDo.id &&
+        startTime <= todoStartTime &&
+        finishTime >= todoFinishTime
+      ) {
+        isNeedAlert = true;
+        return isNeedAlert;
+      }
+
+      if (
+        passModalData?.id !== toDo.id &&
+        todoStartTime <= finishTime &&
+        todoStartTime >= startTime &&
+        todoFinishTime >= finishTime
+      ) {
+        isNeedAlert = true;
+        return isNeedAlert;
+      }
+      if (
+        passModalData?.id !== toDo.id &&
+        todoStartTime <= startTime &&
+        todoFinishTime >= startTime &&
         todoFinishTime <= finishTime
       ) {
         isNeedAlert = true;
         return isNeedAlert;
       }
     });
+
     return isNeedAlert;
   };
 
@@ -190,6 +220,7 @@ export const ToDoModal = ({
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
+      console.log('handleAlert', isToday);
       const toDoArray = isToday
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
