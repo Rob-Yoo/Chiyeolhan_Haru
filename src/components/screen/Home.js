@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
 import { Provider } from 'react-redux';
@@ -39,11 +46,29 @@ const styles = StyleSheet.create({
   homeHeaderText: { flex: 0.7, paddingLeft: 15 },
 
   iconScheduleButton: { marginBottom: 10 },
+  updateBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: -2,
+  },
 });
 
 const Home = ({ navigation }) => {
   const [visibleBtn, setVisibleBtn] = useState('');
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
+
+  const updateBtnDayCahnge = () => {
+    console.log('daychange');
+    setVisibleBtn('DEFAULT');
+  };
+  const updateBtnFail = () => {
+    console.log('fail');
+    setVisibleBtn('DEFAULT');
+  };
 
   useEffect(() => {
     // 날짜가 바켰는 지 체크
@@ -78,6 +103,26 @@ const Home = ({ navigation }) => {
                 style={styles.iconScheduleButton}
               />
             </ScheduleButton>
+            {visibleBtn === 'DAY_CHANGE' ? (
+              <TouchableOpacity
+                onPress={() => updateBtnDayCahnge()}
+                style={styles.updateBtn}
+              >
+                <Text>데이체인지버튼</Text>
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
+            {visibleBtn === 'FAIL' ? (
+              <TouchableOpacity
+                style={styles.updateBtn}
+                onPress={() => updateBtnFail()}
+              >
+                <Text>페일버튼</Text>
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
           </View>
           <Provider store={toDosSlice}>
             <HomeContent />
