@@ -281,16 +281,24 @@ export const ToDoModal = ({
   };
 
   const taskSubmit = ({ index, task }) => {
-    if (index === false) {
-      setTaskList([...taskList, task]);
+    if (task.length === 0) {
+      index
+        ? setTaskList([
+            ...taskList.slice(0, index),
+            ...taskList.slice(index + 1),
+          ])
+        : toggleIsVisible(inputIsVisible, setInputIsVisible);
     } else {
-      setTaskList([
-        ...taskList.slice(0, index),
-        task,
-        ...taskList.slice(index + 1),
-      ]);
+      if (task.length > 0 && index === false) {
+        setTaskList([...taskList, task]);
+      } else {
+        setTaskList([
+          ...taskList.slice(0, index),
+          task,
+          ...taskList.slice(index + 1),
+        ]);
+      }
     }
-
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
 
