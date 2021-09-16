@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,12 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import toDosSlice from 'redux/store';
-import { Provider } from 'react-redux';
+
+import { dbService } from 'utils/firebase';
+import { UID, TODAY } from 'constant/const';
+import { init } from 'redux/store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
 import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
@@ -58,8 +63,16 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({ navigation }) => {
-  const [visibleBtn, setVisibleBtn] = useState('');
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
+  const [visibleBtn, setVisibleBtn] = useState('');
+  const [isLoading, setLoading] = useState(true);
+  const [fetchedToDo, setFetchObj] = useState({});
+  let todoArr = [];
+  let rowObj = {};
+  const mounted = useRef(false);
+  const mounted2 = useRef(false);
+  const dispatch = useDispatch();
+  const toDos = useSelector((state) => state);
 
   const updateBtnDayCahnge = () => {
     console.log('daychange');
@@ -69,6 +82,52 @@ const Home = ({ navigation }) => {
     console.log('fail');
     setVisibleBtn('DEFAULT');
   };
+
+  useEffect(() => {
+    getToDos();
+  }, []);
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      dispatch(init(fetchedToDo));
+    }
+  }, [fetchedToDo]);
+
+  useEffect(() => {
+    if (!mounted2.current) {
+      mounted2.current = true;
+    } else {
+      setLoading(false);
+    }
+  }, [toDos]);
+
+  const getToDos = async () => {
+    try {
+      const row = await dbService.collection(`${UID}`).get();
+      row.forEach((data) => (rowObj[data.id] = data.data()));
+      if (Object.keys(rowObj).length === 0) {
+        setLoading(false);
+      }
+      setFetchObj(rowObj);
+    } catch (e) {
+      console.log('getToDos Error :', e);
+    }
+  };
+
+  for (key in toDos) {
+    if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
+  }
+  todoArr.sort((a, b) => {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  });
 
   useEffect(() => {
     // 날짜가 바켰는 지 체크
@@ -82,54 +141,62 @@ const Home = ({ navigation }) => {
     }
   }, []);
 
-  return (
-    <>
-      <ImageBackground
-        source={{ uri: 'homeBackground' }}
-        style={styles.homeBackground}
-      >
-        <View style={styles.homeContainer}>
-          <View style={styles.homeHeader}>
-            <View style={styles.homeHeaderText}>
-              <HomeTextItem />
-              <IconTaskListLeft />
-            </View>
-            <ScheduleButton>
-              <IconGoToScheduleButton
-                name="icon-go-to-schedule-button"
-                size={40}
-                color={'#229892'}
-                onPress={goToScheduleToday}
-                style={styles.iconScheduleButton}
-              />
-            </ScheduleButton>
-            {visibleBtn === 'DAY_CHANGE' ? (
-              <TouchableOpacity
-                onPress={() => updateBtnDayCahnge()}
-                style={styles.updateBtn}
-              >
-                <Text>데이체인지버튼</Text>
-              </TouchableOpacity>
-            ) : (
-              <></>
-            )}
-            {visibleBtn === 'FAIL' ? (
-              <TouchableOpacity
-                style={styles.updateBtn}
-                onPress={() => updateBtnFail()}
-              >
-                <Text>페일버튼</Text>
-              </TouchableOpacity>
-            ) : (
-              <></>
-            )}
+  return isLoading ? (
+    <View
+      style={{
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT,
+        justifyContent: 'center',
+      }}
+    >
+      <Text>로딩</Text>
+    </View>
+  ) : (
+    <ImageBackground
+      source={{ uri: 'homeBackground' }}
+      style={styles.homeBackground}
+    >
+      <View style={styles.homeContainer}>
+        <View style={styles.homeHeader}>
+          <View style={styles.homeHeaderText}>
+            <HomeTextItem />
+            <IconTaskListLeft />
           </View>
-          <Provider store={toDosSlice}>
-            <HomeContent />
-          </Provider>
+          <ScheduleButton>
+            <IconGoToScheduleButton
+              name="icon-go-to-schedule-button"
+              size={40}
+              color={'#229892'}
+              onPress={goToScheduleToday}
+              style={styles.iconScheduleButton}
+            />
+          </ScheduleButton>
+          {visibleBtn === 'DAY_CHANGE' ? (
+            <TouchableOpacity
+              onPress={() => updateBtnDayCahnge()}
+              style={styles.updateBtn}
+            >
+              <Text>데이체인지버튼</Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
+          {visibleBtn === 'FAIL' ? (
+            <TouchableOpacity
+              style={styles.updateBtn}
+              onPress={() => updateBtnFail()}
+            >
+              <Text>페일버튼</Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
         </View>
-      </ImageBackground>
-    </>
+        <Provider store={toDosSlice}>
+          <HomeContent todoArr={todoArr} />
+        </Provider>
+      </View>
+    </ImageBackground>
   );
 };
 
