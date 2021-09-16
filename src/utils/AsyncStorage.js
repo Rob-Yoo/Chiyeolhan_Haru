@@ -16,7 +16,6 @@ import {
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
-import { geofenceUpdate } from 'utils/BgGeofence';
 
 const setTomorrowData = async (array) => {
   try {
@@ -299,7 +298,7 @@ export const checkEarlistTodo = async (todoStartTime) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data != null) {
-      if (data.length != 0) {
+      if (data.length > 0) {
         const earliestTime = data[0].startTime;
         if (isEarliestTime(earliestTime, todoStartTime)) {
           return true;

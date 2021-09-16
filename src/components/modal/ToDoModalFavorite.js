@@ -165,7 +165,7 @@ export const ToDoModalFavorite = ({
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
       let isNeedAlert = false;
       if (toDoArray != null) {
-        if (toDoArray.length != 0) {
+        if (toDoArray.length > 0) {
           isNeedAlert = checkValidSubmit(
             toDoArray,
             todoStartTime,
