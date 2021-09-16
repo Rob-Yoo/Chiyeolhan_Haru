@@ -257,6 +257,7 @@ export const ToDoModal = ({
   }) => {
     if (isToday && todoStartTime < getCurrentTime()) {
       modalHandler();
+      alertStartTimeError();
       return;
     }
     if (Object.keys(locationData).length == 0) {
