@@ -49,6 +49,7 @@ export const ToDoModal = ({
   isToday,
   passModalData,
   setPassModalData,
+  navigateFavorite = null,
 }) => {
   const dispatch = useDispatch();
   const [locationName, setLocationName] = useState('');
@@ -84,7 +85,10 @@ export const ToDoModal = ({
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    const { latitude, location, longitude, address } = locationData;
+    const { latitude, location, longitude, address } =
+      passModalData === undefined || passModalData?.description
+        ? locationData
+        : passModalData;
     const date = new Date();
     const todoId =
       `${date.getFullYear()}` +
@@ -121,7 +125,12 @@ export const ToDoModal = ({
         isDone: false,
       };
       dispatch(create(newData));
+
+      if (passModalData && passModalData.description === undefined) {
+        navigateFavorite();
+      }
       modalHandler();
+
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
       console.log('toDoSumbit Error :', e);
@@ -197,7 +206,8 @@ export const ToDoModal = ({
           modalHandler();
           alertInValidSubmit();
         } else {
-          !passModalData
+          //passModalData
+          !passModalData?.description
             ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
             : await todoEdit(todoStartTime, todoFinishTime, todoTitle);
         }
@@ -205,7 +215,7 @@ export const ToDoModal = ({
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleTodayTodoSubmit Error :', e);
+      console.log('handleAlert Error :', e);
     }
   };
 
@@ -244,6 +254,10 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
+    if (isToday && todoStartTime < getCurrentTime()) {
+      modalHandler();
+      return;
+    }
     if (Object.keys(locationData).length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
@@ -253,13 +267,13 @@ export const ToDoModal = ({
     } else if (todoTitle === undefined) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      if (!passModalData && isToday) {
+      if (!passModalData?.description && isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
         handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!passModalData && !isToday) {
+      } else if (!passModalData?.description && !isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
         handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (passModalData) {
+      } else if (passModalData?.description) {
         //모달에 데이터가 있을때, 즉 일정을 수정할때
         handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
@@ -267,16 +281,24 @@ export const ToDoModal = ({
   };
 
   const taskSubmit = ({ index, task }) => {
-    if (index === false) {
-      setTaskList([...taskList, task]);
+    if (task.length === 0) {
+      index
+        ? setTaskList([
+            ...taskList.slice(0, index),
+            ...taskList.slice(index + 1),
+          ])
+        : toggleIsVisible(inputIsVisible, setInputIsVisible);
     } else {
-      setTaskList([
-        ...taskList.slice(0, index),
-        task,
-        ...taskList.slice(index + 1),
-      ]);
+      if (task.length > 0 && index === false) {
+        setTaskList([...taskList, task]);
+      } else {
+        setTaskList([
+          ...taskList.slice(0, index),
+          task,
+          ...taskList.slice(index + 1),
+        ]);
+      }
     }
-
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
 
@@ -319,20 +341,22 @@ export const ToDoModal = ({
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
-      setLocationName(passModalData.location);
-      setLocationData(passModalData.location);
-      setTitle(passModalData.description);
-      setTaskList([...passModalData.toDos]);
+      if (passModalData.description) {
+        //데이터 수정 시
+        setTitle(passModalData?.description);
+        setTaskList([...passModalData?.toDos]);
+      }
+      setLocationName(passModalData?.location);
+      setLocationData(passModalData?.location);
     }
   }, [passModalData]);
   useEffect(() => {
     register('todoStartTime'),
       register('todoFinishTime'),
       register('todoTitle'),
-      register('todoTask'),
+      register('todoTask', { min: 1 }),
       register('todoId');
   }, [register]);
-
   return (
     <Modal
       navigation={navigation}
@@ -413,17 +437,26 @@ export const ToDoModal = ({
         </View>
 
         <View style={styles.todoInputContainer}>
-          <TextInput
-            placeholder="제목을 입력해 주세요"
-            style={styles.modalInputTitle}
-            value={title}
-            ref={titleRef}
-            onChange={(e) => handleChange(e)}
-            onChangeText={setValue('todoTitle', title)}
-          />
+          {passModalData && passModalData.startDate < new Date() ? (
+            <View style={styles.modalInputTitle}>
+              <Text>{title}</Text>
+            </View>
+          ) : (
+            <TextInput
+              placeholder="제목을 입력해 주세요"
+              style={styles.modalInputTitle}
+              value={title}
+              ref={titleRef}
+              onChange={(e) => handleChange(e)}
+              onChangeText={setValue('todoTitle', title)}
+            />
+          )}
           <TouchableOpacity
             style={styles.modalInputTask}
-            onPress={() => toggleIsVisible(inputIsVisible, setInputIsVisible)}
+            onPress={() =>
+              !(isToday && passModalData?.startDate < new Date()) &&
+              toggleIsVisible(inputIsVisible, setInputIsVisible)
+            }
           >
             <Text style={styles.modalInputText}>수행리스트</Text>
           </TouchableOpacity>
@@ -437,7 +470,10 @@ export const ToDoModal = ({
             {taskList.map((item, index) => (
               <TouchableWithoutFeedback
                 key={index}
-                onPress={() => editSchedule(item, index)}
+                onPress={() =>
+                  !(isToday && passModalData?.startDate < new Date()) &&
+                  editSchedule(item, index)
+                }
               >
                 <Text style={styles.modalInputText}>{item}</Text>
               </TouchableWithoutFeedback>

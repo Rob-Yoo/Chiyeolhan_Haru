@@ -166,6 +166,7 @@ const CurrentMap = ({
             latitude,
             longitude,
           });
+          setIscurrentLocation(false);
           setData({ location, latitude, longitude, address });
           //필터 돌려서 즐겨찾기 색 넘겨주는 함수
           setIsFavoriteColor(

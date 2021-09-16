@@ -60,7 +60,9 @@ export const Pagination = ({ taskList, targetId }) => {
 
   const addTaskList = () => {
     toggleIsVisible();
-    dispatch(add({ targetId, taskTitle }));
+    if (taskTitle !== null && taskTitle.length > 0)
+      dispatch(add({ targetId, taskTitle }));
+    setTaskTitle(null);
   };
 
   return (
