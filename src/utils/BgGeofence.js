@@ -295,33 +295,32 @@ const subscribeOnGeofence = async () => {
 
 export const initBgGeofence = async (data) => {
   try {
+    const state = await BackgroundGeolocation.ready({
+      // Geolocation Config
+      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+      locationAuthorizationRequest: 'Always',
+      locationAuthorizationAlert: {
+        // ios only
+        titleWhenNotEnabled: '위치 서비스 이용 제한',
+        titleWhenOff: '위치 서비스 이용 제한',
+        instructions:
+          "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
+        settingsButton: '설정',
+        cancelButton: '취소',
+      },
+      // Application config
+      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+    });
+
+    await subscribeOnGeofence();
+
     if (data !== null) {
       if (data.length > 0) {
-        const state = await BackgroundGeolocation.ready({
-          // Geolocation Config
-          desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-          locationAuthorizationRequest: 'Always',
-          locationAuthorizationAlert: {
-            // ios only
-            titleWhenNotEnabled: '위치 서비스 이용 제한',
-            titleWhenOff: '위치 서비스 이용 제한',
-            instructions:
-              "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
-            settingsButton: '설정',
-            cancelButton: '취소',
-          },
-          // Application config
-          stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-          startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-        });
-
-        await subscribeOnGeofence();
         await BackgroundGeolocation.startGeofences();
-
-        return state.didLaunchInBackground;
       }
     }
-    return false;
+    return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);
   }
