@@ -53,16 +53,30 @@ export const completeNotification = (isNextSchedule, time, schedule) => {
   PushNotification.removeDeliveredNotifications([`${schedule.id} + 4`]);
 };
 
-export const notifHandler = (arriveType, timeDiff = 0, schedule = null) => {
+export const failNotification = (time, schedule) => {
+  PushNotification.localNotificationSchedule({
+    //... You can use all the options from localNotifications
+    id: `${schedule.id} + 5`,
+    message: '일정 장소에 오지 못하셨습니다. 리셋 버튼을 눌러주세요.', // (required)
+    date: new Date(Date.now() + 1000 * (time * 60)), // 시작 시간에 알림
+    allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+  });
+  PushNotification.removeDeliveredNotifications([`${schedule.id} + 5`]);
+};
+
+export const notifHandler = (arriveType, schedule, timeDiff = 0) => {
   switch (arriveType) {
     case 'ON_TIME':
       arriveOnTimeNotification();
+      PushNotification.cancelLocalNotification(`${schedule.id} + 5`);
       break;
     case 'LATE':
       arriveLateNotification();
+      PushNotification.cancelLocalNotification(`${schedule.id} + 5`);
       break;
     case 'EARLY':
       arriveEarlyNotification(timeDiff, schedule);
+      PushNotification.cancelLocalNotification(`${schedule.id} + 5`);
       break;
     default:
       console.log('Notif Flag Missing');
