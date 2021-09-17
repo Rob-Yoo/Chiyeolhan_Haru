@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { init } from 'redux/store';
-import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import { dbService } from 'utils/firebase';
-import { UID, TODAY } from 'constant/const';
+import { TODAY } from 'constant/const';
 import { Card } from 'components/items/CardItem';
 import { getCurrentTime } from 'utils/Time';
 import { renderPagination } from 'components/items/renderPagination';
@@ -148,72 +145,9 @@ const PaintHome = ({ todoArr }) => {
   );
 };
 
-const HomeContent = ({ initToDo, toDos }) => {
-  const [isLoading, setLoading] = useState(true);
-  const [fetchedToDo, setFetchObj] = useState({});
-  const mounted = useRef(false);
-  const mounted2 = useRef(false);
-  let todoArr = [];
-  let rowObj = {};
-
-  useEffect(() => {
-    getToDos();
-  }, []);
-
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
-      initToDo(fetchedToDo);
-    }
-  }, [fetchedToDo]);
-
-  useEffect(() => {
-    if (!mounted2.current) {
-      mounted2.current = true;
-    } else {
-      setLoading(false);
-    }
-  }, [toDos]);
-
-  const getToDos = async () => {
-    try {
-      const row = await dbService.collection(`${UID}`).get();
-      row.forEach((data) => (rowObj[data.id] = data.data()));
-      if (Object.keys(rowObj).length === 0) {
-        setLoading(false);
-      }
-      setFetchObj(rowObj);
-    } catch (e) {
-      console.log('getToDos Error :', e);
-    }
-  };
-
-  for (key in toDos) {
-    if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
-  }
-  todoArr.sort((a, b) => {
-    if (a.id < b.id) {
-      return -1;
-    }
-    if (a.id > b.id) {
-      return 1;
-    }
-    return 0;
-  });
-
-  return (
-    <>{isLoading ? <Text>loading</Text> : <PaintHome todoArr={todoArr} />}</>
-  );
-};
-const mapStateToProps = (state) => {
-  return { toDos: state };
+const HomeContent = (props) => {
+  const todoArr = props.todoArr;
+  return <PaintHome todoArr={todoArr} />;
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    initToDo: (todo) => dispatch(init(todo)),
-    addToDo: (task, id) => dispatch(add({ task, id })),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContent);
+export default HomeContent;
