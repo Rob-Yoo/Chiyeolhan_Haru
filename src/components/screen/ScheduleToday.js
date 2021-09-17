@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { ScheduleComponent } from 'components/items/ScheduleComponent';
-import { makeScheduleDate } from 'utils/makeScheduleData';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ScheduleLayout from 'components/items/layout/ScheduleLayout';
-import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE_START_TIME } from 'constant/const';
+import AsyncStorage from '@react-native-community/async-storage';
+import { makeScheduleDate } from 'utils/makeScheduleData';
+import ScheduleLayout from 'components/items/layout/ScheduleLayout';
+import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
 const ScheduleToday = ({ navigation }) => {
   const todayData = [];
@@ -25,8 +25,8 @@ const ScheduleToday = ({ navigation }) => {
     }
   };
 
-  makeScheduleDate(storeData, todayData, true);
-
+  makeScheduleDate(storeData, todayData, 'today');
+  //console.log('schedule today');
   return (
     <>
       <ScheduleLayout

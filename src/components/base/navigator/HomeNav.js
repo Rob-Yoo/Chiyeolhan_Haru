@@ -5,7 +5,6 @@ import { ModalStack } from 'components/base/navigator/Stack';
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
 
 export const Stack = createStackNavigator();
-//export const navOptionHandler = { headerShown: false };
 
 const HomeStack = ({ navigation }) => {
   return (

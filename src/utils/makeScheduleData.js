@@ -1,11 +1,11 @@
-import { DAY, MONTH, YEAR, TODAY, TOMORROW } from 'constant/const';
+import { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } from 'constant/const';
 import { getCurrentTime } from 'utils/Time';
 
-export const makeScheduleDate = (toDos, toDoArr, isToday) => {
+export const makeScheduleDate = (toDos, toDoArr, day) => {
   for (key in toDos) {
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
-      isToday &&
+      day === 'today' &&
       toDos[key].date === TODAY
     ) {
       const isDone = toDos[key].isDone;
@@ -29,7 +29,7 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
-      !isToday &&
+      day === 'tomorrow' &&
       toDos[key].date === TOMORROW
     ) {
       const isDone = toDos[key].isDone;
@@ -43,6 +43,26 @@ export const makeScheduleDate = (toDos, toDoArr, isToday) => {
         location: toDos[key].location,
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
+        startTime: toDos[key].startTime,
+        color: '#B9B9B9',
+        toDos: [...toDos[key].toDos],
+      });
+    } else if (
+      Object.keys(toDos[`${key}`]).length !== 0 &&
+      day === 'yesterday' &&
+      toDos[key].date === YESTERDAY
+    ) {
+      const isDone = toDos[key].isDone;
+      const startH = toDos[key].startTime.replace(/:\d\d/, '');
+      const startM = toDos[key].startTime.replace(/\d\d:/, '');
+      const endH = toDos[key].finishTime.replace(/:\d\d/, '');
+      const endM = toDos[key].finishTime.replace(/\d\d:/, '');
+      toDoArr.push({
+        id: toDos[key].id,
+        description: toDos[key].title,
+        location: toDos[key].location,
+        startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
+        endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
         color: '#B9B9B9',
         toDos: [...toDos[key].toDos],
