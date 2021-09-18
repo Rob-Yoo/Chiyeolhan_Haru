@@ -8,12 +8,13 @@ const toDosSlice = createSlice({
     init: (state, action) => {
       Object.assign(state, action.payload);
     },
+    //투두 생성
     create: (state, action) => {
       const newData = action.payload;
       const id = action.payload.id;
       state[id] = newData;
-      toDosUpdateDB(newData, id);
     },
+    //투두 추가
     add: (state, action) => {
       const { targetId, taskTitle } = action.payload;
       state[targetId].toDos.push(taskTitle);
