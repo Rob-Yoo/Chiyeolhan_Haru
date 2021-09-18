@@ -70,7 +70,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       weekStart = weekStart + 1;
       break;
   }
-
+  //console.log('schedule component');
   return (
     <WeekView
       events={events}

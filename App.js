@@ -10,6 +10,7 @@ import { initBgGeofence } from 'utils/BgGeofence';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import store from 'redux/store';
 import { KEY_VALUE_GEOFENCE } from 'constant/const';
+import { SafeAreaView } from 'react-navigation';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -65,7 +66,9 @@ const App = () => {
           {console.log('foreground')}
           <Provider store={store}>
             <NavigationContainer>
-              <HomeNav />
+              <SafeAreaView style={{ flex: 1 }}>
+                <HomeNav />
+              </SafeAreaView>
             </NavigationContainer>
           </Provider>
         </>

@@ -339,7 +339,6 @@ export const ToDoModal = ({
       params: { isToday: isToday },
     });
   };
-
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
@@ -433,9 +432,11 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
           />
-          <TouchableWithoutFeedback onPress={() => gotoFavorite(isToday)}>
-            <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
-          </TouchableWithoutFeedback>
+          {isToday !== 'yesterday' ? (
+            <TouchableOpacity onPress={() => gotoFavorite(isToday)}>
+              <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         <View style={styles.todoInputContainer}>
