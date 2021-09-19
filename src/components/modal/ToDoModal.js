@@ -41,6 +41,7 @@ import {
 import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime } from 'utils/Time';
+import { toDosUpdateDB } from 'utils/Database';
 
 export const ToDoModal = ({
   modalHandler,
@@ -111,6 +112,21 @@ export const ToDoModal = ({
         isDone: false,
       };
       dispatch(create(newData));
+      await toDosUpdateDB(newData, todoId);
+
+      if (isToday) {
+        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+      } else {
+        dbToAsyncTomorrow();
+      }
+
+      await handleFilterData(
+        location,
+        'location',
+        searchedList,
+        setSearchedList,
+      );
 
       if (isToday) {
         const isChangeEarliest = await checkEarlistTodo(todoStartTime);
@@ -339,7 +355,6 @@ export const ToDoModal = ({
       params: { isToday: isToday },
     });
   };
-
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
@@ -433,9 +448,11 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
           />
-          <TouchableWithoutFeedback onPress={() => gotoFavorite(isToday)}>
-            <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
-          </TouchableWithoutFeedback>
+          {isToday !== 'yesterday' ? (
+            <TouchableOpacity onPress={() => gotoFavorite(isToday)}>
+              <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         <View style={styles.todoInputContainer}>

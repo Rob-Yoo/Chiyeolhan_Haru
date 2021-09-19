@@ -25,6 +25,7 @@
 		8DC1141C8E2044D380163A88 /* icon-searched-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC17A96DE3F94175A81529DE /* icon-searched-location.ttf */; };
 		943EE921770849648EF29722 /* icon-todo-man.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EB444FEF80FB49C2BBD0C443 /* icon-todo-man.ttf */; };
 		994189F915934585BA1FA0EC /* icon-modal-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 865DFAD803E843ED9434E930 /* icon-modal-question.ttf */; };
+		9A764286CCB34A4FA5565F51 /* GodoB.otf in Resources */ = {isa = PBXBuildFile; fileRef = F9533D472D12409D91C0245B /* GodoB.otf */; };
 		9BDCDE8C7FA14002A7850F8D /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BD27EE5FA5424D85ABA950AE /* icon-star-border.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 075301D78C3B4B3AAC76F057 /* icon-star-border.ttf */; };
@@ -94,6 +95,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F4A2ECCDBA1F407E89C72442 /* icon-question.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-question.ttf"; path = "../assets/icons/ttf-svgs/icon-question.ttf"; sourceTree = "<group>"; };
+		F9533D472D12409D91C0245B /* GodoB.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GodoB.otf; path = ../assets/fonts/GodoB.otf; sourceTree = "<group>"; };
 		FC713D3976404481B3797388 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -228,6 +230,7 @@
 				63CA4C047D3D4C82AF5106FD /* icon-tasklist-left-fin.ttf */,
 				FC713D3976404481B3797388 /* icon-tasklist-left.ttf */,
 				EB444FEF80FB49C2BBD0C443 /* icon-todo-man.ttf */,
+				F9533D472D12409D91C0245B /* GodoB.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				10F64CC1E34B4271849D0B16 /* icon-tasklist-left-fin.ttf in Resources */,
 				2C51656974554F0FBB1B7620 /* icon-tasklist-left.ttf in Resources */,
 				943EE921770849648EF29722 /* icon-todo-man.ttf in Resources */,
+				9A764286CCB34A4FA5565F51 /* GodoB.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,7 +339,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
+			shellScript = "export NODE_BINARY=/opt/homebrew/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
 		};
 		780E550D11452C8FFACB7187 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -31,12 +31,17 @@ const ScheduleLayout = ({
   passModalData,
   setPassModalData,
 }) => {
+  //console.log('schedule layout');
   return (
     <>
       <View style={{ flex: 1 }}>{children}</View>
-      <TouchableOpacity style={styles.addToDoButton} onPress={handleModal}>
-        <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
-      </TouchableOpacity>
+      {isToday !== 'yesterday' ? (
+        <TouchableOpacity style={styles.addToDoButton} onPress={handleModal}>
+          <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
       <ToDoModal
         navigation={navigation}
         modalHandler={handleModal}

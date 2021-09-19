@@ -27,5 +27,7 @@ export const MONTH = date.getMonth() + 1;
 export const DAY = date.getDate();
 export const TODAY =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY}` : DAY);
+export const YESTERDAY =
+  (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY - 1}` : DAY - 1);
 export const TOMORROW =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY + 1 < 10 ? `0${DAY + 1}` : DAY + 1);
