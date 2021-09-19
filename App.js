@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
-//import toDosSlice from 'redux/store';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
@@ -33,26 +32,27 @@ const App = () => {
     appState.current = nextAppState;
   };
 
-  useEffect(() => {
-    const prepare = async () => {
-      try {
-        let data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-        if (data !== null) {
-          data = JSON.parse(data);
-        }
-        await SplashScreen.preventAutoHideAsync();
-        const result = await initBgGeofence(data);
-        setIsTerminate(result);
-      } catch (e) {
-        console.warn(e);
-        await SplashScreen.hideAsync();
-      } finally {
-        setAppIsReady(true);
-        await SplashScreen.hideAsync();
+  const prepare = async () => {
+    try {
+      let data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+      if (data !== null) {
+        data = JSON.parse(data);
       }
-    };
-    prepare();
+      await SplashScreen.preventAutoHideAsync();
+      const result = await initBgGeofence(data);
+      setIsTerminate(result);
+    } catch (e) {
+      console.warn(e);
+      await SplashScreen.hideAsync();
+    } finally {
+      setAppIsReady(true);
+      await SplashScreen.hideAsync();
+    }
+  };
+
+  useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
+    prepare();
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };

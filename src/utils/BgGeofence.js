@@ -92,6 +92,7 @@ export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
       const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
       await toDoRef.update({ isDone: true });
     }
+
     if (index > 0) {
       const newDataArray = data.slice(index);
       await AsyncStorage.setItem(
@@ -315,11 +316,11 @@ export const initBgGeofence = async (data) => {
 
     await subscribeOnGeofence();
 
-    if (data !== null) {
-      if (data.length > 0) {
-        await BackgroundGeolocation.startGeofences();
-      }
-    }
+    // if (data !== null) {
+    //   if (data.length > 0) {
+    //     await BackgroundGeolocation.startGeofences();
+    //   }
+    // }
     return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);

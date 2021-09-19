@@ -129,16 +129,16 @@ const Home = ({ navigation }) => {
     return 0;
   });
 
-  useEffect(() => {
-    // 날짜가 바켰는 지 체크
-    const dayChange = checkTodayChange();
-    // 지난 일정 중 isDone이 false인 일정이 있는지 체크
-    const failSchedule = checkGeofenceSchedule();
+  const checkBtn = async () => {
+    // 날짜가 바꼈는 지 체크
+    const dayChange = await checkTodayChange();
     if (dayChange) {
       setVisibleBtn('DAY_CHANGE');
-    } else if (failSchedule) {
-      setVisibleBtn('FAIL');
     }
+  };
+
+  useEffect(() => {
+    checkBtn();
   }, []);
 
   return isLoading ? (

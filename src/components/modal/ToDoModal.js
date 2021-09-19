@@ -97,20 +97,6 @@ export const ToDoModal = ({
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     try {
-      if (isToday) {
-        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      } else {
-        dbToAsyncTomorrow();
-      }
-
-      await handleFilterData(
-        location,
-        'location',
-        searchedList,
-        setSearchedList,
-      );
-
       const newData = {
         id: todoId,
         title: todoTitle,
@@ -125,6 +111,20 @@ export const ToDoModal = ({
         isDone: false,
       };
       dispatch(create(newData));
+
+      if (isToday) {
+        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+      } else {
+        dbToAsyncTomorrow();
+      }
+
+      await handleFilterData(
+        location,
+        'location',
+        searchedList,
+        setSearchedList,
+      );
 
       if (passModalData && passModalData.description === undefined) {
         navigateFavorite();
