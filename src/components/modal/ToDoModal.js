@@ -109,7 +109,7 @@ export const ToDoModal = ({
         latitude,
         date: isToday ? TODAY : TOMORROW,
         toDos: [...taskList],
-        isDone: false,
+        isDone: true,
       };
       dispatch(create(newData));
       await toDosUpdateDB(newData, todoId);

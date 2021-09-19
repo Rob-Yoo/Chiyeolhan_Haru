@@ -64,12 +64,12 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 4`); //현재 일정 완료 알림 사라짐
       }
 
-      if (isChangeEarliest) {
-        await toDoRef.doc(`${geofenceData[1].id}`).update({ isDone: false }); // 추가되기전의 가장 이른 일정의 isDone 바꿈
-      }
+      // if (isChangeEarliest) {
+      //   await toDoRef.doc(`${geofenceData[1].id}`).update({ isDone: false }); // 추가되기전의 가장 이른 일정의 isDone 바꿈
+      // }
 
       for (const schedule of nearBySchedules) {
-        await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
+        // await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
         PushNotification.cancelLocalNotification(`${schedule.id} + 3`); // nearBy 일정들의 도착 알림 사라짐
         console.log('도착 알림 사라짐');
         PushNotification.cancelLocalNotification(`${schedule.id} + 4`); // 완료 알림도 사라짐
@@ -81,9 +81,9 @@ export const geofenceScheduler = async (isChangeEarliest) => {
       if (isEarly) {
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 4`); //현재 일정 완료 알림 사라짐
-        if (isChangeEarliest) {
-          await toDoRef.doc(`${geofenceData[1].id}`).update({ isDone: false }); // 추가되기전의 가장 이른 일정 isDone 바꿈
-        }
+        // if (isChangeEarliest) {
+        //   await toDoRef.doc(`${geofenceData[1].id}`).update({ isDone: false }); // 추가되기전의 가장 이른 일정 isDone 바꿈
+        // }
         console.log('nearBySchedule X isEarly인 경우');
         // 현재 일정 이후의 일정이라도 추가한 일정이 nearBy일 수 있기 때문에 다시 지오펜스를 킨다.
         await geofenceUpdate(geofenceData, false, 0);

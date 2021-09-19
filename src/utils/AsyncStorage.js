@@ -139,6 +139,13 @@ const setTodayToDoArray = async (todayToDos) => {
         id: todo.data().id,
         startTime: todo.data().startTime,
         finishTime: todo.data().finishTime,
+        latitude: todo.data().latitude,
+        longitude: todo.data().longitude,
+        location: todo.data().location,
+        date: todo.data().date,
+        address: todo.data().address,
+        title: todo.data().title,
+        toDos: todo.data().toDos,
       });
     });
     await setTodayData(JSON.stringify(todayToDoArray));
@@ -214,6 +221,10 @@ export const dbToAsyncTomorrow = async () => {
         latitude: result.data().latitude,
         longitude: result.data().longitude,
         location: result.data().location,
+        date: result.data().date,
+        address: result.data().address,
+        title: result.data().title,
+        toDos: result.data().toDos,
       });
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));

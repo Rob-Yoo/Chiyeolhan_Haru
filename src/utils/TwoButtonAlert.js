@@ -1,5 +1,4 @@
 import { Alert } from 'react-native';
-import { toDosDeleteDB } from 'utils/Database';
 
 export const alertStartTimePicker = () =>
   Alert.alert(
@@ -15,6 +14,14 @@ export const alertFinsihTimePicker = (message) =>
 export const alertStartTimeError = () =>
   Alert.alert(
     `현재 시간보다 이전 시간대의\n 일정은 생성할 수 없습니다.`,
+    '',
+    [{ text: '확인' }],
+    { cancelable: false },
+  );
+
+export const offlineAlert = () =>
+  Alert.alert(
+    `인터넷 연결이 끊겼습니다.\n서비스가 제한될 수 있습니다.`,
     '',
     [{ text: '확인' }],
     { cancelable: false },

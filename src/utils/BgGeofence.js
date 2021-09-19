@@ -88,10 +88,10 @@ export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
 
-    if (isSuccess) {
-      const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-      await toDoRef.update({ isDone: true });
-    }
+    // if (isSuccess) {
+    //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+    //   await toDoRef.update({ isDone: true });
+    // }
 
     if (index > 0) {
       const newDataArray = data.slice(index);
@@ -144,7 +144,7 @@ const findNearBy = async (data, currentTime) => {
       } else {
         try {
           idx = idx + 1;
-          await toDoRef.doc(`${nextSchedule.id}`).update({ isDone: true });
+          // await toDoRef.doc(`${nextSchedule.id}`).update({ isDone: true });
           const timeDiff = getEarlyTimeDiff(
             nextSchedule.startTime,
             currentTime,
@@ -189,7 +189,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
     console.log('nearBySchedules :', nearBySchedules);
     if (nearBySchedules.length > 0) {
       // 다음 일정 장소가 현재 일정 장소의 200m 이내에 존재히면
-      await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
+      // await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
       await AsyncStorage.setItem(
         KEY_VALUE_NEAR_BY,
         JSON.stringify(nearBySchedules),
@@ -199,7 +199,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       // 200m 바깥에 존재하면
       if (isEarly) {
         // 일찍 왔으면 일단 isDone만 true로 바꿔주고 EXIT 시간이 일정 시작 시간보다 빠르면 false로 다시 바꿈
-        await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
+        // await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
         // 완료 알림 예약하고 EXIT 시간이 일정 시작 시간보다 빠르면 알림 취소
         completeNotifHandler(data, timeDiff, data[0]);
       } else {
@@ -215,7 +215,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
 const exitAction = async (data, startTime, finishTime, currentTime) => {
   try {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
-    const toDoRef = dbService.collection(`${UID}`);
+    // const toDoRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules == null) {
       if (currentTime < startTime) {
@@ -223,7 +223,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         console.log('일정 시작 시간보다 전에 나감');
         PushNotification.cancelLocalNotification(`${data[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
         PushNotification.cancelLocalNotification(`${data[0].id} + 4`); //현재 일정 완료 알림 사라짐
-        await toDoRef.doc(`${data[0].id}`).update({ isDone: false });
+        // await toDoRef.doc(`${data[0].id}`).update({ isDone: false });
         await AsyncStorage.removeItem(KEY_VALUE_EARLY);
         failNotification(timeDiff, data[0]); // 다시 해당 일정의 failNotification 알림 등록
       } else {
@@ -248,8 +248,8 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
           if (currentTime > schedule.startTime) {
             successCount = successCount + 1;
           } else {
-            await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
-            console.log('isDone: false로 바뀜 :', schedule.location);
+            // await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
+            // console.log('isDone: false로 바뀜 :', schedule.location);
             PushNotification.cancelLocalNotification(`${schedule.id} + 3`); // nearBy 일정들의 도착 알림 사라짐
             console.log('도착 알림 사라짐');
             PushNotification.cancelLocalNotification(`${schedule.id} + 4`); // 완료 알림도 사라짐
