@@ -80,7 +80,7 @@ const addGeofenceTrigger = async () => {
   }
 };
 
-export const geofenceUpdate = async (data, isSuccess = true, index = 1) => {
+export const geofenceUpdate = async (data, index = 1) => {
   try {
     await BackgroundGeolocation.stop();
 
@@ -228,7 +228,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         failNotification(timeDiff, data[0]); // 다시 해당 일정의 failNotification 알림 등록
       } else {
         // 일찍 ENTER하고 시작 시간 이후에 EXIT 하면 이미 isDone은 true이므로 geofence만 다음 일정꺼로 넘김
-        await geofenceUpdate(data, false);
+        await geofenceUpdate(data);
       }
     } else {
       if (!nearBySchedules.includes(data[0])) {
@@ -240,7 +240,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
       if (isAllFinish) {
         const successNumber = nearBySchedules.length;
         console.log('successNumber :', successNumber);
-        await geofenceUpdate(data, false, successNumber); // 성공한 개수 만큼 async storage에서 지움
+        await geofenceUpdate(data, successNumber); // 성공한 개수 만큼 async storage에서 지움
       } else {
         let successCount = 0;
         let timeDiff;
@@ -260,7 +260,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         }
         if (successCount > 0) {
           console.log('successCount :', successCount);
-          await geofenceUpdate(data, false, successCount); // 성공한 개수 만큼 async storage에서 지움
+          await geofenceUpdate(data, successCount); // 성공한 개수 만큼 async storage에서 지움
         } else {
           await AsyncStorage.removeItem(KEY_VALUE_EARLY);
         }

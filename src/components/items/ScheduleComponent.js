@@ -103,7 +103,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
               if ((await deleteToDoAlert(event)) === 'true') {
                 if (day === 'today') {
                   if (event.id == data[0].id) {
-                    await geofenceUpdate(data, false);
+                    await geofenceUpdate(data);
                     deleteTodayAsyncStorageData(targetId);
                   } else {
                     deleteGeofenceAsyncStorageData(targetId);

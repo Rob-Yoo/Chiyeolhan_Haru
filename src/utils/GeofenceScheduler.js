@@ -76,7 +76,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         console.log('완료 알림 사라짐');
       }
       console.log('nearBySchedules인 경우');
-      await geofenceUpdate(geofenceData, false, 0);
+      await geofenceUpdate(geofenceData, 0);
     } else {
       if (isEarly) {
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
@@ -86,7 +86,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         // }
         console.log('nearBySchedule X isEarly인 경우');
         // 현재 일정 이후의 일정이라도 추가한 일정이 nearBy일 수 있기 때문에 다시 지오펜스를 킨다.
-        await geofenceUpdate(geofenceData, false, 0);
+        await geofenceUpdate(geofenceData, 0);
       } else {
         if (progressing) {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
@@ -100,10 +100,10 @@ export const geofenceScheduler = async (isChangeEarliest) => {
               JSON.stringify(geofenceData),
             );
           }
-          await geofenceUpdate(geofenceData, false, 0);
+          await geofenceUpdate(geofenceData, 0);
         } else if (isChangeEarliest) {
           // 현재 진행중인 일정에 neartBySchedules가 없고 도착 상태도 아니고 제일 빠른 시간의 일정이 바뀌었다면
-          await geofenceUpdate(geofenceData, false, 0); // 바뀐 일정의 지오펜스로 바꿈
+          await geofenceUpdate(geofenceData, 0); // 바뀐 일정의 지오펜스로 바꿈
           console.log('nearBySchedule X isEarly X isChangeEarliest인 경우');
         }
       }

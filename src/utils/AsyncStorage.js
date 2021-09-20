@@ -12,11 +12,12 @@ import {
   KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_TODAY_DATA,
+  KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_FAVORITE,
+  YESTERDAY,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
-import { YESTERDAY } from '../constant/const';
 
 const setTomorrowData = async (array) => {
   try {
@@ -294,11 +295,22 @@ export const checkTodayChange = async () => {
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
     } else if (today !== TODAY) {
       const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
+      const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
+
+      await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+
+      if (todayData === null) {
+        await AsyncStorage.removeItem(KEY_VALUE_YESTERDAY_DATA);
+      } else {
+        await AsyncStorage.setItem(KEY_VALUE_YESTERDAY_DATA, todayData);
+      }
+
       if (tomorrowData === null) {
+        await AsyncStorage.removeItem(KEY_VALUE_TODAY_DATA);
+        await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
         return false;
       } else {
         // 오늘이 지나면
-        await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
         // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
         await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, tomorrowData);
         await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, tomorrowData);

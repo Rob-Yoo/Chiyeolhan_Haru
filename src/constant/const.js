@@ -14,6 +14,7 @@ export const KEY_VALUE_PROGRESSING = 'progressingSchedule';
 
 export const KEY_VALUE_TODAY_DATA = 'todayDataArray';
 export const KEY_VALUE_TOMORROW_DATA = 'tomorrowDataArray';
+export const KEY_VALUE_YESTERDAY_DATA = 'yesterdayDataArray';
 
 // 기기 고유 ID
 export const UID = DeviceInfo.getUniqueId();

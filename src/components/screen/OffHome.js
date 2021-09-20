@@ -19,10 +19,12 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 import {
   KEY_VALUE_OFFLINE,
+  KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
 } from 'constant/const';
 import { setNetwork } from 'redux/store';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -98,9 +100,17 @@ const OffHome = ({ navigation, route }) => {
   const getToDos = async () => {
     try {
       const todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
-      const tomorrowAynscData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
+      const tomorrowAsyncData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
+      const yesterdayAsyncData = await getDataFromAsync(
+        KEY_VALUE_YESTERDAY_DATA,
+      );
+
       dispatch(setNetwork('offline'));
-      rowObj = Object.assign(...todayAsyncData, ...tomorrowAynscData);
+      rowObj = Object.assign(
+        ...yesterdayAsyncData,
+        ...todayAsyncData,
+        ...tomorrowAsyncData,
+      );
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);
       }
