@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, createSlice } from '@reduxjs/toolkit';
 import { toDosUpdateDB, toDosDeleteDB } from 'utils/Database';
 
 const toDosSlice = createSlice({
@@ -56,6 +56,20 @@ const toDosSlice = createSlice({
     },
   },
 });
+const networkSlice = createSlice({
+  name: 'networkReducer',
+  initialState: null,
+  reducers: {
+    setNetwork: (state, action) => {
+      return (state = action.payload);
+    },
+  },
+});
+
+const reducer = combineReducers({
+  toDos: toDosSlice.reducer,
+  network: networkSlice.reducer,
+});
 
 export const {
   create,
@@ -66,4 +80,7 @@ export const {
   deleteToDoDispatch,
   editToDoDispatch,
 } = toDosSlice.actions;
-export default configureStore({ reducer: toDosSlice.reducer });
+export const { setNetwork } = networkSlice.actions;
+export default configureStore({
+  reducer,
+});

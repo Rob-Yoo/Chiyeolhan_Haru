@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
 export default function TabBar(props) {
   const { state, descriptors, navigation } = props;
   const [visibleName, setVisibleName] = useState(true);
+  const network = useSelector((state) => state.network);
   return (
     <View style={styles.tabContainer}>
       {state.routes.map((route, index) => {
@@ -104,7 +106,11 @@ export default function TabBar(props) {
         );
       })}
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home', { screen: 'Home' })}
+        onPress={() =>
+          network === 'online'
+            ? navigation.navigate('Home', { screen: 'Home' })
+            : navigation.navigate('OffHome', { screen: 'OffHome' })
+        }
       >
         <Text style={[styles.tabBarText, { color: '#ADADAD' }]}>홈</Text>
       </TouchableOpacity>

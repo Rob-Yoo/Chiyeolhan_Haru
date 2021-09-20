@@ -8,6 +8,7 @@ import {
   alertStartTimePicker,
   alertFinsihTimePicker,
 } from 'utils/TwoButtonAlert';
+import { useSelector } from 'react-redux';
 
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return ' ';
@@ -72,6 +73,7 @@ export const TimePicker = ({
   isToday,
   timeDate,
 }) => {
+  const network = useSelector((state) => state.network);
   const [isVisible, setVisible] = useState(false);
   const [time, setTime] = useState('00:00');
   const [lowTime, setLowTime] = useState(new Date());
@@ -87,7 +89,7 @@ export const TimePicker = ({
   const currentTime = `${hour}:${min}`;
 
   const showTimePicker = () => {
-    if (timeDate < new Date()) return;
+    if (timeDate < new Date() || network === 'offline') return;
     setVisible(true);
   };
 

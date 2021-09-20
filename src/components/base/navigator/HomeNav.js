@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import NetInfo from '@react-native-community/netinfo';
+import { View, Text } from 'react-native';
+
 import Home from 'components/screen/Home';
-import AsyncStorage from '@react-native-community/async-storage';
-import { createStackNavigator } from '@react-navigation/stack';
+import OffHome from 'components/screen/OffHome';
 import { ModalStack } from 'components/base/navigator/Stack';
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
+import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
+import { createStackNavigator } from '@react-navigation/stack';
 import { KEY_VALUE_OFFLINE } from 'constant/const';
 import { offlineAlert } from 'utils/TwoButtonAlert';
 
@@ -26,9 +29,25 @@ const HomeStack = ({ navigation }) => {
   );
 };
 
+const OffHomeStack = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="OffHome"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="OffHome" component={OffHome} />
+      <Stack.Screen
+        name="ScheduleToday"
+        navigation={navigation}
+        component={SchedullScreenDetail}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const HomeNav = ({ navigation }) => {
   const [network, setNetwork] = useState('online');
-
+  const [isNetwork, setIsNetwork] = useState(false);
   useEffect(() => {
     checkNetwork();
   }, [network]);
@@ -38,8 +57,10 @@ const HomeNav = ({ navigation }) => {
       if (state.isInternetReachable !== null) {
         if (state.isInternetReachable && state.isConnected) {
           await _handleIsConnected(state);
+          setIsNetwork(true);
         } else if (!state.isInternetReachable && !state.isConnected) {
           await _handleIsNotConnected();
+          setIsNetwork(true);
         }
       }
     });
@@ -71,7 +92,7 @@ const HomeNav = ({ navigation }) => {
     }
   };
 
-  return (
+  return isNetwork ? (
     <Stack.Navigator
       mode="modal"
       screenOptions={{
@@ -80,9 +101,17 @@ const HomeNav = ({ navigation }) => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Home" component={HomeStack} />
+      {network === 'online' ? (
+        <Stack.Screen name="Home" component={HomeStack} />
+      ) : (
+        <Stack.Screen name="OffHome" component={OffHomeStack} />
+      )}
       <Stack.Screen name="ModalStack" component={ModalStack} />
     </Stack.Navigator>
+  ) : (
+    <View style={{ flex: 1 }}>
+      <Text>홈네비 로딩</Text>
+    </View>
   );
 };
 

@@ -5,25 +5,24 @@ import {
   ImageBackground,
   Dimensions,
   Text,
-  TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components/native';
-//import toDosSlice from 'redux/store';
 
-import { dbService } from 'utils/firebase';
-import { UID, TODAY } from 'constant/const';
+import { TODAY } from 'constant/const';
 import { init } from 'redux/store';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import HomeContent from 'components/items/HomeContent';
+import OffHomeContent from 'components/items/OffHomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
-import { checkTodayChange } from 'utils/AsyncStorage';
-import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE_OFFLINE } from '../../constant/const';
-import store, { setNetwork } from '../../redux/store';
+import { getDataFromAsync } from 'utils/AsyncStorage';
+import {
+  KEY_VALUE_OFFLINE,
+  KEY_VALUE_TODAY_DATA,
+  KEY_VALUE_TOMORROW_DATA,
+} from 'constant/const';
+import { setNetwork } from 'redux/store';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -65,10 +64,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Home = ({ navigation }) => {
+const OffHome = ({ navigation, route }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-
-  const [visibleBtn, setVisibleBtn] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   let todoArr = [];
@@ -77,15 +74,6 @@ const Home = ({ navigation }) => {
   const mounted2 = useRef(false);
   const dispatch = useDispatch();
   const toDos = useSelector((state) => state.toDos);
-
-  const updateBtnDayCahnge = () => {
-    console.log('daychange');
-    setVisibleBtn('DEFAULT');
-  };
-  const updateBtnFail = () => {
-    console.log('fail');
-    setVisibleBtn('DEFAULT');
-  };
 
   useEffect(() => {
     getToDos();
@@ -109,9 +97,10 @@ const Home = ({ navigation }) => {
 
   const getToDos = async () => {
     try {
-      const row = await dbService.collection(`${UID}`).get();
-      row.forEach((data) => (rowObj[data.id] = data.data()));
-      dispatch(setNetwork('online'));
+      const todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
+      const tomorrowAynscData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
+      dispatch(setNetwork('offline'));
+      rowObj = Object.assign(...todayAsyncData, ...tomorrowAynscData);
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);
       }
@@ -120,32 +109,9 @@ const Home = ({ navigation }) => {
       console.log('getToDos Error :', e);
     }
   };
-
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
-  todoArr.sort((a, b) => {
-    if (a.id < b.id) {
-      return -1;
-    }
-    if (a.id > b.id) {
-      return 1;
-    }
-    return 0;
-  });
-
-  const checkBtn = async () => {
-    // 날짜가 바꼈는 지 체크
-    const dayChange = await checkTodayChange();
-    if (dayChange) {
-      setVisibleBtn('DAY_CHANGE');
-    }
-  };
-
-  useEffect(() => {
-    checkBtn();
-  }, []);
-
   return isLoading ? (
     <View
       style={{
@@ -176,31 +142,11 @@ const Home = ({ navigation }) => {
               style={styles.iconScheduleButton}
             />
           </ScheduleButton>
-          {visibleBtn === 'DAY_CHANGE' ? (
-            <TouchableOpacity
-              onPress={() => updateBtnDayCahnge()}
-              style={styles.updateBtn}
-            >
-              <Text>데이체인지버튼</Text>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
-          {visibleBtn === 'FAIL' ? (
-            <TouchableOpacity
-              style={styles.updateBtn}
-              onPress={() => updateBtnFail()}
-            >
-              <Text>페일버튼</Text>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
         </View>
-        <HomeContent todoArr={todoArr} />
+        <OffHomeContent todoArr={todoArr} />
       </View>
     </ImageBackground>
   );
 };
 
-export default Home;
+export default OffHome;

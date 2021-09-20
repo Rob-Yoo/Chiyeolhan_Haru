@@ -4,8 +4,9 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { add } from 'redux/store';
+import { getCurrentTime } from 'utils/Time';
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 
@@ -50,6 +51,9 @@ const styles = StyleSheet.create({
 });
 
 export const Pagination = ({ taskList, targetId }) => {
+  const network = useSelector((state) => state.network);
+  const toDos = useSelector((state) => state.toDos[targetId]);
+  console.log(`toDos: ${JSON.stringify(toDos)}`);
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState(null);
   const dispatch = useDispatch();
@@ -82,7 +86,12 @@ export const Pagination = ({ taskList, targetId }) => {
           name="icon-tasklist-add-button"
           size={19}
           color={'#229892'}
-          onPress={() => targetId !== 0 && toggleIsVisible()}
+          onPress={() =>
+            (targetId !== 0 && network === 'online') ||
+            (toDos.finishTime > getCurrentTime() &&
+              toDos.startTime > getCurrentTime() &&
+              toggleIsVisible())
+          }
         />
       </View>
       <ScrollView
@@ -112,7 +121,15 @@ export const Pagination = ({ taskList, targetId }) => {
                     style={{ position: 'absolute', left: -35, top: 0 }}
                   />
                 )}
-                <Task index={index} text={item} targetId={targetId} />
+                <Task
+                  index={index}
+                  text={item}
+                  targetId={targetId}
+                  canPress={
+                    toDos.finishTime > getCurrentTime() &&
+                    toDos.startTime > getCurrentTime()
+                  }
+                />
               </View>
             );
           })}

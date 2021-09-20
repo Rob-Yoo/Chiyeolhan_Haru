@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -6,10 +6,9 @@ import {
   Text,
   TouchableHighlight,
 } from 'react-native';
+import { edit, remove } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { edit } from 'redux/store';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
-import { remove } from 'redux/store';
 import { deleteToDoTaskList } from 'utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
@@ -66,10 +65,12 @@ const styles = StyleSheet.create({
 });
 
 export const Task = (props) => {
-  const { text: taskText, targetId, index } = props;
+  const { text: taskText, targetId, index, canPress } = props;
   const todosSelector = useSelector(
-    (state) => targetId !== 0 && state[targetId]?.toDos,
+    (state) => targetId !== 0 && state.toDos[targetId]?.toDos,
   );
+
+  const network = useSelector((state) => state.network);
   const [taskTitle, setTaskTitle] = useState(
     targetId !== 0 ? todosSelector[index] : null,
   );
@@ -116,7 +117,10 @@ export const Task = (props) => {
               console.log('task list delete error', e);
             }
           }}
-          onPress={() => targetId !== 0 && toggleIsVisible()}
+          onPress={() =>
+            (targetId !== 0 && network === 'online') ||
+            (canPress && toggleIsVisible())
+          }
           style={styles.task}
         >
           <View

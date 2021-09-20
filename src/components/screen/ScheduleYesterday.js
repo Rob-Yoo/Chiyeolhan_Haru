@@ -6,7 +6,7 @@ import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
 const ScheduleYesterday = ({ navigation }) => {
   const yesterDayData = [];
-  const storeData = useSelector((state) => state);
+  const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
 
