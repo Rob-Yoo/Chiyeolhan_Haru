@@ -21,7 +21,7 @@ export const alertStartTimeError = () =>
 
 export const offlineAlert = () =>
   Alert.alert(
-    `인터넷 연결이 끊겼습니다.\n서비스가 제한될 수 있습니다.`,
+    `인터넷 연결이 끊겼습니다.\n일부 서비스가 제한될 수 있습니다.`,
     '',
     [{ text: '확인' }],
     { cancelable: false },

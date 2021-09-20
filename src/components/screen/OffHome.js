@@ -99,12 +99,18 @@ const OffHome = ({ navigation, route }) => {
 
   const getToDos = async () => {
     try {
-      const todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
-      const tomorrowAsyncData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
-      const yesterdayAsyncData = await getDataFromAsync(
-        KEY_VALUE_YESTERDAY_DATA,
-      );
-
+      let todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
+      let tomorrowAsyncData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
+      let yesterdayAsyncData = await getDataFromAsync(KEY_VALUE_YESTERDAY_DATA);
+      if (yesterdayAsyncData === null) {
+        yesterdayAsyncData = [];
+      }
+      if (todayAsyncData === null) {
+        todayAsyncData = [];
+      }
+      if (tomorrowAsyncData === null) {
+        tomorrowAsyncData = [];
+      }
       dispatch(setNetwork('offline'));
       rowObj = Object.assign(
         ...yesterdayAsyncData,
