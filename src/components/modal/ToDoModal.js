@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
 import { create, editToDoDispatch } from 'redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 import Map from 'components/screen/Map';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
@@ -53,6 +53,7 @@ export const ToDoModal = ({
   navigateFavorite = null,
 }) => {
   const dispatch = useDispatch();
+  const network = useSelector((state) => state.network);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -86,6 +87,10 @@ export const ToDoModal = ({
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    if (network === 'offline') {
+      modalHandler();
+      return;
+    }
     const { latitude, location, longitude, address } =
       passModalData === undefined || passModalData?.description
         ? locationData
@@ -184,6 +189,10 @@ export const ToDoModal = ({
   };
 
   const todoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    if (network === 'offline') {
+      modalHandler();
+      return;
+    }
     const id = passModalData?.id;
     dispatch(
       editToDoDispatch({
@@ -271,6 +280,10 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
+    if (network === 'offline' || isToday === 'yesterday') {
+      modalHandler();
+      return;
+    }
     if (isToday && todoStartTime < getCurrentTime()) {
       modalHandler();
       alertStartTimeError();
@@ -448,7 +461,7 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
           />
-          {isToday !== 'yesterday' ? (
+          {isToday !== 'yesterday' && network !== 'offline' ? (
             <TouchableOpacity onPress={() => gotoFavorite(isToday)}>
               <IconFavorite name="icon-favorite" size={50} color={'#54BCB6'} />
             </TouchableOpacity>
@@ -456,7 +469,8 @@ export const ToDoModal = ({
         </View>
 
         <View style={styles.todoInputContainer}>
-          {passModalData && passModalData.startDate < new Date() ? (
+          {network === 'offline' ||
+          (passModalData && passModalData.startDate < new Date()) ? (
             <View style={styles.modalInputTitle}>
               <Text>{title}</Text>
             </View>
@@ -473,8 +487,9 @@ export const ToDoModal = ({
           <TouchableOpacity
             style={styles.modalInputTask}
             onPress={() =>
-              !(isToday && passModalData?.startDate < new Date()) &&
-              toggleIsVisible(inputIsVisible, setInputIsVisible)
+              network === 'offline' ||
+              (!(isToday && passModalData?.startDate < new Date()) &&
+                toggleIsVisible(inputIsVisible, setInputIsVisible))
             }
           >
             <Text style={styles.modalInputText}>수행리스트</Text>
@@ -490,8 +505,9 @@ export const ToDoModal = ({
               <TouchableWithoutFeedback
                 key={index}
                 onPress={() =>
-                  !(isToday && passModalData?.startDate < new Date()) &&
-                  editSchedule(item, index)
+                  network === 'offline' ||
+                  (!(isToday && passModalData?.startDate < new Date()) &&
+                    editSchedule(item, index))
                 }
               >
                 <Text style={styles.modalInputText}>{item}</Text>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import ToDoModal from 'components/modal/ToDoModal';
@@ -31,11 +32,12 @@ const ScheduleLayout = ({
   passModalData,
   setPassModalData,
 }) => {
-  //console.log('schedule layout');
+  const network = useSelector((state) => state.network);
+
   return (
     <>
       <View style={{ flex: 1 }}>{children}</View>
-      {isToday !== 'yesterday' ? (
+      {isToday !== 'yesterday' && network === 'online' ? (
         <TouchableOpacity style={styles.addToDoButton} onPress={handleModal}>
           <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
         </TouchableOpacity>

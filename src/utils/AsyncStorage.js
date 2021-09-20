@@ -16,6 +16,7 @@ import {
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
+import { YESTERDAY } from '../constant/const';
 
 const setTomorrowData = async (array) => {
   try {
@@ -135,7 +136,9 @@ const setTodayToDoArray = async (todayToDos) => {
   const todayToDoArray = [];
   try {
     todayToDos.forEach((todo) => {
-      todayToDoArray.push({
+      const targetId = todo.data().id;
+      const obj = {};
+      obj[targetId] = {
         id: todo.data().id,
         startTime: todo.data().startTime,
         finishTime: todo.data().finishTime,
@@ -146,7 +149,8 @@ const setTodayToDoArray = async (todayToDos) => {
         address: todo.data().address,
         title: todo.data().title,
         toDos: todo.data().toDos,
-      });
+      };
+      todayToDoArray.push(obj);
     });
     await setTodayData(JSON.stringify(todayToDoArray));
   } catch (e) {
@@ -213,19 +217,22 @@ export const dbToAsyncTomorrow = async () => {
     const tomorrowDataArray = [];
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', `${TOMORROW}`).get();
-    data.forEach((result) => {
-      tomorrowDataArray.push({
-        id: result.data().id,
-        startTime: result.data().startTime,
-        finishTime: result.data().finishTime,
-        latitude: result.data().latitude,
-        longitude: result.data().longitude,
-        location: result.data().location,
-        date: result.data().date,
-        address: result.data().address,
-        title: result.data().title,
-        toDos: result.data().toDos,
-      });
+    data.forEach((todo) => {
+      const targetId = todo.data().id;
+      const obj = {};
+      obj[targetId] = {
+        id: todo.data().id,
+        startTime: todo.data().startTime,
+        finishTime: todo.data().finishTime,
+        latitude: todo.data().latitude,
+        longitude: todo.data().longitude,
+        location: todo.data().location,
+        date: todo.data().date,
+        address: todo.data().address,
+        title: todo.data().title,
+        toDos: todo.data().toDos,
+      };
+      tomorrowDataArray.push(obj);
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
   } catch (e) {
