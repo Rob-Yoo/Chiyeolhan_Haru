@@ -118,8 +118,10 @@ export const Task = (props) => {
             }
           }}
           onPress={() =>
-            (targetId !== 0 && network === 'online') ||
-            (canPress && toggleIsVisible())
+            targetId !== 0 &&
+            network === 'online' &&
+            canPress &&
+            toggleIsVisible()
           }
           style={styles.task}
         >

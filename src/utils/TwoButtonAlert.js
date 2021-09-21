@@ -92,3 +92,23 @@ export const deleteToDoTaskList = async () =>
       { cancelable: false },
     );
   });
+
+export const longTodoTitle = () =>
+  Alert.alert(
+    '일정의 제목을 너무 길게 설정 했습니다.',
+    '',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+
+export const longTaskList = () =>
+  Alert.alert(
+    '일정의 수행리스트를 너무 길게 설정 했습니다.(다음 수행리스트를 이용 하세요)',
+    '',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );

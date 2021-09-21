@@ -54,7 +54,6 @@ export default function TabBar(props) {
             navigation.navigate(route.name);
           }
         };
-
         if (route.name === 'today' || route.name === 'yesterday') {
           return (
             <TouchableOpacity

@@ -42,6 +42,7 @@ import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
+import { longTaskList, longTodoTitle } from '../../utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   modalHandler,
@@ -312,6 +313,11 @@ export const ToDoModal = ({
   };
 
   const taskSubmit = ({ index, task }) => {
+    if (task.length > 30) {
+      longTaskList();
+      toggleIsVisible(inputIsVisible, setInputIsVisible);
+      return;
+    }
     if (task.length === 0) {
       index
         ? setTaskList([
@@ -481,7 +487,11 @@ export const ToDoModal = ({
               value={title}
               ref={titleRef}
               onChange={(e) => handleChange(e)}
-              onChangeText={setValue('todoTitle', title)}
+              onChangeText={
+                title.length > 20
+                  ? () => longTodoTitle()
+                  : setValue('todoTitle', title)
+              }
             />
           )}
           <TouchableOpacity
