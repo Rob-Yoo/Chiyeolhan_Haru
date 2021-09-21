@@ -88,8 +88,8 @@ export const Pagination = ({ taskList, targetId }) => {
           color={'#229892'}
           onPress={() =>
             (targetId !== 0 && network === 'online') ||
-            (toDos.finishTime > getCurrentTime() &&
-              toDos.startTime > getCurrentTime() &&
+            (toDos?.finishTime > getCurrentTime() &&
+              toDos?.startTime > getCurrentTime() &&
               toggleIsVisible())
           }
         />
