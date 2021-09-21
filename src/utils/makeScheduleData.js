@@ -22,7 +22,7 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startTime: toDos[key].startTime,
         finishTime: toDos[key].finishTime,
         color:
-          isDone && getCurrentTime() >= toDos[key].finishTime
+          isDone && getCurrentTime() > toDos[key].finishTime
             ? '#54BCB6'
             : '#B9B9B9',
         toDos: [...toDos[key].toDos],

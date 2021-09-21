@@ -115,6 +115,7 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 
     PushNotification.cancelLocalNotification(`${id} + 3`); //삭제하려는 일정의 arriveEarlyNotification 알림 사라짐
     PushNotification.cancelLocalNotification(`${id} + 4`); //삭제하려는 일정 완료 알림 사라짐
+    PushNotification.cancelLocalNotification(`${id} + 5`); //삭제하려는 일정 failNotif 사라짐
   } catch (e) {
     console.log('deleteGeofenceAsyncStorageData Error :', e);
   }

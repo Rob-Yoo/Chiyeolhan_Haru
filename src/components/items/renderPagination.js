@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Pagination = ({ taskList, targetId }) => {
+const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
-  console.log(`toDos: ${JSON.stringify(toDos)}`);
+  // console.log(`toDos: ${JSON.stringify(toDos)}`);
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState(null);
   const dispatch = useDispatch();

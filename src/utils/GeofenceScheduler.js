@@ -89,6 +89,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         await geofenceUpdate(geofenceData, 0);
       } else {
         if (progressing) {
+          console.log(progressing);
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
           console.log('nearBySchedule X isEarly X Progressing인 경우');
           const progressingData = await toDoRef.doc(`${progressing.id}`).get();

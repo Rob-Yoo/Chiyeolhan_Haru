@@ -89,6 +89,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     getToDos();
+    checkBtn();
   }, []);
 
   useEffect(() => {
@@ -141,10 +142,6 @@ const Home = ({ navigation }) => {
       setVisibleBtn('DAY_CHANGE');
     }
   };
-
-  useEffect(() => {
-    checkBtn();
-  }, []);
 
   return isLoading ? (
     <View

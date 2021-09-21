@@ -9,6 +9,7 @@ export const KEY_VALUE_FAVORITE = 'favoriteDataArray';
 
 export const KEY_VALUE_EARLY = 'isEarly';
 export const KEY_VALUE_GEOFENCE = 'geofenceDataArray';
+export const KEY_VALUE_SUCCESS = 'geofenceSuccessArray';
 export const KEY_VALUE_NEAR_BY = 'nearBySchedulesArray';
 export const KEY_VALUE_PROGRESSING = 'progressingSchedule';
 
