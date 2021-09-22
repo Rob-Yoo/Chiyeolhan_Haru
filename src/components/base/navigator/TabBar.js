@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   tabUnderBar: {
@@ -29,8 +30,10 @@ const styles = StyleSheet.create({
 
 export default function TabBar(props) {
   const { state, descriptors, navigation } = props;
-  const [visibleName, setVisibleName] = useState(true);
+  //const [visibleName, setVisibleName] = useState(true);
+  const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
+
   return (
     <View style={styles.tabContainer}>
       {state.routes.map((route, index) => {
@@ -39,10 +42,9 @@ export default function TabBar(props) {
         const isFocused = state.index === index;
 
         const onLongPress = () => {
-          visibleName
+          visibleName === 'today'
             ? navigation.navigate('yesterday')
             : navigation.navigate('today');
-          setVisibleName(!visibleName);
         };
         const onPress = () => {
           const event = navigation.emit({
@@ -54,9 +56,11 @@ export default function TabBar(props) {
             navigation.navigate(route.name);
           }
         };
+
         if (route.name === 'today' || route.name === 'yesterday') {
           return (
             <TouchableOpacity
+              swipeEnabled={options.swipeEnabled}
               isFocused={isFocused}
               onPress={onPress}
               onLongPress={onLongPress}
@@ -64,8 +68,12 @@ export default function TabBar(props) {
               style={{
                 width:
                   isFocused ||
-                  (!isFocused && visibleName && route.name === 'today') ||
-                  (!isFocused && !visibleName && route.name === 'yesterday')
+                  (!isFocused &&
+                    visibleName === 'today' &&
+                    route.name === 'today') ||
+                  (!isFocused &&
+                    visibleName === 'yesterday' &&
+                    route.name === 'yesterday')
                     ? null
                     : 0,
               }}

@@ -66,9 +66,21 @@ const networkSlice = createSlice({
   },
 });
 
+const tabBarSlice = createSlice({
+  name: 'tabBarReducer',
+  initialState: null,
+  reducers: {
+    setTabBar: (state, action) => {
+      console.log(state);
+      return (state = action.payload);
+    },
+  },
+});
+
 const reducer = combineReducers({
   toDos: toDosSlice.reducer,
   network: networkSlice.reducer,
+  tabBar: tabBarSlice.reducer,
 });
 
 export const {
@@ -81,6 +93,8 @@ export const {
   editToDoDispatch,
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
+export const { setTabBar } = tabBarSlice.actions;
+
 export default configureStore({
   reducer,
 });

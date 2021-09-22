@@ -5,21 +5,29 @@ import ScheduleYesterday from 'components/screen/ScheduleYesterday';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TabBar from 'components/base/navigator/TabBar';
 
-const Tab = createMaterialTopTabNavigator();
-
+const Tab = createMaterialTopTabNavigator(tabNavigatorConfig);
+const tabNavigatorConfig = {
+  tabBarScrollEnabled: false,
+  swipeEnabled: false,
+};
 export const SchedullScreenDetail = ({ navigation }) => {
   return (
-    <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
-      <Tab.Screen
-        name="today"
-        component={ScheduleToday}
-        options={{ tabBarLabel: '오늘' }}
-      />
+    <Tab.Navigator
+      initialRouteName="today"
+      tabBar={(props) => <TabBar {...props} />}
+    >
       <Tab.Screen
         name="yesterday"
         component={ScheduleYesterday}
         options={{ tabBarLabel: '어제' }}
       />
+      <Tab.Screen
+        name="today"
+        component={ScheduleToday}
+        options={{ tabBarLabel: '오늘' }}
+        navigation={navigation}
+      />
+
       <Tab.Screen
         name="tomorrow"
         component={ScheduleTomorrow}
