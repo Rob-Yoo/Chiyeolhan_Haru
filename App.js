@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
-import { initBgGeofence } from 'utils/BgGeofence';
+import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import store from 'redux/store';
 import { SafeAreaView } from 'react-navigation';
@@ -34,8 +34,8 @@ const App = () => {
   const prepare = async () => {
     try {
       await SplashScreen.preventAutoHideAsync();
+      subscribeOnGeofence();
       const result = await initBgGeofence();
-      console.log(result);
       setIsTerminate(result);
     } catch (e) {
       console.warn(e);

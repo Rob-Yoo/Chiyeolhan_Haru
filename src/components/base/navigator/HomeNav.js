@@ -25,7 +25,7 @@ const HomeStack = ({ navigation }) => {
       //   await toDoRef.update({ isDone: true });
       if (successSchedules !== null) {
         for (const schedule of successSchedules) {
-          if (schedule.startTime < currentTime) {
+          if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
           }
         }

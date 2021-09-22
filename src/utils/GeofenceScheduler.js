@@ -62,6 +62,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         // 현재 일정이 진행 중이 아니고 EARLY로 들어온 것만 인식된 상황이라면 각 예약된 알림들을 모두 취소한다.
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 4`); //현재 일정 완료 알림 사라짐
+        PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 5`); //현재 일정 Fail 알림 사라짐
       }
 
       // if (isChangeEarliest) {
@@ -74,6 +75,8 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         console.log('도착 알림 사라짐');
         PushNotification.cancelLocalNotification(`${schedule.id} + 4`); // 완료 알림도 사라짐
         console.log('완료 알림 사라짐');
+        PushNotification.cancelLocalNotification(`${schedule.id} + 5`); // Fail 알림도 사라짐
+        console.log('Fail 알림 사라짐');
       }
       console.log('nearBySchedules인 경우');
       await geofenceUpdate(geofenceData, 0);
@@ -81,6 +84,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
       if (isEarly) {
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
         PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 4`); //현재 일정 완료 알림 사라짐
+        PushNotification.cancelLocalNotification(`${geofenceData[0].id} + 5`); //현재 일정 Fail 알림 사라짐
         // if (isChangeEarliest) {
         //   await toDoRef.doc(`${geofenceData[1].id}`).update({ isDone: false }); // 추가되기전의 가장 이른 일정 isDone 바꿈
         // }

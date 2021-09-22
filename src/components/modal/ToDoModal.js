@@ -26,6 +26,7 @@ import {
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW_DATA,
+  KEY_VALUE_SUCCESS,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -183,17 +184,51 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const id = passModalData?.id;
-    dispatch(
-      editToDoDispatch({
-        todoTitle,
-        todoStartTime,
-        todoFinishTime,
-        taskList,
-        id,
-      }),
-    );
     try {
+      let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      const id = passModalData?.id;
+      const startTime = passModalData?.startTime;
+      let newID;
+
+      if (startTime !== todoStartTime) {
+        // 시작시간이 바뀌면
+        const date = new Date();
+        newID =
+          `${date.getFullYear()}` +
+          `${isToday ? TODAY : TOMORROW}` +
+          `${todoStartTime}`;
+        //newID 생성
+        if (successSchedules !== null) {
+          let idx = 0;
+          let isChange = false;
+          for (const schedule of successSchedules) {
+            if (schedule.id === id) {
+              successSchedules[idx].id = newID;
+              successSchedules[idx].startTime = todoStartTime;
+              isChange = true;
+              break;
+            }
+            idx = idx + 1;
+          }
+          if (isChange) {
+            // console.log('Edit successSchedules : ', successSchedules);
+            await AsyncStorage.setItem(
+              KEY_VALUE_SUCCESS,
+              JSON.stringify(successSchedules),
+            );
+          }
+        }
+      }
+
+      dispatch(
+        editToDoDispatch({
+          todoTitle,
+          todoStartTime,
+          todoFinishTime,
+          taskList,
+          id,
+        }),
+      );
       const isChangeEarliest = isToday
         ? await checkEarlistTodo(todoStartTime)
         : true;
