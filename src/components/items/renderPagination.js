@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
-  // console.log(`toDos: ${JSON.stringify(toDos)}`);
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState(null);
   const dispatch = useDispatch();
@@ -87,10 +86,10 @@ const Pagination = ({ taskList, targetId }) => {
           size={19}
           color={'#229892'}
           onPress={() =>
-            (targetId !== 0 && network === 'online') ||
-            (toDos.finishTime > getCurrentTime() &&
-              toDos.startTime > getCurrentTime() &&
-              toggleIsVisible())
+            targetId !== 0 &&
+            network === 'online' &&
+            toDos.startTime > getCurrentTime() &&
+            toggleIsVisible()
           }
         />
       </View>
@@ -126,7 +125,8 @@ const Pagination = ({ taskList, targetId }) => {
                   text={item}
                   targetId={targetId}
                   canPress={
-                    toDos.finishTime > getCurrentTime() &&
+                    targetId !== 0 &&
+                    network === 'online' &&
                     toDos.startTime > getCurrentTime()
                   }
                 />

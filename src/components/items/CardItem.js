@@ -35,11 +35,11 @@ export const styles = StyleSheet.create({
     borderRadius: Dimensions.get('screen').height > 667 ? 60 : 50,
     shadowColor: '#00000029',
     shadowOffset: {
-      width: 10,
-      height: 10,
+      width: 0,
+      height: 9,
     },
-    shadowOpacity: 0.34,
-    shadowRadius: 5.84,
+    shadowOpacity: 1.34,
+    shadowRadius: 4.84,
   },
   cardText: {
     position: 'relative',
@@ -60,7 +60,8 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
     // backgroundColor: 'red',
     color: '#F4F4F4',
-    marginBottom: 5,
+    marginTop: 5,
+    marginLeft: 15,
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
@@ -136,8 +137,7 @@ export const Card = ({
         />
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'flex-end',
+            justifyContent: 'center',
             flexShrink: 1,
             maxHeight: 300,
           }}
@@ -150,7 +150,8 @@ export const Card = ({
               <View
                 style={{
                   position: 'absolute',
-                  left: -10,
+                  top: 5,
+                  left: 5,
                   width: 5,
                   height: 20,
                   backgroundColor: '#00A29A',
@@ -158,7 +159,7 @@ export const Card = ({
               />
             )}
             <Text style={styles.cardLocation}>
-              {location.length > 8 ? `${location.substr(0, 7)}...` : location}
+              {location.length > 15 ? `${location.substr(0, 7)}...` : location}
             </Text>
           </View>
         </View>

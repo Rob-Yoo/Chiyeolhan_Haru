@@ -122,6 +122,7 @@ const HomeNav = ({ navigation }) => {
         headerBackTitleVisible: false,
         headerTitle: false,
         headerShown: false,
+        swipeEnabled: false,
       }}
     >
       {network === 'online' ? (

@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { KEY_VALUE_START_TIME } from 'constant/const';
 import AsyncStorage from '@react-native-community/async-storage';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
+import { setTabBar } from '../../redux/store';
 
 const ScheduleToday = ({ navigation }) => {
   const todayData = [];
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      console.log('here');
+      dispatch(setTabBar('today'));
+    });
 
+    return unsubscribe;
+  }, [navigation]);
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();

@@ -44,6 +44,8 @@ import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
+import { longTaskList, longTodoTitle } from '../../utils/TwoButtonAlert';
+import { deleteToDoDispatch } from '../../redux/store';
 
 export const ToDoModal = ({
   modalHandler,
@@ -56,6 +58,7 @@ export const ToDoModal = ({
 }) => {
   const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
+  const toDos = useSelector((state) => state.toDos);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -189,29 +192,30 @@ export const ToDoModal = ({
       const id = passModalData?.id;
       const startTime = passModalData?.startTime;
       let newID;
+      let isChange = false;
 
       if (startTime !== todoStartTime) {
         // 시작시간이 바뀌면
+        isChange = true;
         const date = new Date();
-        newID =
+        newId =
           `${date.getFullYear()}` +
           `${isToday ? TODAY : TOMORROW}` +
           `${todoStartTime}`;
         //newID 생성
         if (successSchedules !== null) {
           let idx = 0;
-          let isChange = false;
+
           for (const schedule of successSchedules) {
             if (schedule.id === id) {
               successSchedules[idx].id = newID;
               successSchedules[idx].startTime = todoStartTime;
-              isChange = true;
+
               break;
             }
             idx = idx + 1;
           }
           if (isChange) {
-            // console.log('Edit successSchedules : ', successSchedules);
             await AsyncStorage.setItem(
               KEY_VALUE_SUCCESS,
               JSON.stringify(successSchedules),
@@ -219,16 +223,36 @@ export const ToDoModal = ({
           }
         }
       }
+      if (isChange) {
+        const { location, longitude, latitude, address } = toDos[id];
+        dispatch(deleteToDoDispatch(id));
+        const newData = {
+          id: newId,
+          title: todoTitle,
+          startTime: todoStartTime,
+          finishTime: todoFinishTime,
+          location,
+          address,
+          longitude,
+          latitude,
+          date: isToday ? TODAY : TOMORROW,
+          toDos: [...taskList],
+          isDone: false,
+        };
+        dispatch(create(newData));
+        await toDosUpdateDB(newData, newId);
+      } else if (!isChange) {
+        dispatch(
+          editToDoDispatch({
+            todoTitle,
+            todoStartTime,
+            todoFinishTime,
+            taskList,
+            id,
+          }),
+        );
+      }
 
-      dispatch(
-        editToDoDispatch({
-          todoTitle,
-          todoStartTime,
-          todoFinishTime,
-          taskList,
-          id,
-        }),
-      );
       const isChangeEarliest = isToday
         ? await checkEarlistTodo(todoStartTime)
         : true;
@@ -337,6 +361,11 @@ export const ToDoModal = ({
   };
 
   const taskSubmit = ({ index, task }) => {
+    if (task.length > 30) {
+      longTaskList();
+      toggleIsVisible(inputIsVisible, setInputIsVisible);
+      return;
+    }
     if (task.length === 0) {
       index
         ? setTaskList([
@@ -506,7 +535,11 @@ export const ToDoModal = ({
               value={title}
               ref={titleRef}
               onChange={(e) => handleChange(e)}
-              onChangeText={setValue('todoTitle', title)}
+              onChangeText={
+                title.length > 20
+                  ? () => longTodoTitle()
+                  : setValue('todoTitle', title)
+              }
             />
           )}
           <TouchableOpacity

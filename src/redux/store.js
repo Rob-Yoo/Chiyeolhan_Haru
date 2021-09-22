@@ -41,6 +41,17 @@ const toDosSlice = createSlice({
       state[targetId].toDos = [...taskList];
       toDosUpdateDB(state[targetId], targetId);
     },
+    editIdDispatch: (state, action) => {
+      const {
+        taskList,
+        todoFinishTime,
+        todoStartTime,
+        todoTitle,
+        id: targetId,
+        newId,
+      } = action.payload;
+      console.log(state);
+    },
     //수행리스트 제거
     remove: (state, action) => {
       const { targetId, index } = action.payload;
@@ -66,9 +77,21 @@ const networkSlice = createSlice({
   },
 });
 
+const tabBarSlice = createSlice({
+  name: 'tabBarReducer',
+  initialState: null,
+  reducers: {
+    setTabBar: (state, action) => {
+      console.log(state);
+      return (state = action.payload);
+    },
+  },
+});
+
 const reducer = combineReducers({
   toDos: toDosSlice.reducer,
   network: networkSlice.reducer,
+  tabBar: tabBarSlice.reducer,
 });
 
 export const {
@@ -79,8 +102,11 @@ export const {
   remove,
   deleteToDoDispatch,
   editToDoDispatch,
+  editIdDispatch,
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
+export const { setTabBar } = tabBarSlice.actions;
+
 export default configureStore({
   reducer,
 });
