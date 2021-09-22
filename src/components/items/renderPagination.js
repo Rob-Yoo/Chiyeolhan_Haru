@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Pagination = ({ taskList, targetId }) => {
+const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
   const [isVisible, setIsVisible] = useState(false);

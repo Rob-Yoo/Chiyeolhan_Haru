@@ -26,6 +26,7 @@ import {
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW_DATA,
+  KEY_VALUE_SUCCESS,
 } from 'constant/const';
 import {
   checkEarlistTodo,
@@ -33,6 +34,7 @@ import {
   dbToAsyncTomorrow,
   getDataFromAsync,
 } from 'utils/AsyncStorage';
+import { failNotification } from 'utils/Notification';
 import {
   alertInValidSubmit,
   alertStartTimeError,
@@ -40,9 +42,10 @@ import {
 } from 'utils/TwoButtonAlert';
 import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
-import { getCurrentTime } from 'utils/Time';
+import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
 import { longTaskList, longTodoTitle } from '../../utils/TwoButtonAlert';
+import { deleteToDoDispatch } from '../../redux/store';
 
 export const ToDoModal = ({
   modalHandler,
@@ -55,6 +58,7 @@ export const ToDoModal = ({
 }) => {
   const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
+  const toDos = useSelector((state) => state.toDos);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -101,6 +105,7 @@ export const ToDoModal = ({
       `${date.getFullYear()}` +
       `${isToday ? TODAY : TOMORROW}` +
       `${todoStartTime}`;
+    const currentTime = getCurrentTime();
     // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
     // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
     try {
@@ -115,28 +120,16 @@ export const ToDoModal = ({
         latitude,
         date: isToday ? TODAY : TOMORROW,
         toDos: [...taskList],
-        isDone: true,
+        isDone: false,
       };
       dispatch(create(newData));
       await toDosUpdateDB(newData, todoId);
 
       if (isToday) {
         const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
         dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-      } else {
-        dbToAsyncTomorrow();
-      }
-
-      await handleFilterData(
-        location,
-        'location',
-        searchedList,
-        setSearchedList,
-      );
-
-      if (isToday) {
-        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+        failNotification(timeDiff, todoId); // 일정이 끝시간땨에 실패 알림 예약
       } else {
         dbToAsyncTomorrow();
       }
@@ -194,17 +187,72 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const id = passModalData?.id;
-    dispatch(
-      editToDoDispatch({
-        todoTitle,
-        todoStartTime,
-        todoFinishTime,
-        taskList,
-        id,
-      }),
-    );
     try {
+      let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      const id = passModalData?.id;
+      const startTime = passModalData?.startTime;
+      let newID;
+      let isChange = false;
+
+      if (startTime !== todoStartTime) {
+        // 시작시간이 바뀌면
+        isChange = true;
+        const date = new Date();
+        newId =
+          `${date.getFullYear()}` +
+          `${isToday ? TODAY : TOMORROW}` +
+          `${todoStartTime}`;
+        //newID 생성
+        if (successSchedules !== null) {
+          let idx = 0;
+
+          for (const schedule of successSchedules) {
+            if (schedule.id === id) {
+              successSchedules[idx].id = newID;
+              successSchedules[idx].startTime = todoStartTime;
+
+              break;
+            }
+            idx = idx + 1;
+          }
+          if (isChange) {
+            await AsyncStorage.setItem(
+              KEY_VALUE_SUCCESS,
+              JSON.stringify(successSchedules),
+            );
+          }
+        }
+      }
+      if (isChange) {
+        const { location, longitude, latitude, address } = toDos[id];
+        dispatch(deleteToDoDispatch(id));
+        const newData = {
+          id: newId,
+          title: todoTitle,
+          startTime: todoStartTime,
+          finishTime: todoFinishTime,
+          location,
+          address,
+          longitude,
+          latitude,
+          date: isToday ? TODAY : TOMORROW,
+          toDos: [...taskList],
+          isDone: false,
+        };
+        dispatch(create(newData));
+        await toDosUpdateDB(newData, newId);
+      } else if (!isChange) {
+        dispatch(
+          editToDoDispatch({
+            todoTitle,
+            todoStartTime,
+            todoFinishTime,
+            taskList,
+            id,
+          }),
+        );
+      }
+
       const isChangeEarliest = isToday
         ? await checkEarlistTodo(todoStartTime)
         : true;

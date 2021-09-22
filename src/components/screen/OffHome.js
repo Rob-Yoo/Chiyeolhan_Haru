@@ -102,6 +102,7 @@ const OffHome = ({ navigation, route }) => {
       let todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
       let tomorrowAsyncData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
       let yesterdayAsyncData = await getDataFromAsync(KEY_VALUE_YESTERDAY_DATA);
+
       if (yesterdayAsyncData === null) {
         yesterdayAsyncData = [];
       }

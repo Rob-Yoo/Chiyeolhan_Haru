@@ -41,6 +41,17 @@ const toDosSlice = createSlice({
       state[targetId].toDos = [...taskList];
       toDosUpdateDB(state[targetId], targetId);
     },
+    editIdDispatch: (state, action) => {
+      const {
+        taskList,
+        todoFinishTime,
+        todoStartTime,
+        todoTitle,
+        id: targetId,
+        newId,
+      } = action.payload;
+      console.log(state);
+    },
     //수행리스트 제거
     remove: (state, action) => {
       const { targetId, index } = action.payload;
@@ -91,6 +102,7 @@ export const {
   remove,
   deleteToDoDispatch,
   editToDoDispatch,
+  editIdDispatch,
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
 export const { setTabBar } = tabBarSlice.actions;

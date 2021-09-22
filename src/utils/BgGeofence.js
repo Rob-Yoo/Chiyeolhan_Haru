@@ -1,12 +1,12 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
-import { dbService } from 'utils/firebase';
 import {
   UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_EARLY,
   KEY_VALUE_PROGRESSING,
+  KEY_VALUE_SUCCESS,
 } from 'constant/const';
 import PushNotification from 'react-native-push-notification';
 import {
@@ -36,6 +36,14 @@ const getDataFromAsync = async (storageName) => {
   }
 };
 
+const setSuccessSchedule = async (array) => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(array));
+  } catch (e) {
+    console.log('setTomorrowData Error :', e);
+  }
+};
+
 const completeNotifHandler = (data, timeDiff, schedule) => {
   if (data.length >= 2) {
     completeNotification(true, timeDiff, schedule);
@@ -55,8 +63,6 @@ const addGeofence = async (latitude, longitude, data) => {
       notifyOnExit: true,
     });
     console.log('Adding Geofence Success!!', data[0].location);
-    await BackgroundGeolocation.startGeofences();
-    console.log('start Geofence');
   } catch (e) {
     console.log('addGeofence Error :', e);
   }
@@ -69,6 +75,7 @@ const addGeofenceTrigger = async () => {
       const lat = data[0].latitude;
       const lng = data[0].longitude;
       await addGeofence(lat, lng, data);
+      await BackgroundGeolocation.startGeofences();
     } else {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       console.log('[removeGeofence] success');
@@ -124,7 +131,6 @@ const findNearBy = async (data, currentTime) => {
     lat: data[0].latitude,
     lon: data[0].longitude,
   };
-  const toDoRef = dbService.collection(`${UID}`);
   const nextSchedules = data.slice(1);
 
   if (nextSchedules.length > 0) {
@@ -152,6 +158,7 @@ const findNearBy = async (data, currentTime) => {
           arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
           completeNotifHandler(data, timeDiff, nextSchedule); // 각 일정들마다 완료 알림 예약
           PushNotification.cancelLocalNotification(`${nextSchedule.id} + 5`); // failNotif 알림 취소
+          await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
         } catch (e) {
           console.log('findNearBy Error :', e);
@@ -162,8 +169,33 @@ const findNearBy = async (data, currentTime) => {
   return nearBySchedules;
 };
 
+const saveSuccessSchedules = async (id, startTime) => {
+  try {
+    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    if (successSchedules === null) {
+      const schedule = [{ id, startTime }];
+      await setSuccessSchedule(schedule);
+    } else {
+      let isOverlap = false;
+
+      for (const schedule of successSchedules) {
+        if (schedule.id === id) {
+          isOverlap = true;
+          break;
+        }
+      }
+      if (!isOverlap) {
+        successSchedules.push({ id, startTime });
+        await setSuccessSchedule(successSchedules);
+      }
+      console.log('successSchedule : ', successSchedules);
+    }
+  } catch (e) {
+    console.log('saveSuccessSchedules Error :', e);
+  }
+};
+
 const enterAction = async (data, startTime, finishTime, currentTime) => {
-  const toDoRef = dbService.collection(`${UID}`);
   const timeDiff = getTimeDiff(currentTime, data[0].finishTime);
   let isEarly = false;
 
@@ -173,14 +205,17 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       if (0 <= timeDiff && timeDiff <= 5) {
         console.log('제 시간에 옴', currentTime);
         notifHandler('ON_TIME', data[0]);
+        PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
       } else {
         console.log('늦게 옴', currentTime);
         notifHandler('LATE', data[0]);
+        PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
       }
     } else {
       const timeDiff = getEarlyTimeDiff(startTime, currentTime);
       console.log('일찍 옴', currentTime);
       notifHandler('EARLY', data[0], timeDiff);
+      PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
     }
@@ -203,10 +238,11 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
         // 완료 알림 예약하고 EXIT 시간이 일정 시작 시간보다 빠르면 알림 취소
         completeNotifHandler(data, timeDiff, data[0]);
       } else {
-        await geofenceUpdate(data);
         completeNotifHandler(data, timeDiff, data[0]);
+        await geofenceUpdate(data);
       }
     }
+    await saveSuccessSchedules(data[0].id, data[0].startTime); // 성공한 일정 저장
   } catch (e) {
     console.log('enterAction Error :', e);
   }
@@ -215,7 +251,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
 const exitAction = async (data, startTime, finishTime, currentTime) => {
   try {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
-    // const toDoRef = dbService.collection(`${UID}`);
+    let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
 
     if (nearBySchedules == null) {
       if (currentTime < startTime) {
@@ -223,11 +259,15 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         console.log('일정 시작 시간보다 전에 나감');
         PushNotification.cancelLocalNotification(`${data[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
         PushNotification.cancelLocalNotification(`${data[0].id} + 4`); //현재 일정 완료 알림 사라짐
-        // await toDoRef.doc(`${data[0].id}`).update({ isDone: false });
+        failNotification(timeDiff, data[0].id); // 다시 해당 일정의 failNotification 알림 등록
+        successSchedules = successSchedules.filter(
+          (schedule) => schedule.id !== data[0].id,
+        );
+        console.log(successSchedules);
+        await setSuccessSchedule(successSchedules); // 성공한 일정 배열에서 삭제
         await AsyncStorage.removeItem(KEY_VALUE_EARLY);
-        failNotification(timeDiff, data[0]); // 다시 해당 일정의 failNotification 알림 등록
       } else {
-        // 일찍 ENTER하고 시작 시간 이후에 EXIT 하면 이미 isDone은 true이므로 geofence만 다음 일정꺼로 넘김
+        // 일찍 ENTER하고 시작 시간 이후에 할때
         await geofenceUpdate(data);
       }
     } else {
@@ -245,17 +285,18 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         let successCount = 0;
         let timeDiff;
         for (const schedule of nearBySchedules) {
-          if (currentTime > schedule.startTime) {
+          if (currentTime >= schedule.startTime) {
             successCount = successCount + 1;
           } else {
-            // await toDoRef.doc(`${schedule.id}`).update({ isDone: false });
-            // console.log('isDone: false로 바뀜 :', schedule.location);
+            successSchedules = successSchedules.filter(
+              (success) => success.id !== schedule.id,
+            );
             PushNotification.cancelLocalNotification(`${schedule.id} + 3`); // nearBy 일정들의 도착 알림 사라짐
             console.log('도착 알림 사라짐');
             PushNotification.cancelLocalNotification(`${schedule.id} + 4`); // 완료 알림도 사라짐
             console.log('완료 알림 사라짐');
             timeDiff = getTimeDiff(currentTime, schedule.finishTime);
-            failNotification(timeDiff, schedule); // 다시 nearBy 일정들의 failNotification 알림 등록
+            failNotification(timeDiff, schedule.id); // 다시 nearBy 일정들의 failNotification 알림 등록
           }
         }
         if (successCount > 0) {
@@ -264,6 +305,8 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         } else {
           await AsyncStorage.removeItem(KEY_VALUE_EARLY);
         }
+        console.log('Updated SuccessSchedules : ', successSchedules);
+        await setSuccessSchedule(successSchedules); // 성공한 일정 배열에서 삭제
       }
     }
   } catch (e) {
@@ -271,16 +314,16 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
   }
 };
 
-const subscribeOnGeofence = async () => {
+export const subscribeOnGeofence = () => {
   BackgroundGeolocation.onGeofence(async (event) => {
     try {
       const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-
       if (data.length > 0) {
         const startTime = data[0].startTime;
         const finishTime = data[0].finishTime;
 
         if (event.action == 'ENTER') {
+          console.log('ENTER');
           await enterAction(data, startTime, finishTime, getCurrentTime());
         }
 
@@ -294,7 +337,7 @@ const subscribeOnGeofence = async () => {
   });
 };
 
-export const initBgGeofence = async (data) => {
+export const initBgGeofence = async () => {
   try {
     const state = await BackgroundGeolocation.ready({
       // Geolocation Config
@@ -314,13 +357,6 @@ export const initBgGeofence = async (data) => {
       startOnBoot: true, // <-- Auto start tracking when device is powered-up.
     });
 
-    await subscribeOnGeofence();
-
-    // if (data !== null) {
-    //   if (data.length > 0) {
-    //     await BackgroundGeolocation.startGeofences();
-    //   }
-    // }
     return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);

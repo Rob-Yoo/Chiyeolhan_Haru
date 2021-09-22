@@ -53,15 +53,15 @@ export const completeNotification = (isNextSchedule, time, schedule) => {
   PushNotification.removeDeliveredNotifications([`${schedule.id} + 4`]);
 };
 
-export const failNotification = (time, schedule) => {
+export const failNotification = (time, id) => {
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
-    id: `${schedule.id} + 5`,
-    message: '일정 장소에 오지 못하셨습니다. 리셋 버튼을 눌러주세요.', // (required)
+    id: `${id} + 5`,
+    message: '일정 장소에 오지 않았습니다. 리셋 버튼을 눌러주세요.', // (required)
     date: new Date(Date.now() + 1000 * (time * 60)), // 시작 시간에 알림
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
-  PushNotification.removeDeliveredNotifications([`${schedule.id} + 5`]);
+  PushNotification.removeDeliveredNotifications([`${id} + 5`]);
 };
 
 export const notifHandler = (arriveType, schedule, timeDiff = 0) => {

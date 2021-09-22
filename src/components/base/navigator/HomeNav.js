@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-
+import { dbService } from 'utils/firebase';
 import Home from 'components/screen/Home';
 import OffHome from 'components/screen/OffHome';
 import { ModalStack } from 'components/base/navigator/Stack';
@@ -8,12 +8,35 @@ import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDe
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
-import { KEY_VALUE_OFFLINE } from 'constant/const';
+import { KEY_VALUE_OFFLINE, KEY_VALUE_SUCCESS, UID } from 'constant/const';
+import { getDataFromAsync } from 'utils/AsyncStorage';
 import { offlineAlert } from 'utils/TwoButtonAlert';
+import { getCurrentTime } from 'utils/Time';
 
 export const Stack = createStackNavigator();
 
 const HomeStack = ({ navigation }) => {
+  const loadSuccessSchedules = async () => {
+    try {
+      const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      const currentTime = getCurrentTime();
+      const todosRef = dbService.collection(`${UID}`);
+      //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
+      //   await toDoRef.update({ isDone: true });
+      if (successSchedules !== null) {
+        for (const schedule of successSchedules) {
+          if (schedule.startTime <= currentTime) {
+            await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+          }
+        }
+      }
+    } catch (e) {
+      console.log('loadSuccessSchedules Error :', e);
+    }
+  };
+  useEffect(() => {
+    loadSuccessSchedules();
+  }, []);
   return (
     <Stack.Navigator
       initialRouteName="Home"
@@ -56,7 +79,7 @@ const HomeNav = ({ navigation }) => {
     NetInfo.addEventListener(async (state) => {
       if (state.isInternetReachable !== null) {
         if (state.isInternetReachable && state.isConnected) {
-          await _handleIsConnected(state);
+          await _handleIsConnected();
           setIsNetwork(true);
         } else if (!state.isInternetReachable && !state.isConnected) {
           await _handleIsNotConnected();
@@ -66,7 +89,7 @@ const HomeNav = ({ navigation }) => {
     });
   };
 
-  const _handleIsConnected = async (state) => {
+  const _handleIsConnected = async () => {
     try {
       if (network === 'offline') {
         setNetwork('online');

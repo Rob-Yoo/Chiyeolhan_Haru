@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
-import { initBgGeofence } from 'utils/BgGeofence';
+import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import store from 'redux/store';
-import { KEY_VALUE_GEOFENCE } from 'constant/const';
 import { SafeAreaView } from 'react-navigation';
 
 const App = () => {
@@ -35,12 +33,9 @@ const App = () => {
 
   const prepare = async () => {
     try {
-      let data = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
-      if (data !== null) {
-        data = JSON.parse(data);
-      }
       await SplashScreen.preventAutoHideAsync();
-      const result = await initBgGeofence(data);
+      subscribeOnGeofence();
+      const result = await initBgGeofence();
       setIsTerminate(result);
     } catch (e) {
       console.warn(e);
