@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
   swiperStyle: { height: '100%' },
 });
 
-const PaintHome = ({ todoArr }) => {
+const HomeContent = (props) => {
+  const todoArr = props.todoArr;
   const [isData, setIsData] = useState(
     todoArr[0]?.id === undefined ? false : true,
   );
@@ -147,11 +148,6 @@ const PaintHome = ({ todoArr }) => {
       )}
     </View>
   );
-};
-
-const HomeContent = (props) => {
-  const todoArr = props.todoArr;
-  return <PaintHome todoArr={todoArr} />;
 };
 
 export default HomeContent;

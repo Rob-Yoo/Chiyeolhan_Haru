@@ -8,22 +8,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components/native';
-//import toDosSlice from 'redux/store';
 
 import { dbService } from 'utils/firebase';
 import { UID, TODAY } from 'constant/const';
 import { init } from 'redux/store';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import { checkTodayChange } from 'utils/AsyncStorage';
-import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE_OFFLINE, YESTERDAY } from '../../constant/const';
-import store, { setNetwork } from '../../redux/store';
+import { YESTERDAY } from 'constant/const';
+import { setNetwork, setTabBar } from 'redux/store';
+import { Loading } from './Loading';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -113,6 +111,7 @@ const Home = ({ navigation }) => {
       const row = await dbService.collection(`${UID}`).get();
       row.forEach((data) => (rowObj[data.id] = data.data()));
       dispatch(setNetwork('online'));
+      dispatch(setTabBar('today'));
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);
         return;
@@ -150,15 +149,7 @@ const Home = ({ navigation }) => {
   };
 
   return isLoading ? (
-    <View
-      style={{
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
-        justifyContent: 'center',
-      }}
-    >
-      <Text>로딩</Text>
-    </View>
+    <Loading />
   ) : (
     <ImageBackground
       source={{ uri: 'homeBackground' }}

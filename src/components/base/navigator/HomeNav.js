@@ -12,6 +12,7 @@ import { KEY_VALUE_OFFLINE, KEY_VALUE_SUCCESS, UID } from 'constant/const';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 import { offlineAlert } from 'utils/TwoButtonAlert';
 import { getCurrentTime } from 'utils/Time';
+import { Loading } from '../../screen/Loading';
 
 export const Stack = createStackNavigator();
 
@@ -133,9 +134,7 @@ const HomeNav = ({ navigation }) => {
       <Stack.Screen name="ModalStack" component={ModalStack} />
     </Stack.Navigator>
   ) : (
-    <View style={{ flex: 1 }}>
-      <Text>홈네비 로딩</Text>
-    </View>
+    <Loading />
   );
 };
 

@@ -23,8 +23,8 @@ import {
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
 } from 'constant/const';
-import { setNetwork } from 'redux/store';
-import AsyncStorage from '@react-native-community/async-storage';
+import { setNetwork, setTabBar } from 'redux/store';
+import { Loading } from 'components/screen/Loading';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -113,6 +113,7 @@ const OffHome = ({ navigation, route }) => {
         tomorrowAsyncData = [];
       }
       dispatch(setNetwork('offline'));
+      dispatch(setTabBar('today'));
       rowObj = Object.assign(
         ...yesterdayAsyncData,
         ...todayAsyncData,
@@ -130,15 +131,7 @@ const OffHome = ({ navigation, route }) => {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
   return isLoading ? (
-    <View
-      style={{
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
-        justifyContent: 'center',
-      }}
-    >
-      <Text>로딩</Text>
-    </View>
+    <Loading />
   ) : (
     <ImageBackground
       source={{ uri: 'homeBackground' }}

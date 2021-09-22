@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import { setTabBar } from '../../../redux/store';
+import { setTabBar } from 'redux/store';
 
 const styles = StyleSheet.create({
   tabUnderBar: {

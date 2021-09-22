@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
-import { setTabBar } from '../../redux/store';
 
 const ScheduleTomorrow = ({ navigation }) => {
   const tmorrowData = [];

@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { create, editToDoDispatch } from 'redux/store';
+import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import Map from 'components/screen/Map';
+import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
@@ -40,12 +41,10 @@ import {
   alertStartTimeError,
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
-import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
-import { longTaskList, longTodoTitle } from '../../utils/TwoButtonAlert';
-import { deleteToDoDispatch } from '../../redux/store';
+import { longTaskList, longTodoTitle } from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   modalHandler,

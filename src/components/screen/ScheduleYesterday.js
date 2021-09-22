@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
-import { setTabBar } from '../../redux/store';
 
 const ScheduleYesterday = ({ navigation }) => {
   const yesterDayData = [];
