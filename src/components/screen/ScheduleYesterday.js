@@ -11,17 +11,6 @@ const ScheduleYesterday = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // do something
-      console.log('here3');
-      dispatch(setTabBar('yesterday'));
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();

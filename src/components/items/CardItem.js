@@ -117,12 +117,14 @@ export const Card = ({
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
+    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
       <View
         style={[
           styles.card,
           {
-            flex: 0.8,
+            flex: 1,
+            maxWidth: 250,
+            maxHeight: 250,
             justifyContent: 'space-between',
             backgroundColor: '#54BCB6',
           },
@@ -189,7 +191,7 @@ export const Card = ({
           ></View>
         </View>
       </View>
-      <View style={[styles.card, styles.cardCalendar]}>
+      {/* <View style={[styles.card, styles.cardCalendar]}>
         <Text
           style={[
             styles.cardCalendarText,
@@ -211,7 +213,7 @@ export const Card = ({
         >
           {MONTH} 월
         </Text>
-      </View>
+      </View> */}
     </View>
   );
 };

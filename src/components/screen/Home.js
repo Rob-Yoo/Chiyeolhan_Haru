@@ -22,7 +22,7 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import { checkTodayChange } from 'utils/AsyncStorage';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE_OFFLINE } from '../../constant/const';
+import { KEY_VALUE_OFFLINE, YESTERDAY } from '../../constant/const';
 import store, { setNetwork } from '../../redux/store';
 
 const ScheduleButton = styled.TouchableOpacity``;
@@ -115,8 +115,14 @@ const Home = ({ navigation }) => {
       dispatch(setNetwork('online'));
       if (Object.keys(rowObj).length === 0) {
         setLoading(false);
+        return;
       }
-      setFetchObj(rowObj);
+      let filterObj = {};
+      for (key in rowObj) {
+        if (rowObj[key].date >= YESTERDAY)
+          filterObj = { ...filterObj, [key]: rowObj[key] };
+      }
+      setFetchObj(filterObj);
     } catch (e) {
       console.log('getToDos Error :', e);
     }

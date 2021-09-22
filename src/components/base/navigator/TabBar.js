@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import { setTabBar } from '../../../redux/store';
 
 const styles = StyleSheet.create({
   tabUnderBar: {
@@ -33,7 +34,7 @@ export default function TabBar(props) {
   //const [visibleName, setVisibleName] = useState(true);
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
-
+  const dispatch = useDispatch();
   return (
     <View style={styles.tabContainer}>
       {state.routes.map((route, index) => {
@@ -42,9 +43,13 @@ export default function TabBar(props) {
         const isFocused = state.index === index;
 
         const onLongPress = () => {
-          visibleName === 'today'
-            ? navigation.navigate('yesterday')
-            : navigation.navigate('today');
+          if (visibleName === 'today') {
+            dispatch(setTabBar('yesterday'));
+            navigation.navigate('yesterday');
+          } else {
+            dispatch(setTabBar('today'));
+            navigation.navigate('today');
+          }
         };
         const onPress = () => {
           const event = navigation.emit({
@@ -65,18 +70,6 @@ export default function TabBar(props) {
               onPress={onPress}
               onLongPress={onLongPress}
               key={`tab_${index}`}
-              style={{
-                width:
-                  isFocused ||
-                  (!isFocused &&
-                    visibleName === 'today' &&
-                    route.name === 'today') ||
-                  (!isFocused &&
-                    visibleName === 'yesterday' &&
-                    route.name === 'yesterday')
-                    ? null
-                    : 0,
-              }}
             >
               <Text
                 style={[

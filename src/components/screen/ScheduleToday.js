@@ -12,16 +12,7 @@ const ScheduleToday = ({ navigation }) => {
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // do something
-      console.log('here');
-      dispatch(setTabBar('today'));
-    });
 
-    return unsubscribe;
-  }, [navigation]);
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();

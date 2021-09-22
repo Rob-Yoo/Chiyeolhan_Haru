@@ -97,6 +97,10 @@ const PaintHome = ({ todoArr }) => {
         loop={false}
         style={styles.swiperStyle}
         index={nowIndex}
+        scrollViewStyle={{ overflow: 'visible' }}
+        removeClippedSubviews={false}
+        containerStyle={{ width: 300 }}
+        // paginationStyle={{ width: 400 }}
       >
         {todoArr &&
           todoArr.map((item, index) => {

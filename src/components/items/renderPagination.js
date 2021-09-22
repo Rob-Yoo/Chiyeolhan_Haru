@@ -48,6 +48,13 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
+  paginationStyle: {
+    position: 'absolute',
+    top: 300,
+    left: -50,
+    width: 400,
+    height: '100%',
+  },
 });
 
 const Pagination = ({ taskList, targetId }) => {
@@ -69,7 +76,7 @@ const Pagination = ({ taskList, targetId }) => {
   };
 
   return (
-    <>
+    <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
         <Text
           style={{
@@ -152,7 +159,7 @@ const Pagination = ({ taskList, targetId }) => {
           />
         </View>
       </ModalLayout>
-    </>
+    </View>
   );
 };
 
