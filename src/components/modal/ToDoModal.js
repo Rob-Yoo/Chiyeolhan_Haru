@@ -66,6 +66,7 @@ export const ToDoModal = ({
   const [isOngoing, setIsOngoing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
+  const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
@@ -92,6 +93,7 @@ export const ToDoModal = ({
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
     setIsOngoing(false);
+    network !== 'offline' && setCanEdit(true);
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -332,7 +334,8 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
-    if (network === 'offline' || isToday === 'yesterday') {
+    console.log(canEdit);
+    if (!canEdit) {
       modalHandler();
       return;
     }
@@ -427,6 +430,14 @@ export const ToDoModal = ({
   };
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
+    console.log(passModalData?.startDate < new Date());
+    if (
+      network === 'offline' ||
+      isToday === 'yesterday' ||
+      passModalData?.startDate < new Date()
+    ) {
+      setCanEdit(false);
+    }
     if (passModalData !== undefined) {
       handleIsOnGoing();
       if (passModalData.description) {
@@ -462,17 +473,28 @@ export const ToDoModal = ({
       <View style={styles.modalInputContainer}>
         <View style={styles.modalTopContainer}>
           <View style={styles.modalTextView}>
-            <Text style={styles.modalTopText} onPress={modalHandler}>
-              취소
-            </Text>
-            <TouchableOpacity>
-              <Text
-                onPress={handleSubmit(handleTodoSubmit)}
+            {canEdit ? (
+              <>
+                <Text style={styles.modalTopText} onPress={modalHandler}>
+                  취소
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    onPress={handleSubmit(handleTodoSubmit)}
+                    style={styles.modalTopText}
+                  >
+                    완료
+                  </Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <TouchableOpacity
                 style={styles.modalTopText}
+                onPress={handleSubmit(handleTodoSubmit)}
               >
-                완료
-              </Text>
-            </TouchableOpacity>
+                <Text style={styles.modalTopText}>닫기</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <ImageBackground

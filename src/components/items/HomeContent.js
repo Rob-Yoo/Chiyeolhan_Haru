@@ -101,7 +101,7 @@ const HomeContent = (props) => {
         scrollViewStyle={{ overflow: 'visible' }}
         removeClippedSubviews={false}
         containerStyle={{ width: 300 }}
-        // paginationStyle={{ width: 400 }}
+        //paginationStyle={{ width: 400 }}
       >
         {todoArr &&
           todoArr.map((item, index) => {

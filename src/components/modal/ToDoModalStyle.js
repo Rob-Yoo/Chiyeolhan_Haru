@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   modalTextView: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingHorizontal: 50,
     marginTop: 20,
   },

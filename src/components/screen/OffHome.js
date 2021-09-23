@@ -25,6 +25,7 @@ import {
 } from 'constant/const';
 import { setNetwork, setTabBar } from 'redux/store';
 import { Loading } from 'components/screen/Loading';
+import HomeContent from '../items/HomeContent';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -153,7 +154,7 @@ const OffHome = ({ navigation, route }) => {
             />
           </ScheduleButton>
         </View>
-        <OffHomeContent todoArr={todoArr} />
+        <HomeContent todoArr={todoArr} />
       </View>
     </ImageBackground>
   );

@@ -88,17 +88,19 @@ const Pagination = ({ taskList, targetId }) => {
         >
           수행 리스트
         </Text>
-        <IconTaskListAdd
-          name="icon-tasklist-add-button"
-          size={19}
-          color={'#229892'}
-          onPress={() =>
-            targetId !== 0 &&
-            network === 'online' &&
-            toDos.startTime > getCurrentTime() &&
-            toggleIsVisible()
-          }
-        />
+        {network !== 'offline' ? (
+          <IconTaskListAdd
+            name="icon-tasklist-add-button"
+            size={19}
+            color={'#229892'}
+            onPress={() =>
+              targetId !== 0 &&
+              network === 'online' &&
+              toDos.startTime > getCurrentTime() &&
+              toggleIsVisible()
+            }
+          />
+        ) : null}
       </View>
       <ScrollView
         style={{
