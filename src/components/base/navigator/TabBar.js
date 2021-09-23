@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
+    // justifyContent: 'flex-start',
     paddingTop: 40,
     paddingBottom: 20,
     paddingLeft: 20,
@@ -27,6 +28,12 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
 });
+const handleDayChange = () => {
+  console.log('여기 데이체인지');
+};
+const handleReset = () => {
+  console.log('여기 리셋');
+};
 
 export default function TabBar(props) {
   const { state, descriptors, navigation } = props;
@@ -89,7 +96,7 @@ export default function TabBar(props) {
             isFocused={isFocused}
             onPress={onPress}
             key={`tab_${index}`}
-            style={{ marginRight: 180 }}
+            style={{ marginRight: 120 }}
           >
             <Text
               style={[
@@ -104,6 +111,30 @@ export default function TabBar(props) {
           </TouchableOpacity>
         );
       })}
+      <TouchableOpacity
+        style={{
+          width: 30,
+          height: 30,
+          backgroundColor: 'red',
+          borderRadius: 30,
+          marginRight: 25,
+        }}
+        onPress={() => handleDayChange()}
+      >
+        <Text>내일오늘일정버튼</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          width: 30,
+          height: 30,
+          backgroundColor: 'red',
+          borderRadius: 30,
+        }}
+        onPress={() => handleReset()}
+      >
+        <Text>리셋버튼</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() =>
           network === 'online'
