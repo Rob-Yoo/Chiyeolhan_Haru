@@ -123,14 +123,16 @@ export const deleteTodayAsyncStorageData = async (id) => {
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
 
     const newTodayData = todayData.filter((item) => item.id !== id);
-    const newSuccess = successSchedules.filter((item) => item.id !== id);
-
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY_DATA,
       JSON.stringify(newTodayData),
     );
-    await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(newSuccess));
-    console.log('deleted Success Schedules : ', newSuccess);
+
+    if (successSchedules) {
+      const newSuccess = successSchedules.filter((item) => item.id !== id);
+      await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(newSuccess));
+      console.log('deleted Success Schedules : ', newSuccess);
+    }
 
     cancelNotification(id); //삭제하려는 일정의 예약된 모든 알림 삭제
     PushNotification.getScheduledLocalNotifications((notif) =>
