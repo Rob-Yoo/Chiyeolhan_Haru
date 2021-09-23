@@ -63,13 +63,16 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
-
+  const [isOngoing, setIsOngoing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
 
+  const handleIsOnGoing = () => {
+    passModalData?.startDate < new Date() && setIsOngoing(true);
+  };
   const toggleIsVisible = (isVisible, setVisible) => {
     setVisible(!isVisible);
   };
@@ -88,6 +91,7 @@ export const ToDoModal = ({
     setValue('todoTitle', undefined);
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
+    setIsOngoing(false);
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -424,6 +428,7 @@ export const ToDoModal = ({
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (passModalData !== undefined) {
+      handleIsOnGoing();
       if (passModalData.description) {
         //데이터 수정 시
         setTitle(passModalData?.description);
@@ -440,6 +445,7 @@ export const ToDoModal = ({
       register('todoTask', { min: 1 }),
       register('todoId');
   }, [register]);
+
   return (
     <Modal
       navigation={navigation}
@@ -506,6 +512,7 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, true)}
             isToday={isToday}
             timeDate={passModalData?.startDate}
+            isOngoing={isOngoing}
           />
           <Text style={{ fontSize: 25 }}>~</Text>
           <TimePicker
@@ -513,6 +520,7 @@ export const ToDoModal = ({
             timeText={'끝'}
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
+            isOngoing={isOngoing}
           />
           {isToday !== 'yesterday' && network !== 'offline' ? (
             <TouchableOpacity onPress={() => gotoFavorite(isToday)}>
