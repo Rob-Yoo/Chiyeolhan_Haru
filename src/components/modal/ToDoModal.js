@@ -20,6 +20,7 @@ import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
 import IconFavorite from '#assets/icons/icon-favorite';
 import { handleFilterData } from 'utils/handleFilterData';
+import { cancelNotification } from 'utils/Notification';
 import {
   TODAY,
   TOMORROW,
@@ -188,46 +189,53 @@ export const ToDoModal = ({
       return;
     }
     try {
+      console.log(todoStartTime, todoFinishTime);
       let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      const currentTime = getCurrentTime();
+      const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
       const id = passModalData?.id;
       const startTime = passModalData?.startTime;
       let newID;
-      let isChange = false;
+      let isStartTimeChange = false;
 
       if (startTime !== todoStartTime) {
         // 시작시간이 바뀌면
-        isChange = true;
+        isStartTimeChange = true;
         const date = new Date();
-        newId =
+        newID =
           `${date.getFullYear()}` +
           `${isToday ? TODAY : TOMORROW}` +
           `${todoStartTime}`;
         //newID 생성
         if (successSchedules !== null) {
           let idx = 0;
-
+          let isNeedUpdate = false;
           for (const schedule of successSchedules) {
             if (schedule.id === id) {
               successSchedules[idx].id = newID;
               successSchedules[idx].startTime = todoStartTime;
-
+              isNeedUpdate = true;
               break;
             }
             idx = idx + 1;
           }
-          if (isChange) {
+          if (isNeedUpdate) {
             await AsyncStorage.setItem(
               KEY_VALUE_SUCCESS,
               JSON.stringify(successSchedules),
             );
+            console.log('Updated successSchedules :', successSchedules);
           }
         }
       }
-      if (isChange) {
+      if (isStartTimeChange) {
         const { location, longitude, latitude, address } = toDos[id];
+
         dispatch(deleteToDoDispatch(id));
+        cancelNotification(id); //수정하려는 일정의 예약된 모든 알림 삭제
+
         const newData = {
-          id: newId,
+          id: newID,
           title: todoTitle,
           startTime: todoStartTime,
           finishTime: todoFinishTime,
@@ -240,8 +248,8 @@ export const ToDoModal = ({
           isDone: false,
         };
         dispatch(create(newData));
-        await toDosUpdateDB(newData, newId);
-      } else if (!isChange) {
+        await toDosUpdateDB(newData, newID);
+      } else if (!isStartTimeChange) {
         dispatch(
           editToDoDispatch({
             todoTitle,
@@ -256,7 +264,16 @@ export const ToDoModal = ({
       const isChangeEarliest = isToday
         ? await checkEarlistTodo(todoStartTime)
         : true;
-      isToday ? dbToAsyncStorage(isChangeEarliest) : dbToAsyncTomorrow();
+      if (isToday) {
+        await dbToAsyncStorage(isChangeEarliest);
+        if (isStartTimeChange) {
+          failNotification(timeDiff, newID); // 일정이 끝시간때에 실패 알림 예약
+        } else {
+          failNotification(timeDiff, id); // 일정이 끝시간때에 실패 알림 예약
+        }
+      } else {
+        dbToAsyncTomorrow();
+      }
       modalHandler();
     } catch (e) {
       console.log('todoModal todoEdit Error', e);

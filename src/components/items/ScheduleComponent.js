@@ -104,13 +104,13 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
                 if (day === 'today') {
                   if (event.id == data[0].id) {
                     await geofenceUpdate(data);
-                    deleteTodayAsyncStorageData(targetId);
+                    await deleteTodayAsyncStorageData(targetId);
                   } else {
-                    deleteGeofenceAsyncStorageData(targetId);
-                    deleteTodayAsyncStorageData(targetId);
+                    await deleteGeofenceAsyncStorageData(targetId);
+                    await deleteTodayAsyncStorageData(targetId);
                   }
                 } else if (day === 'tomorrow') {
-                  deleteTomorrowAsyncStorageData(targetId);
+                  await deleteTomorrowAsyncStorageData(targetId);
                 }
                 await dispatch(deleteToDoDispatch(targetId));
               }
