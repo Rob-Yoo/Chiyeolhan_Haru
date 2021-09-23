@@ -20,6 +20,7 @@ import {
   notifHandler,
   arriveEarlyNotification,
   failNotification,
+  cancelNotification,
 } from 'utils/Notification';
 import getDistance from 'haversine-distance';
 
@@ -41,14 +42,6 @@ const setSuccessSchedule = async (array) => {
     await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(array));
   } catch (e) {
     console.log('setTomorrowData Error :', e);
-  }
-};
-
-const completeNotifHandler = (data, timeDiff, schedule) => {
-  if (data.length >= 2) {
-    completeNotification(true, timeDiff, schedule);
-  } else {
-    completeNotification(false, timeDiff, schedule);
   }
 };
 
@@ -156,8 +149,8 @@ const findNearBy = async (data, currentTime) => {
             currentTime,
           );
           arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
-          completeNotifHandler(data, timeDiff, nextSchedule); // 각 일정들마다 완료 알림 예약
-          PushNotification.cancelLocalNotification(`${nextSchedule.id} + 5`); // failNotif 알림 취소
+          completeNotification(timeDiff, nextSchedule); // 각 일정들마다 완료 알림 예약
+          PushNotification.cancelLocalNotification(`${nextSchedule.id}F`); // failNotif 알림 취소
           await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
         } catch (e) {
@@ -188,7 +181,6 @@ const saveSuccessSchedules = async (id, startTime) => {
         successSchedules.push({ id, startTime });
         await setSuccessSchedule(successSchedules);
       }
-      console.log('successSchedule : ', successSchedules);
     }
   } catch (e) {
     console.log('saveSuccessSchedules Error :', e);
@@ -204,45 +196,41 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       const timeDiff = getLateTimeDiff(startTime, currentTime);
       if (0 <= timeDiff && timeDiff <= 5) {
         console.log('제 시간에 옴', currentTime);
-        notifHandler('ON_TIME', data[0]);
-        PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
+        notifHandler('ON_TIME', data[0]); // notifHandler 함수 안에서 fail 알림을 삭제함
       } else {
         console.log('늦게 옴', currentTime);
         notifHandler('LATE', data[0]);
-        PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
       }
     } else {
       const timeDiff = getEarlyTimeDiff(startTime, currentTime);
       console.log('일찍 옴', currentTime);
       notifHandler('EARLY', data[0], timeDiff);
-      PushNotification.cancelLocalNotification(`${data[0].id} + 5`); // 해당 일정의 failNotification 알림 삭제
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
     }
+    completeNotification(timeDiff, data[0]); // 현재 일정의 완료 알림 예약
 
     const nearBySchedules = await findNearBy(data, currentTime);
     console.log('nearBySchedules :', nearBySchedules);
     if (nearBySchedules.length > 0) {
       // 다음 일정 장소가 현재 일정 장소의 200m 이내에 존재히면
-      // await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
       await AsyncStorage.setItem(
         KEY_VALUE_NEAR_BY,
         JSON.stringify(nearBySchedules),
       );
-      completeNotifHandler(data, timeDiff, data[0]); // 현재 일정의 완료 알림 예약
     } else {
       // 200m 바깥에 존재하면
-      if (isEarly) {
-        // 일찍 왔으면 일단 isDone만 true로 바꿔주고 EXIT 시간이 일정 시작 시간보다 빠르면 false로 다시 바꿈
-        // await toDoRef.doc(`${data[0].id}`).update({ isDone: true });
-        // 완료 알림 예약하고 EXIT 시간이 일정 시작 시간보다 빠르면 알림 취소
-        completeNotifHandler(data, timeDiff, data[0]);
-      } else {
-        completeNotifHandler(data, timeDiff, data[0]);
+      if (!isEarly) {
+        // 일찍 온게 아니라면 다음 일정으로 업데이트
         await geofenceUpdate(data);
       }
+      // 일찍 온 것이라면 일단 성공한 일정으로 취급하고 완료 알림 예약
+      // 시작시간보다 일찍 나갔다면 성공한 일정 배열에서 제외하고 모든 알림 삭제
     }
     await saveSuccessSchedules(data[0].id, data[0].startTime); // 성공한 일정 저장
+    PushNotification.getScheduledLocalNotifications((notif) =>
+      console.log('예약된 알람 :', notif),
+    );
   } catch (e) {
     console.log('enterAction Error :', e);
   }
@@ -257,8 +245,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
       if (currentTime < startTime) {
         const timeDiff = getTimeDiff(currentTime, finishTime);
         console.log('일정 시작 시간보다 전에 나감');
-        PushNotification.cancelLocalNotification(`${data[0].id} + 3`); //현재 일정 arriveEarlyNotification 알림 사라짐
-        PushNotification.cancelLocalNotification(`${data[0].id} + 4`); //현재 일정 완료 알림 사라짐
+        cancelNotification(data[0].id); //현재 일정의 예약된 모든 알림 삭제
         failNotification(timeDiff, data[0].id); // 다시 해당 일정의 failNotification 알림 등록
         successSchedules = successSchedules.filter(
           (schedule) => schedule.id !== data[0].id,
@@ -291,10 +278,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
             );
-            PushNotification.cancelLocalNotification(`${schedule.id} + 3`); // nearBy 일정들의 도착 알림 사라짐
-            console.log('도착 알림 사라짐');
-            PushNotification.cancelLocalNotification(`${schedule.id} + 4`); // 완료 알림도 사라짐
-            console.log('완료 알림 사라짐');
+            cancelNotification(schedule.id); //nearBy 일정들의 예약된 모든 알림 삭제
             timeDiff = getTimeDiff(currentTime, schedule.finishTime);
             failNotification(timeDiff, schedule.id); // 다시 nearBy 일정들의 failNotification 알림 등록
           }

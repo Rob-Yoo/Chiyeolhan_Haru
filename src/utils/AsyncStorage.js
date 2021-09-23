@@ -15,8 +15,10 @@ import {
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_FAVORITE,
+  KEY_VALUE_SUCCESS,
   YESTERDAY,
 } from 'constant/const';
+import { cancelNotification } from 'utils/Notification';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
 const setTomorrowData = async (array) => {
@@ -98,12 +100,10 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
   try {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const nearBySchedule = await getDataFromAsync(KEY_VALUE_NEAR_BY);
-    const newGeofenceData = geofenceData.filter((item) => item.id !== id);
 
-    await AsyncStorage.setItem(
-      KEY_VALUE_GEOFENCE,
-      JSON.stringify(newGeofenceData),
-    );
+    const newGeofence = geofenceData.filter((item) => item.id !== id);
+
+    await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, JSON.stringify(newGeofence));
 
     if (nearBySchedule) {
       const newNearBySchedule = nearBySchedule.filter((item) => item.id !== id);
@@ -112,10 +112,6 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
         JSON.stringify(newNearBySchedule),
       );
     }
-
-    PushNotification.cancelLocalNotification(`${id} + 3`); //삭제하려는 일정의 arriveEarlyNotification 알림 사라짐
-    PushNotification.cancelLocalNotification(`${id} + 4`); //삭제하려는 일정 완료 알림 사라짐
-    PushNotification.cancelLocalNotification(`${id} + 5`); //삭제하려는 일정 failNotif 사라짐
   } catch (e) {
     console.log('deleteGeofenceAsyncStorageData Error :', e);
   }
@@ -124,10 +120,21 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
 export const deleteTodayAsyncStorageData = async (id) => {
   try {
     const todayData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
+    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+
     const newTodayData = todayData.filter((item) => item.id !== id);
+    const newSuccess = successSchedules.filter((item) => item.id !== id);
+
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY_DATA,
       JSON.stringify(newTodayData),
+    );
+    await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(newSuccess));
+    console.log('deleted Success Schedules : ', newSuccess);
+
+    cancelNotification(id); //삭제하려는 일정의 예약된 모든 알림 삭제
+    PushNotification.getScheduledLocalNotifications((notif) =>
+      console.log('예약된 알람 :', notif),
     );
   } catch (e) {
     console.log('deleteTodayAsyncStorageData Error :', e);
@@ -154,6 +161,7 @@ const setTodayToDoArray = async (todayToDos) => {
       };
       todayToDoArray.push(obj);
     });
+    console.log('todayToDoArray : ', todayToDoArray);
     await setTodayData(JSON.stringify(todayToDoArray));
   } catch (e) {
     console.log('setTodayToDoArray Error :', e);
@@ -191,11 +199,11 @@ const setGeofenceDataArray = async (todayToDos) => {
         });
       }
     });
+    console.log('geofenceDataArray : ', geofenceDataArray);
     await setGeofenceData(JSON.stringify(geofenceDataArray));
     if (progressingSchedule) {
       await setProgressingSchedule(JSON.stringify(progressingSchedule));
     }
-    console.log(geofenceDataArray);
   } catch (e) {
     console.log('setGeofenceDataArray Error :', e);
   }
