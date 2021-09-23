@@ -27,12 +27,12 @@ export const styles = StyleSheet.create({
   },
   todomanBackgroundCircle: {
     position: 'absolute',
-    top: Dimensions.get('screen').height > 667 ? 10 : 12,
-    left: 12,
-    width: Dimensions.get('screen').height > 667 ? 60 : 50,
-    height: Dimensions.get('screen').height > 667 ? 60 : 50,
+    top: Dimensions.get('screen').height > 667 ? 11 : 12,
+    left: 13,
+    width: Dimensions.get('screen').height > 667 ? 50 : 50,
+    height: Dimensions.get('screen').height > 667 ? 50 : 50,
     backgroundColor: '#ffffff',
-    borderRadius: Dimensions.get('screen').height > 667 ? 60 : 50,
+    borderRadius: Dimensions.get('screen').height > 667 ? 50 : 50,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
@@ -117,12 +117,14 @@ export const Card = ({
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
+    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
       <View
         style={[
           styles.card,
           {
-            flex: 0.8,
+            flex: 1,
+            maxWidth: 250,
+            maxHeight: 250,
             justifyContent: 'space-between',
             backgroundColor: '#54BCB6',
           },
@@ -132,7 +134,7 @@ export const Card = ({
         <View style={styles.todomanBackgroundCircle} />
         <IconTaskToDoman
           name="icon-todo-man"
-          size={Dimensions.get('screen').height > 667 ? 42 : 35}
+          size={Dimensions.get('screen').height > 667 ? 35 : 35}
           color="#229892"
         />
         <View
@@ -189,7 +191,7 @@ export const Card = ({
           ></View>
         </View>
       </View>
-      <View style={[styles.card, styles.cardCalendar]}>
+      {/* <View style={[styles.card, styles.cardCalendar]}>
         <Text
           style={[
             styles.cardCalendarText,
@@ -211,7 +213,7 @@ export const Card = ({
         >
           {MONTH} 월
         </Text>
-      </View>
+      </View> */}
     </View>
   );
 };

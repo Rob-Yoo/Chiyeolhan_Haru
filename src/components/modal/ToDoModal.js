@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { create, editToDoDispatch } from 'redux/store';
+import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import Map from 'components/screen/Map';
+import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import IconQuestion from '#assets/icons/icon-question';
@@ -41,12 +42,10 @@ import {
   alertStartTimeError,
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
-import styles from 'components/modal/ToDoModalStyle';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
-import { longTaskList, longTodoTitle } from '../../utils/TwoButtonAlert';
-import { deleteToDoDispatch } from '../../redux/store';
+import { longTaskList, longTodoTitle } from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   modalHandler,
@@ -65,13 +64,17 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
-
+  const [isOngoing, setIsOngoing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
+  const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
 
+  const handleIsOnGoing = () => {
+    passModalData?.startDate < new Date() && setIsOngoing(true);
+  };
   const toggleIsVisible = (isVisible, setVisible) => {
     setVisible(!isVisible);
   };
@@ -90,6 +93,8 @@ export const ToDoModal = ({
     setValue('todoTitle', undefined);
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
+    setIsOngoing(false);
+    network !== 'offline' && setCanEdit(true);
   };
 
   const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -346,7 +351,8 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
-    if (network === 'offline' || isToday === 'yesterday') {
+    console.log(canEdit);
+    if (!canEdit) {
       modalHandler();
       return;
     }
@@ -441,7 +447,16 @@ export const ToDoModal = ({
   };
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
+    console.log(passModalData?.startDate < new Date());
+    if (
+      network === 'offline' ||
+      isToday === 'yesterday' ||
+      passModalData?.startDate < new Date()
+    ) {
+      setCanEdit(false);
+    }
     if (passModalData !== undefined) {
+      handleIsOnGoing();
       if (passModalData.description) {
         //데이터 수정 시
         setTitle(passModalData?.description);
@@ -458,6 +473,7 @@ export const ToDoModal = ({
       register('todoTask', { min: 1 }),
       register('todoId');
   }, [register]);
+
   return (
     <Modal
       navigation={navigation}
@@ -474,17 +490,28 @@ export const ToDoModal = ({
       <View style={styles.modalInputContainer}>
         <View style={styles.modalTopContainer}>
           <View style={styles.modalTextView}>
-            <Text style={styles.modalTopText} onPress={modalHandler}>
-              취소
-            </Text>
-            <TouchableOpacity>
-              <Text
-                onPress={handleSubmit(handleTodoSubmit)}
+            {canEdit ? (
+              <>
+                <Text style={styles.modalTopText} onPress={modalHandler}>
+                  취소
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    onPress={handleSubmit(handleTodoSubmit)}
+                    style={styles.modalTopText}
+                  >
+                    완료
+                  </Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <TouchableOpacity
                 style={styles.modalTopText}
+                onPress={handleSubmit(handleTodoSubmit)}
               >
-                완료
-              </Text>
-            </TouchableOpacity>
+                <Text style={styles.modalTopText}>닫기</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <ImageBackground
@@ -524,6 +551,7 @@ export const ToDoModal = ({
             pickerHandler={(text) => timeHandler(text, true)}
             isToday={isToday}
             timeDate={passModalData?.startDate}
+            isOngoing={isOngoing}
           />
           <Text style={{ fontSize: 25 }}>~</Text>
           <TimePicker
@@ -531,6 +559,7 @@ export const ToDoModal = ({
             timeText={'끝'}
             pickerHandler={(text) => timeHandler(text, false)}
             timeDate={passModalData?.endDate}
+            isOngoing={isOngoing}
           />
           {isToday !== 'yesterday' && network !== 'offline' ? (
             <TouchableOpacity onPress={() => gotoFavorite(isToday)}>

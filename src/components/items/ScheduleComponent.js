@@ -32,24 +32,20 @@ const styles = StyleSheet.create({
 
 const MyEventComponent = ({ event, position }) => {
   return (
-    <>
-      <View color={event.color}>
-        <Text style={[styles.text, styles.description]}>
-          {event.description}
-        </Text>
-        <View style={{ flexDirection: 'row', marginLeft: 15 }}>
-          <View
-            style={{
-              width: 3,
-              height: 15,
-              backgroundColor: '#fff',
-              marginRight: 5,
-            }}
-          />
-          <Text style={[styles.text, styles.location]}>{event.location}</Text>
-        </View>
+    <View color={event.color}>
+      <Text style={[styles.text, styles.description]}>{event.description}</Text>
+      <View style={{ flexDirection: 'row', marginLeft: 15 }}>
+        <View
+          style={{
+            width: 3,
+            height: 15,
+            backgroundColor: '#fff',
+            marginRight: 5,
+          }}
+        />
+        <Text style={[styles.text, styles.location]}>{event.location}</Text>
       </View>
-    </>
+    </View>
   );
 };
 
@@ -81,6 +77,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       formatTimeLabel="HH:mm A"
       showTitle={false}
       showNowLine={true}
+      eventContainerStyle={{ paddingHorizontal: 50 }}
       headerStyle={{
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,

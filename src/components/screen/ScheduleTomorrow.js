@@ -5,22 +5,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
-import { setTabBar } from '../../redux/store';
 
 const ScheduleTomorrow = ({ navigation }) => {
   const tmorrowData = [];
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     // do something
-  //     console.log('here2');
-  //     dispatch(setTabBar());
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
+
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();

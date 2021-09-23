@@ -4,6 +4,7 @@ import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
 import ScheduleYesterday from 'components/screen/ScheduleYesterday';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TabBar from 'components/base/navigator/TabBar';
+import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator(tabNavigatorConfig);
 const tabNavigatorConfig = {
@@ -11,22 +12,26 @@ const tabNavigatorConfig = {
   swipeEnabled: false,
 };
 export const SchedullScreenDetail = ({ navigation }) => {
+  const tabBar = useSelector((state) => state.tabBar);
   return (
     <Tab.Navigator
       initialRouteName="today"
       tabBar={(props) => <TabBar {...props} />}
     >
-      <Tab.Screen
-        name="yesterday"
-        component={ScheduleYesterday}
-        options={{ tabBarLabel: '어제' }}
-      />
-      <Tab.Screen
-        name="today"
-        component={ScheduleToday}
-        options={{ tabBarLabel: '오늘' }}
-        navigation={navigation}
-      />
+      {tabBar === 'yesterday' ? (
+        <Tab.Screen
+          name="yesterday"
+          component={ScheduleYesterday}
+          options={{ tabBarLabel: '어제' }}
+        />
+      ) : (
+        <Tab.Screen
+          name="today"
+          component={ScheduleToday}
+          options={{ tabBarLabel: '오늘' }}
+          navigation={navigation}
+        />
+      )}
 
       <Tab.Screen
         name="tomorrow"

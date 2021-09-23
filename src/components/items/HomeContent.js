@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
   swiperStyle: { height: '100%' },
 });
 
-const PaintHome = ({ todoArr }) => {
+const HomeContent = (props) => {
+  let todoArr = props.todoArr;
   const [isData, setIsData] = useState(
     todoArr[0]?.id === undefined ? false : true,
   );
@@ -97,6 +98,10 @@ const PaintHome = ({ todoArr }) => {
         loop={false}
         style={styles.swiperStyle}
         index={nowIndex}
+        scrollViewStyle={{ overflow: 'visible' }}
+        removeClippedSubviews={false}
+        containerStyle={{ width: 300 }}
+        //paginationStyle={{ width: 400 }}
       >
         {todoArr &&
           todoArr.map((item, index) => {
@@ -122,18 +127,16 @@ const PaintHome = ({ todoArr }) => {
           style={{
             backgroundColor: '#000',
             flex: 1,
-            width: Dimensions.get('screen').height > 667 ? 270 : 230,
+            width: '110%',
             height:
               Dimensions.get('screen').height > 667
                 ? Dimensions.get('screen').height * 0.285
                 : Dimensions.get('screen').height * 0.334,
             position: 'absolute',
-            top: 0,
-            left: 10,
+            top: -7,
             opacity: 0.3,
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: 20,
           }}
         >
           <Text style={{ color: '#fff', fontSize: 20 }}>
@@ -143,11 +146,6 @@ const PaintHome = ({ todoArr }) => {
       )}
     </View>
   );
-};
-
-const HomeContent = (props) => {
-  const todoArr = props.todoArr;
-  return <PaintHome todoArr={todoArr} />;
 };
 
 export default HomeContent;

@@ -72,6 +72,7 @@ export const TimePicker = ({
   pickerHandler,
   isToday,
   timeDate,
+  isOngoing,
 }) => {
   const network = useSelector((state) => state.network);
   const [isVisible, setVisible] = useState(false);
@@ -89,7 +90,7 @@ export const TimePicker = ({
   const currentTime = `${hour}:${min}`;
 
   const showTimePicker = () => {
-    if (timeDate < new Date() || network === 'offline') return;
+    if (isOngoing || network === 'offline') return;
     setVisible(true);
   };
 

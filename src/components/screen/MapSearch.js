@@ -93,7 +93,7 @@ export const MapSearch = ({
   isFavoriteColor,
   handleFavorite,
 }) => {
-  const [inputText, setText] = useState('');
+  const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
 
@@ -111,6 +111,7 @@ export const MapSearch = ({
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
   };
+
   return (
     <View style={styles.mapSearchContainer}>
       <View
@@ -154,13 +155,15 @@ export const MapSearch = ({
                 toggleModal();
               }}
             />
-            <IconStarBorder
-              name="icon-favorite"
-              size={23}
-              color={isFavoriteColor}
-              style={{ paddingHorizontal: 10, width: '10%' }}
-              onPress={() => handleFavorite()}
-            />
+            {!!inputText && (
+              <IconStarBorder
+                name="icon-favorite"
+                size={23}
+                color={isFavoriteColor}
+                style={{ paddingHorizontal: 10, width: '10%' }}
+                onPress={() => handleFavorite()}
+              />
+            )}
           </View>
         </View>
         <View style={{ flex: 1 }}>
