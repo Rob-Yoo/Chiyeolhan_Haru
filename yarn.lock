@@ -5733,7 +5733,7 @@ react-native-web@^0.11:
 
 "react-native-week-view@https://github.com/6mn12j/react-native-week-view.git":
   version "0.6.1"
-  resolved "https://github.com/6mn12j/react-native-week-view.git#1783353eab95cb63fb5500ad6e8e8c91ba5fdc60"
+  resolved "https://github.com/6mn12j/react-native-week-view.git#8062fe6d5f8c794818e0745acc72aae3d3d3bc93"
   dependencies:
     memoize-one "^5.1.1"
     moment "^2.19.3"

@@ -21,11 +21,13 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         endDate: new Date(YEAR, MONTH - 1, DAY, endH, endM),
         startTime: toDos[key].startTime,
         finishTime: toDos[key].finishTime,
-        color:
-          isDone && getCurrentTime() >= toDos[key].startTime
-            ? '#54BCB6'
-            : '#B9B9B9',
+        // color:
+        //   isDone && getCurrentTime() >= toDos[key].startTime
+        //     ? '#54BCB6'
+        //     : '#B9B9B9',
+        color: '#54BCB6',
         toDos: [...toDos[key].toDos],
+        isDone,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -44,8 +46,9 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: '#B9B9B9',
+        color: '#54BCB6',
         toDos: [...toDos[key].toDos],
+        isDone,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -64,8 +67,9 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: '#B9B9B9',
+        color: isDone ? '#B9B9B9' : '#B9B9B9',
         toDos: [...toDos[key].toDos],
+        isDone,
       });
     }
   }
