@@ -9,10 +9,10 @@ import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import { KEY_VALUE_OFFLINE, KEY_VALUE_SUCCESS, UID } from 'constant/const';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { getDataFromAsync, checkTodayChange } from 'utils/AsyncStorage';
 import { offlineAlert } from 'utils/TwoButtonAlert';
 import { getCurrentTime } from 'utils/Time';
-import { Loading } from '../../screen/Loading';
+import { Loading } from 'components/screen/Loading';
 
 export const Stack = createStackNavigator();
 
@@ -22,8 +22,6 @@ const HomeStack = ({ navigation }) => {
       const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
       const currentTime = getCurrentTime();
       const todosRef = dbService.collection(`${UID}`);
-      //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-      //   await toDoRef.update({ isDone: true });
       if (successSchedules !== null) {
         for (const schedule of successSchedules) {
           if (schedule.startTime <= currentTime) {
@@ -35,6 +33,7 @@ const HomeStack = ({ navigation }) => {
       console.log('loadSuccessSchedules Error :', e);
     }
   };
+
   useEffect(() => {
     loadSuccessSchedules();
   }, []);
@@ -72,6 +71,11 @@ const OffHomeStack = ({ navigation }) => {
 const HomeNav = ({ navigation }) => {
   const [network, setNetwork] = useState('online');
   const [isNetwork, setIsNetwork] = useState(false);
+
+  useEffect(() => {
+    checkTodayChange();
+  }, []);
+
   useEffect(() => {
     checkNetwork();
   }, [network]);
@@ -108,7 +112,6 @@ const HomeNav = ({ navigation }) => {
         offlineAlert();
         await AsyncStorage.setItem(KEY_VALUE_OFFLINE, 'Offline');
         const a = await AsyncStorage.getItem(KEY_VALUE_OFFLINE);
-        console.log(a);
         setNetwork('offline');
       }
     } catch (e) {

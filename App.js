@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
 import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
+import { checkTodayChange } from 'utils/AsyncStorage';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import store from 'redux/store';
 import { SafeAreaView } from 'react-navigation';
@@ -22,7 +23,8 @@ const App = () => {
       setIsTerminate(false);
       try {
         await BackgroundGeolocation.requestPermission();
-        console.log('success');
+        // 날짜가 바뀌었는지 체크
+        checkTodayChange();
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }

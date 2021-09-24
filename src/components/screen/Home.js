@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 
 import { dbService } from 'utils/firebase';
@@ -18,7 +11,6 @@ import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
-import { checkTodayChange } from 'utils/AsyncStorage';
 import { YESTERDAY } from 'constant/const';
 import { setNetwork, setTabBar } from 'redux/store';
 import { Loading } from './Loading';
@@ -66,7 +58,6 @@ const styles = StyleSheet.create({
 const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
 
-  const [visibleBtn, setVisibleBtn] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   let todoArr = [];
@@ -76,18 +67,8 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const toDos = useSelector((state) => state.toDos);
 
-  const updateBtnDayCahnge = () => {
-    console.log('daychange');
-    setVisibleBtn('DEFAULT');
-  };
-  const updateBtnFail = () => {
-    console.log('fail');
-    setVisibleBtn('DEFAULT');
-  };
-
   useEffect(() => {
     getToDos();
-    checkBtn();
   }, []);
 
   useEffect(() => {
@@ -140,14 +121,6 @@ const Home = ({ navigation }) => {
     return 0;
   });
 
-  const checkBtn = async () => {
-    // 날짜가 바꼈는 지 체크
-    const dayChange = await checkTodayChange();
-    if (dayChange) {
-      setVisibleBtn('DAY_CHANGE');
-    }
-  };
-
   return isLoading ? (
     <Loading />
   ) : (
@@ -170,26 +143,6 @@ const Home = ({ navigation }) => {
               style={styles.iconScheduleButton}
             />
           </ScheduleButton>
-          {visibleBtn === 'DAY_CHANGE' ? (
-            <TouchableOpacity
-              onPress={() => updateBtnDayCahnge()}
-              style={styles.updateBtn}
-            >
-              <Text>데이체인지버튼</Text>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
-          {visibleBtn === 'FAIL' ? (
-            <TouchableOpacity
-              style={styles.updateBtn}
-              onPress={() => updateBtnFail()}
-            >
-              <Text>페일버튼</Text>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
         </View>
         <HomeContent todoArr={todoArr} />
       </View>
