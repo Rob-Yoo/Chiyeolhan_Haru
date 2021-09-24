@@ -39,6 +39,8 @@
 		EE7CC9DE2D7645779733A411 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F4DE704F88343C48F3B474E /* icon-schedulte-timeset-button.ttf */; };
 		FA3FBBBC89AB49CAB20BA5A7 /* icon-add-todo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F7510C83724B96950DDFFF /* icon-add-todo.ttf */; };
 		CFADC130F6674829BC89FC2F /* icon-home.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFFC16BEBAC7403DA74544E7 /* icon-home.ttf */; };
+		CAC8B9CB25154C7FB988EBC4 /* icon-check.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC3CE6562A34433BA31BD0AD /* icon-check.ttf */; };
+		FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1516193F5D9443FB2B987C5 /* icon-fail.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +102,8 @@
 		FC713D3976404481B3797388 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
 		BFFC16BEBAC7403DA74544E7 /* icon-home.ttf */ = {isa = PBXFileReference; name = "icon-home.ttf"; path = "../assets/icons/ttf-svgs/icon-home.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AC3CE6562A34433BA31BD0AD /* icon-check.ttf */ = {isa = PBXFileReference; name = "icon-check.ttf"; path = "../assets/icons/ttf-svgs/icon-check.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B1516193F5D9443FB2B987C5 /* icon-fail.ttf */ = {isa = PBXFileReference; name = "icon-fail.ttf"; path = "../assets/icons/ttf-svgs/icon-fail.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +238,8 @@
 				EB444FEF80FB49C2BBD0C443 /* icon-todo-man.ttf */,
 				F9533D472D12409D91C0245B /* GodoB.otf */,
 				BFFC16BEBAC7403DA74544E7 /* icon-home.ttf */,
+				AC3CE6562A34433BA31BD0AD /* icon-check.ttf */,
+				B1516193F5D9443FB2B987C5 /* icon-fail.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -325,6 +331,8 @@
 				943EE921770849648EF29722 /* icon-todo-man.ttf in Resources */,
 				9A764286CCB34A4FA5565F51 /* GodoB.otf in Resources */,
 				CFADC130F6674829BC89FC2F /* icon-home.ttf in Resources */,
+				CAC8B9CB25154C7FB988EBC4 /* icon-check.ttf in Resources */,
+				FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

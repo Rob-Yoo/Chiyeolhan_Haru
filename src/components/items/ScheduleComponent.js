@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-bold',
   },
   description: {
-    fontSize: 20,
+    fontSize: 16,
+    marginBottom: 2,
   },
   location: {
     fontSize: 10,
@@ -119,8 +120,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
-        maxWidth: 250,
-        left: 40,
+        maxWidth: 190,
+        left: 50,
       }}
       scrollToTimeNow={day === 'today' ? true : false}
       EventComponent={MyEventComponent}
