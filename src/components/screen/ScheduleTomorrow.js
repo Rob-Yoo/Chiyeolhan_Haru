@@ -26,7 +26,7 @@ const ScheduleTomorrow = ({ navigation }) => {
   };
 
   makeScheduleDate(storeData, tmorrowData, 'tomorrow');
-  //console.log('schedule tomorrow');
+
   return (
     <>
       <ScheduleLayout

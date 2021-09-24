@@ -23,7 +23,7 @@ const ScheduleYesterday = ({ navigation }) => {
   };
 
   makeScheduleDate(storeData, yesterDayData, 'yesterday');
-  //console.log('schedule yesterday');
+
   return (
     <>
       <ScheduleLayout

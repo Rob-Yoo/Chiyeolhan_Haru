@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { setTabBar } from 'redux/store';
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 const handleDayChange = () => {
-  console.log('여기 데이체인지');
+  if (dayChange) console.log('여기 데이체인지');
 };
 const handleReset = () => {
   console.log('여기 리셋');

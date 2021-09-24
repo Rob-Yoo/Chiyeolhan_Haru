@@ -26,7 +26,7 @@ const ScheduleToday = ({ navigation }) => {
   };
 
   makeScheduleDate(storeData, todayData, 'today');
-  //console.log('schedule today');
+
   return (
     <>
       <ScheduleLayout

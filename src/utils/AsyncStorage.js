@@ -16,7 +16,6 @@ import {
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_FAVORITE,
   KEY_VALUE_SUCCESS,
-  YESTERDAY,
 } from 'constant/const';
 import { cancelNotification } from 'utils/Notification';
 import { isEarliestTime, getCurrentTime } from 'utils/Time';
@@ -299,11 +298,11 @@ export const deleteAllSearchedData = async () => {
 
 export const checkTodayChange = async () => {
   try {
-    let isNeedUpdate = false;
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
 
     if (today === null) {
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+      console.log(await AsyncStorage.getItem(KEY_VALUE_TODAY));
     } else if (today !== TODAY) {
       const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
       const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
@@ -328,12 +327,10 @@ export const checkTodayChange = async () => {
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
         const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         console.log('바뀐 geofenceData :', geofenceData);
-        isNeedUpdate = true;
       }
     } else {
-      console.log('날짜가 바뀌지 않았음');
+      console.log('날짜가 바뀌지 않음');
     }
-    return isNeedUpdate;
   } catch (e) {
     console.log('checkTodayChange Error :', e);
   }
