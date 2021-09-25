@@ -88,11 +88,6 @@ export const geofenceUpdate = async (data, index = 1) => {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
 
-    // if (isSuccess) {
-    //   const toDoRef = dbService.collection(`${UID}`).doc(`${data[0].id}`);
-    //   await toDoRef.update({ isDone: true });
-    // }
-
     if (index > 0) {
       const newDataArray = data.slice(index);
       await AsyncStorage.setItem(
@@ -143,7 +138,6 @@ const findNearBy = async (data, currentTime) => {
       } else {
         try {
           idx = idx + 1;
-          // await toDoRef.doc(`${nextSchedule.id}`).update({ isDone: true });
           const timeDiff = getEarlyTimeDiff(
             nextSchedule.startTime,
             currentTime,
