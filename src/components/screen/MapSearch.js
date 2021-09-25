@@ -7,83 +7,15 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
+
+import { SCREEN_HEIGHT } from 'components/screen/Home';
 
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconStarBorder from '#assets/icons/icon-star-border';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
 
-const styles = StyleSheet.create({
-  mapSearchContainer: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-  },
-  searchedHistoryContainer: {
-    flex: 1,
-    width: '100%',
-    height: 800,
-    backgroundColor: '#fff',
-  },
-  icon: { marginRight: 10 },
-  searchedText: {
-    fontSize: 20,
-    fontWeight: '500',
-  },
-  searchedDeleteText: {
-    borderColor: '#A2A2A2',
-    color: '#A2A2A2',
-    borderWidth: 1,
-    borderRadius: 5,
-    fontSize: 16,
-    position: 'absolute',
-    padding: 3,
-    top: 20,
-    right: 10,
-  },
-  searchInputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 140,
-    backgroundColor: '#54BCB6',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    paddingTop: 20,
-  },
-  // searchInputView: {
-  //   backgroundColor: '#fff',
-  //   width: '90%',
-  //   height: 50,
-  //   borderRadius: 10,
-  // },
-  searchInputViewBackButton: {
-    width: '10%',
-    height: 30,
-    paddingTop: 5,
-    paddingHorizontal: 10,
-  },
-  searchInputViewInput: {
-    width: '80%',
-    height: SCREEN_HEIGHT * 0.05,
-    borderRadius: 10,
-    fontSize: 19,
-  },
-  searchedDeleteAllText: {
-    fontSize: 20,
-    marginVertical: 25,
-    textAlign: 'center',
-  },
-  searcehdItem: {
-    flexDirection: 'row',
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#707070',
-  },
-});
+import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
 
 export const MapSearch = ({
   _handlePlacesAPI,
@@ -228,3 +160,73 @@ export const MapSearch = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  mapSearchContainer: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+  },
+  searchedHistoryContainer: {
+    flex: 1,
+    width: '100%',
+    height: 800,
+    backgroundColor: '#fff',
+  },
+  icon: { marginRight: 10 },
+  searchedText: {
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  searchedDeleteText: {
+    borderColor: '#A2A2A2',
+    color: '#A2A2A2',
+    borderWidth: 1,
+    borderRadius: 5,
+    fontSize: 16,
+    position: 'absolute',
+    padding: 3,
+    top: 20,
+    right: 10,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 140,
+    backgroundColor: '#54BCB6',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    paddingTop: 20,
+  },
+  // searchInputView: {
+  //   backgroundColor: '#fff',
+  //   width: '90%',
+  //   height: 50,
+  //   borderRadius: 10,
+  // },
+  searchInputViewBackButton: {
+    width: '10%',
+    height: 30,
+    paddingTop: 5,
+    paddingHorizontal: 10,
+  },
+  searchInputViewInput: {
+    width: '80%',
+    height: SCREEN_HEIGHT * 0.05,
+    borderRadius: 10,
+    fontSize: 19,
+  },
+  searchedDeleteAllText: {
+    fontSize: 20,
+    marginVertical: 25,
+    textAlign: 'center',
+  },
+  searcehdItem: {
+    flexDirection: 'row',
+    paddingVertical: 18,
+    paddingHorizontal: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: '#707070',
+  },
+});

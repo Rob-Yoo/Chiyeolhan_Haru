@@ -1,5 +1,42 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+export const LocationData = ({
+  locationData,
+  modalHandler,
+  locationDataHandler,
+}) => {
+  const searchedLocation = () => {
+    locationDataHandler(locationData);
+    modalHandler();
+  };
+  const { location, address } = locationData;
+  return (
+    <View style={styles.locationInfoCard}>
+      <View style={{ flex: 4 }}>
+        <Text style={styles.locationTitle}>{location}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            flexWrap: 'nowrap',
+            paddingRight: 40,
+          }}
+        >
+          <Text style={styles.address}>도로명</Text>
+          <Text style={styles.addressText}>{address}</Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={styles.locationFinButton}
+        onPress={searchedLocation}
+      >
+        <Text style={styles.locationFinText}>완료</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   locationInfoCard: {
     flex: 1,
@@ -52,39 +89,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
-export const LocationData = ({
-  locationData,
-  modalHandler,
-  locationDataHandler,
-}) => {
-  const searchedLocation = () => {
-    locationDataHandler(locationData);
-    modalHandler();
-  };
-  const { location, address } = locationData;
-  return (
-    <View style={styles.locationInfoCard}>
-      <View style={{ flex: 4 }}>
-        <Text style={styles.locationTitle}>{location}</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            flexWrap: 'nowrap',
-            paddingRight: 40,
-          }}
-        >
-          <Text style={styles.address}>도로명</Text>
-          <Text style={styles.addressText}>{address}</Text>
-        </View>
-      </View>
-      <TouchableOpacity
-        style={styles.locationFinButton}
-        onPress={searchedLocation}
-      >
-        <Text style={styles.locationFinText}>완료</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};

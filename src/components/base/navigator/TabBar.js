@@ -1,7 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { setTabBar } from 'redux/store';
+
 import IconHome from '#assets/icons/icon-home';
 
 const styles = StyleSheet.create({

@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+
 import { fontPercentage } from 'utils/responsive';
 
 const styles = StyleSheet.create({

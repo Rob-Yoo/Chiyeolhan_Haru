@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { dbService } from 'utils/firebase';
+import NetInfo from '@react-native-community/netinfo';
+import AsyncStorage from '@react-native-community/async-storage';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Home from 'components/screen/Home';
 import OffHome from 'components/screen/OffHome';
 import { ModalStack } from 'components/base/navigator/Stack';
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
-import NetInfo from '@react-native-community/netinfo';
-import AsyncStorage from '@react-native-community/async-storage';
-import { createStackNavigator } from '@react-navigation/stack';
-import { KEY_VALUE_OFFLINE, KEY_VALUE_SUCCESS, UID } from 'constant/const';
+import { Loading } from 'components/screen/Loading';
+
+import { dbService } from 'utils/firebase';
 import { getDataFromAsync, checkTodayChange } from 'utils/AsyncStorage';
 import { offlineAlert } from 'utils/TwoButtonAlert';
 import { getCurrentTime } from 'utils/Time';
-import { Loading } from 'components/screen/Loading';
+
+import { KEY_VALUE_SUCCESS, UID } from 'constant/const';
 
 export const Stack = createStackNavigator();
 
@@ -114,7 +116,6 @@ const HomeNav = ({ navigation }) => {
         setNetwork('online');
       }
       console.log('Online');
-      await AsyncStorage.removeItem(KEY_VALUE_OFFLINE);
     } catch (e) {
       console.log('_handleIsConnected Error :', e);
     }
@@ -124,9 +125,8 @@ const HomeNav = ({ navigation }) => {
     try {
       if (network === 'online') {
         offlineAlert();
-        await AsyncStorage.setItem(KEY_VALUE_OFFLINE, 'Offline');
-        const a = await AsyncStorage.getItem(KEY_VALUE_OFFLINE);
         setNetwork('offline');
+        console.log('Offline');
       }
     } catch (e) {
       console.log('_handleIsNotConnected Error :', e);

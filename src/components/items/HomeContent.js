@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { TODAY } from 'constant/const';
-import { Card } from 'components/items/CardItem';
-import { getCurrentTime } from 'utils/Time';
+
 import { renderPagination } from 'components/items/renderPagination';
+import { Card } from 'components/items/CardItem';
+
+import { getCurrentTime } from 'utils/Time';
+
+import { TODAY } from 'constant/const';
+
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 5,

@@ -1,14 +1,8 @@
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  UID,
-  KEY_VALUE_GEOFENCE,
-  KEY_VALUE_NEAR_BY,
-  KEY_VALUE_EARLY,
-  KEY_VALUE_PROGRESSING,
-  KEY_VALUE_SUCCESS,
-} from 'constant/const';
 import PushNotification from 'react-native-push-notification';
+import getDistance from 'haversine-distance';
+
 import {
   getEarlyTimeDiff,
   getLateTimeDiff,
@@ -22,7 +16,15 @@ import {
   failNotification,
   cancelNotification,
 } from 'utils/Notification';
-import getDistance from 'haversine-distance';
+
+import {
+  UID,
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_NEAR_BY,
+  KEY_VALUE_EARLY,
+  KEY_VALUE_PROGRESSING,
+  KEY_VALUE_SUCCESS,
+} from 'constant/const';
 
 const getDataFromAsync = async (storageName) => {
   try {

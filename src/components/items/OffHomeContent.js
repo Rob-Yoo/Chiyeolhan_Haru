@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { getCurrentTime } from 'utils/Time';
+
 import { Card } from 'components/items/CardItem';
 import { renderPagination } from 'components/items/renderPagination';
 
-const styles = StyleSheet.create({
-  homeContainer: {
-    flex: 5,
-    alignItems: 'center',
-  },
-  swiperStyle: { height: '100%' },
-});
+import { getCurrentTime } from 'utils/Time';
 
 const PaintHome = ({ todoArr }) => {
   const [isData, setIsData] = useState(
@@ -145,5 +139,13 @@ const OffHomeContent = (props) => {
 
   return <PaintHome todoArr={todoArr} />;
 };
+
+const styles = StyleSheet.create({
+  homeContainer: {
+    flex: 5,
+    alignItems: 'center',
+  },
+  swiperStyle: { height: '100%' },
+});
 
 export default OffHomeContent;

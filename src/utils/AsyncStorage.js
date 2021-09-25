@@ -1,7 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import PushNotification from 'react-native-push-notification';
+
 import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
-import PushNotification from 'react-native-push-notification';
+import { cancelNotification } from 'utils/Notification';
+import { isEarliestTime, getCurrentTime } from 'utils/Time';
+
 import {
   TODAY,
   TOMORROW,
@@ -17,8 +21,6 @@ import {
   KEY_VALUE_FAVORITE,
   KEY_VALUE_SUCCESS,
 } from 'constant/const';
-import { cancelNotification } from 'utils/Notification';
-import { isEarliestTime, getCurrentTime } from 'utils/Time';
 
 const setTomorrowData = async (array) => {
   try {

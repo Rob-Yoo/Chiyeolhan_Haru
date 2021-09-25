@@ -1,5 +1,4 @@
 import PushNotification from 'react-native-push-notification';
-// import { commonTimeExpression } from 'utils/Time';
 
 export const arriveOnTimeNotification = () => {
   PushNotification.localNotificationSchedule({

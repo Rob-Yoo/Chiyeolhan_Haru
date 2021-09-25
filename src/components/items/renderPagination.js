@@ -1,61 +1,18 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
-import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
-import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
-import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { add } from 'redux/store';
-import { getCurrentTime } from 'utils/Time';
+
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 
-const styles = StyleSheet.create({
-  taskHeader: {
-    paddingHorizontal: 40,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
+import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
+import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
+import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
-  task: {
-    backgroundColor: '#FFF',
-    width: '80%',
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-    paddingVertical: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-  taskText: {
-    maxWidth: '100%',
-    color: '#38504F',
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize: 20,
-  },
-  modalInputTask: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: 350,
-    height: 60,
-    marginBottom: 20,
-  },
-  paginationStyle: {
-    position: 'absolute',
-    top: 300,
-    left: -50,
-    width: 400,
-    height: '100%',
-  },
-});
+import { getCurrentTime } from 'utils/Time';
 
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
@@ -172,3 +129,50 @@ export const renderPagination = (index, total, context) => {
     return <Pagination taskList={taskList} targetId={targetId} />;
   }
 };
+
+const styles = StyleSheet.create({
+  taskHeader: {
+    paddingHorizontal: 40,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
+  task: {
+    backgroundColor: '#FFF',
+    width: '80%',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    marginLeft: 20,
+    paddingVertical: 20,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  },
+  taskText: {
+    maxWidth: '100%',
+    color: '#38504F',
+    fontFamily: 'NotoSansKR-Bold',
+    fontSize: 20,
+  },
+  modalInputTask: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: 350,
+    height: 60,
+    marginBottom: 20,
+  },
+  paginationStyle: {
+    position: 'absolute',
+    top: 300,
+    left: -50,
+    width: 400,
+    height: '100%',
+  },
+});
