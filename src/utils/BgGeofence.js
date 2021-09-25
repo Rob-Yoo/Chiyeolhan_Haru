@@ -156,7 +156,7 @@ const findNearBy = async (data, currentTime) => {
   return nearBySchedules;
 };
 
-const saveSuccessSchedules = async (id, startTime) => {
+const saveSuccessSchedules = async (id, startTime, finishTime) => {
   try {
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     if (successSchedules === null) {
@@ -172,7 +172,7 @@ const saveSuccessSchedules = async (id, startTime) => {
         }
       }
       if (!isOverlap) {
-        successSchedules.push({ id, startTime });
+        successSchedules.push({ id, startTime, finishTime });
         await setSuccessSchedule(successSchedules);
       }
     }
@@ -221,7 +221,11 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       // 일찍 온 것이라면 일단 성공한 일정으로 취급하고 완료 알림 예약
       // 시작시간보다 일찍 나갔다면 성공한 일정 배열에서 제외하고 모든 알림 삭제
     }
-    await saveSuccessSchedules(data[0].id, data[0].startTime); // 성공한 일정 저장
+    await saveSuccessSchedules(
+      data[0].id,
+      data[0].startTime,
+      data[0].finishTime,
+    ); // 성공한 일정 저장
     PushNotification.getScheduledLocalNotifications((notif) =>
       console.log('예약된 알람 :', notif),
     );
@@ -243,9 +247,8 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         failNotification(timeDiff, data[0].id); // 다시 해당 일정의 failNotification 알림 등록
         successSchedules = successSchedules.filter(
           (schedule) => schedule.id !== data[0].id,
-        );
-        console.log(successSchedules);
-        await setSuccessSchedule(successSchedules); // 성공한 일정 배열에서 삭제
+        ); // 성공한 일정 배열에서 삭제
+        await setSuccessSchedule(successSchedules);
         await AsyncStorage.removeItem(KEY_VALUE_EARLY);
       } else {
         // 일찍 ENTER하고 시작 시간 이후에 할때
@@ -271,7 +274,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
           } else {
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
-            );
+            ); // 성공한 일정 배열에서 삭제함
             cancelNotification(schedule.id); //nearBy 일정들의 예약된 모든 알림 삭제
             timeDiff = getTimeDiff(currentTime, schedule.finishTime);
             failNotification(timeDiff, schedule.id); // 다시 nearBy 일정들의 failNotification 알림 등록
@@ -284,7 +287,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
           await AsyncStorage.removeItem(KEY_VALUE_EARLY);
         }
         console.log('Updated SuccessSchedules : ', successSchedules);
-        await setSuccessSchedule(successSchedules); // 성공한 일정 배열에서 삭제
+        await setSuccessSchedule(successSchedules);
       }
     }
   } catch (e) {

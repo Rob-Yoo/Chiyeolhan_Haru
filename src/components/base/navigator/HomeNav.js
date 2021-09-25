@@ -19,7 +19,8 @@ export const Stack = createStackNavigator();
 const HomeStack = ({ navigation }) => {
   const loadSuccessSchedules = async () => {
     try {
-      const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      let isNeedUpdate = false;
       const currentTime = getCurrentTime();
       const todosRef = dbService.collection(`${UID}`);
       if (successSchedules !== null) {
@@ -27,6 +28,19 @@ const HomeStack = ({ navigation }) => {
           if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
           }
+          if (schedule.finishTime < currentTime) {
+            successSchedules = successSchedules.filter(
+              (success) => success.id !== schedule.id,
+            ); // 이미 끝난 성공한 일정은 삭제
+            isNeedUpdate = true;
+          }
+        }
+        if (isNeedUpdate) {
+          await AsyncStorage.setItem(
+            KEY_VALUE_SUCCESS,
+            JSON.stringify(successSchedules),
+          );
+          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
         }
       }
     } catch (e) {
