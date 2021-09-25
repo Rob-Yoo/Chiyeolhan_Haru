@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Button } from 'react-native';
+import React, { useEffect, useState, StyleSheet } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import { KEY_VALUE_START_TIME } from 'constant/const';
@@ -173,11 +173,18 @@ export const TimePicker = ({
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      <Button
+      {/*<Button
         color="#142423"
         title={`${timeText}시간: ${time}`}
         onPress={showTimePicker}
-      />
+      />*/}
+      <TouchableOpacity onPress={showTimePicker}>
+        <Text
+          style={{ fontFamily: 'NotoSansKR-Bold', fontSize: 18, color: '#fff' }}
+        >
+          {time}
+        </Text>
+      </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isVisible}
         mode="time"

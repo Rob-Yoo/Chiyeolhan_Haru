@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { setTabBar } from 'redux/store';
+import IconHome from '#assets/icons/icon-home';
 
 const styles = StyleSheet.create({
   tabUnderBar: {
@@ -142,7 +143,11 @@ export default function TabBar(props) {
             : navigation.navigate('OffHome', { screen: 'OffHome' })
         }
       >
-        <Text style={[styles.tabBarText, { color: '#ADADAD' }]}>홈</Text>
+        <IconHome
+          name="icon-home"
+          size={20}
+          style={[styles.tabBarText, { color: '#717171' }]}
+        />
       </TouchableOpacity>
     </View>
   );

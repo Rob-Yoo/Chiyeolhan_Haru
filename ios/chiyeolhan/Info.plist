@@ -105,6 +105,9 @@
 		<string>icon-favorite.ttf</string>
 		<string>icon-find-current-location.ttf</string>
 		<string>GodoB.otf</string>
+		<string>icon-home.ttf</string>
+		<string>icon-check.ttf</string>
+		<string>icon-fail.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
