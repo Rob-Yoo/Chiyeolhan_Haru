@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { makeScheduleDate } from 'utils/makeScheduleData';
+
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
+
+import { makeScheduleDate } from 'utils/makeScheduleData';
 
 const ScheduleYesterday = ({ navigation }) => {
   const yesterDayData = [];

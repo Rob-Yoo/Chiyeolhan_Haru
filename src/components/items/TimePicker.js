@@ -1,14 +1,17 @@
-import React, { useEffect, useState, StyleSheet } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-community/async-storage';
-import { KEY_VALUE_START_TIME } from 'constant/const';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import { useSelector } from 'react-redux';
+
 import { getTimeDiff } from 'utils/Time';
 import {
   alertStartTimePicker,
   alertFinsihTimePicker,
 } from 'utils/TwoButtonAlert';
-import { useSelector } from 'react-redux';
+
+import { KEY_VALUE_START_TIME } from 'constant/const';
 
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return ' ';

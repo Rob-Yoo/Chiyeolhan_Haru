@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import * as SplashScreen from 'expo-splash-screen';
-import HomeNav from 'components/base/navigator/HomeNav';
 import { Provider } from 'react-redux';
+import BackgroundGeolocation from 'react-native-background-geolocation';
+import { SafeAreaView } from 'react-navigation';
+import * as SplashScreen from 'expo-splash-screen';
+
+import store from 'redux/store';
+
+import HomeNav from 'components/base/navigator/HomeNav';
+
 import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 import { checkTodayChange } from 'utils/AsyncStorage';
-import BackgroundGeolocation from 'react-native-background-geolocation';
-import store from 'redux/store';
-import { SafeAreaView } from 'react-navigation';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);

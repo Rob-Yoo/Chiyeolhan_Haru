@@ -1,9 +1,10 @@
 import React from 'react';
-import WeekView from 'react-native-week-view';
 import { View, Text, StyleSheet } from 'react-native';
+import WeekView from 'react-native-week-view';
 import { useDispatch } from 'react-redux';
-import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
+
 import { deleteToDoDispatch } from 'redux/store';
+
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
   deleteTomorrowAsyncStorageData,
@@ -14,22 +15,9 @@ import {
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
 
+import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
+
 const BACKGROUND_COLOR = '#ECF5F471';
-const styles = StyleSheet.create({
-  text: {
-    color: '#fff',
-    textAlign: 'left',
-    fontWeight: 'bold',
-    fontFamily: 'NotoSansKR-bold',
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  location: {
-    fontSize: 10,
-  },
-});
 
 const MyEventComponent = ({ event, position }) => {
   return (
@@ -128,3 +116,19 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    color: '#fff',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontFamily: 'NotoSansKR-bold',
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  location: {
+    fontSize: 10,
+  },
+});

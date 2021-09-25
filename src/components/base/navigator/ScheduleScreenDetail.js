@@ -1,10 +1,11 @@
 import React from 'react';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useSelector } from 'react-redux';
+
 import ScheduleToday from 'components/screen/ScheduleToday';
 import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
 import ScheduleYesterday from 'components/screen/ScheduleYesterday';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TabBar from 'components/base/navigator/TabBar';
-import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator(tabNavigatorConfig);
 const tabNavigatorConfig = {

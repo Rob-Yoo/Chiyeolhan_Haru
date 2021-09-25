@@ -1,71 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  Text,
-} from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
-
-import { TODAY } from 'constant/const';
-import { init } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 
-import OffHomeContent from 'components/items/OffHomeContent';
+import { init, setNetwork, setTabBar } from 'redux/store';
+
+import { Loading } from 'components/screen/Loading';
 import { HomeTextItem } from 'components/items/HomeTextItem';
+import HomeContent from 'components/items/HomeContent';
+
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
+
 import { getDataFromAsync } from 'utils/AsyncStorage';
+
 import {
-  KEY_VALUE_OFFLINE,
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
+  TODAY,
 } from 'constant/const';
-import { setNetwork, setTabBar } from 'redux/store';
-import { Loading } from 'components/screen/Loading';
-import HomeContent from '../items/HomeContent';
 
 const ScheduleButton = styled.TouchableOpacity``;
-
-/*Layout */
-export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get('window');
-export const CONTENT_OFFSET = 16;
-export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
-export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
-
-const styles = StyleSheet.create({
-  homeBackground: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  homeContainer: {
-    width: CONTAINER_WIDTH,
-    height: CONTAINER_HEIGHT,
-  },
-  homeHeader: {
-    flex: 1.3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  homeHeaderText: { flex: 0.7, paddingLeft: 15 },
-
-  iconScheduleButton: { marginBottom: 10 },
-  updateBtn: {
-    width: 65,
-    height: 65,
-    borderRadius: 50,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -2,
-  },
-});
 
 const OffHome = ({ navigation, route }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
@@ -159,5 +115,43 @@ const OffHome = ({ navigation, route }) => {
     </ImageBackground>
   );
 };
+
+/*Layout */
+export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  Dimensions.get('window');
+export const CONTENT_OFFSET = 16;
+export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
+export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
+
+const styles = StyleSheet.create({
+  homeBackground: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  homeContainer: {
+    width: CONTAINER_WIDTH,
+    height: CONTAINER_HEIGHT,
+  },
+  homeHeader: {
+    flex: 1.3,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  homeHeaderText: { flex: 0.7, paddingLeft: 15 },
+
+  iconScheduleButton: { marginBottom: 10 },
+  updateBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: -2,
+  },
+});
 
 export default OffHome;

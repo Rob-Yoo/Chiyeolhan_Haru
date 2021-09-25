@@ -6,45 +6,16 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import { KEY_VALUE_FAVORITE } from 'constant/const';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+
 import ToDoModal from 'components/modal/ToDoModal';
 
 import IconQuestion from '#assets/icons/icon-question';
 import IconAngleDown from '#assets/icons/icon-angle-down';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 
-const styles = StyleSheet.create({
-  modalInputContainer: {
-    backgroundColor: '#54BCB6',
-    height: '100%',
-    flex: 1,
-  },
-  modalTopContainer: {
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    marginTop: 100,
-    width: '100%',
-    borderRadius: 50,
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    position: 'relative',
-  },
-  searchInputContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    position: 'relative',
-    backgroundColor: '#fff',
-    width: '90%',
-    height: 50,
-    borderRadius: 10,
-  },
-  searchInputViewBackButton: {
-    width: 30,
-    height: 30,
-  },
-});
+import { getDataFromAsync } from 'utils/AsyncStorage';
+
+import { KEY_VALUE_FAVORITE } from 'constant/const';
 
 const defaultRender = () => {
   let defaultArray = [];
@@ -212,3 +183,35 @@ export const Favorite = ({ navigation, route }) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  modalInputContainer: {
+    backgroundColor: '#54BCB6',
+    height: '100%',
+    flex: 1,
+  },
+  modalTopContainer: {
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    marginTop: 100,
+    width: '100%',
+    borderRadius: 50,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    position: 'relative',
+  },
+  searchInputContainer: {
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+    position: 'relative',
+    backgroundColor: '#fff',
+    width: '90%',
+    height: 50,
+    borderRadius: 10,
+  },
+  searchInputViewBackButton: {
+    width: 30,
+    height: 30,
+  },
+});

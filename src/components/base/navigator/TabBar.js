@@ -1,7 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { setTabBar } from 'redux/store';
+
 import IconHome from '#assets/icons/icon-home';
 
 const styles = StyleSheet.create({
@@ -29,9 +31,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
 });
-const handleDayChange = () => {
-  if (dayChange) console.log('여기 데이체인지');
-};
+
 const handleReset = () => {
   console.log('여기 리셋');
 };
@@ -112,18 +112,6 @@ export default function TabBar(props) {
           </TouchableOpacity>
         );
       })}
-      <TouchableOpacity
-        style={{
-          width: 30,
-          height: 30,
-          backgroundColor: 'red',
-          borderRadius: 30,
-          marginRight: 25,
-        }}
-        onPress={() => handleDayChange()}
-      >
-        <Text>내일오늘일정버튼</Text>
-      </TouchableOpacity>
       <TouchableOpacity
         style={{
           width: 30,

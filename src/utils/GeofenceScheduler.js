@@ -1,4 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
+
+import { cancelNotification } from 'utils/Notification';
+import { dbService } from 'utils/firebase';
+import { geofenceUpdate } from 'utils/BgGeofence';
+import { getCurrentTime } from 'utils/Time';
+
 import {
   UID,
   KEY_VALUE_GEOFENCE,
@@ -7,10 +13,6 @@ import {
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_SUCCESS,
 } from 'constant/const';
-import { cancelNotification } from 'utils/Notification';
-import { dbService } from 'utils/firebase';
-import { geofenceUpdate } from 'utils/BgGeofence';
-import { getCurrentTime } from 'utils/Time';
 
 const getDataFromAsync = async (storageName) => {
   try {

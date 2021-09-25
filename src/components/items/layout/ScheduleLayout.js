@@ -1,8 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import AddToDoIcon from '#assets/icons/icon-add-todo.js';
+import { useSelector } from 'react-redux';
+
 import ToDoModal from 'components/modal/ToDoModal';
+
+import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 
 const styles = StyleSheet.create({
   addToDoButton: {

@@ -1,4 +1,5 @@
 import { dbService } from 'utils/firebase';
+
 import { UID } from 'constant/const';
 
 export const toDosUpdateDB = async (newData, id) => {

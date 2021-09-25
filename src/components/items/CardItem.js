@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
-import { DAY, MONTH } from 'constant/const';
+
 import { getCurrentTime } from 'utils/Time';
-import {
-  fontPercentage,
-  heightPercentage,
-  widthPercentage,
-} from 'utils/responsive';
+import { fontPercentage } from 'utils/responsive';
+
 export const styles = StyleSheet.create({
   card: {
     maxHeight:
@@ -191,29 +189,6 @@ export const Card = ({
           ></View>
         </View>
       </View>
-      {/* <View style={[styles.card, styles.cardCalendar]}>
-        <Text
-          style={[
-            styles.cardCalendarText,
-            {
-              fontSize:
-                Dimensions.get('window').height > 667
-                  ? fontPercentage(40)
-                  : fontPercentage(35),
-            },
-          ]}
-        >
-          {DAY}
-        </Text>
-        <Text
-          style={[
-            styles.cardCalendarText,
-            { fontSize: fontPercentage(25), color: '#458B87' },
-          ]}
-        >
-          {MONTH} 월
-        </Text>
-      </View> */}
     </View>
   );
 };

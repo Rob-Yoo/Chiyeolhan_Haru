@@ -7,21 +7,41 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
-import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
+
 import Map from 'components/screen/Map';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
+
 import IconQuestion from '#assets/icons/icon-question';
 import IconFavorite from '#assets/icons/icon-favorite';
+
 import { handleFilterData } from 'utils/handleFilterData';
-import { cancelNotification } from 'utils/Notification';
+import {
+  checkEarlistTodo,
+  dbToAsyncStorage,
+  dbToAsyncTomorrow,
+  getDataFromAsync,
+} from 'utils/AsyncStorage';
+import { failNotification, cancelNotification } from 'utils/Notification';
+import {
+  alertInValidSubmit,
+  alertStartTimeError,
+  alertNotFillIn,
+  longTaskList,
+  longTodoTitle,
+} from 'utils/TwoButtonAlert';
+import { getCurrentTime, getTimeDiff } from 'utils/Time';
+import { toDosUpdateDB } from 'utils/Database';
+
 import {
   TODAY,
   TOMORROW,
@@ -30,22 +50,6 @@ import {
   KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_SUCCESS,
 } from 'constant/const';
-import {
-  checkEarlistTodo,
-  dbToAsyncStorage,
-  dbToAsyncTomorrow,
-  getDataFromAsync,
-} from 'utils/AsyncStorage';
-import { failNotification } from 'utils/Notification';
-import {
-  alertInValidSubmit,
-  alertStartTimeError,
-  alertNotFillIn,
-} from 'utils/TwoButtonAlert';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
-import { getCurrentTime, getTimeDiff } from 'utils/Time';
-import { toDosUpdateDB } from 'utils/Database';
-import { longTaskList, longTodoTitle } from 'utils/TwoButtonAlert';
 
 export const ToDoModal = ({
   modalHandler,
@@ -71,6 +75,36 @@ export const ToDoModal = ({
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
+
+  useEffect(() => {
+    //수정시 넘겨온 데이터가 있을때
+    console.log(passModalData?.startDate < new Date());
+    if (
+      network === 'offline' ||
+      isToday === 'yesterday' ||
+      passModalData?.startDate < new Date()
+    ) {
+      setCanEdit(false);
+    }
+    if (passModalData !== undefined) {
+      handleIsOnGoing();
+      if (passModalData.description) {
+        //데이터 수정 시
+        setTitle(passModalData?.description);
+        setTaskList([...passModalData?.toDos]);
+      }
+      setLocationName(passModalData?.location);
+      setLocationData(passModalData?.location);
+    }
+  }, [passModalData]);
+
+  useEffect(() => {
+    register('todoStartTime'),
+      register('todoFinishTime'),
+      register('todoTitle'),
+      register('todoTask', { min: 1 }),
+      register('todoId');
+  }, [register]);
 
   const handleIsOnGoing = () => {
     passModalData?.startDate < new Date() && setIsOngoing(true);
@@ -184,7 +218,6 @@ export const ToDoModal = ({
         }
       }
     }
-
     return isNeedAlert;
   };
 
@@ -233,6 +266,7 @@ export const ToDoModal = ({
           }
         }
       }
+
       if (isStartTimeChange) {
         const { location, longitude, latitude, address } = toDos[id];
 
@@ -418,14 +452,8 @@ export const ToDoModal = ({
       newTime = restMin + '0';
     } else if ('5' <= oneDigitMin && oneDigitMin <= '9') {
       newTime = restMin + '5';
-    } else {
-      // if (isStart) {
-      //   setValue('todoStartTime', text);
-      //   return ;
-      // } else {
-      //   setValue('todoFinishTime', text);
-      // }
     }
+
     if (isStart) {
       await AsyncStorage.setItem(KEY_VALUE_START_TIME, newTime);
       setValue('todoStartTime', newTime);
@@ -438,6 +466,7 @@ export const ToDoModal = ({
     setTask({ item, index });
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
+
   const gotoFavorite = (isToday) => {
     console.log('여기');
     modalHandler();
@@ -446,34 +475,6 @@ export const ToDoModal = ({
       params: { isToday },
     });
   };
-  useEffect(() => {
-    //수정시 넘겨온 데이터가 있을때
-    console.log(passModalData?.startDate < new Date());
-    if (
-      network === 'offline' ||
-      isToday === 'yesterday' ||
-      passModalData?.startDate < new Date()
-    ) {
-      setCanEdit(false);
-    }
-    if (passModalData !== undefined) {
-      handleIsOnGoing();
-      if (passModalData.description) {
-        //데이터 수정 시
-        setTitle(passModalData?.description);
-        setTaskList([...passModalData?.toDos]);
-      }
-      setLocationName(passModalData?.location);
-      setLocationData(passModalData?.location);
-    }
-  }, [passModalData]);
-  useEffect(() => {
-    register('todoStartTime'),
-      register('todoFinishTime'),
-      register('todoTitle'),
-      register('todoTask', { min: 1 }),
-      register('todoId');
-  }, [register]);
 
   return (
     <Modal

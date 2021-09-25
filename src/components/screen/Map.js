@@ -1,42 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
-import * as Location from 'expo-location';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 import { GOOGLE_PLACES_API_KEY } from '@env';
+
 import { MapSearch } from 'components/screen/MapSearch';
 import { LocationData } from 'components/items/LocationData';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+
+import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
+import { handleFilterData } from 'utils/handleFilterData';
+import { noDataAlert } from 'utils/TwoButtonAlert';
+
 import {
   GOOGLE_API_URL,
   GOOGLE_PARARMS,
   KEY_VALUE_SEARCHED,
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
-import { handleFilterData } from 'utils/handleFilterData';
-import { noDataAlert } from 'utils/TwoButtonAlert';
-import { setFavoriteData } from 'utils/AsyncStorage';
-
-const styles = StyleSheet.create({
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  iconFindCurrentLocation: {
-    width: 45,
-    height: 45,
-
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 5.4,
-      height: 6,
-    },
-    shadowOpacity: 5,
-    shadowRadius: 2.84,
-  },
-});
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
-  // await AsyncStorage.removeItem(KEY_VALUE_FAVORITE);
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
   if (favoriteArray === null) return '#575757';
   const isfavoriteColor =
@@ -295,5 +277,24 @@ const Map = ({
     <></>
   );
 };
+
+const styles = StyleSheet.create({
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+  iconFindCurrentLocation: {
+    width: 45,
+    height: 45,
+
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 5.4,
+      height: 6,
+    },
+    shadowOpacity: 5,
+    shadowRadius: 2.84,
+  },
+});
 
 export default Map;

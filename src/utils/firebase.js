@@ -21,8 +21,7 @@ const firebaseConfig = {
 if (!firbase.apps.length) {
   firbase.initializeApp(firebaseConfig);
 } else {
-  firbase.app(); // if already initialized, use that one
+  firbase.app();
 }
-// firbase.initializeApp(firebaseConfig);
 
 export const dbService = firbase.firestore();

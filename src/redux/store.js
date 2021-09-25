@@ -1,4 +1,5 @@
 import { combineReducers, configureStore, createSlice } from '@reduxjs/toolkit';
+
 import { toDosUpdateDB, toDosDeleteDB } from 'utils/Database';
 
 const toDosSlice = createSlice({
