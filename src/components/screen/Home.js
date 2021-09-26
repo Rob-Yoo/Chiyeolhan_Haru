@@ -12,6 +12,7 @@ import { Loading } from 'components/screen/Loading';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
+import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
 
 import { YESTERDAY } from 'constant/const';
@@ -32,7 +33,7 @@ const Home = ({ navigation }) => {
   const toDos = useSelector((state) => state.toDos);
 
   useEffect(() => {
-    getToDos();
+    readyForHome();
   }, []);
 
   useEffect(() => {
@@ -50,6 +51,12 @@ const Home = ({ navigation }) => {
       setLoading(false);
     }
   }, [toDos]);
+
+  const readyForHome = async () => {
+    await getToDos();
+    await checkDayChange();
+    await loadSuccessSchedules();
+  };
 
   const getToDos = async () => {
     try {

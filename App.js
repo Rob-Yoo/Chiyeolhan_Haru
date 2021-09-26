@@ -11,7 +11,7 @@ import store from 'redux/store';
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
-import { checkTodayChange } from 'utils/AsyncStorage';
+import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -27,7 +27,8 @@ const App = () => {
       try {
         await BackgroundGeolocation.requestPermission();
         // 날짜가 바뀌었는지 체크
-        checkTodayChange();
+        await checkDayChange();
+        await loadSuccessSchedules();
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }
