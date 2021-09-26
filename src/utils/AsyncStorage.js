@@ -298,7 +298,7 @@ export const deleteAllSearchedData = async () => {
   }
 };
 
-export const checkTodayChange = async () => {
+export const checkDayChange = async () => {
   try {
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
 
@@ -334,7 +334,7 @@ export const checkTodayChange = async () => {
       console.log('날짜가 바뀌지 않음');
     }
   } catch (e) {
-    console.log('checkTodayChange Error :', e);
+    console.log('checkDayChange Error :', e);
   }
 };
 
@@ -354,5 +354,42 @@ export const checkEarlistTodo = async (todoStartTime) => {
     return true;
   } catch (e) {
     console.log('checkEarlistTodo Error :', e);
+  }
+};
+
+export const loadSuccessSchedules = async () => {
+  try {
+    let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    let isNeedUpdate = false;
+    const currentTime = getCurrentTime();
+    const todosRef = dbService.collection(`${UID}`);
+    if (successSchedules !== null) {
+      if (successSchedules.length > 0) {
+        for (const schedule of successSchedules) {
+          if (schedule.startTime <= currentTime) {
+            await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+          }
+          if (schedule.finishTime < currentTime) {
+            successSchedules = successSchedules.filter(
+              (success) => success.id !== schedule.id,
+            ); // 이미 끝난 성공한 일정은 삭제
+            isNeedUpdate = true;
+          }
+        }
+        if (isNeedUpdate) {
+          await AsyncStorage.setItem(
+            KEY_VALUE_SUCCESS,
+            JSON.stringify(successSchedules),
+          );
+          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+        }
+      } else {
+        console.log('successSchedules 비어있음');
+      }
+    } else {
+      console.log('successSchedules 없음');
+    }
+  } catch (e) {
+    console.log('loadSuccessSchedules Error :', e);
   }
 };

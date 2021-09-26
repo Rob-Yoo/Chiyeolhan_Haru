@@ -162,7 +162,7 @@ const saveSuccessSchedules = async (id, startTime, finishTime) => {
   try {
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     if (successSchedules === null) {
-      const schedule = [{ id, startTime }];
+      const schedule = [{ id, startTime, finishTime }];
       await setSuccessSchedule(schedule);
     } else {
       let isOverlap = false;
@@ -306,7 +306,6 @@ export const subscribeOnGeofence = () => {
         const finishTime = data[0].finishTime;
 
         if (event.action == 'ENTER') {
-          console.log('ENTER');
           await enterAction(data, startTime, finishTime, getCurrentTime());
         }
 
