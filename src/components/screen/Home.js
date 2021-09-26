@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,8 +15,15 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
 
-import { YESTERDAY } from 'constant/const';
-import { UID, TODAY } from 'constant/const';
+import {
+  UID,
+  TODAY,
+  YESTERDAY,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  CONTAINER_HEIGHT,
+  CONTAINER_WIDTH,
+} from 'constant/const';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -122,13 +129,6 @@ const Home = ({ navigation }) => {
 };
 
 export default Home;
-
-/*Layout */
-export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get('window');
-export const CONTENT_OFFSET = 16;
-export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
-export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
 
 const styles = StyleSheet.create({
   homeBackground: {

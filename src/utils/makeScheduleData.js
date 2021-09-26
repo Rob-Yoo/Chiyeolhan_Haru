@@ -1,5 +1,7 @@
 import { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } from 'constant/const';
 
+import { getCurrentTime } from 'utils/Time';
+
 export const makeScheduleDate = (toDos, toDoArr, day) => {
   for (key in toDos) {
     if (
@@ -20,7 +22,12 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         endDate: new Date(YEAR, MONTH - 1, DAY, endH, endM),
         startTime: toDos[key].startTime,
         finishTime: toDos[key].finishTime,
-        color: '#54BCB6',
+        color:
+          (isDone && getCurrentTime() >= toDos[key].startTime) ||
+          getCurrentTime() < toDos[key].startTime ||
+          getCurrentTime() < toDos[key].finishTime
+            ? '#54BCB6'
+            : '#B9B9B9',
         toDos: [...toDos[key].toDos],
         isDone,
       });
@@ -62,7 +69,7 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: isDone ? '#B9B9B9' : '#B9B9B9',
+        color: isDone ? '#54BCB6' : '#B9B9B9',
         toDos: [...toDos[key].toDos],
         isDone,
       });

@@ -7,6 +7,7 @@ import { add } from 'redux/store';
 
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
@@ -20,7 +21,6 @@ const Pagination = ({ taskList, targetId }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [taskTitle, setTaskTitle] = useState(null);
   const dispatch = useDispatch();
-
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
@@ -31,7 +31,6 @@ const Pagination = ({ taskList, targetId }) => {
       dispatch(add({ targetId, taskTitle }));
     setTaskTitle(null);
   };
-
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
@@ -45,61 +44,63 @@ const Pagination = ({ taskList, targetId }) => {
         >
           수행 리스트
         </Text>
-        {network !== 'offline' ? (
+        {network === 'offline' || targetId === 0 ? null : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
             size={19}
             color={'#229892'}
             onPress={() =>
-              targetId !== 0 &&
               network === 'online' &&
               toDos.startTime > getCurrentTime() &&
               toggleIsVisible()
             }
           />
-        ) : null}
+        )}
       </View>
-      <ScrollView
-        style={{
-          height: '100%',
-          maxHeight: 700,
-          flexGrow: 0,
-          // paddingHorizontal: 20,
-        }}
-      >
-        {taskList &&
-          taskList.map((item, index) => {
-            return (
-              <View key={`T` + targetId + index}>
-                {index === 0 ? (
-                  <IconTaskListLeft
-                    name="icon-tasklist-left"
-                    size={105}
-                    color="#707070"
-                    style={{ position: 'absolute', left: -35, top: 0 }}
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          {taskList &&
+            taskList.map((item, index) => {
+              return (
+                <View key={`T` + targetId + index}>
+                  {index === 0 ? (
+                    <IconTaskListLeft
+                      name="icon-tasklist-left"
+                      size={106}
+                      color="#707070"
+                      style={{
+                        position: 'absolute',
+                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                        top: 0,
+                      }}
+                    />
+                  ) : (
+                    <IconTaskListLeftFin
+                      name="icon-tasklist-left-fin"
+                      size={106}
+                      color="#707070"
+                      style={{
+                        position: 'absolute',
+                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                        top: 0,
+                      }}
+                    />
+                  )}
+                  <Task
+                    index={index}
+                    text={item}
+                    targetId={targetId}
+                    canPress={
+                      targetId !== 0 &&
+                      network === 'online' &&
+                      toDos?.startTime > getCurrentTime()
+                    }
                   />
-                ) : (
-                  <IconTaskListLeftFin
-                    name="icon-tasklist-left-fin"
-                    size={105}
-                    color="#707070"
-                    style={{ position: 'absolute', left: -35, top: 0 }}
-                  />
-                )}
-                <Task
-                  index={index}
-                  text={item}
-                  targetId={targetId}
-                  canPress={
-                    targetId !== 0 &&
-                    network === 'online' &&
-                    toDos.startTime > getCurrentTime()
-                  }
-                />
-              </View>
-            );
-          })}
-      </ScrollView>
+                </View>
+              );
+            })}
+        </ScrollView>
+      </View>
 
       <ModalLayout
         isVisible={isVisible}
@@ -127,6 +128,8 @@ export const renderPagination = (index, total, context) => {
     const taskList = context?.props?.toDos[index].toDos;
     const targetId = context?.props?.toDos[index].id;
     return <Pagination taskList={taskList} targetId={targetId} />;
+  } else {
+    return <Pagination taskList={[' ']} targetId={0} />;
   }
 };
 

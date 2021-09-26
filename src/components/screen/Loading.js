@@ -1,11 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  Text,
-} from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
 
 export const Loading = () => {
   return (

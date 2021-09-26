@@ -51,66 +51,66 @@ export const Task = (props) => {
   useEffect(() => {
     todosSelector !== 0 && setTaskTitle(todosSelector[index]);
   }, [todosSelector]);
-
   return (
-    <>
-      <View style={styles.taskContainer}>
-        <TouchableHighlight
-          underlayColor="rgba(0, 0, 0, 0.2)"
-          onLongPress={async () => {
-            try {
-              if (targetId !== 0) {
-                if ((await deleteToDoTaskList(targetId)) === 'true')
-                  handleDeleteTaskList(targetId, index);
-              }
-            } catch (e) {
-              console.log('task list delete error', e);
+    <View style={styles.taskContainer}>
+      <TouchableHighlight
+        underlayColor="rgba(0, 0, 0, 0.2)"
+        onLongPress={async () => {
+          try {
+            if (targetId !== 0) {
+              if ((await deleteToDoTaskList(targetId)) === 'true')
+                handleDeleteTaskList(targetId, index);
             }
-          }}
-          onPress={() =>
-            targetId !== 0 &&
-            network === 'online' &&
-            canPress &&
-            toggleIsVisible()
+          } catch (e) {
+            console.log('task list delete error', e);
           }
-          style={styles.task}
+        }}
+        onPress={() =>
+          targetId !== 0 &&
+          network === 'online' &&
+          canPress &&
+          toggleIsVisible()
+        }
+        style={[styles.task, { paddingVertical: 10 }]}
+      >
+        <View
+          style={{
+            alignItems: 'center',
+            width: '100%',
+            flexWrap: 'wrap',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+          <Text
+            style={[
+              styles.taskText,
+              { fontSize: taskText.length > 45 ? 13 : 17 },
+            ]}
           >
-            <Text style={styles.taskText}>
-              {taskText?.length > 17
-                ? `${taskText.substr(0, 11)}...`
-                : taskText}
-            </Text>
-          </View>
-        </TouchableHighlight>
+            {taskText}
+          </Text>
+        </View>
+      </TouchableHighlight>
 
-        <ModalLayout
-          isVisible={isVisible}
-          taskListVisibleHandler={() => toggleIsVisible()}
-          setHandler={() => setTaskTitle(taskTitle)}
-        >
-          <View>
-            <TextInput
-              onChangeText={(text) => {
-                setTaskTitle(text);
-              }}
-              value={taskTitle}
-              onSubmitEditing={() => {
-                submitTask();
-              }}
-              style={styles.modalInputTask}
-              returnKeyType="done"
-            />
-          </View>
-        </ModalLayout>
-      </View>
-    </>
+      <ModalLayout
+        isVisible={isVisible}
+        taskListVisibleHandler={() => toggleIsVisible()}
+        setHandler={() => setTaskTitle(taskTitle)}
+      >
+        <View>
+          <TextInput
+            onChangeText={(text) => {
+              setTaskTitle(text);
+            }}
+            value={taskTitle}
+            onSubmitEditing={() => {
+              submitTask();
+            }}
+            style={styles.modalInputTask}
+            returnKeyType="done"
+          />
+        </View>
+      </ModalLayout>
+    </View>
   );
 };
 

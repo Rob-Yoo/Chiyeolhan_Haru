@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTabBar } from 'redux/store';
 
 import IconHome from '#assets/icons/icon-home';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 const styles = StyleSheet.create({
   tabUnderBar: {
@@ -18,11 +19,11 @@ const styles = StyleSheet.create({
   tabContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    alignItems: 'center',
-    // justifyContent: 'flex-start',
-    paddingTop: 40,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingTop: SCREEN_HEIGHT > 668 ? 40 : 10,
     paddingBottom: 20,
-    paddingLeft: 20,
+    paddingHorizontal: 20,
   },
   tabBarText: {
     fontFamily: 'GodoB',

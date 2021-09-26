@@ -341,6 +341,7 @@ export const checkDayChange = async () => {
 export const checkEarlistTodo = async (todoStartTime) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    console.log(JSON.stringify(data));
     if (data != null) {
       if (data.length > 0) {
         const earliestTime = data[0].startTime;

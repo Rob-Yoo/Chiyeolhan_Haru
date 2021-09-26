@@ -6,14 +6,13 @@ import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { getCurrentTime } from 'utils/Time';
 import { fontPercentage } from 'utils/responsive';
 
+import { SCREEN_HEIGHT } from 'constant/const';
 export const styles = StyleSheet.create({
   card: {
-    maxHeight:
-      Dimensions.get('screen').height > 667
-        ? Dimensions.get('screen').height / 3.5
-        : Dimensions.get('screen').height / 3,
-    padding: 20,
-    marginHorizontal: 10,
+    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
+
+    paddingHorizontal: 20,
+    paddingVertical: 5,
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -24,13 +23,11 @@ export const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   todomanBackgroundCircle: {
-    position: 'absolute',
-    top: Dimensions.get('screen').height > 667 ? 11 : 12,
-    left: 13,
-    width: Dimensions.get('screen').height > 667 ? 50 : 50,
-    height: Dimensions.get('screen').height > 667 ? 50 : 50,
+    width: SCREEN_HEIGHT > 668 ? 50 : 40,
+    height: SCREEN_HEIGHT > 668 ? 50 : 40,
     backgroundColor: '#ffffff',
-    borderRadius: Dimensions.get('screen').height > 667 ? 50 : 50,
+    borderRadius: 50,
+
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
@@ -38,17 +35,17 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 1.34,
     shadowRadius: 4.84,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  cardText: {
-    position: 'relative',
-  },
+
   cardTitle: {
     fontFamily: 'NotoSansKR-Bold',
     fontSize:
-      Dimensions.get('window').height > 667
-        ? fontPercentage(24)
+      Dimensions.get('window').height > 668
+        ? fontPercentage(22)
         : fontPercentage(20),
-    marginRight: 15,
+
     position: 'relative',
   },
   cardLocation: {
@@ -89,10 +86,6 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
-    if (!isDone) {
-      setWidth('0%');
-      return;
-    }
     if (isDone && getCurrentTime() >= finishTime) {
       setWidth('100%');
       return;
@@ -115,26 +108,27 @@ export const Card = ({
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+    <View style={{ flex: 1, flexDirection: 'row' }}>
       <View
         style={[
           styles.card,
           {
             flex: 1,
-            maxWidth: 250,
-            maxHeight: 250,
-            justifyContent: 'space-between',
+            maxWidth: SCREEN_HEIGHT > 668 ? 250 : 220,
+            maxHeight: SCREEN_HEIGHT > 668 ? 250 : 220,
+            justifyContent: 'space-evenly',
             backgroundColor: '#54BCB6',
           },
         ]}
         key={`CARD${id}`}
       >
-        <View style={styles.todomanBackgroundCircle} />
-        <IconTaskToDoman
-          name="icon-todo-man"
-          size={Dimensions.get('screen').height > 667 ? 35 : 35}
-          color="#229892"
-        />
+        <View style={styles.todomanBackgroundCircle}>
+          <IconTaskToDoman
+            name="icon-todo-man"
+            size={SCREEN_HEIGHT > 668 ? 35 : 30}
+            color="#229892"
+          />
+        </View>
         <View
           style={{
             justifyContent: 'center',

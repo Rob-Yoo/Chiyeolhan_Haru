@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
+import { View, StyleSheet, ImageBackground, s } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,7 +20,12 @@ import {
   KEY_VALUE_TOMORROW_DATA,
   TODAY,
 } from 'constant/const';
-
+import {
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  CONTAINER_HEIGHT,
+  CONTAINER_WIDTH,
+} from 'constant/const';
 const ScheduleButton = styled.TouchableOpacity``;
 
 const OffHome = ({ navigation, route }) => {
@@ -115,13 +120,6 @@ const OffHome = ({ navigation, route }) => {
     </ImageBackground>
   );
 };
-
-/*Layout */
-export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get('window');
-export const CONTENT_OFFSET = 16;
-export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
-export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
 
 const styles = StyleSheet.create({
   homeBackground: {

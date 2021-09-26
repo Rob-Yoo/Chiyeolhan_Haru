@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { SCREEN_HEIGHT } from 'components/screen/Home';
-
 import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconStarBorder from '#assets/icons/icon-star-border';
 
 import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
+
+import { SCREEN_HEIGHT } from 'constant/const';
 
 export const MapSearch = ({
   _handlePlacesAPI,

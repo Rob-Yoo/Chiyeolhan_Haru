@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { Provider } from 'react-redux';
-import BackgroundGeolocation from 'react-native-background-geolocation';
-import { SafeAreaView } from 'react-navigation';
 import * as SplashScreen from 'expo-splash-screen';
 
+import { NavigationContainer } from '@react-navigation/native';
+import BackgroundGeolocation from 'react-native-background-geolocation';
+
 import store from 'redux/store';
+import { Provider } from 'react-redux';
 
 import HomeNav from 'components/base/navigator/HomeNav';
 
@@ -67,9 +67,7 @@ const App = () => {
           {console.log('foreground')}
           <Provider store={store}>
             <NavigationContainer>
-              <SafeAreaView style={{ flex: 1 }}>
-                <HomeNav />
-              </SafeAreaView>
+              <HomeNav />
             </NavigationContainer>
           </Provider>
         </>

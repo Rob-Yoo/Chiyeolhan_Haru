@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 
 import { renderPagination } from 'components/items/renderPagination';
@@ -7,7 +7,7 @@ import { Card } from 'components/items/CardItem';
 
 import { getCurrentTime } from 'utils/Time';
 
-import { TODAY } from 'constant/const';
+import { TODAY, SCREEN_HEIGHT } from 'constant/const';
 
 const styles = StyleSheet.create({
   homeContainer: {
@@ -84,7 +84,31 @@ const HomeContent = (props) => {
         longitude: '',
         startTime: '',
         title: '',
-        toDos: null,
+        toDos: [''],
+      },
+      {
+        date: '',
+        finishTime: '',
+        id: 0,
+        latitude: '',
+        location: '',
+        address: '',
+        longitude: '',
+        startTime: '',
+        title: '',
+        toDos: [''],
+      },
+      {
+        date: '',
+        finishTime: '',
+        id: 0,
+        latitude: '',
+        location: '',
+        address: '',
+        longitude: '',
+        startTime: '',
+        title: '',
+        toDos: [''],
       },
     ];
   }
@@ -101,11 +125,11 @@ const HomeContent = (props) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
-        index={nowIndex}
+        index={isData ? nowIndex : 1}
         scrollViewStyle={{ overflow: 'visible' }}
-        removeClippedSubviews={false}
-        containerStyle={{ width: 300 }}
-        //paginationStyle={{ width: 400 }}
+        containerStyle={{
+          width: SCREEN_HEIGHT > 668 ? 290 : 260,
+        }}
       >
         {todoArr &&
           todoArr.map((item, index) => {
@@ -124,18 +148,16 @@ const HomeContent = (props) => {
             );
           })}
       </Swiper>
-      {isData ? (
-        <></>
-      ) : (
+      {isData ? null : (
         <View
           style={{
             backgroundColor: '#000',
             flex: 1,
-            width: '110%',
+            width: '130%',
             height:
-              Dimensions.get('screen').height > 667
-                ? Dimensions.get('screen').height * 0.285
-                : Dimensions.get('screen').height * 0.334,
+              SCREEN_HEIGHT > 668
+                ? SCREEN_HEIGHT / 3.5 + 30
+                : SCREEN_HEIGHT / 3 + 30,
             position: 'absolute',
             top: -7,
             opacity: 0.3,
