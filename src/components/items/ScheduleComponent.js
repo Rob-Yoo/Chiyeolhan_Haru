@@ -1,6 +1,6 @@
 import React from 'react';
 import WeekView from 'react-native-week-view';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { DAY, MONTH, YEAR, KEY_VALUE_GEOFENCE } from 'constant/const';
 import { deleteToDoDispatch } from 'redux/store';
@@ -13,6 +13,7 @@ import {
 } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 const styles = StyleSheet.create({
@@ -23,19 +24,39 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-bold',
   },
   description: {
-    fontSize: 16,
     marginBottom: 2,
   },
   location: {
-    fontSize: 10,
+    fontSize: 9,
   },
 });
-
+console.log(SCREEN_HEIGHT);
 const MyEventComponent = ({ event, position }) => {
+  const timeDiff = event.endDate - event.startDate;
   return (
-    <View color={event.color}>
-      <Text style={[styles.text, styles.description]}>{event.description}</Text>
-      <View style={{ flexDirection: 'row', marginLeft: 15 }}>
+    <View
+      color={event.color}
+      style={{
+        flexDirection: timeDiff <= 1200000 ? 'row' : null,
+        alignItems: timeDiff <= 1200000 ? 'center' : null,
+      }}
+    >
+      <Text
+        style={[
+          styles.text,
+          styles.description,
+          {
+            fontSize:
+              (SCREEN_HEIGHT > 668 && timeDiff <= 600000) ||
+              (SCREEN_HEIGHT < 668 && timeDiff <= 900000)
+                ? 10
+                : 15,
+          },
+        ]}
+      >
+        {event.description}
+      </Text>
+      <View style={{ flexDirection: 'row', marginLeft: '5.5%' }}>
         <View
           style={{
             width: 3,
@@ -67,7 +88,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       weekStart = weekStart + 1;
       break;
   }
-  //console.log('schedule component');
+
   return (
     <WeekView
       events={events}
@@ -120,7 +141,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       headerTextStyle={{ color: BACKGROUND_COLOR }}
       eventContainerStyle={{
-        maxWidth: 190,
+        maxWidth: Dimensions.get('window').height > 668 ? '60%' : '50%',
+        minHeight: Dimensions.get('window').height > 668 ? 19 : 14,
         left: 50,
       }}
       scrollToTimeNow={day === 'today' ? true : false}

@@ -1,5 +1,7 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { fontPercentage } from 'utils/responsive';
+import { SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_WIDTH } from '../../constant/const';
 
 const styles = StyleSheet.create({
   modalStyle: {
@@ -27,8 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     backgroundColor: '#54BCB6',
-    height: Dimensions.get('window').height > 667 ? '40%' : '45%',
-    // height: 320,
+    height: SCREEN_HEIGHT > 668 ? '40%' : '45%',
     borderRadius: 50,
     marginTop: -10,
     borderColor: '#fff',
@@ -54,17 +55,17 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   imageBackgroundMapStyle: {
-    width: Dimensions.get('window').height > 667 ? 160 : 150,
-    height: Dimensions.get('window').height > 667 ? 160 : 150,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.4 : SCREEN_WIDTH * 0.35,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.4 : SCREEN_WIDTH * 0.35,
     borderRadius: 100,
     marginRight: 20,
   },
   imageBackgroundStyle: {
-    width: Dimensions.get('window').height > 667 ? 160 : 150,
-    height: Dimensions.get('window').height > 667 ? 160 : 150,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.4 : SCREEN_WIDTH * 0.35,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.4 : SCREEN_WIDTH * 0.35,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 100,
-
-    paddingVertical: 40,
   },
   modalLocationText: {
     fontFamily: 'NotoSansKR-Bold',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   modalInputContainer: {
     backgroundColor: '#e2ece9',
     marginTop: '40%',
-    height: Dimensions.get('window').height / 1.2,
+    height: SCREEN_HEIGHT / 1.2,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   modalInputTitle: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    width: 200,
+    width: 140,
     height: 35,
     marginBottom: 20,
     justifyContent: 'center',
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     width: 350,
-    height: Dimensions.get('window').height > 667 ? 200 : 100,
+    height: SCREEN_HEIGHT > 668 ? 200 : 100,
     marginBottom: 20,
     shadowColor: '#00000029',
     shadowOffset: {

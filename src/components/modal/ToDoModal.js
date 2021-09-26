@@ -41,7 +41,7 @@ import {
   alertStartTimeError,
   alertNotFillIn,
 } from 'utils/TwoButtonAlert';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
 import { longTaskList, longTodoTitle } from 'utils/TwoButtonAlert';
@@ -165,10 +165,11 @@ export const ToDoModal = ({
     let isNeedAlert = false;
 
     for (const toDo of toDoArray) {
-      const startTime = toDo.startTime;
-      const finishTime = toDo.finishTime;
+      const id = Object.keys(toDo);
+      const startTime = toDo[id].startTime;
+      const finishTime = toDo[id].finishTime;
 
-      if (passModalData?.id !== toDo.id) {
+      if (passModalData?.id !== id[0]) {
         if (todoStartTime < startTime && startTime < todoFinishTime) {
           isNeedAlert = true;
           break;
@@ -178,6 +179,10 @@ export const ToDoModal = ({
           break;
         }
         if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (startTime === todoStartTime || todoStartTime === finishTime) {
           isNeedAlert = true;
           break;
         }
@@ -270,6 +275,7 @@ export const ToDoModal = ({
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
+      console.log('handleAlert');
       const toDoArray = isToday
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
@@ -334,7 +340,6 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
-    console.log(canEdit);
     if (!canEdit) {
       modalHandler();
       return;
@@ -367,7 +372,7 @@ export const ToDoModal = ({
   };
 
   const taskSubmit = ({ index, task }) => {
-    if (task.length > 30) {
+    if (task.length > 35) {
       longTaskList();
       toggleIsVisible(inputIsVisible, setInputIsVisible);
       return;
@@ -431,7 +436,6 @@ export const ToDoModal = ({
   };
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
-    console.log(passModalData?.startDate < new Date());
     if (
       network === 'offline' ||
       isToday === 'yesterday' ||
@@ -478,7 +482,7 @@ export const ToDoModal = ({
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingHorizontal: 10,
+              paddingHorizontal: 5,
               backgroundColor: 'transparent',
             }}
           >
@@ -493,7 +497,8 @@ export const ToDoModal = ({
                   height: 35,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: 20,
+                  marginTop: 15,
+                  paddingLeft: 1,
                 }}
                 onPress={() => gotoFavorite(isToday)}
               >
@@ -558,9 +563,8 @@ export const ToDoModal = ({
                 ) : (
                   <IconQuestion
                     name="icon-question"
-                    size={Dimensions.get('window').height > 667 ? 100 : 70}
+                    size={SCREEN_HEIGHT > 668 ? 100 : 70}
                     color={'#FFFFFF'}
-                    style={{ position: 'absolute', top: 35, left: 50 }}
                     onPress={() =>
                       toggleIsVisible(mapIsVisible, setMapIsVisible)
                     }

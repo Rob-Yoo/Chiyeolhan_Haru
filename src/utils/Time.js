@@ -1,4 +1,5 @@
 export const getEarlyTimeDiff = (startTime, currentTime) => {
+  if (startTime === '') return;
   const startHour = startTime?.slice(0, 2);
   const startMin = startTime?.slice(3);
   const currentHour = currentTime?.slice(0, 2);
@@ -18,6 +19,7 @@ export const getEarlyTimeDiff = (startTime, currentTime) => {
 };
 
 export const getLateTimeDiff = (startTime, currentTime) => {
+  if (startTime === '') return;
   const startHour = startTime?.slice(0, 2);
   const startMin = startTime?.slice(3);
   const currentHour = currentTime?.slice(0, 2);
@@ -37,6 +39,7 @@ export const getLateTimeDiff = (startTime, currentTime) => {
 };
 
 export const getTimeDiff = (startTime, finishTime) => {
+  if (startTime === '') return;
   const startHour = startTime?.slice(0, 2);
   const startMin = startTime?.slice(3);
   const finishHour = finishTime?.slice(0, 2);
@@ -59,6 +62,7 @@ export const getTimeDiff = (startTime, finishTime) => {
 };
 
 export const isEarliestTime = (earliestTime, willAddTime) => {
+  if (startTime === '') return;
   const earliestTimeHour = earliestTime?.slice(0, 2);
   const earliestTimeMin = earliestTime?.slice(3);
   const willAddTimeHour = willAddTime?.slice(0, 2);
@@ -74,6 +78,7 @@ export const isEarliestTime = (earliestTime, willAddTime) => {
 };
 
 export const commonTimeExpression = (time) => {
+  if (startTime === '') return;
   const hour = time?.slice(0, 2);
   let min = time?.slice(3);
   let sdHour; // signle-digit hour

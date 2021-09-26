@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 //async storage key
@@ -37,3 +38,10 @@ export const YESTERDAY =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY - 1}` : DAY - 1);
 export const TOMORROW =
   (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY + 1 < 10 ? `0${DAY + 1}` : DAY + 1);
+
+/*Layout */
+export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  Dimensions.get('window');
+export const CONTENT_OFFSET = 16;
+export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
+export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;

@@ -5,6 +5,7 @@ import ScheduleYesterday from 'components/screen/ScheduleYesterday';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TabBar from 'components/base/navigator/TabBar';
 import { useSelector } from 'react-redux';
+import { SafeAreaView } from 'react-navigation';
 
 const Tab = createMaterialTopTabNavigator(tabNavigatorConfig);
 const tabNavigatorConfig = {
@@ -14,31 +15,33 @@ const tabNavigatorConfig = {
 export const SchedullScreenDetail = ({ navigation }) => {
   const tabBar = useSelector((state) => state.tabBar);
   return (
-    <Tab.Navigator
-      initialRouteName="today"
-      tabBar={(props) => <TabBar {...props} />}
-    >
-      {tabBar === 'yesterday' ? (
-        <Tab.Screen
-          name="yesterday"
-          component={ScheduleYesterday}
-          options={{ tabBarLabel: '어제' }}
-        />
-      ) : (
-        <Tab.Screen
-          name="today"
-          component={ScheduleToday}
-          options={{ tabBarLabel: '오늘' }}
-          navigation={navigation}
-        />
-      )}
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <Tab.Navigator
+        initialRouteName="today"
+        tabBar={(props) => <TabBar {...props} />}
+      >
+        {tabBar === 'yesterday' ? (
+          <Tab.Screen
+            name="yesterday"
+            component={ScheduleYesterday}
+            options={{ tabBarLabel: '어제' }}
+          />
+        ) : (
+          <Tab.Screen
+            name="today"
+            component={ScheduleToday}
+            options={{ tabBarLabel: '오늘' }}
+            navigation={navigation}
+          />
+        )}
 
-      <Tab.Screen
-        name="tomorrow"
-        component={ScheduleTomorrow}
-        options={{ tabBarLabel: '내일' }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="tomorrow"
+          component={ScheduleTomorrow}
+          options={{ tabBarLabel: '내일' }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 

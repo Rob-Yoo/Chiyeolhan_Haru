@@ -19,18 +19,17 @@ import { HomeTextItem } from 'components/items/HomeTextItem';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import { checkTodayChange } from 'utils/AsyncStorage';
-import { YESTERDAY } from 'constant/const';
+import {
+  YESTERDAY,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  CONTAINER_HEIGHT,
+  CONTAINER_WIDTH,
+} from 'constant/const';
 import { setNetwork, setTabBar } from 'redux/store';
 import { Loading } from './Loading';
 
 const ScheduleButton = styled.TouchableOpacity``;
-
-/*Layout */
-export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get('window');
-export const CONTENT_OFFSET = 16;
-export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
-export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
 
 const styles = StyleSheet.create({
   homeBackground: {
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
   homeContainer: {
     width: CONTAINER_WIDTH,
     height: CONTAINER_HEIGHT,
+    padding: 20,
   },
   homeHeader: {
     flex: 1.3,

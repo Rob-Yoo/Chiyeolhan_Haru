@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+} from 'react-native';
 import { setTabBar } from 'redux/store';
 import IconHome from '#assets/icons/icon-home';
 
@@ -16,11 +22,11 @@ const styles = StyleSheet.create({
   tabContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    alignItems: 'center',
-    // justifyContent: 'flex-start',
-    paddingTop: 40,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingTop: Dimensions.get('window').height > 668 ? 40 : 10,
     paddingBottom: 20,
-    paddingLeft: 20,
+    paddingHorizontal: 20,
   },
   tabBarText: {
     fontFamily: 'GodoB',
@@ -118,13 +124,12 @@ export default function TabBar(props) {
           height: 30,
           backgroundColor: 'red',
           borderRadius: 30,
-          marginRight: 25,
         }}
         onPress={() => handleDayChange()}
       >
         <Text>내일오늘일정버튼</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           width: 30,
           height: 30,
@@ -134,7 +139,7 @@ export default function TabBar(props) {
         onPress={() => handleReset()}
       >
         <Text>리셋버튼</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         onPress={() =>

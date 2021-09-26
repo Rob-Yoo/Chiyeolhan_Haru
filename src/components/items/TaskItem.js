@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableHighlight,
+  Dimensions,
 } from 'react-native';
 import { edit, remove } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,17 +25,14 @@ const styles = StyleSheet.create({
   taskContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 10,
-    maxHeight: 100,
+    marginTop: 15,
   },
   task: {
     backgroundColor: '#FFF',
     width: '80%',
     borderRadius: 20,
     paddingHorizontal: 10,
-    marginBottom: 10,
     marginLeft: 20,
-    paddingVertical: 20,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
@@ -42,17 +40,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+    justifyContent: 'center',
+    minHeight: 80,
   },
   taskText: {
-    maxWidth: '100%',
     color: '#38504F',
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 20,
   },
   modalInputTask: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    width: 350,
+    width: Dimensions.get('window').width * 0.8,
     height: 60,
     marginBottom: 20,
   },
@@ -101,65 +99,65 @@ export const Task = (props) => {
   useEffect(() => {
     todosSelector !== 0 && setTaskTitle(todosSelector[index]);
   }, [todosSelector]);
-
   return (
-    <>
-      <View style={styles.taskContainer}>
-        <TouchableHighlight
-          underlayColor="rgba(0, 0, 0, 0.2)"
-          onLongPress={async () => {
-            try {
-              if (targetId !== 0) {
-                if ((await deleteToDoTaskList(targetId)) === 'true')
-                  handleDeleteTaskList(targetId, index);
-              }
-            } catch (e) {
-              console.log('task list delete error', e);
+    <View style={styles.taskContainer}>
+      <TouchableHighlight
+        underlayColor="rgba(0, 0, 0, 0.2)"
+        onLongPress={async () => {
+          try {
+            if (targetId !== 0) {
+              if ((await deleteToDoTaskList(targetId)) === 'true')
+                handleDeleteTaskList(targetId, index);
             }
-          }}
-          onPress={() =>
-            targetId !== 0 &&
-            network === 'online' &&
-            canPress &&
-            toggleIsVisible()
+          } catch (e) {
+            console.log('task list delete error', e);
           }
-          style={styles.task}
+        }}
+        onPress={() =>
+          targetId !== 0 &&
+          network === 'online' &&
+          canPress &&
+          toggleIsVisible()
+        }
+        style={[styles.task, { paddingVertical: 10 }]}
+      >
+        <View
+          style={{
+            alignItems: 'center',
+            width: '100%',
+            flexWrap: 'wrap',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+          <Text
+            style={[
+              styles.taskText,
+              { fontSize: taskText.length > 45 ? 13 : 17 },
+            ]}
           >
-            <Text style={styles.taskText}>
-              {taskText?.length > 17
-                ? `${taskText.substr(0, 11)}...`
-                : taskText}
-            </Text>
-          </View>
-        </TouchableHighlight>
+            {taskText}
+          </Text>
+        </View>
+      </TouchableHighlight>
 
-        <ModalLayout
-          isVisible={isVisible}
-          taskListVisibleHandler={() => toggleIsVisible()}
-          setHandler={() => setTaskTitle(taskTitle)}
-        >
-          <View>
-            <TextInput
-              onChangeText={(text) => {
-                setTaskTitle(text);
-              }}
-              value={taskTitle}
-              onSubmitEditing={() => {
-                submitTask();
-              }}
-              style={styles.modalInputTask}
-              returnKeyType="done"
-            />
-          </View>
-        </ModalLayout>
-      </View>
-    </>
+      <ModalLayout
+        isVisible={isVisible}
+        taskListVisibleHandler={() => toggleIsVisible()}
+        setHandler={() => setTaskTitle(taskTitle)}
+      >
+        <View>
+          <TextInput
+            onChangeText={(text) => {
+              setTaskTitle(text);
+            }}
+            value={taskTitle}
+            onSubmitEditing={() => {
+              submitTask();
+            }}
+            style={styles.modalInputTask}
+            returnKeyType="done"
+          />
+        </View>
+      </ModalLayout>
+    </View>
   );
 };

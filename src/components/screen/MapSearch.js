@@ -13,7 +13,7 @@ import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconStarBorder from '#assets/icons/icon-star-border';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'components/screen/Home';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 const styles = StyleSheet.create({
   mapSearchContainer: {
