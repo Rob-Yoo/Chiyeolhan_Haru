@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingTop: SCREEN_HEIGHT > 668 ? 40 : 10,
+    paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
