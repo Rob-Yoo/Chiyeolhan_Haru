@@ -75,7 +75,7 @@ export const ToDoModal = ({
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
-
+  const scrollView = useRef();
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     console.log(passModalData?.startDate < new Date());
@@ -647,26 +647,17 @@ export const ToDoModal = ({
           </View>
         </View>
 
-        <View style={styles.todoInputContainer}>
-          <TouchableOpacity
-            style={styles.modalInputTask}
-            onPress={() =>
-              network === 'offline' ||
-              (!(isToday && passModalData?.startDate < new Date()) &&
-                toggleIsVisible(inputIsVisible, setInputIsVisible))
-            }
-          >
-            <Text style={styles.modalInputText}>수행리스트</Text>
-          </TouchableOpacity>
+        <View style={styles.todoBottomContainer}>
+          <Text style={styles.taskTitle}>수행리스트</Text>
 
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
             }}
-            style={styles.modalTaskContainer}
           >
             {taskList.map((item, index) => (
               <TouchableOpacity
+                style={styles.modalInputTask}
                 key={index}
                 onPress={() =>
                   network === 'offline' ||
@@ -677,7 +668,16 @@ export const ToDoModal = ({
                 <Text style={styles.modalInputText}>{item}</Text>
               </TouchableOpacity>
             ))}
+            <TouchableOpacity
+              style={styles.modalInputTask}
+              onPress={() =>
+                network === 'offline' ||
+                (!(isToday && passModalData?.startDate < new Date()) &&
+                  toggleIsVisible(inputIsVisible, setInputIsVisible))
+              }
+            ></TouchableOpacity>
           </ScrollView>
+
           {task ? (
             <ToDoModalInput
               key={task}
