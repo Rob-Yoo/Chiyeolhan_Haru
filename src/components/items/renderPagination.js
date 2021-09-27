@@ -34,16 +34,7 @@ const Pagination = ({ taskList, targetId }) => {
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
-        <Text
-          style={{
-            color: '#229892',
-            fontFamily: 'NotoSansKR-Bold',
-            fontSize: 22,
-            marginRight: 10,
-          }}
-        >
-          수행 리스트
-        </Text>
+        <Text style={styles.taskTitle}>수행 리스트</Text>
         {network === 'offline' || targetId === 0 ? null : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
@@ -157,6 +148,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+  },
+  taskTitle: {
+    color: '#229892',
+    fontFamily: 'NotoSansKR-Bold',
+    fontSize: 22,
+    marginRight: 10,
   },
   taskText: {
     maxWidth: '100%',
