@@ -9,7 +9,11 @@ import { LocationData } from 'components/items/LocationData';
 
 import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
 import { handleFilterData } from 'utils/handleFilterData';
-import { noDataAlert } from 'utils/TwoButtonAlert';
+import {
+  noDataAlert,
+  favoriteAlert,
+  deleteFavoriteAlert,
+} from 'utils/TwoButtonAlert';
 
 import {
   GOOGLE_API_URL,
@@ -45,6 +49,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
       if (favoriteAsyncData === null) {
         //제일 처음 데이터가 없을때는 데이터를 넣고 걍 페이보릿색으로 바꿔주고 리턴
         await setFavoriteData([locationData]);
+        favoriteAlert();
         return setIsFavoriteColor('#FECC02');
       }
 
@@ -64,6 +69,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
             ),
         );
         await setFavoriteData(tempData);
+        deleteFavoriteAlert();
         return setIsFavoriteColor(
           await filterFavoriteReturnStarColor(
             locationData.latitude,
@@ -73,6 +79,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
       } else {
         //favorite가 아니란 얘기임
         await setFavoriteData([updateData, ...favoriteAsyncData]);
+        favoriteAlert();
         return setIsFavoriteColor(
           await filterFavoriteReturnStarColor(
             locationData.latitude,

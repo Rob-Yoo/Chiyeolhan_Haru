@@ -87,7 +87,10 @@ export const getDataFromAsync = async (storageName) => {
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
     const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
-    const newTomorrowData = tomorrowData.filter((item) => item[id].id !== id);
+    const newTomorrowData = tomorrowData.filter((item) => {
+      const scheduleID = Object.keys(item);
+      return item[scheduleID].id !== id;
+    });
     await AsyncStorage.setItem(
       KEY_VALUE_TOMORROW_DATA,
       JSON.stringify(newTomorrowData),
@@ -123,7 +126,8 @@ export const deleteTodayAsyncStorageData = async (id) => {
     const todayData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const newTodayData = todayData.filter((item) => {
-      return item[id].id !== id;
+      const scheduleID = Object.keys(item);
+      return item[scheduleID].id !== id;
     });
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY_DATA,
@@ -300,6 +304,8 @@ export const deleteAllSearchedData = async () => {
 };
 
 export const checkDayChange = async () => {
+  let isChange = false;
+
   try {
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
 
@@ -331,9 +337,12 @@ export const checkDayChange = async () => {
         const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         console.log('바뀐 geofenceData :', geofenceData);
       }
+
+      isChange = true;
     } else {
       console.log('날짜가 바뀌지 않음');
     }
+    return isChange;
   } catch (e) {
     console.log('checkDayChange Error :', e);
   }
