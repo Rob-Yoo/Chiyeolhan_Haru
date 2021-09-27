@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -31,6 +37,7 @@ const Pagination = ({ taskList, targetId }) => {
       dispatch(add({ targetId, taskTitle }));
     setTaskTitle(null);
   };
+
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
@@ -42,7 +49,7 @@ const Pagination = ({ taskList, targetId }) => {
             color={'#229892'}
             onPress={() =>
               network === 'online' &&
-              toDos.startTime > getCurrentTime() &&
+              toDos.finishTime > getCurrentTime() &&
               toggleIsVisible()
             }
           />
@@ -84,12 +91,38 @@ const Pagination = ({ taskList, targetId }) => {
                     canPress={
                       targetId !== 0 &&
                       network === 'online' &&
-                      toDos?.startTime > getCurrentTime()
+                      toDos?.finishTime > getCurrentTime()
                     }
                   />
                 </View>
               );
             })}
+
+          {
+            /*수행 리스트  없을때*/
+            !taskList.length && (
+              <View style={{ alignItems: 'center' }}>
+                <IconTaskListLeft
+                  name="icon-tasklist-left"
+                  size={106}
+                  color="#707070"
+                  style={{
+                    position: 'absolute',
+                    left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                    top: 0,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() =>
+                    network === 'online' &&
+                    toDos.finishTime > getCurrentTime() &&
+                    toggleIsVisible()
+                  }
+                  style={styles.nodataTask}
+                />
+              </View>
+            )
+          }
         </ScrollView>
       </View>
 
@@ -174,5 +207,18 @@ const styles = StyleSheet.create({
     left: -50,
     width: 400,
     height: '100%',
+  },
+  nodataTask: {
+    backgroundColor: '#FFF',
+    width: '80%',
+    height: 80,
+    borderRadius: 20,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
   },
 });

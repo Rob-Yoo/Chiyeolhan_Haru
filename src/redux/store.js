@@ -72,7 +72,6 @@ const tabBarSlice = createSlice({
   initialState: null,
   reducers: {
     setTabBar: (state, action) => {
-      console.log(state);
       return (state = action.payload);
     },
   },
