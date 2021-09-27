@@ -93,6 +93,12 @@ const MyEventComponent = ({ event, position }) => {
 
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
+
+  const scrollRefresh = () => {
+    console.log('refresh');
+    //여기에 refresh 추가
+    return Promise.resolve('true');
+  };
   let weekStart = new Date().getDay();
   let selectedDate = '';
   switch (day) {
@@ -132,6 +138,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       }}
       EventComponent={MyEventComponent}
       scrollToTimeNow={day === 'today' ? true : false}
+      scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {
         passToModalData(event);
       }}

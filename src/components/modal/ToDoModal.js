@@ -78,7 +78,6 @@ export const ToDoModal = ({
   const scrollView = useRef();
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
-    console.log(passModalData?.startDate < new Date());
     if (
       network === 'offline' ||
       isToday === 'yesterday' ||
@@ -232,7 +231,6 @@ export const ToDoModal = ({
       return;
     }
     try {
-      console.log(todoStartTime, todoFinishTime);
       let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
       const currentTime = getCurrentTime();
       const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
@@ -326,7 +324,6 @@ export const ToDoModal = ({
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
-      console.log('handleAlert');
       const toDoArray = isToday
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
@@ -428,7 +425,7 @@ export const ToDoModal = ({
       toggleIsVisible(inputIsVisible, setInputIsVisible);
       return;
     }
-    console.log(task);
+
     if (task.length === 0) {
       setTaskList([...taskList.slice(0, index), ...taskList.slice(index + 1)]);
       //toggleIsVisible(inputIsVisible, setInputIsVisible);
@@ -445,9 +442,6 @@ export const ToDoModal = ({
     }
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
-  useEffect(() => {
-    console.log(taskList);
-  }, [taskList]);
 
   const timeHandler = async (text, isStart) => {
     let newTime;
@@ -473,7 +467,6 @@ export const ToDoModal = ({
   };
 
   const gotoFavorite = (isToday) => {
-    console.log('여기');
     modalHandler();
     navigation.navigate('ModalStack', {
       screen: 'Favorite',

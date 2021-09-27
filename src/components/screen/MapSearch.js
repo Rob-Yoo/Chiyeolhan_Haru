@@ -25,6 +25,7 @@ export const MapSearch = ({
   isFavoriteColor,
   handleFavorite,
 }) => {
+  const [findlocation, setFindlocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
@@ -84,10 +85,11 @@ export const MapSearch = ({
               onChangeText={(text) => setText(text)}
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
+                setFindlocation(true);
                 toggleModal();
               }}
             />
-            {!!inputText && (
+            {findlocation ? (
               <IconStarBorder
                 name="icon-favorite"
                 size={23}
@@ -95,7 +97,7 @@ export const MapSearch = ({
                 style={{ paddingHorizontal: 10, width: '10%' }}
                 onPress={() => handleFavorite()}
               />
-            )}
+            ) : null}
           </View>
         </View>
         <View style={{ flex: 1 }}>
