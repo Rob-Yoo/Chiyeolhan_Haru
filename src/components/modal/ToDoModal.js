@@ -428,13 +428,10 @@ export const ToDoModal = ({
       toggleIsVisible(inputIsVisible, setInputIsVisible);
       return;
     }
+    console.log(task);
     if (task.length === 0) {
-      index
-        ? setTaskList([
-            ...taskList.slice(0, index),
-            ...taskList.slice(index + 1),
-          ])
-        : toggleIsVisible(inputIsVisible, setInputIsVisible);
+      setTaskList([...taskList.slice(0, index), ...taskList.slice(index + 1)]);
+      //toggleIsVisible(inputIsVisible, setInputIsVisible);
     } else {
       if (task.length > 0 && index === false) {
         setTaskList([...taskList, task]);
@@ -448,6 +445,9 @@ export const ToDoModal = ({
     }
     toggleIsVisible(inputIsVisible, setInputIsVisible);
   };
+  useEffect(() => {
+    console.log(taskList);
+  }, [taskList]);
 
   const timeHandler = async (text, isStart) => {
     let newTime;
