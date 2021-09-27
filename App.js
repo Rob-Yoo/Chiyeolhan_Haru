@@ -1,17 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AppState } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
-import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import store from 'redux/store';
-import { Provider } from 'react-redux';
 
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
-import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -24,14 +21,6 @@ const App = () => {
       nextAppState === 'active'
     ) {
       setIsTerminate(false);
-      try {
-        await BackgroundGeolocation.requestPermission();
-        // 날짜가 바뀌었는지 체크
-        await checkDayChange();
-        await loadSuccessSchedules();
-      } catch (e) {
-        console.log('requestPermission Deny:', e);
-      }
     }
 
     appState.current = nextAppState;

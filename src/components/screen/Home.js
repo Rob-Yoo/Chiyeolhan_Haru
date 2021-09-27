@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, AppState } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { init, setNetwork, setTabBar } from 'redux/store';
 
@@ -32,15 +33,43 @@ const Home = ({ navigation }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
-  let todoArr = [];
-  let rowObj = {};
   const mounted = useRef(false);
   const mounted2 = useRef(false);
   const dispatch = useDispatch();
   const toDos = useSelector((state) => state.toDos);
+  const appState = useRef(AppState.currentState);
+  let todoArr = [];
+  let rowObj = {};
+
+  const __handleAppStateChange = async (nextAppState) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      try {
+        await BackgroundGeolocation.requestPermission();
+        // 날짜가 바뀌었는지 체크
+        const isDayChange = await checkDayChange();
+        await loadSuccessSchedules();
+        if (isDayChange) {
+          setLoading(true);
+          await getToDos();
+          dispatch(init(fetchedToDo));
+          setLoading(false);
+        }
+      } catch (e) {
+        console.log('requestPermission Deny:', e);
+      }
+    }
+    appState.current = nextAppState;
+  };
 
   useEffect(() => {
+    AppState.addEventListener('change', __handleAppStateChange);
     readyForHome();
+    return () => {
+      AppState.removeEventListener('change', __handleAppStateChange);
+    };
   }, []);
 
   useEffect(() => {
