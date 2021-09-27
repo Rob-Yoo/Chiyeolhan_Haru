@@ -87,7 +87,7 @@ export const getDataFromAsync = async (storageName) => {
 export const deleteTomorrowAsyncStorageData = async (id) => {
   try {
     const tomorrowData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
-    const newTomorrowData = tomorrowData.filter((item) => item.id !== id);
+    const newTomorrowData = tomorrowData.filter((item) => item[id].id !== id);
     await AsyncStorage.setItem(
       KEY_VALUE_TOMORROW_DATA,
       JSON.stringify(newTomorrowData),
@@ -122,8 +122,9 @@ export const deleteTodayAsyncStorageData = async (id) => {
   try {
     const todayData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
-
-    const newTodayData = todayData.filter((item) => item.id !== id);
+    const newTodayData = todayData.filter((item) => {
+      return item[id].id !== id;
+    });
     await AsyncStorage.setItem(
       KEY_VALUE_TODAY_DATA,
       JSON.stringify(newTodayData),

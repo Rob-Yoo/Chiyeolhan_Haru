@@ -24,14 +24,20 @@ import {
 } from 'constant/const';
 
 const BACKGROUND_COLOR = '#ECF5F471';
+
+const minutes20 = 1200000;
+const minutes15 = 90000;
+const munutes10 = 60000;
+
 const MyEventComponent = ({ event, position }) => {
   const timeDiff = event.endDate - event.startDate;
+  console.log(event.description, timeDiff);
   return (
     <View
       color={event.color}
       style={{
-        flexDirection: timeDiff <= 1200000 ? 'row' : null,
-        alignItems: timeDiff <= 1200000 ? 'center' : null,
+        flexDirection: timeDiff <= minutes20 ? 'row' : null,
+        alignItems: timeDiff <= minutes20 ? 'center' : null,
       }}
     >
       <Text
@@ -40,8 +46,8 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              (SCREEN_HEIGHT > 668 && timeDiff <= 600000) ||
-              (SCREEN_HEIGHT < 668 && timeDiff <= 900000)
+              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 10
                 : 15,
           },

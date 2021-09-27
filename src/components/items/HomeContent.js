@@ -9,14 +9,6 @@ import { getCurrentTime } from 'utils/Time';
 
 import { TODAY, SCREEN_HEIGHT } from 'constant/const';
 
-const styles = StyleSheet.create({
-  homeContainer: {
-    flex: 5,
-    alignItems: 'center',
-  },
-  swiperStyle: { height: '100%' },
-});
-
 const HomeContent = (props) => {
   let todoArr = props.todoArr;
   const [isData, setIsData] = useState(
@@ -149,29 +141,36 @@ const HomeContent = (props) => {
           })}
       </Swiper>
       {isData ? null : (
-        <View
-          style={{
-            backgroundColor: '#000',
-            flex: 1,
-            width: '130%',
-            height:
-              SCREEN_HEIGHT > 668
-                ? SCREEN_HEIGHT / 3.5 + 30
-                : SCREEN_HEIGHT / 3 + 30,
-            position: 'absolute',
-            top: -7,
-            opacity: 0.3,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ color: '#fff', fontSize: 20 }}>
-            현재일정이 없습니다
-          </Text>
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>현재일정이 없습니다</Text>
         </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  /*Home*/
+  homeContainer: {
+    flex: 5,
+    alignItems: 'center',
+  },
+  swiperStyle: { height: '100%' },
+
+  /*noData */
+  noDataContainer: {
+    backgroundColor: '#000',
+    flex: 1,
+    width: '130%',
+    height:
+      SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 + 30 : SCREEN_HEIGHT / 3 + 30,
+    position: 'absolute',
+    top: -7,
+    opacity: 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: { color: '#fff', fontSize: 20 },
+});
 
 export default HomeContent;
