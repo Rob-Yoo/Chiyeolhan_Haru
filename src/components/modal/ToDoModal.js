@@ -217,7 +217,7 @@ export const ToDoModal = ({
           isNeedAlert = true;
           break;
         }
-        if (startTime === todoStartTime || todoStartTime === finishTime) {
+        if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
           isNeedAlert = true;
           break;
         }
