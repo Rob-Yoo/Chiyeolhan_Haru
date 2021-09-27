@@ -35,6 +35,16 @@ export const noDataAlert = () =>
     cancelable: false,
   });
 
+export const favoriteAlert = () =>
+  Alert.alert('즐겨찾기에 추가되었습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
+export const deleteFavoriteAlert = () =>
+  Alert.alert('즐겨찾기에서 삭제되었습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
 export const alertInValidSubmit = () =>
   Alert.alert(
     '그 시간대에 이미 다른 일정이 존재합니다.',
