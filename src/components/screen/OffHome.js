@@ -41,6 +41,8 @@ const OffHome = ({ navigation, route }) => {
 
   useEffect(() => {
     getToDos();
+    dispatch(setNetwork('offline'));
+    dispatch(setTabBar('today'));
   }, []);
 
   useEffect(() => {
@@ -61,29 +63,27 @@ const OffHome = ({ navigation, route }) => {
 
   const getToDos = async () => {
     try {
-      let todayAsyncData = await getDataFromAsync(KEY_VALUE_TODAY_DATA);
-      let tomorrowAsyncData = await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
-      let yesterdayAsyncData = await getDataFromAsync(KEY_VALUE_YESTERDAY_DATA);
+      let todayAsyncData = (await getDataFromAsync(KEY_VALUE_TODAY_DATA)) ?? [];
+      let tomorrowAsyncData =
+        (await getDataFromAsync(KEY_VALUE_TOMORROW_DATA)) ?? [];
+      let yesterdayAsyncData =
+        (await getDataFromAsync(KEY_VALUE_YESTERDAY_DATA)) ?? [];
+      if (
+        todayAsyncData.length === 0 &&
+        tomorrowAsyncData.length === 0 &&
+        yesterdayAsyncData.length === 0
+      ) {
+        //데이터가 아무것도 없을때
+        setLoading(false);
+        return;
+      }
 
-      if (yesterdayAsyncData === null) {
-        yesterdayAsyncData = [];
-      }
-      if (todayAsyncData === null) {
-        todayAsyncData = [];
-      }
-      if (tomorrowAsyncData === null) {
-        tomorrowAsyncData = [];
-      }
-      dispatch(setNetwork('offline'));
-      dispatch(setTabBar('today'));
       rowObj = Object.assign(
         ...yesterdayAsyncData,
         ...todayAsyncData,
         ...tomorrowAsyncData,
       );
-      if (Object.keys(rowObj).length === 0) {
-        setLoading(false);
-      }
+
       setFetchObj(rowObj);
     } catch (e) {
       console.log('getToDos Error :', e);

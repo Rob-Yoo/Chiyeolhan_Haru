@@ -96,11 +96,13 @@ const Home = ({ navigation }) => {
 
   const getToDos = async () => {
     try {
-      const row = await dbService.collection(`${UID}`).get();
-      row.forEach((data) => (rowObj[data.id] = data.data()));
       dispatch(setNetwork('online'));
       dispatch(setTabBar('today'));
+      const row = await dbService.collection(`${UID}`).get();
+      row.forEach((data) => (rowObj[data.id] = data.data()));
+
       if (Object.keys(rowObj).length === 0) {
+        //데이터가 아무것도 없을때
         setLoading(false);
         return;
       }

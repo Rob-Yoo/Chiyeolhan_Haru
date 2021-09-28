@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import WeekView from 'react-native-week-view';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteToDoDispatch } from 'redux/store';
 
@@ -93,12 +93,17 @@ const MyEventComponent = ({ event, position }) => {
 
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const network = useSelector((state) => state.network);
 
-  const scrollRefresh = () => {
+  const scrollRefresh = async () => {
+    setIsRefreshing(true);
     console.log('refresh');
     //여기에 refresh 추가
+    setIsRefreshing(false);
     return Promise.resolve('true');
   };
+
   let weekStart = new Date().getDay();
   let selectedDate = '';
   switch (day) {
@@ -125,7 +130,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       formatTimeLabel="HH:mm A"
       showTitle={false}
       showNowLine={true}
-      //eventContainerStyle={{ paddingHorizontal: 50 }}
       headerStyle={{
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
@@ -137,6 +141,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         left: 40,
       }}
       EventComponent={MyEventComponent}
+      isRefreshing={isRefreshing}
       scrollToTimeNow={day === 'today' ? true : false}
       scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {
@@ -148,29 +153,29 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         const currentTime = getCurrentTime();
         const startTime = event.startTime;
 
-        if (day !== 'yesterday') {
-          if (
-            (day === 'today' && currentTime < startTime) ||
-            day === 'tomorrow'
-          ) {
-            try {
-              if ((await deleteToDoAlert(event)) === 'true') {
-                if (day === 'today') {
-                  if (event.id == data[0].id) {
-                    await geofenceUpdate(data);
-                    await deleteTodayAsyncStorageData(targetId);
-                  } else {
-                    await deleteGeofenceAsyncStorageData(targetId);
-                    await deleteTodayAsyncStorageData(targetId);
-                  }
-                } else if (day === 'tomorrow') {
-                  await deleteTomorrowAsyncStorageData(targetId);
+        if (
+          (network === 'online' &&
+            day === 'today' &&
+            currentTime < startTime) ||
+          (network === 'online' && day === 'tomorrow')
+        ) {
+          try {
+            if ((await deleteToDoAlert(event)) === 'true') {
+              if (day === 'today') {
+                if (event.id == data[0].id) {
+                  await geofenceUpdate(data);
+                  await deleteTodayAsyncStorageData(targetId);
+                } else {
+                  await deleteGeofenceAsyncStorageData(targetId);
+                  await deleteTodayAsyncStorageData(targetId);
                 }
-                await dispatch(deleteToDoDispatch(targetId));
+              } else if (day === 'tomorrow') {
+                await deleteTomorrowAsyncStorageData(targetId);
               }
-            } catch (e) {
-              console.log('long onPress delete Error', e);
+              await dispatch(deleteToDoDispatch(targetId));
             }
+          } catch (e) {
+            console.log('long onPress delete Error', e);
           }
         }
       }}
