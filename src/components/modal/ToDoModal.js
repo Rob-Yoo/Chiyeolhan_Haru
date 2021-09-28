@@ -100,11 +100,12 @@ export const ToDoModal = ({
   }, [passModalData]);
 
   useEffect(() => {
-    register('todoStartTime'),
-      register('todoFinishTime'),
-      register('todoTitle'),
-      register('todoTask', { min: 1 }),
-      register('todoId');
+    register('todoStartTime');
+    register('todoFinishTime');
+    register('todoTitle');
+    // register('todoTask', { min: 1 }),
+    register('todoTask', { min: 1 });
+    register('todoId');
   }, [register]);
 
   const handleIsOnGoing = () => {

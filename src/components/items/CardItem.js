@@ -16,29 +16,27 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
-      width: 3.4,
-      height: 5,
+      width: 0,
+      height: 15,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
+    shadowOpacity: 1.5,
+    shadowRadius: 6.84,
   },
   todomanBackgroundCircle: {
     width: SCREEN_HEIGHT > 668 ? 50 : 40,
     height: SCREEN_HEIGHT > 668 ? 50 : 40,
     backgroundColor: '#ffffff',
     borderRadius: 50,
-
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
-      height: 9,
+      height: 15,
     },
-    shadowOpacity: 1.34,
-    shadowRadius: 4.84,
+    shadowOpacity: 1.5,
+    shadowRadius: 5.84,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   cardTitle: {
     fontFamily: 'NotoSansKR-Bold',
     fontSize:

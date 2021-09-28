@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +21,10 @@ import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/Time';
+import {
+  CONTAINER_HEIGHT,
+  CONTAINER_WIDTH,
+} from 'react-native-week-view/src/utils';
 
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
@@ -55,8 +60,8 @@ const Pagination = ({ taskList, targetId }) => {
           />
         )}
       </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView>
+      <View style={{ height: SCREEN_HEIGHT }}>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
           {taskList &&
             taskList.map((item, index) => {
               return (
@@ -118,7 +123,7 @@ const Pagination = ({ taskList, targetId }) => {
                     toDos.finishTime > getCurrentTime() &&
                     toggleIsVisible()
                   }
-                  style={styles.nodataTask}
+                  style={styles.modatalTask}
                 />
               </View>
             )
@@ -158,6 +163,13 @@ export const renderPagination = (index, total, context) => {
 };
 
 const styles = StyleSheet.create({
+  paginationStyle: {
+    position: 'absolute',
+    top: SCREEN_HEIGHT > 668 ? CONTAINER_HEIGHT * 0.6 : CONTAINER_HEIGHT * 0.5,
+    left: SCREEN_HEIGHT > 668 ? -50 : -70,
+    width: 400,
+    height: '100%',
+  },
   taskHeader: {
     paddingHorizontal: 40,
     flexDirection: 'row',
@@ -201,14 +213,8 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
-  paginationStyle: {
-    position: 'absolute',
-    top: 300,
-    left: -50,
-    width: 400,
-    height: '100%',
-  },
-  nodataTask: {
+
+  modatalTask: {
     backgroundColor: '#FFF',
     width: '80%',
     height: 80,
@@ -220,5 +226,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+    marginTop: 10,
+    marginLeft: 20,
   },
 });

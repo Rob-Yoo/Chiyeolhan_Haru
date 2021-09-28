@@ -94,7 +94,7 @@ export const MapSearch = ({
                 name="icon-favorite"
                 size={23}
                 color={isFavoriteColor}
-                style={{ paddingRight: 10, width: '10%' }}
+                style={{ width: '10%' }}
                 onPress={() => handleFavorite()}
               />
             )}

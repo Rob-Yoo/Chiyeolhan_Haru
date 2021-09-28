@@ -162,9 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     width: '130%',
-    height:
-      // SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 + 30 : SCREEN_HEIGHT / 3 + 30,
-      '120%',
+    height: '120%',
     position: 'absolute',
     top: -20,
     opacity: 0.3,

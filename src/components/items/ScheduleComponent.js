@@ -38,6 +38,7 @@ const MyEventComponent = ({ event, position }) => {
       style={{
         flexDirection: timeDiff <= minutes20 ? 'row' : null,
         alignItems: timeDiff <= minutes20 ? 'center' : null,
+        justifyContent: 'center',
       }}
     >
       <Text
@@ -55,7 +56,7 @@ const MyEventComponent = ({ event, position }) => {
       >
         {event.description}
       </Text>
-      <View style={{ flexDirection: 'row', marginLeft: 2.5 }}>
+      <View style={{ flexDirection: 'row', marginLeft: 2.5, paddingTop: 1 }}>
         <View
           style={{
             width:
@@ -63,11 +64,7 @@ const MyEventComponent = ({ event, position }) => {
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 2
                 : 3,
-            height:
-              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
-              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
-                ? 10
-                : 14,
+            height: 13,
             backgroundColor: '#fff',
             marginRight: 4,
           }}
@@ -192,6 +189,5 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    marginBottom: 2,
   },
 });
