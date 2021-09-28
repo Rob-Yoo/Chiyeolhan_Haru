@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import WeekView from 'react-native-week-view';
 import { useDispatch } from 'react-redux';
@@ -93,12 +93,16 @@ const MyEventComponent = ({ event, position }) => {
 
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const scrollRefresh = () => {
+  const scrollRefresh = async () => {
+    setIsRefreshing(true);
     console.log('refresh');
     //여기에 refresh 추가
+    setIsRefreshing(false);
     return Promise.resolve('true');
   };
+
   let weekStart = new Date().getDay();
   let selectedDate = '';
   switch (day) {
@@ -125,7 +129,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       formatTimeLabel="HH:mm A"
       showTitle={false}
       showNowLine={true}
-      //eventContainerStyle={{ paddingHorizontal: 50 }}
       headerStyle={{
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
@@ -137,6 +140,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         left: 40,
       }}
       EventComponent={MyEventComponent}
+      isRefreshing={isRefreshing}
       scrollToTimeNow={day === 'today' ? true : false}
       scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {

@@ -18,6 +18,7 @@ import Map from 'components/screen/Map';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
+import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
 import IconFavorite from '#assets/icons/icon-favorite';
@@ -68,6 +69,7 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
+  const [favoriteIsVisible, setFavoriteIsVisible] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
@@ -112,6 +114,7 @@ export const ToDoModal = ({
     setVisible(!isVisible);
   };
   const getLocationData = (value) => {
+    console.log(value);
     setLocationData(value);
     setLocationName(value.location);
   };
@@ -512,7 +515,9 @@ export const ToDoModal = ({
                   marginTop: 15,
                   paddingLeft: 1,
                 }}
-                onPress={() => gotoFavorite(isToday)}
+                onPress={() =>
+                  toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+                }
               >
                 <IconFavorite
                   name="icon-favorite"
@@ -713,6 +718,32 @@ export const ToDoModal = ({
           locationDataHandler={(value) => getLocationData(value)}
           searchedList={searchedList}
           setSearchedList={setSearchedList}
+        />
+      </Modal>
+
+      {/* Favorite Modal*/}
+      <Modal
+        isVisible={favoriteIsVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
+        style={{
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+          margin: 0,
+        }}
+      >
+        <TouchableOpacity
+          style={styles.background}
+          activeOpacity={1}
+          onPress={() =>
+            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+          }
+        />
+        <FavoriteModal
+          modalHandler={() =>
+            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+          }
+          locationDataHandler={(value) => getLocationData(value)}
         />
       </Modal>
     </Modal>
