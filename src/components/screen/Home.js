@@ -48,15 +48,7 @@ const Home = ({ navigation }) => {
     ) {
       try {
         await BackgroundGeolocation.requestPermission();
-        // 날짜가 바뀌었는지 체크
-        const isDayChange = await checkDayChange();
         await loadSuccessSchedules();
-        if (isDayChange) {
-          setLoading(true);
-          await getToDos();
-          dispatch(init(fetchedToDo));
-          setLoading(false);
-        }
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }

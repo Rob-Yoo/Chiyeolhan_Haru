@@ -1,12 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { cancelNotification } from 'utils/Notification';
-import { dbService } from 'utils/firebase';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
 
 import {
-  UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_EARLY,
@@ -27,21 +25,32 @@ const getDataFromAsync = async (storageName) => {
   }
 };
 
-export const checkGeofenceSchedule = async (id) => {
+export const checkGeofenceSchedule = async () => {
+  // 가장 최신의 지오펜스 일정 끝시간이 지났을 때 해당 일정이 성공한 일정 배열에 존재하는지 체크
+  // 없으면 다음 일정으로 업데이트 해줘야한다.
   try {
-    let isNeedUpdate = false;
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const currentTime = getCurrentTime();
-    const todosRef = dbService.collection(`${UID}`);
-    const data = await todosRef.where('id', '==', `${id}`).get();
-    data.forEach((schedule) => {
-      // isDone이 false인 일정들 중 끝 시간이 지난 일정이 있으면 사용자가 직접 포그라운드에서 업데이트를 시켜줘야함
-      if (schedule.data().finishTime < currentTime) {
-        isNeedUpdate = true;
-        return;
+    let isNeedUpdate = false;
+
+    if (geofenceData) {
+      if (geofenceData.length > 0) {
+        if (geofenceData[0].finishTime <= currentTime) {
+          if (successSchedules) {
+            // successSchedules이 빈 배열 경우에는 무조건 true 반환
+            isNeedUpdate = successSchedules.every(
+              (schedule) => geofenceData[0].id !== schedule.id,
+            );
+          } else {
+            // successSchedules이 null인 경우는 앱을 처음 설치하고 첫 일정 장소에 들어오지 않는 경우이다.
+            isNeedUpdate = true;
+          }
+        }
       }
-    });
+    }
     console.log(
-      '사용자가 안들어와서 직접 들어와서 업데이트 시켜줘야하나요? ',
+      '안와서 다음 일정으로 업데이트가 수동으로 필요한가요? : ',
       isNeedUpdate,
     );
     return isNeedUpdate;
@@ -111,6 +120,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
               KEY_VALUE_GEOFENCE,
               JSON.stringify(geofenceData),
             );
+            console.log('geofenceData : ', geofenceData);
             await geofenceUpdate(geofenceData, 0);
             console.log('nearBySchedule X isEarly X Progressing인 경우');
           }

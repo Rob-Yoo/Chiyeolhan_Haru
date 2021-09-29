@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
@@ -169,7 +170,7 @@ const setTodayToDoArray = async (todayToDos) => {
       };
       todayToDoArray.push(obj);
     });
-    console.log('todayToDoArray : ', todayToDoArray);
+    // console.log('todayToDoArray : ', todayToDoArray);
     await setTodayData(JSON.stringify(todayToDoArray));
   } catch (e) {
     console.log('setTodayToDoArray Error :', e);
@@ -304,8 +305,6 @@ export const deleteAllSearchedData = async () => {
 };
 
 export const checkDayChange = async () => {
-  let isChange = false;
-
   try {
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
 
@@ -315,6 +314,7 @@ export const checkDayChange = async () => {
     } else if (today !== TODAY) {
       const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
       const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
+      const successSchedules = await AsyncStorage.getItem(KEY_VALUE_SUCCESS);
 
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
 
@@ -337,12 +337,14 @@ export const checkDayChange = async () => {
         const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         console.log('바뀐 geofenceData :', geofenceData);
       }
-
-      isChange = true;
+      // 성공한 일정 배열을 초기화해준다.
+      await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
+      // 트래킹이 되고있는 일정이 남아있을 수 있기 때문에 멈춰준다.
+      await BackgroundGeolocation.stop();
+      console.log('stop geofence');
     } else {
       console.log('날짜가 바뀌지 않음');
     }
-    return isChange;
   } catch (e) {
     console.log('checkDayChange Error :', e);
   }
@@ -374,6 +376,7 @@ export const loadSuccessSchedules = async () => {
     let isNeedUpdate = false;
     const currentTime = getCurrentTime();
     const todosRef = dbService.collection(`${UID}`);
+
     if (successSchedules !== null) {
       if (successSchedules.length > 0) {
         for (const schedule of successSchedules) {

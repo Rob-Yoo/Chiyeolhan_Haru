@@ -20,6 +20,7 @@ const firebaseConfig = {
 
 if (!firbase.apps.length) {
   firbase.initializeApp(firebaseConfig);
+  // console.log(firebaseConfig);
 } else {
   firbase.app();
 }
