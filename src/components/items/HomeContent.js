@@ -120,7 +120,7 @@ const HomeContent = (props) => {
         index={isData ? nowIndex : 1}
         scrollViewStyle={{ overflow: 'visible' }}
         containerStyle={{
-          width: SCREEN_HEIGHT > 668 ? 290 : 260,
+          width: SCREEN_HEIGHT > 668 ? 280 : 260,
         }}
       >
         {todoArr &&
@@ -159,18 +159,19 @@ const styles = StyleSheet.create({
 
   /*noData */
   noDataContainer: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     flex: 1,
     width: '130%',
     height:
-      SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 + 30 : SCREEN_HEIGHT / 3 + 30,
+      // SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 + 30 : SCREEN_HEIGHT / 3 + 30,
+      '120%',
     position: 'absolute',
-    top: -7,
+    top: -20,
     opacity: 0.3,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noDataText: { color: '#fff', fontSize: 20 },
+  noDataText: { color: '#000', fontSize: 20 },
 });
 
 export default HomeContent;

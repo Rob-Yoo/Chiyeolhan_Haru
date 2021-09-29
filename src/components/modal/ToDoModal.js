@@ -18,6 +18,7 @@ import Map from 'components/screen/Map';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
+import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
 import IconFavorite from '#assets/icons/icon-favorite';
@@ -68,6 +69,7 @@ export const ToDoModal = ({
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
+  const [favoriteIsVisible, setFavoriteIsVisible] = useState(false);
   const [isOngoing, setIsOngoing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [task, setTask] = useState(false);
@@ -78,7 +80,6 @@ export const ToDoModal = ({
   const scrollView = useRef();
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
-    console.log(passModalData?.startDate < new Date());
     if (
       network === 'offline' ||
       isToday === 'yesterday' ||
@@ -113,6 +114,7 @@ export const ToDoModal = ({
     setVisible(!isVisible);
   };
   const getLocationData = (value) => {
+    console.log(value);
     setLocationData(value);
     setLocationName(value.location);
   };
@@ -232,7 +234,6 @@ export const ToDoModal = ({
       return;
     }
     try {
-      console.log(todoStartTime, todoFinishTime);
       let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
       const currentTime = getCurrentTime();
       const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
@@ -326,7 +327,6 @@ export const ToDoModal = ({
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
     try {
-      console.log('handleAlert');
       const toDoArray = isToday
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
@@ -428,13 +428,10 @@ export const ToDoModal = ({
       toggleIsVisible(inputIsVisible, setInputIsVisible);
       return;
     }
+
     if (task.length === 0) {
-      index
-        ? setTaskList([
-            ...taskList.slice(0, index),
-            ...taskList.slice(index + 1),
-          ])
-        : toggleIsVisible(inputIsVisible, setInputIsVisible);
+      setTaskList([...taskList.slice(0, index), ...taskList.slice(index + 1)]);
+      //toggleIsVisible(inputIsVisible, setInputIsVisible);
     } else {
       if (task.length > 0 && index === false) {
         setTaskList([...taskList, task]);
@@ -473,7 +470,6 @@ export const ToDoModal = ({
   };
 
   const gotoFavorite = (isToday) => {
-    console.log('여기');
     modalHandler();
     navigation.navigate('ModalStack', {
       screen: 'Favorite',
@@ -519,7 +515,9 @@ export const ToDoModal = ({
                   marginTop: 15,
                   paddingLeft: 1,
                 }}
-                onPress={() => gotoFavorite(isToday)}
+                onPress={() =>
+                  toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+                }
               >
                 <IconFavorite
                   name="icon-favorite"
@@ -720,6 +718,32 @@ export const ToDoModal = ({
           locationDataHandler={(value) => getLocationData(value)}
           searchedList={searchedList}
           setSearchedList={setSearchedList}
+        />
+      </Modal>
+
+      {/* Favorite Modal*/}
+      <Modal
+        isVisible={favoriteIsVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutRight"
+        style={{
+          width: SCREEN_WIDTH,
+          height: SCREEN_HEIGHT,
+          margin: 0,
+        }}
+      >
+        <TouchableOpacity
+          style={styles.background}
+          activeOpacity={1}
+          onPress={() =>
+            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+          }
+        />
+        <FavoriteModal
+          modalHandler={() =>
+            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+          }
+          locationDataHandler={(value) => getLocationData(value)}
         />
       </Modal>
     </Modal>

@@ -103,7 +103,7 @@ const CurrentMap = ({
   const [locationData, setData] = useState(null);
   const [locationResult, setResult] = useState(location);
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
-  const [isFavoriteColor, setIsFavoriteColor] = useState('#575757');
+  const [isFavoriteColor, setIsFavoriteColor] = useState(null);
 
   useEffect(() => {
     const getSearchedList = async () => {
@@ -164,7 +164,6 @@ const CurrentMap = ({
           );
           //검색기록 필터
           await handleFilterData(text, 'search', searchedList, setSearchedList);
-
           break;
         case 'ZERO_RESULTS':
           noDataAlert();

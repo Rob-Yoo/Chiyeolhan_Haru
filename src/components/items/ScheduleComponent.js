@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import WeekView from 'react-native-week-view';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteToDoDispatch } from 'redux/store';
 
@@ -22,16 +22,16 @@ import {
   KEY_VALUE_GEOFENCE,
   SCREEN_HEIGHT,
 } from 'constant/const';
+import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
 const minutes20 = 1200000;
-const minutes15 = 90000;
-const munutes10 = 60000;
+const minutes15 = 900000;
+const munutes10 = 600000;
 
 const MyEventComponent = ({ event, position }) => {
   const timeDiff = event.endDate - event.startDate;
-  console.log(event.description, timeDiff);
   return (
     <View
       color={event.color}
@@ -48,23 +48,44 @@ const MyEventComponent = ({ event, position }) => {
             fontSize:
               (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
-                ? 10
-                : 15,
+                ? 8
+                : 13,
           },
         ]}
       >
         {event.description}
       </Text>
-      <View style={{ flexDirection: 'row', marginLeft: '5.5%' }}>
+      <View style={{ flexDirection: 'row', marginLeft: 2.5 }}>
         <View
           style={{
-            width: 3,
-            height: 15,
+            width:
+              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
+                ? 2
+                : 3,
+            height:
+              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
+                ? 10
+                : 14,
             backgroundColor: '#fff',
-            marginRight: 5,
+            marginRight: 4,
           }}
         />
-        <Text style={[styles.text, styles.location]}>{event.location}</Text>
+        <Text
+          style={[
+            styles.text,
+            {
+              fontSize:
+                (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+                (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
+                  ? 8
+                  : 11,
+            },
+          ]}
+        >
+          {event.location}
+        </Text>
       </View>
     </View>
   );
@@ -72,6 +93,17 @@ const MyEventComponent = ({ event, position }) => {
 
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const network = useSelector((state) => state.network);
+
+  const scrollRefresh = async () => {
+    setIsRefreshing(true);
+    console.log('refresh');
+    //여기에 refresh 추가
+    setIsRefreshing(false);
+    return Promise.resolve('true');
+  };
+
   let weekStart = new Date().getDay();
   let selectedDate = '';
   switch (day) {
@@ -98,11 +130,20 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       formatTimeLabel="HH:mm A"
       showTitle={false}
       showNowLine={true}
-      eventContainerStyle={{ paddingHorizontal: 50 }}
       headerStyle={{
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
+      headerTextStyle={{ color: BACKGROUND_COLOR }}
+      eventContainerStyle={{
+        maxWidth: CONTAINER_WIDTH * 0.53,
+        minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
+        left: 40,
+      }}
+      EventComponent={MyEventComponent}
+      isRefreshing={isRefreshing}
+      scrollToTimeNow={day === 'today' ? true : false}
+      scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {
         passToModalData(event);
       }}
@@ -112,40 +153,32 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         const currentTime = getCurrentTime();
         const startTime = event.startTime;
 
-        if (day !== 'yesterday') {
-          if (
-            (day === 'today' && currentTime < startTime) ||
-            day === 'tomorrow'
-          ) {
-            try {
-              if ((await deleteToDoAlert(event)) === 'true') {
-                if (day === 'today') {
-                  if (event.id == data[0].id) {
-                    await geofenceUpdate(data);
-                    await deleteTodayAsyncStorageData(targetId);
-                  } else {
-                    await deleteGeofenceAsyncStorageData(targetId);
-                    await deleteTodayAsyncStorageData(targetId);
-                  }
-                } else if (day === 'tomorrow') {
-                  await deleteTomorrowAsyncStorageData(targetId);
+        if (
+          (network === 'online' &&
+            day === 'today' &&
+            currentTime < startTime) ||
+          (network === 'online' && day === 'tomorrow')
+        ) {
+          try {
+            if ((await deleteToDoAlert(event)) === 'true') {
+              if (day === 'today') {
+                if (event.id == data[0].id) {
+                  await geofenceUpdate(data);
+                  await deleteTodayAsyncStorageData(targetId);
+                } else {
+                  await deleteGeofenceAsyncStorageData(targetId);
+                  await deleteTodayAsyncStorageData(targetId);
                 }
-                await dispatch(deleteToDoDispatch(targetId));
+              } else if (day === 'tomorrow') {
+                await deleteTomorrowAsyncStorageData(targetId);
               }
-            } catch (e) {
-              console.log('long onPress delete Error', e);
+              await dispatch(deleteToDoDispatch(targetId));
             }
+          } catch (e) {
+            console.log('long onPress delete Error', e);
           }
         }
       }}
-      headerTextStyle={{ color: BACKGROUND_COLOR }}
-      eventContainerStyle={{
-        maxWidth: SCREEN_HEIGHT > 668 ? '60%' : '50%',
-        minHeight: SCREEN_HEIGHT > 668 ? 19 : 14,
-        left: 50,
-      }}
-      scrollToTimeNow={day === 'today' ? true : false}
-      EventComponent={MyEventComponent}
     />
   );
 };
@@ -160,8 +193,5 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 2,
-  },
-  location: {
-    fontSize: 10,
   },
 });

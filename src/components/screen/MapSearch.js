@@ -24,7 +24,9 @@ export const MapSearch = ({
   setSearchedList,
   isFavoriteColor,
   handleFavorite,
+  isFind,
 }) => {
+  const [findlocation, setFindlocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
@@ -43,7 +45,6 @@ export const MapSearch = ({
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
   };
-
   return (
     <View style={styles.mapSearchContainer}>
       <View
@@ -84,15 +85,16 @@ export const MapSearch = ({
               onChangeText={(text) => setText(text)}
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
+                setFindlocation(true);
                 toggleModal();
               }}
             />
-            {!!inputText && (
+            {isFavoriteColor && (
               <IconStarBorder
                 name="icon-favorite"
                 size={23}
                 color={isFavoriteColor}
-                style={{ paddingHorizontal: 10, width: '10%' }}
+                style={{ paddingRight: 10, width: '10%' }}
                 onPress={() => handleFavorite()}
               />
             )}
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
   },
   searchInputViewInput: {
     width: '80%',
-    height: SCREEN_HEIGHT * 0.05,
+    height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 19,
   },
