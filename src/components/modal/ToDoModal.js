@@ -530,9 +530,12 @@ export const ToDoModal = ({
             <View style={styles.modalTextView}>
               {canEdit ? (
                 <>
-                  <Text style={styles.modalTopText} onPress={modalHandler}>
-                    취소
-                  </Text>
+                  <TouchableOpacity>
+                    <Text onPress={modalHandler} style={styles.modalTopText}>
+                      취소
+                    </Text>
+                  </TouchableOpacity>
+
                   <TouchableOpacity>
                     <Text
                       onPress={handleSubmit(handleTodoSubmit)}
@@ -648,7 +651,6 @@ export const ToDoModal = ({
 
         <View style={styles.todoBottomContainer}>
           <Text style={styles.taskTitle}>수행리스트</Text>
-
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -657,7 +659,7 @@ export const ToDoModal = ({
             {taskList.map((item, index) => (
               <TouchableOpacity
                 style={styles.modalInputTask}
-                key={index}
+                key={`${item.id}${index}`}
                 onPress={() =>
                   network === 'offline' ||
                   (!(isToday && passModalData?.startDate < new Date()) &&

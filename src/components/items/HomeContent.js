@@ -142,7 +142,7 @@ const HomeContent = (props) => {
       </Swiper>
       {isData ? null : (
         <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>현재일정이 없습니다</Text>
+          <Text style={styles.noDataText}>수행리스트가 없습니다</Text>
         </View>
       )}
     </View>

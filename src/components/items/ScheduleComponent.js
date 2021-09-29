@@ -131,7 +131,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      headerTextStyle={{ color: BACKGROUND_COLOR }}
+      headerTextStyle={{ color: '#5E5E5E', marginRight: 120 }}
+      formatDateHeader={'M월 DD일'}
       eventContainerStyle={{
         maxWidth: CONTAINER_WIDTH * 0.53,
         minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
@@ -140,6 +141,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       EventComponent={MyEventComponent}
       isRefreshing={isRefreshing}
       scrollToTimeNow={day === 'today' ? true : false}
+      network={network}
       scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {
         passToModalData(event);

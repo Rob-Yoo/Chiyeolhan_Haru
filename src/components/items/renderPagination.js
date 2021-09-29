@@ -60,76 +60,75 @@ const Pagination = ({ taskList, targetId }) => {
           />
         )}
       </View>
-      <View style={{ height: SCREEN_HEIGHT }}>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-          {taskList &&
-            taskList.map((item, index) => {
-              return (
-                <View key={`T` + targetId + index}>
-                  {index === 0 ? (
-                    <IconTaskListLeft
-                      name="icon-tasklist-left"
-                      size={106}
-                      color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                        top: 0,
-                      }}
-                    />
-                  ) : (
-                    <IconTaskListLeftFin
-                      name="icon-tasklist-left-fin"
-                      size={106}
-                      color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                        top: 0,
-                      }}
-                    />
-                  )}
-                  <Task
-                    index={index}
-                    text={item}
-                    targetId={targetId}
-                    canPress={
-                      targetId !== 0 &&
-                      network === 'online' &&
-                      toDos?.finishTime > getCurrentTime()
-                    }
-                  />
-                </View>
-              );
-            })}
 
-          {
-            /*수행 리스트  없을때*/
-            !taskList.length && (
-              <View style={{ alignItems: 'center' }}>
-                <IconTaskListLeft
-                  name="icon-tasklist-left"
-                  size={106}
-                  color="#707070"
-                  style={{
-                    position: 'absolute',
-                    left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                    top: 0,
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() =>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        {taskList &&
+          taskList.map((item, index) => {
+            return (
+              <View key={`T` + targetId + index}>
+                {index === 0 ? (
+                  <IconTaskListLeft
+                    name="icon-tasklist-left"
+                    size={106}
+                    color="#707070"
+                    style={{
+                      position: 'absolute',
+                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                      top: 0,
+                    }}
+                  />
+                ) : (
+                  <IconTaskListLeftFin
+                    name="icon-tasklist-left-fin"
+                    size={106}
+                    color="#707070"
+                    style={{
+                      position: 'absolute',
+                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                      top: 0,
+                    }}
+                  />
+                )}
+                <Task
+                  index={index}
+                  text={item}
+                  targetId={targetId}
+                  canPress={
+                    targetId !== 0 &&
                     network === 'online' &&
-                    toDos.finishTime > getCurrentTime() &&
-                    toggleIsVisible()
+                    toDos?.finishTime > getCurrentTime()
                   }
-                  style={styles.modatalTask}
                 />
               </View>
-            )
-          }
-        </ScrollView>
-      </View>
+            );
+          })}
+
+        {
+          /*수행 리스트  없을때*/
+          !taskList.length && (
+            <View style={{ alignItems: 'center' }}>
+              <IconTaskListLeft
+                name="icon-tasklist-left"
+                size={106}
+                color="#707070"
+                style={{
+                  position: 'absolute',
+                  left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                  top: 0,
+                }}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  network === 'online' &&
+                  toDos.finishTime > getCurrentTime() &&
+                  toggleIsVisible()
+                }
+                style={styles.modatalTask}
+              />
+            </View>
+          )
+        }
+      </ScrollView>
 
       <ModalLayout
         isVisible={isVisible}
