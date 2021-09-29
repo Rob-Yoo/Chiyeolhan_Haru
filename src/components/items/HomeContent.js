@@ -142,7 +142,7 @@ const HomeContent = (props) => {
       </Swiper>
       {isData ? null : (
         <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>현재일정이 없습니다</Text>
+          <Text style={styles.noDataText}>수행리스트가 없습니다</Text>
         </View>
       )}
     </View>
@@ -162,9 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
     width: '130%',
-    height:
-      // SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 + 30 : SCREEN_HEIGHT / 3 + 30,
-      '120%',
+    height: '120%',
     position: 'absolute',
     top: -20,
     opacity: 0.3,

@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
   modalTextView: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingHorizontal: 30,
+    paddingHorizontal: 80,
     marginTop: 20,
+    width: '100%',
   },
   modalTopText: {
     fontFamily: 'GodoB',
@@ -147,6 +148,7 @@ const styles = StyleSheet.create({
   todoBottomContainer: {
     paddingTop: 30,
     width: '100%',
+    height: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     shadowColor: '#00000029',

@@ -39,6 +39,7 @@ const MyEventComponent = ({ event, position }) => {
       style={{
         flexDirection: timeDiff <= minutes20 ? 'row' : null,
         alignItems: timeDiff <= minutes20 ? 'center' : null,
+        justifyContent: 'center',
       }}
     >
       <Text
@@ -56,7 +57,7 @@ const MyEventComponent = ({ event, position }) => {
       >
         {event.description}
       </Text>
-      <View style={{ flexDirection: 'row', marginLeft: 2.5 }}>
+      <View style={{ flexDirection: 'row', marginLeft: 2.5, paddingTop: 1 }}>
         <View
           style={{
             width:
@@ -64,11 +65,7 @@ const MyEventComponent = ({ event, position }) => {
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 2
                 : 3,
-            height:
-              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
-              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
-                ? 10
-                : 14,
+            height: 13,
             backgroundColor: '#fff',
             marginRight: 4,
           }}
@@ -98,10 +95,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const network = useSelector((state) => state.network);
 
   const scrollRefresh = async () => {
-    setIsRefreshing(true);
     //여기에 refresh 추가
     await loadSuccessSchedules();
-    setIsRefreshing(false);
     return Promise.resolve('true');
   };
 
@@ -135,7 +130,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         color: BACKGROUND_COLOR,
         borderColor: BACKGROUND_COLOR,
       }}
-      headerTextStyle={{ color: BACKGROUND_COLOR }}
+      headerTextStyle={{ color: '#5E5E5E', marginRight: 120 }}
+      formatDateHeader={'M월 DD일'}
       eventContainerStyle={{
         maxWidth: CONTAINER_WIDTH * 0.53,
         minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
@@ -144,6 +140,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       EventComponent={MyEventComponent}
       isRefreshing={isRefreshing}
       scrollToTimeNow={day === 'today' ? true : false}
+      network={network}
       scrollRefresh={() => scrollRefresh()}
       onEventPress={async (event) => {
         passToModalData(event);
@@ -193,6 +190,5 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    marginBottom: 2,
   },
 });

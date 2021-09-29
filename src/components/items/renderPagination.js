@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +21,10 @@ import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/Time';
+import {
+  CONTAINER_HEIGHT,
+  CONTAINER_WIDTH,
+} from 'react-native-week-view/src/utils';
 
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
@@ -55,76 +60,75 @@ const Pagination = ({ taskList, targetId }) => {
           />
         )}
       </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView>
-          {taskList &&
-            taskList.map((item, index) => {
-              return (
-                <View key={`T` + targetId + index}>
-                  {index === 0 ? (
-                    <IconTaskListLeft
-                      name="icon-tasklist-left"
-                      size={106}
-                      color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                        top: 0,
-                      }}
-                    />
-                  ) : (
-                    <IconTaskListLeftFin
-                      name="icon-tasklist-left-fin"
-                      size={106}
-                      color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                        top: 0,
-                      }}
-                    />
-                  )}
-                  <Task
-                    index={index}
-                    text={item}
-                    targetId={targetId}
-                    canPress={
-                      targetId !== 0 &&
-                      network === 'online' &&
-                      toDos?.finishTime > getCurrentTime()
-                    }
-                  />
-                </View>
-              );
-            })}
 
-          {
-            /*수행 리스트  없을때*/
-            !taskList.length && (
-              <View style={{ alignItems: 'center' }}>
-                <IconTaskListLeft
-                  name="icon-tasklist-left"
-                  size={106}
-                  color="#707070"
-                  style={{
-                    position: 'absolute',
-                    left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                    top: 0,
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() =>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        {taskList &&
+          taskList.map((item, index) => {
+            return (
+              <View key={`T` + targetId + index}>
+                {index === 0 ? (
+                  <IconTaskListLeft
+                    name="icon-tasklist-left"
+                    size={106}
+                    color="#707070"
+                    style={{
+                      position: 'absolute',
+                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                      top: 0,
+                    }}
+                  />
+                ) : (
+                  <IconTaskListLeftFin
+                    name="icon-tasklist-left-fin"
+                    size={106}
+                    color="#707070"
+                    style={{
+                      position: 'absolute',
+                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                      top: 0,
+                    }}
+                  />
+                )}
+                <Task
+                  index={index}
+                  text={item}
+                  targetId={targetId}
+                  canPress={
+                    targetId !== 0 &&
                     network === 'online' &&
-                    toDos.finishTime > getCurrentTime() &&
-                    toggleIsVisible()
+                    toDos?.finishTime > getCurrentTime()
                   }
-                  style={styles.nodataTask}
                 />
               </View>
-            )
-          }
-        </ScrollView>
-      </View>
+            );
+          })}
+
+        {
+          /*수행 리스트  없을때*/
+          !taskList.length && (
+            <View style={{ alignItems: 'center' }}>
+              <IconTaskListLeft
+                name="icon-tasklist-left"
+                size={106}
+                color="#707070"
+                style={{
+                  position: 'absolute',
+                  left: SCREEN_HEIGHT > 668 ? -35 : -20,
+                  top: 0,
+                }}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  network === 'online' &&
+                  toDos.finishTime > getCurrentTime() &&
+                  toggleIsVisible()
+                }
+                style={styles.modatalTask}
+              />
+            </View>
+          )
+        }
+      </ScrollView>
 
       <ModalLayout
         isVisible={isVisible}
@@ -158,6 +162,13 @@ export const renderPagination = (index, total, context) => {
 };
 
 const styles = StyleSheet.create({
+  paginationStyle: {
+    position: 'absolute',
+    top: SCREEN_HEIGHT > 668 ? CONTAINER_HEIGHT * 0.6 : CONTAINER_HEIGHT * 0.5,
+    left: SCREEN_HEIGHT > 668 ? -50 : -70,
+    width: 400,
+    height: '100%',
+  },
   taskHeader: {
     paddingHorizontal: 40,
     flexDirection: 'row',
@@ -201,14 +212,8 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 20,
   },
-  paginationStyle: {
-    position: 'absolute',
-    top: 300,
-    left: -50,
-    width: 400,
-    height: '100%',
-  },
-  nodataTask: {
+
+  modatalTask: {
     backgroundColor: '#FFF',
     width: '80%',
     height: 80,
@@ -220,5 +225,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+    marginTop: 10,
+    marginLeft: 20,
   },
 });
