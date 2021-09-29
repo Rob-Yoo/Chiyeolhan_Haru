@@ -96,7 +96,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
 
   const scrollRefresh = async () => {
     //여기에 refresh 추가
-    await loadSuccessSchedules();
+    const isChange = await loadSuccessSchedules();
     return Promise.resolve('true');
   };
 

@@ -374,6 +374,7 @@ export const loadSuccessSchedules = async () => {
   try {
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     let isNeedUpdate = false;
+    let isChange = false;
     const currentTime = getCurrentTime();
     const todosRef = dbService.collection(`${UID}`);
 
@@ -382,6 +383,7 @@ export const loadSuccessSchedules = async () => {
         for (const schedule of successSchedules) {
           if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+            isChange = true;
           }
           if (schedule.finishTime < currentTime) {
             successSchedules = successSchedules.filter(
@@ -403,6 +405,7 @@ export const loadSuccessSchedules = async () => {
     } else {
       console.log('successSchedules 없음');
     }
+    return isChange;
   } catch (e) {
     console.log('loadSuccessSchedules Error :', e);
   }

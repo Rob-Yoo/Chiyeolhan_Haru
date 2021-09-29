@@ -37,16 +37,18 @@ export const noDataAlert = () =>
     cancelable: false,
   });
 
-export const resetAlert = (time) => {
-  const timeExpression = commonTimeExpression(time);
-  Alert.alert(
-    `${timeExpression} 일정의 장소에\n 위치 서비스를 제공할 수 있도록 변경되었습니다.`,
-    '',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
+export const resetAlert = (time = 0) => {
+  let msg;
+
+  if (time == 0) {
+    msg = '다음 일정이 없으므로 위치 서비스를 종료합니다.';
+  } else {
+    const timeExpression = commonTimeExpression(time);
+    msg = `${timeExpression} 일정의 장소에\n 위치 서비스를 제공할 수 있도록 변경되었습니다.`;
+  }
+  Alert.alert(`${msg}`, '', [{ text: '확인' }], {
+    cancelable: false,
+  });
 };
 
 export const resetDenyAlert = () =>
@@ -58,6 +60,11 @@ export const resetDenyAlert = () =>
       cancelable: false,
     },
   );
+
+export const addModifyBlockAlert = () =>
+  Alert.alert('리셋 버튼을 먼저 눌러주세요.', [{ text: '확인' }], {
+    cancelable: false,
+  });
 
 export const favoriteAlert = () =>
   Alert.alert('즐겨찾기에 추가되었습니다.', '', [{ text: '확인' }], {

@@ -6,6 +6,9 @@ import ToDoModal from 'components/modal/ToDoModal';
 
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 
+import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
+import { addModifyBlockAlert } from 'utils/TwoButtonAlert';
+
 const styles = StyleSheet.create({
   addToDoButton: {
     width: 60,
@@ -24,7 +27,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
 });
-
 const ScheduleLayout = ({
   navigation,
   isToday,
@@ -36,11 +38,20 @@ const ScheduleLayout = ({
 }) => {
   const network = useSelector((state) => state.network);
 
+  const pressAddButton = async () => {
+    const block = await checkGeofenceSchedule();
+    if (block) {
+      addModifyBlockAlert();
+    } else {
+      handleModal();
+    }
+  };
+
   return (
     <>
       <View style={{ flex: 1 }}>{children}</View>
       {isToday !== 'yesterday' && network === 'online' ? (
-        <TouchableOpacity style={styles.addToDoButton} onPress={handleModal}>
+        <TouchableOpacity style={styles.addToDoButton} onPress={pressAddButton}>
           <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
         </TouchableOpacity>
       ) : (

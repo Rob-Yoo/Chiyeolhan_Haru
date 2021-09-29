@@ -30,14 +30,25 @@ const TabBar = (props) => {
       let idx = 0;
 
       if (isNeedReset) {
-        for (const data of geofenceData) {
-          if (data.finishTime > currentTime) {
-            break;
+        if (geofenceData.length == 1) {
+          // 현재 일정이 마지막일 때
+          await geofenceUpdate(geofenceData);
+          resetAlert();
+        } else {
+          for (const data of geofenceData) {
+            if (data.finishTime > currentTime) {
+              break;
+            }
+            idx += 1;
           }
-          idx += 1;
+          await geofenceUpdate(geofenceData, idx);
+          if (geofenceData.length === idx) {
+            // 현재시간과 가장 가까운 다음 일정이 없을 때
+            resetAlert();
+          } else {
+            resetAlert(geofenceData[idx].startTime);
+          }
         }
-        await geofenceUpdate(geofenceData, idx);
-        resetAlert(geofenceData[idx].startTime);
       } else {
         resetDenyAlert();
       }
