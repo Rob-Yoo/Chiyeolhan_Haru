@@ -95,10 +95,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const network = useSelector((state) => state.network);
 
   const scrollRefresh = async () => {
-    setIsRefreshing(true);
     //여기에 refresh 추가
     await loadSuccessSchedules();
-    setIsRefreshing(false);
     return Promise.resolve('true');
   };
 
