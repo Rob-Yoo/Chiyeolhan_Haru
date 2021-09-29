@@ -132,6 +132,7 @@ const CurrentMap = ({
 
   const _handlePlacesAPI = async (text) => {
     try {
+      // console.log(GOOGLE_PLACES_API_KEY);
       const place = text.replaceAll(' ', '%20');
       const response = await fetch(
         `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
