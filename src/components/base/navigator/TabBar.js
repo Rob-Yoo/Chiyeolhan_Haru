@@ -5,44 +5,47 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTabBar } from 'redux/store';
 
 import IconHome from '#assets/icons/icon-home';
-import { SCREEN_HEIGHT } from 'constant/const';
 
-const styles = StyleSheet.create({
-  tabUnderBar: {
-    backgroundColor: '#229892',
-    width: 50,
-    height: 3,
-    position: 'absolute',
-    bottom: -10,
-    right: -5,
-  },
-  tabContainer: {
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  tabBarText: {
-    fontFamily: 'GodoB',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginLeft: 25,
-  },
-});
+import { getCurrentTime } from 'utils/Time';
+import { getDataFromAsync } from 'utils/AsyncStorage';
+import { geofenceUpdate } from 'utils/BgGeofence';
+import { resetAlert, resetDenyAlert } from 'utils/TwoButtonAlert';
+import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 
-const handleReset = () => {
-  console.log('여기 리셋');
-};
+import { KEY_VALUE_GEOFENCE } from 'constant/const';
 
-export default function TabBar(props) {
+const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
   //const [visibleName, setVisibleName] = useState(true);
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
   const dispatch = useDispatch();
+
+  const handleReset = async () => {
+    try {
+      // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
+      const isNeedReset = await checkGeofenceSchedule();
+      const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+      const currentTime = getCurrentTime();
+      let idx = 0;
+
+      if (isNeedReset) {
+        for (const data of geofenceData) {
+          if (data.finishTime > currentTime) {
+            break;
+          }
+          idx += 1;
+        }
+        await geofenceUpdate(geofenceData, idx);
+        resetAlert(geofenceData[idx].startTime);
+      } else {
+        resetDenyAlert();
+      }
+    } catch (e) {
+      console.log('handleReset Error :', e);
+    }
+  };
+
   return (
     <View style={styles.tabContainer}>
       {state.routes.map((route, index) => {
@@ -140,4 +143,32 @@ export default function TabBar(props) {
       </TouchableOpacity>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  tabUnderBar: {
+    backgroundColor: '#229892',
+    width: 50,
+    height: 3,
+    position: 'absolute',
+    bottom: -10,
+    right: -5,
+  },
+  tabContainer: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+  },
+  tabBarText: {
+    fontFamily: 'GodoB',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginLeft: 25,
+  },
+});
+
+export default TabBar;

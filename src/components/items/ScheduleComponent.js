@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
+import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 import { deleteToDoDispatch } from 'redux/store';
 
@@ -11,6 +12,7 @@ import {
   deleteTodayAsyncStorageData,
   deleteGeofenceAsyncStorageData,
   getDataFromAsync,
+  loadSuccessSchedules,
 } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
@@ -22,7 +24,6 @@ import {
   KEY_VALUE_GEOFENCE,
   SCREEN_HEIGHT,
 } from 'constant/const';
-import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -98,8 +99,8 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
 
   const scrollRefresh = async () => {
     setIsRefreshing(true);
-    console.log('refresh');
     //여기에 refresh 추가
+    await loadSuccessSchedules();
     setIsRefreshing(false);
     return Promise.resolve('true');
   };

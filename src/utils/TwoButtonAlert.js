@@ -1,5 +1,7 @@
 import { Alert } from 'react-native';
 
+import { commonTimeExpression } from 'utils/Time';
+
 export const alertStartTimePicker = () =>
   Alert.alert(
     `현재 시간보다 이전 시간대는\n선택할 수 없습니다.`,
@@ -34,6 +36,28 @@ export const noDataAlert = () =>
   Alert.alert('검색 결과가 없습니다.', '', [{ text: '확인' }], {
     cancelable: false,
   });
+
+export const resetAlert = (time) => {
+  const timeExpression = commonTimeExpression(time);
+  Alert.alert(
+    `${timeExpression} 일정의 장소에\n 위치 서비스를 제공할 수 있도록 변경되었습니다.`,
+    '',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+};
+
+export const resetDenyAlert = () =>
+  Alert.alert(
+    '리셋 버튼',
+    '일정 장소에 오지 않았거나 내일 일정의\n 위치 서비스를 시작할 때 눌러주세요.',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
 
 export const favoriteAlert = () =>
   Alert.alert('즐겨찾기에 추가되었습니다.', '', [{ text: '확인' }], {
