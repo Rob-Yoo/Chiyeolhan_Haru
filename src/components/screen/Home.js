@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground, AppState } from 'react-native';
+import { View, StyleSheet, AppState } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
@@ -125,10 +125,7 @@ const Home = ({ navigation }) => {
   return isLoading ? (
     <Loading />
   ) : (
-    <ImageBackground
-      source={{ uri: 'homeBackground' }}
-      style={styles.homeBackground}
-    >
+    <View style={styles.wrap}>
       <View style={styles.homeContainer}>
         <View style={styles.homeHeader}>
           <View style={styles.homeHeaderText}>
@@ -147,22 +144,23 @@ const Home = ({ navigation }) => {
         </View>
         <HomeContent todoArr={todoArr} />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
 export default Home;
 
 const styles = StyleSheet.create({
-  homeBackground: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    paddingHorizontal: 20,
+  wrap: {
+    flex: 1,
+    backgroundColor: '#ECF5F471',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   homeContainer: {
     width: CONTAINER_WIDTH,
     height: CONTAINER_HEIGHT,
+    backgroundColor: '#ECF5F471',
   },
   homeHeader: {
     flex: 1.3,

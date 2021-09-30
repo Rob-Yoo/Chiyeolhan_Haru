@@ -4,7 +4,7 @@ import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
-import { deleteToDoDispatch } from 'redux/store';
+import { deleteToDoDispatch, init } from 'redux/store';
 
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
@@ -14,8 +14,9 @@ import {
   getDataFromAsync,
   loadSuccessSchedules,
 } from 'utils/AsyncStorage';
-import { geofenceUpdate } from 'utils/BgGeofence';
+import { dbService } from 'utils/firebase';
 import { getCurrentTime } from 'utils/Time';
+import { geofenceUpdate } from 'utils/BgGeofence';
 
 import {
   DAY,
@@ -23,6 +24,8 @@ import {
   YEAR,
   KEY_VALUE_GEOFENCE,
   SCREEN_HEIGHT,
+  UID,
+  YESTERDAY,
 } from 'constant/const';
 
 const BACKGROUND_COLOR = '#ECF5F471';
@@ -89,32 +92,45 @@ const MyEventComponent = ({ event, position }) => {
   );
 };
 
+const getSelectedDate = (day) => {
+  let weekStart = new Date().getDay();
+  switch (day) {
+    case 'today':
+      return [new Date(YEAR, MONTH - 1, DAY), weekStart];
+
+    case 'yesterday':
+      weekStart -= 1;
+      return [new Date(YEAR, MONTH - 1, DAY - 1), weekStart];
+
+    case 'tomorrow':
+      weekStart = weekStart + 1;
+      return [new Date(YEAR, MONTH - 1, DAY + 1), weekStart];
+  }
+};
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
+  let [selectedDate, weekStart] = getSelectedDate(day);
   const dispatch = useDispatch();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
   const network = useSelector((state) => state.network);
 
   const scrollRefresh = async () => {
-    //여기에 refresh 추가
+    let rowObj = {};
     const isChange = await loadSuccessSchedules();
+    const row = await dbService.collection(`${UID}`).get();
+    row.forEach((data) => (rowObj[data.id] = data.data()));
+    if (Object.keys(rowObj).length === 0) {
+      //데이터가 아무것도 없을때
+      return Promise.resolve('true');
+    }
+    let filterObj = {};
+    for (key in rowObj) {
+      if (rowObj[key].date >= YESTERDAY)
+        filterObj = { ...filterObj, [key]: rowObj[key] };
+    }
+    dispatch(init(filterObj));
     return Promise.resolve('true');
   };
-
-  let weekStart = new Date().getDay();
-  let selectedDate = '';
-  switch (day) {
-    case 'today':
-      selectedDate = new Date(YEAR, MONTH - 1, DAY);
-      break;
-    case 'yesterday':
-      selectedDate = new Date(YEAR, MONTH - 1, DAY - 1);
-      weekStart -= 1;
-      break;
-    case 'tomorrow':
-      selectedDate = new Date(YEAR, MONTH - 1, DAY + 1);
-      weekStart = weekStart + 1;
-      break;
-  }
 
   return (
     <WeekView
