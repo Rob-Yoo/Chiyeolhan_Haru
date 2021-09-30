@@ -125,14 +125,13 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   taskContainer: {
-    flex: 1,
     alignItems: 'center',
     marginTop: 10,
     maxHeight: 100,
   },
   task: {
     backgroundColor: '#FFF',
-    width: '80%',
+    width: '75%',
     height: 80,
     borderRadius: 20,
     paddingHorizontal: 10,

@@ -12,8 +12,7 @@ import { geofenceUpdate } from 'utils/BgGeofence';
 import { resetAlert, resetDenyAlert } from 'utils/TwoButtonAlert';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 
-import { KEY_VALUE_GEOFENCE } from 'constant/const';
-import { SCREEN_WIDTH } from '../../../constant/const';
+import { KEY_VALUE_GEOFENCE, SCREEN_WIDTH } from 'constant/const';
 
 const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
@@ -67,8 +66,8 @@ const TabBar = (props) => {
       <View style={styles.tabContainer}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
-          let label = options.tabBarLabel;
           const isFocused = state.index === index;
+          let label = options.tabBarLabel;
 
           const onLongPress = () => {
             if (visibleName === 'today') {
@@ -179,6 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingVertical: 10,
   },
   tabUnderBar: {
     backgroundColor: '#229892',
@@ -193,7 +193,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 15,
   },
   tabBarText: {
     fontFamily: 'GodoB',

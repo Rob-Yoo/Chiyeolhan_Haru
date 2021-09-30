@@ -15,22 +15,16 @@ import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
+import { getDate } from 'utils/Time';
 
-import {
-  UID,
-  TODAY,
-  YESTERDAY,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  CONTAINER_HEIGHT,
-  CONTAINER_WIDTH,
-} from 'constant/const';
+import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
 const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
 
+  const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   const mounted = useRef(false);

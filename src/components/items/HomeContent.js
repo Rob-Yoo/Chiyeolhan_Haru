@@ -5,12 +5,13 @@ import Swiper from 'react-native-swiper';
 import { renderPagination } from 'components/items/renderPagination';
 import { Card } from 'components/items/CardItem';
 
-import { getCurrentTime } from 'utils/Time';
+import { getCurrentTime, getDate } from 'utils/Time';
 
-import { TODAY, SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 const HomeContent = (props) => {
   let todoArr = props.todoArr;
+  const { TODAY } = getDate();
   const [isData, setIsData] = useState(
     todoArr[0]?.id === undefined ? false : true,
   );

@@ -1,8 +1,7 @@
-import { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } from 'constant/const';
-
-import { getCurrentTime } from 'utils/Time';
+import { getCurrentTime, getDate } from 'utils/Time';
 
 export const makeScheduleDate = (toDos, toDoArr, day) => {
+  const { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } = getDate();
   for (key in toDos) {
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&

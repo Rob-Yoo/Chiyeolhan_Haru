@@ -15,7 +15,7 @@ import {
   loadSuccessSchedules,
 } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
-import { getCurrentTime } from 'utils/Time';
+import { getCurrentTime, getDate } from 'utils/Time';
 import { geofenceUpdate } from 'utils/BgGeofence';
 
 import {
@@ -94,6 +94,8 @@ const MyEventComponent = ({ event, position }) => {
 
 const getSelectedDate = (day) => {
   let weekStart = new Date().getDay();
+  const { YEAR, MONTH, DAY } = getDate();
+
   switch (day) {
     case 'today':
       return [new Date(YEAR, MONTH - 1, DAY), weekStart];
@@ -107,30 +109,32 @@ const getSelectedDate = (day) => {
       return [new Date(YEAR, MONTH - 1, DAY + 1), weekStart];
   }
 };
+
+const scrollRefresh = async () => {
+  let rowObj = {};
+  let filterObj = {};
+  const { YESTERDAY } = getDate();
+
+  await loadSuccessSchedules();
+  const row = await dbService.collection(`${UID}`).get();
+  row.forEach((data) => (rowObj[data.id] = data.data()));
+  if (Object.keys(rowObj).length === 0) {
+    //데이터가 아무것도 없을때
+    return Promise.resolve('true');
+  }
+  for (key in rowObj) {
+    if (rowObj[key].date >= YESTERDAY)
+      filterObj = { ...filterObj, [key]: rowObj[key] };
+  }
+  dispatch(init(filterObj));
+  return Promise.resolve('true');
+};
+
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   let [selectedDate, weekStart] = getSelectedDate(day);
-  const dispatch = useDispatch();
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
-
-  const scrollRefresh = async () => {
-    let rowObj = {};
-    const isChange = await loadSuccessSchedules();
-    const row = await dbService.collection(`${UID}`).get();
-    row.forEach((data) => (rowObj[data.id] = data.data()));
-    if (Object.keys(rowObj).length === 0) {
-      //데이터가 아무것도 없을때
-      return Promise.resolve('true');
-    }
-    let filterObj = {};
-    for (key in rowObj) {
-      if (rowObj[key].date >= YESTERDAY)
-        filterObj = { ...filterObj, [key]: rowObj[key] };
-    }
-    dispatch(init(filterObj));
-    return Promise.resolve('true');
-  };
 
   return (
     <WeekView

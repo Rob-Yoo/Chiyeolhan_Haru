@@ -25,21 +25,9 @@ export const GOOGLE_API_URL =
 export const GOOGLE_PARARMS =
   'inputtype=textquery&language=ko&fields=formatted_address,name,geometry';
 
-// Date 관련
-const date = new Date();
-export const YEAR = date.getFullYear();
-export const MONTH = date.getMonth() + 1;
-export const DAY = date.getDate();
-export const TODAY =
-  (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY}` : DAY);
-export const YESTERDAY =
-  (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY - 1}` : DAY - 1);
-export const TOMORROW =
-  (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY + 1 < 10 ? `0${DAY + 1}` : DAY + 1);
-
 /*Layout */
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
   Dimensions.get('window');
 export const CONTENT_OFFSET = 16;
 export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
-export const CONTAINER_WIDTH = SCREEN_WIDTH - 20;
+export const CONTAINER_WIDTH = SCREEN_WIDTH - 50;

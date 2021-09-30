@@ -39,13 +39,11 @@ import {
   longTaskList,
   longTodoTitle,
 } from 'utils/TwoButtonAlert';
-import { getCurrentTime, getTimeDiff } from 'utils/Time';
+import { getCurrentTime, getTimeDiff, getDate } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
 import { addModifyBlockAlert } from 'utils/TwoButtonAlert';
 
 import {
-  TODAY,
-  TOMORROW,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW_DATA,
@@ -63,6 +61,7 @@ export const ToDoModal = ({
   setPassModalData,
   navigateFavorite = null,
 }) => {
+  const { TODAY, TOMORROW } = getDate();
   const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos);
@@ -231,7 +230,7 @@ export const ToDoModal = ({
     return isNeedAlert;
   };
 
-  const todoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
+  const toDoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
     if (network === 'offline') {
       modalHandler();
       return;
@@ -351,12 +350,13 @@ export const ToDoModal = ({
           modalHandler();
           alertInValidSubmit();
         } else {
-          //passModalData
+          //passModalData 수정일때
           !passModalData?.description
             ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-            : await todoEdit(todoStartTime, todoFinishTime, todoTitle);
+            : await toDoEdit(todoStartTime, todoFinishTime, todoTitle);
         }
       } else {
+        //일정 생성 일때
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
@@ -475,14 +475,6 @@ export const ToDoModal = ({
   const editSchedule = (item, index) => {
     setTask({ item, index });
     toggleIsVisible(inputIsVisible, setInputIsVisible);
-  };
-
-  const gotoFavorite = (isToday) => {
-    modalHandler();
-    navigation.navigate('ModalStack', {
-      screen: 'Favorite',
-      params: { isToday },
-    });
   };
 
   return (

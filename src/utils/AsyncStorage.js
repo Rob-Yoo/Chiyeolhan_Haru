@@ -5,11 +5,9 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
 import { cancelNotification } from 'utils/Notification';
-import { isEarliestTime, getCurrentTime } from 'utils/Time';
+import { isEarliestTime, getCurrentTime, getDate } from 'utils/Time';
 
 import {
-  TODAY,
-  TOMORROW,
   UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_TODAY,
@@ -22,6 +20,7 @@ import {
   KEY_VALUE_FAVORITE,
   KEY_VALUE_SUCCESS,
 } from 'constant/const';
+const { TODAY, TOMORROW } = getDate();
 
 const setTomorrowData = async (array) => {
   try {

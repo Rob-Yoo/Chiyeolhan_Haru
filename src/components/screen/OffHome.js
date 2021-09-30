@@ -12,13 +12,13 @@ import HomeContent from 'components/items/HomeContent';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
+import { getDate } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 
 import {
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
-  TODAY,
 } from 'constant/const';
 import {
   SCREEN_HEIGHT,
@@ -29,6 +29,7 @@ import {
 const ScheduleButton = styled.TouchableOpacity``;
 
 const OffHome = ({ navigation, route }) => {
+  const { TODAY } = getDate();
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});

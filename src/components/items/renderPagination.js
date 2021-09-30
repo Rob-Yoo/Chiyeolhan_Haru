@@ -42,7 +42,6 @@ const Pagination = ({ taskList, targetId }) => {
       dispatch(add({ targetId, taskTitle }));
     setTaskTitle(null);
   };
-
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
@@ -61,74 +60,76 @@ const Pagination = ({ taskList, targetId }) => {
         )}
       </View>
 
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-        {taskList &&
-          taskList.map((item, index) => {
-            return (
-              <View key={`T` + targetId + index}>
-                {index === 0 ? (
-                  <IconTaskListLeft
-                    name="icon-tasklist-left"
-                    size={106}
-                    color="#707070"
-                    style={{
-                      position: 'absolute',
-                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                      top: 0,
-                    }}
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {taskList &&
+            taskList.map((item, index) => {
+              return (
+                <View key={`T` + targetId + index}>
+                  {index === 0 ? (
+                    <IconTaskListLeft
+                      name="icon-tasklist-left"
+                      size={106}
+                      color="#707070"
+                      style={{
+                        position: 'absolute',
+                        left: SCREEN_HEIGHT > 668 ? -15 : -10,
+                        top: 0,
+                      }}
+                    />
+                  ) : (
+                    <IconTaskListLeftFin
+                      name="icon-tasklist-left-fin"
+                      size={106}
+                      color="#707070"
+                      style={{
+                        position: 'absolute',
+                        left: SCREEN_HEIGHT > 668 ? -15 : -10,
+                        top: 0,
+                      }}
+                    />
+                  )}
+                  <Task
+                    index={index}
+                    text={item}
+                    targetId={targetId}
+                    canPress={
+                      targetId !== 0 &&
+                      network === 'online' &&
+                      toDos?.finishTime > getCurrentTime()
+                    }
                   />
-                ) : (
-                  <IconTaskListLeftFin
-                    name="icon-tasklist-left-fin"
-                    size={106}
-                    color="#707070"
-                    style={{
-                      position: 'absolute',
-                      left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                      top: 0,
-                    }}
-                  />
-                )}
-                <Task
-                  index={index}
-                  text={item}
-                  targetId={targetId}
-                  canPress={
-                    targetId !== 0 &&
+                </View>
+              );
+            })}
+
+          {
+            /*수행 리스트  없을때*/
+            !taskList.length && (
+              <View style={{ alignItems: 'center' }}>
+                <IconTaskListLeft
+                  name="icon-tasklist-left"
+                  size={106}
+                  color="#707070"
+                  style={{
+                    position: 'absolute',
+                    left: SCREEN_HEIGHT > 668 ? -15 : -10,
+                    top: 0,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() =>
                     network === 'online' &&
-                    toDos?.finishTime > getCurrentTime()
+                    toDos.finishTime > getCurrentTime() &&
+                    toggleIsVisible()
                   }
+                  style={styles.modatalTask}
                 />
               </View>
-            );
-          })}
-
-        {
-          /*수행 리스트  없을때*/
-          !taskList.length && (
-            <View style={{ alignItems: 'center' }}>
-              <IconTaskListLeft
-                name="icon-tasklist-left"
-                size={106}
-                color="#707070"
-                style={{
-                  position: 'absolute',
-                  left: SCREEN_HEIGHT > 668 ? -35 : -20,
-                  top: 0,
-                }}
-              />
-              <TouchableOpacity
-                onPress={() =>
-                  network === 'online' &&
-                  toDos.finishTime > getCurrentTime() &&
-                  toggleIsVisible()
-                }
-                style={styles.modatalTask}
-              />
-            </View>
-          )
-        }
-      </ScrollView>
+            )
+          }
+        </ScrollView>
+      </View>
 
       <ModalLayout
         isVisible={isVisible}
@@ -152,6 +153,7 @@ const Pagination = ({ taskList, targetId }) => {
 };
 
 export const renderPagination = (index, total, context) => {
+  console.log('pagination');
   if (context.props.toDos[index] !== undefined) {
     const taskList = context?.props?.toDos[index].toDos;
     const targetId = context?.props?.toDos[index].id;
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
 
   modatalTask: {
     backgroundColor: '#FFF',
-    width: '80%',
+    width: '75%',
     height: 80,
     borderRadius: 20,
     shadowColor: '#00000029',
