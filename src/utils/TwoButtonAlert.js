@@ -54,7 +54,22 @@ export const resetAlert = (time = 0) => {
 export const resetDenyAlert = () =>
   Alert.alert(
     '리셋 버튼',
-    '일정 장소에 오지 않았거나 내일 일정의\n 위치 서비스를 시작할 때 눌러주세요.',
+    '일정 장소에 오지 않았을 경우 눌러주세요.',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+
+export const startAlert = () =>
+  Alert.alert('일정에 대한 위치 서비스를 시작합니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
+export const startDenyAlert = () =>
+  Alert.alert(
+    '시작 버튼',
+    `내일 일정의 위치 서비스를 시작할 때 눌러주세요. 위치 서비스를 시작하면 백그라운드에서 계속 동작하기 때문에 배터리가 소모될 수 있습니다.\n따라서, 내일 첫 일정의 시작시간과 가까운 시간대에 누르는 것이 좋습니다.`,
     [{ text: '확인' }],
     {
       cancelable: false,

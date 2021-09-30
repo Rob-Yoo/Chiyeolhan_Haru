@@ -3,6 +3,7 @@ import DeviceInfo from 'react-native-device-info';
 
 //async storage key
 export const KEY_VALUE_TODAY = 'today';
+export const KEY_VALUE_DAY_CHANGE = 'isDayChange';
 export const KEY_VALUE_EARLY = 'isEarly';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_PROGRESSING = 'progressingSchedule';

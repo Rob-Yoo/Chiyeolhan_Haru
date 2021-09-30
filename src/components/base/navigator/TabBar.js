@@ -9,10 +9,19 @@ import IconHome from '#assets/icons/icon-home';
 import { getCurrentTime } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
-import { resetAlert, resetDenyAlert } from 'utils/TwoButtonAlert';
+import {
+  resetAlert,
+  resetDenyAlert,
+  startDenyAlert,
+  startAlert,
+} from 'utils/TwoButtonAlert';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 
-import { KEY_VALUE_GEOFENCE, SCREEN_WIDTH } from 'constant/const';
+import {
+  KEY_VALUE_GEOFENCE,
+  KEY_VALUE_DAY_CHANGE,
+  SCREEN_WIDTH,
+} from 'constant/const';
 
 const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
@@ -57,7 +66,19 @@ const TabBar = (props) => {
     }
   };
 
-  const handleReset2 = () => {
+  const handleReset2 = async () => {
+    try {
+      const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
+      if (isDayChange) {
+        const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+        await geofenceUpdate(geofenceData);
+        startAlert();
+      } else {
+        startDenyAlert();
+      }
+    } catch (e) {
+      console.log('handleReset2 Error : ', e);
+    }
     console.log('handleReset2');
   };
 
@@ -152,7 +173,7 @@ const TabBar = (props) => {
           }}
           onPress={() => network === 'online' && handleReset2()}
         >
-          <Text>리셋2</Text>
+          <Text>시작버튼</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
