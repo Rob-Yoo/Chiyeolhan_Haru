@@ -13,6 +13,7 @@ import { resetAlert, resetDenyAlert } from 'utils/TwoButtonAlert';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 
 import { KEY_VALUE_GEOFENCE } from 'constant/const';
+import { SCREEN_WIDTH } from '../../../constant/const';
 
 const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
@@ -57,41 +58,67 @@ const TabBar = (props) => {
     }
   };
 
+  const handleReset2 = () => {
+    console.log('handleReset2');
+  };
+
   return (
-    <View style={styles.tabContainer}>
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        let label = options.tabBarLabel;
-        const isFocused = state.index === index;
+    <View style={styles.wrap}>
+      <View style={styles.tabContainer}>
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
+          let label = options.tabBarLabel;
+          const isFocused = state.index === index;
 
-        const onLongPress = () => {
-          if (visibleName === 'today') {
-            dispatch(setTabBar('yesterday'));
-            navigation.navigate('yesterday');
-          } else {
-            dispatch(setTabBar('today'));
-            navigation.navigate('today');
-          }
-        };
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            targt: route.key,
-            canPreventDefault: true,
-          });
-          if (!isFocused && !event.defulatPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
+          const onLongPress = () => {
+            if (visibleName === 'today') {
+              dispatch(setTabBar('yesterday'));
+              navigation.navigate('yesterday');
+            } else {
+              dispatch(setTabBar('today'));
+              navigation.navigate('today');
+            }
+          };
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              targt: route.key,
+              canPreventDefault: true,
+            });
+            if (!isFocused && !event.defulatPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
 
-        if (route.name === 'today' || route.name === 'yesterday') {
+          if (route.name === 'today' || route.name === 'yesterday') {
+            return (
+              <TouchableOpacity
+                swipeEnabled={options.swipeEnabled}
+                isFocused={isFocused}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                key={`tab_${index}`}
+              >
+                <Text
+                  style={[
+                    styles.tabBarText,
+                    { color: isFocused ? '#229892' : '#ADADAD' },
+                  ]}
+                  isFocused={isFocused}
+                >
+                  {label}
+                </Text>
+                {isFocused ? <View style={styles.tabUnderBar} /> : null}
+              </TouchableOpacity>
+            );
+          }
+
           return (
             <TouchableOpacity
-              swipeEnabled={options.swipeEnabled}
               isFocused={isFocused}
               onPress={onPress}
-              onLongPress={onLongPress}
               key={`tab_${index}`}
+              style={{ marginRight: 120 }}
             >
               <Text
                 style={[
@@ -105,58 +132,54 @@ const TabBar = (props) => {
               {isFocused ? <View style={styles.tabUnderBar} /> : null}
             </TouchableOpacity>
           );
-        }
-
-        return (
-          <TouchableOpacity
-            isFocused={isFocused}
-            onPress={onPress}
-            key={`tab_${index}`}
-            style={{ marginRight: 120 }}
-          >
-            <Text
-              style={[
-                styles.tabBarText,
-                { color: isFocused ? '#229892' : '#ADADAD' },
-              ]}
-              isFocused={isFocused}
-            >
-              {label}
-            </Text>
-            {isFocused ? <View style={styles.tabUnderBar} /> : null}
-          </TouchableOpacity>
-        );
-      })}
-      <TouchableOpacity
-        style={{
-          width: 30,
-          height: 30,
-          backgroundColor: 'red',
-          borderRadius: 30,
-        }}
-        onPress={() => handleReset()}
-      >
-        <Text>리셋버튼</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() =>
-          network === 'online'
-            ? navigation.navigate('Home', { screen: 'Home' })
-            : navigation.navigate('OffHome', { screen: 'OffHome' })
-        }
-      >
-        <IconHome
-          name="icon-home"
-          size={20}
-          style={[styles.tabBarText, { color: '#717171' }]}
-        />
-      </TouchableOpacity>
+        })}
+        <TouchableOpacity
+          style={{
+            width: 30,
+            height: 30,
+            backgroundColor: 'red',
+            borderRadius: 30,
+          }}
+          onPress={() => network === 'online' && handleReset()}
+        >
+          <Text>리셋버튼</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            width: 30,
+            height: 30,
+            backgroundColor: 'red',
+            borderRadius: 30,
+          }}
+          onPress={() => network === 'online' && handleReset2()}
+        >
+          <Text>리셋2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            network === 'online'
+              ? navigation.navigate('Home', { screen: 'Home' })
+              : navigation.navigate('OffHome', { screen: 'OffHome' })
+          }
+        >
+          <IconHome
+            name="icon-home"
+            size={20}
+            style={[styles.tabBarText, { color: '#717171' }]}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrap: {
+    width: SCREEN_WIDTH,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
   tabUnderBar: {
     backgroundColor: '#229892',
     width: 50,
@@ -166,13 +189,11 @@ const styles = StyleSheet.create({
     right: -5,
   },
   tabContainer: {
-    backgroundColor: '#fff',
+    width: '100%',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingTop: 20,
     paddingBottom: 20,
-    paddingHorizontal: 20,
   },
   tabBarText: {
     fontFamily: 'GodoB',
