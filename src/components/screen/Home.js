@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import { init, setNetwork, setTabBar } from 'redux/store';
+import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
 import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
@@ -23,9 +23,9 @@ const ScheduleButton = styled.TouchableOpacity``;
 
 const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-
   let todoArr = [];
   const dispatch = useDispatch();
+  const homeRender = useSelector((state) => state.homerender);
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
   const toDos = useSelector((state) => state.toDos);
@@ -64,7 +64,6 @@ const Home = ({ navigation }) => {
 
   const getToDos = async () => {
     try {
-      console.log('getToDos');
       dispatch(setNetwork('online'));
       dispatch(setTabBar('today'));
       setLoading(true);
@@ -90,6 +89,10 @@ const Home = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    dispatch(setHomeRender(false));
+  }, [homeRender]);
+
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
@@ -102,9 +105,8 @@ const Home = ({ navigation }) => {
     }
     return 0;
   });
-  console.log('Home');
 
-  return isLoading ? (
+  return isLoading || homeRender ? (
     <Loading />
   ) : (
     <View style={styles.wrap}>

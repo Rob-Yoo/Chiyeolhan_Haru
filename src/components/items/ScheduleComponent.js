@@ -20,7 +20,7 @@ import { geofenceUpdate } from 'utils/BgGeofence';
 
 import { KEY_VALUE_GEOFENCE, SCREEN_HEIGHT, UID } from 'constant/const';
 import { checkDayChange } from '../../utils/AsyncStorage';
-import { setHomeRender } from '../../redux/store';
+import { clear, setHomeRender } from '../../redux/store';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -105,10 +105,38 @@ const getSelectedDate = (day) => {
 };
 
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
-  let [selectedDate, weekStart] = getSelectedDate(day);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
+  let [selectedDate, weekStart] = getSelectedDate(day);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    return async () => {
+      const isDayChange = await checkDayChange();
+      if (!isDayChange) {
+        console.log('not / unmounted');
+        return;
+      } else {
+        console.log('unmounted');
+        //dispatch(clear());
+        let rowObj = {};
+        let filterObj = {};
+        const { YESTERDAY } = getDate();
+        const row = await dbService.collection(`${UID}`).get();
+        row.forEach((data) => (rowObj[data.id] = data.data()));
+        if (Object.keys(rowObj).length === 0) {
+          //데이터가 아무것도 없을때
+          return Promise.resolve('true');
+        }
+        for (key in rowObj) {
+          if (rowObj[key].date >= YESTERDAY)
+            filterObj = { ...filterObj, [key]: rowObj[key] };
+        }
+        dispatch(init(filterObj));
+        dispatch(setHomeRender(true));
+      }
+    };
+  }, []);
 
   const scrollRefresh = async () => {
     try {
