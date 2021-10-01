@@ -4,7 +4,7 @@ import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
-import { deleteToDoDispatch, init } from 'redux/store';
+import { deleteToDoDispatch, init, setHomeRender } from 'redux/store';
 
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
@@ -13,14 +13,13 @@ import {
   deleteGeofenceAsyncStorageData,
   getDataFromAsync,
   loadSuccessSchedules,
+  checkDayChange,
 } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
 import { getCurrentTime, getDate } from 'utils/Time';
 import { geofenceUpdate } from 'utils/BgGeofence';
 
 import { KEY_VALUE_GEOFENCE, SCREEN_HEIGHT, UID } from 'constant/const';
-import { checkDayChange } from '../../utils/AsyncStorage';
-import { clear, setHomeRender } from '../../redux/store';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
