@@ -414,7 +414,7 @@ export const ToDoModal = ({
       alertNotFillIn('일정의 시작시간을 등록해주세요.');
     } else if (todoFinishTime === undefined) {
       alertNotFillIn('일정의 끝시간을 등록해주세요.');
-    } else if (todoTitle === undefined) {
+    } else if (todoTitle.length === 0) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
       if (!passModalData?.description && isToday) {

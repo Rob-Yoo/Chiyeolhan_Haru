@@ -157,7 +157,6 @@ const Pagination = ({ taskList, targetId }) => {
 };
 
 export const renderPagination = (index, total, context) => {
-  console.log('pagination');
   if (context.props.toDos[index] !== undefined) {
     const taskList = context?.props?.toDos[index].toDos;
     const targetId = context?.props?.toDos[index].id;
