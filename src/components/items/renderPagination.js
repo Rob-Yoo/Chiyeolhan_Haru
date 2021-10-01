@@ -61,7 +61,11 @@ const Pagination = ({ taskList, targetId }) => {
       </View>
 
       <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: 300,
+          }}
+        >
           {taskList &&
             taskList.map((item, index) => {
               return (

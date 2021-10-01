@@ -652,7 +652,7 @@ export const ToDoModal = ({
           <Text style={styles.taskTitle}>수행리스트</Text>
           <ScrollView
             contentContainerStyle={{
-              flexGrow: 1,
+              paddingBottom: 300,
             }}
           >
             {taskList.map((item, index) => (
