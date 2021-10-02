@@ -10,6 +10,7 @@ import { makeScheduleDate } from 'utils/makeScheduleData';
 import { KEY_VALUE_START_TIME } from 'constant/const';
 
 const ScheduleToday = ({ navigation }) => {
+  console.log('today');
   const todayData = [];
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);

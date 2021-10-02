@@ -77,10 +77,21 @@ const tabBarSlice = createSlice({
   },
 });
 
+const homeRenderSlice = createSlice({
+  name: 'homeRenderReducer',
+  initialState: false,
+  reducers: {
+    setHomeRender: (state, action) => {
+      return (state = action.payload);
+    },
+  },
+});
+
 const reducer = combineReducers({
   toDos: toDosSlice.reducer,
   network: networkSlice.reducer,
   tabBar: tabBarSlice.reducer,
+  homerender: homeRenderSlice.reducer,
 });
 
 export const {
@@ -94,6 +105,7 @@ export const {
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
 export const { setTabBar } = tabBarSlice.actions;
+export const { setHomeRender } = homeRenderSlice.actions;
 
 export default configureStore({
   reducer,
