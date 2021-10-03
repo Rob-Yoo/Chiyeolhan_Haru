@@ -4,7 +4,7 @@ import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
-import { deleteToDoDispatch, init, setHomeRender } from 'redux/store';
+import { deleteToDoDispatch, init } from 'redux/store';
 
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
@@ -13,13 +13,14 @@ import {
   deleteGeofenceAsyncStorageData,
   getDataFromAsync,
   loadSuccessSchedules,
-  checkDayChange,
 } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
 import { getCurrentTime, getDate } from 'utils/Time';
 import { geofenceUpdate } from 'utils/BgGeofence';
 
 import { KEY_VALUE_GEOFENCE, SCREEN_HEIGHT, UID } from 'constant/const';
+import { checkDayChange } from '../../utils/AsyncStorage';
+import { clear, setHomeRender } from '../../redux/store';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -103,21 +104,44 @@ const getSelectedDate = (day) => {
   }
 };
 
+const scrollRefresh = async (dispatch) => {
+  try {
+    await loadSuccessSchedules();
+
+    let rowObj = {};
+    let filterObj = {};
+    const { YESTERDAY } = getDate();
+    const row = await dbService.collection(`${UID}`).get();
+    row.forEach((data) => (rowObj[data.id] = data.data()));
+    if (Object.keys(rowObj).length === 0) {
+      //데이터가 아무것도 없을때
+      return Promise.resolve('true');
+    }
+    for (key in rowObj) {
+      if (rowObj[key].date >= YESTERDAY)
+        filterObj = { ...filterObj, [key]: rowObj[key] };
+    }
+    dispatch(init(filterObj));
+    return Promise.resolve('true');
+  } catch (e) {
+    console.log('scrollRefresh Error :', e);
+  }
+};
+
 export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const dispatch = useDispatch();
   const network = useSelector((state) => state.network);
-  let [selectedDate, weekStart] = getSelectedDate(day);
+  let [tempDate, tempWeekStart] = getSelectedDate(day);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [weekStart, setWeekStart] = useState(tempWeekStart);
+  const [selectedDate, setSelectedDate] = useState(tempDate);
 
   useEffect(() => {
     return async () => {
       const isDayChange = await checkDayChange();
       if (!isDayChange) {
-        console.log('not / unmounted');
         return;
       } else {
-        console.log('unmounted');
-        //dispatch(clear());
         let rowObj = {};
         let filterObj = {};
         const { YESTERDAY } = getDate();
@@ -137,29 +161,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
     };
   }, []);
 
-  const scrollRefresh = async () => {
-    try {
-      await loadSuccessSchedules();
-
-      let rowObj = {};
-      let filterObj = {};
-      const { YESTERDAY } = getDate();
-      const row = await dbService.collection(`${UID}`).get();
-      row.forEach((data) => (rowObj[data.id] = data.data()));
-      if (Object.keys(rowObj).length === 0) {
-        //데이터가 아무것도 없을때
-        return Promise.resolve('true');
-      }
-      for (key in rowObj) {
-        if (rowObj[key].date >= YESTERDAY)
-          filterObj = { ...filterObj, [key]: rowObj[key] };
-      }
-      dispatch(init(filterObj));
-      return Promise.resolve('true');
-    } catch (e) {
-      console.log('scrollRefresh Error :', e);
-    }
-  };
   return (
     <WeekView
       events={events}
@@ -185,7 +186,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       isRefreshing={isRefreshing}
       scrollToTimeNow={day === 'today' ? true : false}
       network={network}
-      scrollRefresh={() => scrollRefresh()}
+      scrollRefresh={() => scrollRefresh(dispatch)}
       onEventPress={async (event) => {
         passToModalData(event);
       }}
