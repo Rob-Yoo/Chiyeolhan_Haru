@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { setTabBar } from 'redux/store';
 
@@ -16,6 +17,7 @@ import {
   startAlert,
 } from 'utils/TwoButtonAlert';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
+import { cancelNotification } from 'utils/Notification';
 
 import {
   KEY_VALUE_GEOFENCE,
@@ -48,6 +50,7 @@ const TabBar = (props) => {
             if (data.finishTime > currentTime) {
               break;
             }
+            cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
             idx += 1;
           }
           await geofenceUpdate(geofenceData, idx);
@@ -71,15 +74,14 @@ const TabBar = (props) => {
       const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
       if (isDayChange) {
         const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-        await geofenceUpdate(geofenceData);
-        startAlert();
+        startAlert(geofenceUpdate, geofenceData);
+        await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
       } else {
         startDenyAlert();
       }
     } catch (e) {
       console.log('handleReset2 Error : ', e);
     }
-    console.log('handleReset2');
   };
 
   return (

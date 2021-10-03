@@ -74,13 +74,13 @@ export const isEarliestTime = (earliestTime, willAddTime) => {
 };
 
 export const commonTimeExpression = (time) => {
-  const hour = time?.slice(0, 2);
-  let min = time?.slice(3);
+  const hour = time.slice(0, 2);
+  let min = time.slice(3);
   let sdHour; // signle-digit hour
   let msg;
 
   if (hour < '10') {
-    sdHour = hour.slice(1);
+    sdHour = hour.slice(1); // ex) "09" => "9"
   }
 
   if (min < '10') {

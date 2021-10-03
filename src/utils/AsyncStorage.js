@@ -21,7 +21,6 @@ import {
   KEY_VALUE_SUCCESS,
   KEY_VALUE_DAY_CHANGE,
 } from 'constant/const';
-const { TODAY, TOMORROW } = getDate();
 
 const setTomorrowData = async (array) => {
   try {
@@ -218,14 +217,17 @@ const setGeofenceDataArray = async (todayToDos) => {
   }
 };
 
-export const dbToAsyncStorage = async (isChangeEarliest) => {
+export const dbToAsyncStorage = async (isChangeEarliest = null) => {
   try {
+    const { TODAY } = getDate();
     const todosRef = dbService.collection(`${UID}`);
     const todayToDos = await todosRef.where('date', '==', TODAY).get();
 
     await setTodayToDoArray(todayToDos);
     await setGeofenceDataArray(todayToDos);
-    await geofenceScheduler(isChangeEarliest);
+    if (isChangeEarliest !== null) {
+      await geofenceScheduler(isChangeEarliest);
+    }
   } catch (e) {
     console.log('dbToAsyncStorage Error :', e);
   }
@@ -233,6 +235,7 @@ export const dbToAsyncStorage = async (isChangeEarliest) => {
 
 export const dbToAsyncTomorrow = async () => {
   try {
+    const { TOMORROW } = getDate();
     const tomorrowDataArray = [];
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', `${TOMORROW}`).get();
@@ -307,6 +310,7 @@ export const deleteAllSearchedData = async () => {
 export const checkDayChange = async () => {
   try {
     const today = await AsyncStorage.getItem(KEY_VALUE_TODAY);
+    const { TODAY } = getDate();
 
     if (today === null) {
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
@@ -330,8 +334,7 @@ export const checkDayChange = async () => {
       } else {
         // 오늘이 지나면
         // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
-        await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, tomorrowData);
-        await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, tomorrowData);
+        await dbToAsyncStorage();
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
         const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
         console.log('바뀐 geofenceData :', geofenceData);
