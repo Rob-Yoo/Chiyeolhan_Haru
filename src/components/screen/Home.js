@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import { init, setNetwork, setTabBar } from 'redux/store';
+import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
 import HomeContent from 'components/items/HomeContent';
 import { HomeTextItem } from 'components/items/HomeTextItem';
@@ -23,17 +23,13 @@ const ScheduleButton = styled.TouchableOpacity``;
 
 const Home = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-
+  let todoArr = [];
+  const dispatch = useDispatch();
+  const homeRender = useSelector((state) => state.homerender);
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
-  const [fetchedToDo, setFetchObj] = useState({});
-  const mounted = useRef(false);
-  const mounted2 = useRef(false);
-  const dispatch = useDispatch();
   const toDos = useSelector((state) => state.toDos);
   const appState = useRef(AppState.currentState);
-  let todoArr = [];
-  let rowObj = {};
 
   const __handleAppStateChange = async (nextAppState) => {
     if (
@@ -43,6 +39,7 @@ const Home = ({ navigation }) => {
       try {
         await BackgroundGeolocation.requestPermission();
         await loadSuccessSchedules();
+        // const isDaychange = await checkDayChange();
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }
@@ -58,50 +55,43 @@ const Home = ({ navigation }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
-      dispatch(init(fetchedToDo));
-    }
-  }, [fetchedToDo]);
-
-  useEffect(() => {
-    if (!mounted2.current) {
-      mounted2.current = true;
-    } else {
-      setLoading(false);
-    }
-  }, [toDos]);
-
   const readyForHome = async () => {
     await getToDos();
     await checkDayChange();
     await loadSuccessSchedules();
+    setLoading(false);
   };
 
   const getToDos = async () => {
     try {
       dispatch(setNetwork('online'));
       dispatch(setTabBar('today'));
+      setLoading(true);
+
+      let rowObj = {};
+      let filterObj = {};
       const row = await dbService.collection(`${UID}`).get();
       row.forEach((data) => (rowObj[data.id] = data.data()));
-
       if (Object.keys(rowObj).length === 0) {
         //데이터가 아무것도 없을때
         setLoading(false);
         return;
       }
-      let filterObj = {};
       for (key in rowObj) {
         if (rowObj[key].date >= YESTERDAY)
           filterObj = { ...filterObj, [key]: rowObj[key] };
       }
-      setFetchObj(filterObj);
+      await dispatch(init(filterObj));
+      setLoading(false);
+      return;
     } catch (e) {
       console.log('getToDos Error :', e);
     }
   };
+
+  useEffect(() => {
+    dispatch(setHomeRender(false));
+  }, [homeRender]);
 
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
@@ -116,7 +106,7 @@ const Home = ({ navigation }) => {
     return 0;
   });
 
-  return isLoading ? (
+  return isLoading || homeRender ? (
     <Loading />
   ) : (
     <View style={styles.wrap}>
