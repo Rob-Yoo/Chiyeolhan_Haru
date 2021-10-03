@@ -69,7 +69,7 @@ const TabBar = (props) => {
     }
   };
 
-  const handleReset2 = async () => {
+  const handleStart = async () => {
     try {
       const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
       if (isDayChange) {
@@ -80,7 +80,7 @@ const TabBar = (props) => {
         startDenyAlert();
       }
     } catch (e) {
-      console.log('handleReset2 Error : ', e);
+      console.log('handleStart Error : ', e);
     }
   };
 
@@ -173,7 +173,7 @@ const TabBar = (props) => {
             backgroundColor: 'red',
             borderRadius: 30,
           }}
-          onPress={() => network === 'online' && handleReset2()}
+          onPress={() => network === 'online' && handleStart()}
         >
           <Text>시작버튼</Text>
         </TouchableOpacity>

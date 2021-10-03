@@ -330,7 +330,6 @@ export const checkDayChange = async () => {
       if (tomorrowData === null) {
         await AsyncStorage.removeItem(KEY_VALUE_TODAY_DATA);
         await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
-        return false;
       } else {
         // 오늘이 지나면
         // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
@@ -345,9 +344,11 @@ export const checkDayChange = async () => {
       await BackgroundGeolocation.stop();
       await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
       console.log('stop geofence');
+      return true;
     } else {
       console.log('날짜가 바뀌지 않음');
     }
+    return false;
   } catch (e) {
     console.log('checkDayChange Error :', e);
   }
