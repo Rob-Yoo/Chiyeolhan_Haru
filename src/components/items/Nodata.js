@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constant/const';
-import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+import IconTaskToDoman from '#assets/icons/icon-todo-man';
+import IconArrow from '#assets/icons/icon-arrow';
+
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 export const Nodata = () => {
   const navigation = useNavigation();
 
@@ -86,7 +89,7 @@ export const Nodata = () => {
           일정을 추가해보세요
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('ScheduleToday')}>
-          <Text>버튼</Text>
+          <IconArrow name="icon-arrow" size={30} color="#229892" />
         </TouchableOpacity>
       </View>
     </View>

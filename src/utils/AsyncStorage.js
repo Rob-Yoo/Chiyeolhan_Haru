@@ -57,7 +57,6 @@ const setSearchedData = async (array) => {
 const setProgressingSchedule = async (schedule) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_PROGRESSING, schedule);
-    console.log(schedule);
   } catch (e) {
     console.log('setSearchedData Error :', e);
   }

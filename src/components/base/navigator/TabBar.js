@@ -182,7 +182,7 @@ const TabBar = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginRight: 7, marginTop: 5 }}
-            onPress={() => network === 'online' && handleReset2()}
+            onPress={() => network === 'online' && handleStart()}
           >
             <ImageBackground
               style={[{ width: 23, height: 23 }]}
