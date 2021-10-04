@@ -23,7 +23,7 @@ import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
 const ScheduleButton = styled.TouchableOpacity``;
 
 const Home = ({ navigation }) => {
-  console.log('Home');
+  // console.log('Home');
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   let todoArr = [];
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
   const toDos = useSelector((state) => state.toDos);
-  console.log(`toDos:${JSON.stringify(toDos)}`);
+  // console.log(`toDos:${JSON.stringify(toDos)}`);
   const appState = useRef(AppState.currentState);
 
   const __handleAppStateChange = async (nextAppState) => {
@@ -52,7 +52,6 @@ const Home = ({ navigation }) => {
     }
     appState.current = nextAppState;
   };
-
   useEffect(() => {
     AppState.addEventListener('change', __handleAppStateChange);
     readyForHome();

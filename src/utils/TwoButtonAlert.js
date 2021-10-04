@@ -53,7 +53,7 @@ export const resetAlert = (time = 0) => {
 
 export const resetDenyAlert = () =>
   Alert.alert(
-    '리셋 버튼',
+    '재시작 버튼',
     '일정 장소에 오지 않았을 경우 눌러주세요.',
     [{ text: '확인' }],
     {
@@ -72,7 +72,7 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
       {
         text: '확인',
         onPress: async () => {
-          await geofenceUpdate(geofenceData);
+          await geofenceUpdate(geofenceData, 0);
         },
       },
     ],
