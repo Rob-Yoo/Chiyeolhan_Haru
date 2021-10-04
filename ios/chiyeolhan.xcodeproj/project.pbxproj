@@ -46,6 +46,16 @@
 		C5B2B80C5B7B48BB99180609 /* icon-handle-start.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CC60ED28270A428F00C3A6BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CC60ED24270A428E00C3A6BC /* Restart.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = Restart;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		075301D78C3B4B3AAC76F057 /* icon-star-border.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-star-border.ttf"; path = "../assets/icons/ttf-svgs/icon-star-border.ttf"; sourceTree = "<group>"; };
@@ -91,6 +101,7 @@
 		BC17A96DE3F94175A81529DE /* icon-searched-location.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-searched-location.ttf"; path = "../assets/icons/ttf-svgs/icon-searched-location.ttf"; sourceTree = "<group>"; };
 		BFFC16BEBAC7403DA74544E7 /* icon-home.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-home.ttf"; path = "../assets/icons/ttf-svgs/icon-home.ttf"; sourceTree = "<group>"; };
 		C942AC29E53F4CEAB5FAB9AC /* icon-schedule-pointer.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-schedule-pointer.ttf"; path = "../assets/icons/ttf-svgs/icon-schedule-pointer.ttf"; sourceTree = "<group>"; };
+		CC60ED24270A428E00C3A6BC /* Restart.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Restart.xcodeproj; path = "../node_modules/react-native-restart/ios/Restart.xcodeproj"; sourceTree = "<group>"; };
 		CCBB057C26E29C9900B58FD4 /* libRNBoundary.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNBoundary.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCD7902626B86687008D8A94 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		CDD2509D17904D24AE6604A2 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Bold.otf"; path = "../assets/fonts/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
@@ -156,6 +167,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				CC60ED24270A428E00C3A6BC /* Restart.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -190,6 +202,14 @@
 			);
 			name = Supporting;
 			path = chiyeolhan/Supporting;
+			sourceTree = "<group>";
+		};
+		CC60ED25270A428E00C3A6BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CC60ED29270A428F00C3A6BC /* libRestart.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		D65327D7A22EEC0BE12398D9 /* Pods */ = {
@@ -301,12 +321,28 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CC60ED25270A428E00C3A6BC /* Products */;
+					ProjectRef = CC60ED24270A428E00C3A6BC /* Restart.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* chiyeolhan */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		CC60ED29270A428F00C3A6BC /* libRestart.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestart.a;
+			remoteRef = CC60ED28270A428F00C3A6BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
@@ -363,7 +399,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=/opt/homebrew/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n../node_modules/expo-constants/scripts/get-app-config-ios.sh\n../node_modules/expo-updates/scripts/create-manifest-ios.sh\n";
 		};
 		780E550D11452C8FFACB7187 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -539,6 +575,7 @@
 					"\"${PODS_ROOT}/Headers/Public/react-native-maps\"",
 					"\"${PODS_ROOT}/Headers/Public/react-native-safe-area-context\"",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(SRCROOT)/../node_modules/react-native-restart\"/**",
 				);
 				INFOPLIST_FILE = chiyeolhan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -617,6 +654,7 @@
 					"\"${PODS_ROOT}/Headers/Public/react-native-maps\"",
 					"\"${PODS_ROOT}/Headers/Public/react-native-safe-area-context\"",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(SRCROOT)/../node_modules/react-native-restart\"/**",
 				);
 				INFOPLIST_FILE = chiyeolhan/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

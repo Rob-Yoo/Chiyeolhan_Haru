@@ -32,4 +32,5 @@ target 'chiyeolhan' do
   pod 'Google-Maps-iOS-Utils'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 end

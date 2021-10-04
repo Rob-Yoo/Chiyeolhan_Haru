@@ -3,6 +3,7 @@ import { View, StyleSheet, AppState } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import RNRestart from 'react-native-restart';
 
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
@@ -41,7 +42,10 @@ const Home = ({ navigation }) => {
       try {
         await BackgroundGeolocation.requestPermission();
         await loadSuccessSchedules();
-        // const isDaychange = await checkDayChange();
+        const isDaychange = await checkDayChange();
+        if (isDaychange) {
+          RNRestart.Restart();
+        }
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }
