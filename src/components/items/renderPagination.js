@@ -124,7 +124,7 @@ const Pagination = ({ taskList, targetId }) => {
                 <TouchableOpacity
                   onPress={() =>
                     network === 'online' &&
-                    toDos.finishTime > getCurrentTime() &&
+                    toDos?.finishTime > getCurrentTime() &&
                     toggleIsVisible()
                   }
                   style={styles.modatalTask}

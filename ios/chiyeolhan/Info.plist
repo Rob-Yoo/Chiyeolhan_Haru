@@ -108,6 +108,10 @@
 		<string>icon-home.ttf</string>
 		<string>icon-check.ttf</string>
 		<string>icon-fail.ttf</string>
+		<string>icon-arrow.ttf</string>
+		<string>icon-handle-reset1.ttf</string>
+		<string>icon-handle-reset2.ttf</string>
+		<string>icon-handle-start.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

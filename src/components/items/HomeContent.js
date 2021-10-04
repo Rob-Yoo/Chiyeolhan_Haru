@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-import { renderPagination } from 'components/items/renderPagination';
+import { Nodata } from 'components/items//Nodata';
 import { Card } from 'components/items/CardItem';
+import { renderPagination } from 'components/items/renderPagination';
 
 import { getCurrentTime, getDate } from 'utils/Time';
 
@@ -11,10 +12,10 @@ import { SCREEN_HEIGHT } from 'constant/const';
 
 const HomeContent = (props) => {
   let todoArr = props.todoArr;
+  if (todoArr.length === 0) return <Nodata />;
+
   const { TODAY } = getDate();
-  const [isData, setIsData] = useState(
-    todoArr[0]?.id === undefined ? false : true,
-  );
+
   const [nowIndex, setNowIndex] = useState(todoArr.length);
   const getNowTimeIndex = () => {
     let tempData = Number.MAX_SAFE_INTEGER;
@@ -65,52 +66,11 @@ const HomeContent = (props) => {
       });
     setNowIndex(tempIndex);
   };
-  if (Array.isArray(todoArr) && todoArr.length === 0) {
-    todoArr = [
-      {
-        date: '',
-        finishTime: '',
-        id: 0,
-        latitude: '',
-        location: '',
-        address: '',
-        longitude: '',
-        startTime: '',
-        title: '',
-        toDos: [''],
-      },
-      {
-        date: '',
-        finishTime: '',
-        id: 0,
-        latitude: '',
-        location: '',
-        address: '',
-        longitude: '',
-        startTime: '',
-        title: '',
-        toDos: [''],
-      },
-      {
-        date: '',
-        finishTime: '',
-        id: 0,
-        latitude: '',
-        location: '',
-        address: '',
-        longitude: '',
-        startTime: '',
-        title: '',
-        toDos: [''],
-      },
-    ];
-  }
+
   useEffect(() => {
     getNowTimeIndex();
   }, []);
-  useEffect(() => {
-    setIsData(todoArr[0]?.id === 0 ? false : true);
-  }, [todoArr]);
+
   return (
     <View style={styles.homeContainer}>
       <Swiper
@@ -118,7 +78,7 @@ const HomeContent = (props) => {
         renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
-        index={isData ? nowIndex : 1}
+        index={nowIndex}
         scrollViewStyle={{ overflow: 'visible' }}
         containerStyle={{
           width: SCREEN_HEIGHT > 668 ? 280 : 260,
@@ -136,16 +96,10 @@ const HomeContent = (props) => {
                 toDos={todoArr}
                 id={item.id}
                 isDone={item.isDone}
-                isData={isData}
               />
             );
           })}
       </Swiper>
-      {isData ? null : (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>수행리스트가 없습니다</Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -157,20 +111,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   swiperStyle: { height: '100%' },
-
-  /*noData */
-  noDataContainer: {
-    backgroundColor: '#fff',
-    flex: 1,
-    width: '130%',
-    height: '120%',
-    position: 'absolute',
-    top: -20,
-    opacity: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  noDataText: { color: '#000', fontSize: 20 },
 });
 
 export default HomeContent;
