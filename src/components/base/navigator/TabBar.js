@@ -1,10 +1,17 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ImageBackground,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setTabBar } from 'redux/store';
 
 import IconHome from '#assets/icons/icon-home';
+import IconHandleStart from '#assets/icons/icon-handle-start';
 
 import { getCurrentTime } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
@@ -153,41 +160,44 @@ const TabBar = (props) => {
             </TouchableOpacity>
           );
         })}
-        <TouchableOpacity
+        <View
           style={{
-            width: 30,
-            height: 30,
-            backgroundColor: 'red',
-            borderRadius: 30,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'flex-start',
+            width: 120,
           }}
-          onPress={() => network === 'online' && handleReset()}
         >
-          <Text>리셋버튼</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 30,
-            height: 30,
-            backgroundColor: 'red',
-            borderRadius: 30,
-          }}
-          onPress={() => network === 'online' && handleReset2()}
-        >
-          <Text>시작버튼</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            network === 'online'
-              ? navigation.navigate('Home', { screen: 'Home' })
-              : navigation.navigate('OffHome', { screen: 'OffHome' })
-          }
-        >
-          <IconHome
-            name="icon-home"
-            size={20}
-            style={[styles.tabBarText, { color: '#717171' }]}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => network === 'online' && handleReset()}
+            style={{ marginTop: 5 }}
+          >
+            <IconHandleStart
+              style={styles.navIcon}
+              name="icon-handle-reset"
+              size={23}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginRight: 7, marginTop: 5 }}
+            onPress={() => network === 'online' && handleReset2()}
+          >
+            <ImageBackground
+              style={[{ width: 23, height: 23 }]}
+              source={{ uri: 'iconHandleStart' }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: 5 }}
+            onPress={() =>
+              network === 'online'
+                ? navigation.navigate('Home', { screen: 'Home' })
+                : navigation.navigate('OffHome', { screen: 'OffHome' })
+            }
+          >
+            <IconHome name="icon-home" size={22} style={styles.navIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -223,6 +233,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 25,
   },
+  navIcon: { color: '#717171', width: 30, height: 30 },
 });
 
 export default TabBar;

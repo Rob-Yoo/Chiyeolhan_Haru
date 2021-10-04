@@ -76,7 +76,6 @@ export const Card = ({
   location,
   id,
   isDone,
-  isData,
 }) => {
   const [width, setWidth] = useState('0%');
   useEffect(() => {
@@ -84,7 +83,7 @@ export const Card = ({
   }, []);
 
   const getProgressBarWidth = () => {
-    if (isDone && getCurrentTime() >= finishTime) {
+    if (getCurrentTime() >= finishTime) {
       setWidth('100%');
       return;
     } else {
@@ -136,29 +135,23 @@ export const Card = ({
         >
           <Text style={styles.cardTitle}>{text}</Text>
           <View style={{ flexWrap: 'nowrap' }}>
-            {!isData ? (
-              <></>
-            ) : (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 5,
-                  left: 5,
-                  width: 5,
-                  height: 20,
-                  backgroundColor: '#00A29A',
-                }}
-              />
-            )}
+            <View
+              style={{
+                position: 'absolute',
+                top: 5,
+                left: 5,
+                width: 5,
+                height: 20,
+                backgroundColor: '#00A29A',
+              }}
+            />
             <Text style={styles.cardLocation}>
               {location.length > 15 ? `${location.substr(0, 7)}...` : location}
             </Text>
           </View>
         </View>
         <Text style={styles.cardTime}>
-          {startTime}
-          {!isData ? `` : `~`}
-          {finishTime}
+          {startTime}~{finishTime}
         </Text>
         <View style={{ position: 'relative' }}>
           <View

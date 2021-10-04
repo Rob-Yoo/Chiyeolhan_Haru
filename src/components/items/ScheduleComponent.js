@@ -19,8 +19,6 @@ import { getCurrentTime, getDate } from 'utils/Time';
 import { geofenceUpdate } from 'utils/BgGeofence';
 
 import { KEY_VALUE_GEOFENCE, SCREEN_HEIGHT, UID } from 'constant/const';
-import { checkDayChange } from '../../utils/AsyncStorage';
-import { clear, setHomeRender } from '../../redux/store';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -135,31 +133,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [weekStart, setWeekStart] = useState(tempWeekStart);
   const [selectedDate, setSelectedDate] = useState(tempDate);
-
-  useEffect(() => {
-    return async () => {
-      const isDayChange = await checkDayChange();
-      if (!isDayChange) {
-        return;
-      } else {
-        let rowObj = {};
-        let filterObj = {};
-        const { YESTERDAY } = getDate();
-        const row = await dbService.collection(`${UID}`).get();
-        row.forEach((data) => (rowObj[data.id] = data.data()));
-        if (Object.keys(rowObj).length === 0) {
-          //데이터가 아무것도 없을때
-          return Promise.resolve('true');
-        }
-        for (key in rowObj) {
-          if (rowObj[key].date >= YESTERDAY)
-            filterObj = { ...filterObj, [key]: rowObj[key] };
-        }
-        dispatch(init(filterObj));
-        dispatch(setHomeRender(true));
-      }
-    };
-  }, []);
 
   return (
     <WeekView
