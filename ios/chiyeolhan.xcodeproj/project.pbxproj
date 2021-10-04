@@ -40,6 +40,10 @@
 		EE7CC9DE2D7645779733A411 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F4DE704F88343C48F3B474E /* icon-schedulte-timeset-button.ttf */; };
 		FA3FBBBC89AB49CAB20BA5A7 /* icon-add-todo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F7510C83724B96950DDFFF /* icon-add-todo.ttf */; };
 		FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1516193F5D9443FB2B987C5 /* icon-fail.ttf */; };
+		92533EE02B8B45FBB105DF9F /* icon-arrow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FF08D96677F463B90EA2C3C /* icon-arrow.ttf */; };
+		C3BDB87397DC4D9FB2550DA3 /* icon-handle-reset1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */; };
+		6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */; };
+		C5B2B80C5B7B48BB99180609 /* icon-handle-start.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +106,10 @@
 		F9533D472D12409D91C0245B /* GodoB.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GodoB.otf; path = ../assets/fonts/GodoB.otf; sourceTree = "<group>"; };
 		FC713D3976404481B3797388 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
+		5FF08D96677F463B90EA2C3C /* icon-arrow.ttf */ = {isa = PBXFileReference; name = "icon-arrow.ttf"; path = "../assets/icons/ttf-svgs/icon-arrow.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */ = {isa = PBXFileReference; name = "icon-handle-reset1.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-reset1.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */ = {isa = PBXFileReference; name = "icon-handle-reset2.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-reset2.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */ = {isa = PBXFileReference; name = "icon-handle-start.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-start.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +245,10 @@
 				BFFC16BEBAC7403DA74544E7 /* icon-home.ttf */,
 				AC3CE6562A34433BA31BD0AD /* icon-check.ttf */,
 				B1516193F5D9443FB2B987C5 /* icon-fail.ttf */,
+				5FF08D96677F463B90EA2C3C /* icon-arrow.ttf */,
+				D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */,
+				67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */,
+				821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -329,6 +341,10 @@
 				CFADC130F6674829BC89FC2F /* icon-home.ttf in Resources */,
 				CAC8B9CB25154C7FB988EBC4 /* icon-check.ttf in Resources */,
 				FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */,
+				92533EE02B8B45FBB105DF9F /* icon-arrow.ttf in Resources */,
+				C3BDB87397DC4D9FB2550DA3 /* icon-handle-reset1.ttf in Resources */,
+				6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */,
+				C5B2B80C5B7B48BB99180609 /* icon-handle-start.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
