@@ -50,7 +50,6 @@ const Home = ({ navigation }) => {
     }
     appState.current = nextAppState;
   };
-
   useEffect(() => {
     AppState.addEventListener('change', __handleAppStateChange);
     readyForHome();
