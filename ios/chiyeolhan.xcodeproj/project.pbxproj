@@ -44,6 +44,8 @@
 		C3BDB87397DC4D9FB2550DA3 /* icon-handle-reset1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */; };
 		6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */; };
 		C5B2B80C5B7B48BB99180609 /* icon-handle-start.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */; };
+		1989DC985B5C41B4A82A937C /* icon-left-circle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 379234F3FDCC43BEBECB61F8 /* icon-left-circle.ttf */; };
+		D3C80A5B1C574099994D3742 /* icon-minus-circle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E22013D9FFD34E188BE527D5 /* icon-minus-circle.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */ = {isa = PBXFileReference; name = "icon-handle-reset1.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-reset1.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */ = {isa = PBXFileReference; name = "icon-handle-reset2.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-reset2.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */ = {isa = PBXFileReference; name = "icon-handle-start.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-start.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		379234F3FDCC43BEBECB61F8 /* icon-left-circle.ttf */ = {isa = PBXFileReference; name = "icon-left-circle.ttf"; path = "../assets/icons/ttf-svgs/icon-left-circle.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E22013D9FFD34E188BE527D5 /* icon-minus-circle.ttf */ = {isa = PBXFileReference; name = "icon-minus-circle.ttf"; path = "../assets/icons/ttf-svgs/icon-minus-circle.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +273,8 @@
 				D63DDB18BE6148BD9AB2CA82 /* icon-handle-reset1.ttf */,
 				67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */,
 				821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */,
+				379234F3FDCC43BEBECB61F8 /* icon-left-circle.ttf */,
+				E22013D9FFD34E188BE527D5 /* icon-minus-circle.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -381,6 +387,8 @@
 				C3BDB87397DC4D9FB2550DA3 /* icon-handle-reset1.ttf in Resources */,
 				6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */,
 				C5B2B80C5B7B48BB99180609 /* icon-handle-start.ttf in Resources */,
+				1989DC985B5C41B4A82A937C /* icon-left-circle.ttf in Resources */,
+				D3C80A5B1C574099994D3742 /* icon-minus-circle.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

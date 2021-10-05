@@ -1,0 +1,16 @@
+{
+  "name": "icon-minus-circle",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "994eaa764b3f30721f3839c64c390ce3",
+      "css": "minus-circle",
+      "code": 59392,
+      "src": "websymbols"
+    }
+  ]
+}

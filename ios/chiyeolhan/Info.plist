@@ -112,6 +112,8 @@
 		<string>icon-handle-reset1.ttf</string>
 		<string>icon-handle-reset2.ttf</string>
 		<string>icon-handle-start.ttf</string>
+		<string>icon-left-circle.ttf</string>
+		<string>icon-minus-circle.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

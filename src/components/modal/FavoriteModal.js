@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  ImageBackground,
 } from 'react-native';
 
 import IconQuestion from '#assets/icons/icon-question';
-import IconAngleDown from '#assets/icons/icon-angle-down';
+import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
+import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
 import { getDataFromAsync } from 'utils/AsyncStorage';
 
@@ -17,30 +19,15 @@ import { KEY_VALUE_FAVORITE } from 'constant/const';
 
 const defaultRender = () => {
   let defaultArray = [];
-  for (let i = 0; i < 6; i++) {
-    defaultArray.push(
-      <View
-        key={`DEFAULT${i}`}
-        style={{
-          width: '44%',
-          height: 160,
-          backgroundColor: '#fff',
-          borderRadius: 20,
-          margin: 10,
-          shadowColor: '#00000029',
 
-          shadowOpacity: 0.5,
-          shadowRadius: 8,
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 10,
-        }}
-      >
+  for (let i = 0; i < 8; i++) {
+    defaultArray.push(
+      <View key={`DEFAULT${i}`} style={styles.favoriteCard}>
         <IconQuestion
           name="icon-question"
           style={{ position: 'absolute' }}
           color={'#B1E4E2'}
-          size={120}
+          size={100}
         />
       </View>,
     );
@@ -62,8 +49,6 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   const [favorite, setFavorite] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const scrollToEndFavorite = () => scrollViewRef.current.scrollToEnd();
-
   useEffect(() => {
     getFavoriteAsync(setFavorite, setLoading);
   }, []);
@@ -73,54 +58,81 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
     modalHandler();
   };
 
+  const deleteFavorite = (item) => {
+    console.log(item);
+  };
+
   if (!loading) {
     return <Text>LOADING</Text>;
   }
   return (
-    <>
-      <ScrollView
-        ref={scrollViewRef}
-        contentContainerStyle={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          flexGrow: 1,
-        }}
-        style={styles.modalTopContainer}
+    <View style={{ flex: 1, marginTop: 100 }}>
+      <ImageBackground
+        imageStyle={{ borderRadius: 50 }}
+        style={[styles.modalTopContainer]}
+        source={{ uri: 'favoriteBackground' }}
       >
-        {favorite?.map((item, index) => {
-          return (
-            <TouchableOpacity
-              onPress={() => pressFavorite(item, index)}
-              key={`FAVORITE${index}`}
-              style={{
-                width: '44%',
-                height: 160,
-                backgroundColor: '#fff',
-                borderRadius: 20,
-                margin: 10,
-                shadowColor: '#00000029',
-                shadowOpacity: 0.5,
-                shadowRadius: 8,
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 10,
-              }}
-            >
-              <IconSearchedLocation
-                name="location"
-                style={{ position: 'absolute' }}
-                color={'#B1E4E2'}
-                size={120}
-              />
-              <Text style={{ fontFamily: 'notoSansKR-Bold', fontSize: 25 }}>
-                {item.location}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-        {defaultRender()}
-      </ScrollView>
-      <View
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            flexWrap: 'wrap',
+            flexGrow: 1,
+            paddingBottom: 100,
+          }}
+        >
+          {favorite?.map((item, index) => {
+            return (
+              <View style={styles.favoriteCard}>
+                <TouchableOpacity
+                  onPress={() => pressFavorite(item, index)}
+                  key={`${index}`}
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <IconSearchedLocation
+                    name="location"
+                    style={{ position: 'absolute' }}
+                    color={'#B1E4E2'}
+                    size={100}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'notoSansKR-Bold',
+                      fontSize: item.location.length > 10 ? 18 : 23,
+                    }}
+                  >
+                    {item.location}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => deleteFavorite(item)}
+                  style={{ position: 'absolute', top: 10, right: 10 }}
+                >
+                  <IconMinusCircle
+                    name="minus-circle"
+                    size={18}
+                    color="#54BCB6"
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+          {defaultRender()}
+          <TouchableOpacity onPress={modalHandler} style={styles.buttonGoBack}>
+            <IconGobackButton
+              color="#54BCB6"
+              name="icon-go-back-button"
+              size={18}
+            />
+          </TouchableOpacity>
+        </ScrollView>
+      </ImageBackground>
+      {/* <View
         style={{
           backgroundColor: '#fff',
           position: 'absolute',
@@ -136,53 +148,52 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
           name="icon-angle-down"
           size={20}
         />
-      </View>
-
-      {/* <ToDoModal
-        navigation={navigation}
-        modalHandler={() => toggleModal()}
-        passModalData={passModalData}
-        setPassModalData={setPassModalData}
-        isModalVisible={isModalVisible}
-        isToday={isToday}
-        navigateFavorite={() =>
-          navigation.navigate('ScheduleToday', {
-            screen: 'ScheduleToday',
-          })
-        }
-      /> */}
-    </>
+      </View> */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  modalInputContainer: {
-    backgroundColor: '#54BCB6',
-    height: '100%',
-    flex: 1,
-  },
   modalTopContainer: {
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    marginTop: 100,
-    width: '100%',
-    borderRadius: 50,
-    paddingHorizontal: 15,
+    justifyContent: 'center',
     paddingVertical: 20,
-    position: 'relative',
+    paddingHorizontal: 15,
   },
-  searchInputContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    position: 'relative',
-    backgroundColor: '#fff',
-    width: '90%',
-    height: 50,
-    borderRadius: 10,
-  },
+
   searchInputViewBackButton: {
     width: 30,
     height: 30,
+  },
+  favoriteCard: {
+    margin: 10,
+    padding: 10,
+    height: 140,
+    width: '39%',
+    shadowRadius: 8,
+    borderRadius: 20,
+    shadowOpacity: 0.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    shadowColor: '#00000029',
+  },
+  buttonGoBack: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    position: 'absolute',
+    top: 5,
+    left: 10,
   },
 });

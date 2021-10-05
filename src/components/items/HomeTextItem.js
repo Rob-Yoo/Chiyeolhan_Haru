@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     width: 7,
     height: 60,
     backgroundColor: '#00A29A',
-
     shadowColor: '#00000029',
   },
 });
