@@ -1,6 +1,10 @@
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { Alert } from 'react-native';
 
 import { commonTimeExpression } from 'utils/Time';
+
+import { KEY_VALUE_DAY_CHANGE, KEY_VALUE_START_TODO } from 'constant/const';
 
 export const alertStartTimePicker = () =>
   Alert.alert(
@@ -37,23 +41,23 @@ export const noDataAlert = () =>
     cancelable: false,
   });
 
-export const resetAlert = (time = 0) => {
+export const restartNotifAlert = (time = 0) => {
   let msg;
 
   if (time == 0) {
     msg = '다음 일정이 없으므로 위치 서비스를 종료합니다.';
   } else {
     const timeExpression = commonTimeExpression(time);
-    msg = `${timeExpression} 일정의 장소에\n 위치 서비스를 제공할 수 있도록 변경되었습니다.`;
+    msg = `${timeExpression} 일정부터 다시 시작됩니다.`;
   }
   Alert.alert(`${msg}`, '', [{ text: '확인' }], {
     cancelable: false,
   });
 };
 
-export const resetDenyAlert = () =>
+export const restartDenyAlert = () =>
   Alert.alert(
-    '재시작 버튼',
+    '다시 시작 버튼',
     '일정 장소에 오지 않았을 경우 눌러주세요.',
     [{ text: '확인' }],
     {
@@ -72,7 +76,13 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
       {
         text: '확인',
         onPress: async () => {
-          await geofenceUpdate(geofenceData, 0);
+          try {
+            await geofenceUpdate(geofenceData, 0);
+            await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
+            await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
+          } catch (e) {
+            console.log('startAlert Error : ', e);
+          }
         },
       },
     ],
@@ -81,18 +91,25 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
     },
   );
 
-export const startDenyAlert = () =>
-  Alert.alert(
-    `시작 버튼`,
-    `내일 일정의 위치 서비스를 시작할 때 눌러주세요.\n-\n위치 서비스를 시작하면 백그라운드에서 계속 동작하기 때문에 배터리가 소모될 수 있습니다.\n따라서, 내일 첫 일정의 시작 시간 직전에 누르는 것이 좋습니다.`,
-    [{ text: '확인' }],
-    {
+export const startDenyAlert = (type) => {
+  if (type == 1) {
+    Alert.alert('일정이 없습니다.', '', [{ text: '확인' }], {
       cancelable: false,
-    },
-  );
+    });
+  } else {
+    Alert.alert(
+      `시작 버튼`,
+      `치열한 하루를 시작할 때 눌러주세요.\n-\n위치 서비스를 시작하면 백그라운드에서 계속 동작하기 때문에 배터리가 소모될 수 있습니다.\n따라서, 첫 일정의 시작 시간 직전에 누르는 것이 좋습니다.`,
+      [{ text: '확인' }],
+      {
+        cancelable: false,
+      },
+    );
+  }
+};
 
 export const addModifyBlockAlert = () =>
-  Alert.alert('리셋 버튼을 먼저 눌러주세요.', [{ text: '확인' }], {
+  Alert.alert('다시 시작 버튼을 먼저 눌러주세요.', '', [{ text: '확인' }], {
     cancelable: false,
   });
 
@@ -165,18 +182,13 @@ export const deleteToDoTaskList = async () =>
   });
 
 export const longTodoTitle = () =>
-  Alert.alert(
-    '일정의 제목을 너무 길게 설정 했습니다.',
-    '',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
+  Alert.alert('일정의 제목을 너무 길게 설정했습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
 
 export const longTaskList = () =>
   Alert.alert(
-    '일정의 수행리스트를 너무 길게 설정 했습니다.(다음 수행리스트를 이용 하세요)',
+    '일정의 수행 리스트를 너무 길게 설정했습니다.(다음 수행리스트를 이용하세요.)',
     '',
     [{ text: '확인' }],
     {

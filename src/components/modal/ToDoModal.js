@@ -35,13 +35,14 @@ import { failNotification, cancelNotification } from 'utils/Notification';
 import {
   alertInValidSubmit,
   alertStartTimeError,
+  alertFinsihTimePicker,
   alertNotFillIn,
   longTaskList,
   longTodoTitle,
+  addModifyBlockAlert,
 } from 'utils/TwoButtonAlert';
 import { getCurrentTime, getTimeDiff, getDate } from 'utils/Time';
 import { toDosUpdateDB } from 'utils/Database';
-import { addModifyBlockAlert } from 'utils/TwoButtonAlert';
 
 import {
   KEY_VALUE_TODAY_DATA,
@@ -391,6 +392,10 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
+    if (todoStartTime >= todoFinishTime) {
+      alertFinsihTimePicker('잘못된 시간 설정입니다.');
+      return;
+    }
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
@@ -411,9 +416,9 @@ export const ToDoModal = ({
     if (Object.keys(locationData).length == 0) {
       alertNotFillIn('일정 장소를 등록해주세요.');
     } else if (todoStartTime === undefined) {
-      alertNotFillIn('일정의 시작시간을 등록해주세요.');
+      alertNotFillIn('일정의 시작 시간을 등록해주세요.');
     } else if (todoFinishTime === undefined) {
-      alertNotFillIn('일정의 끝시간을 등록해주세요.');
+      alertNotFillIn('일정의 끝 시간을 등록해주세요.');
     } else if (todoTitle.length === 0) {
       alertNotFillIn('일정의 제목을 입력해주세요');
     } else {

@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   Text,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { setTabBar } from 'redux/store';
 
@@ -18,8 +18,8 @@ import { getCurrentTime } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
-  resetAlert,
-  resetDenyAlert,
+  restartNotifAlert,
+  restartDenyAlert,
   startDenyAlert,
   startAlert,
 } from 'utils/TwoButtonAlert';
@@ -39,7 +39,7 @@ const TabBar = (props) => {
   const network = useSelector((state) => state.network);
   const dispatch = useDispatch();
 
-  const handleReset = async () => {
+  const handleRestart = async () => {
     try {
       // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
       const isNeedReset = await checkGeofenceSchedule();
@@ -47,32 +47,53 @@ const TabBar = (props) => {
       const currentTime = getCurrentTime();
       let idx = 0;
 
+      const restartAlert = () =>
+        Alert.alert(
+          '다시 시작',
+          '다시 치열한 하루를 보낼 준비됐나요?',
+          [
+            { text: '취소' },
+            {
+              text: '확인',
+              onPress: async () => {
+                try {
+                  if (geofenceData.length == 1) {
+                    // 현재 일정이 마지막일 때
+                    restartAlert(geofenceUpdate, geofenceData, 1);
+                    await geofenceUpdate(geofenceData);
+                    restartNotifAlert();
+                  } else {
+                    for (const data of geofenceData) {
+                      if (data.finishTime > currentTime) {
+                        break;
+                      }
+                      cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
+                      idx += 1;
+                    }
+                    await geofenceUpdate(geofenceData, idx);
+                    if (geofenceData.length === idx) {
+                      // 현재시간과 가장 가까운 다음 일정이 없을 때
+                      restartNotifAlert();
+                    } else {
+                      restartNotifAlert(geofenceData[idx].startTime);
+                    }
+                  }
+                } catch (e) {
+                  console.log('startAlert Error : ', e);
+                }
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+
       if (isNeedReset) {
-        if (geofenceData.length == 1) {
-          // 현재 일정이 마지막일 때
-          await geofenceUpdate(geofenceData);
-          resetAlert();
-        } else {
-          for (const data of geofenceData) {
-            if (data.finishTime > currentTime) {
-              break;
-            }
-            cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
-            idx += 1;
-          }
-          await geofenceUpdate(geofenceData, idx);
-          if (geofenceData.length === idx) {
-            // 현재시간과 가장 가까운 다음 일정이 없을 때
-            resetAlert();
-          } else {
-            resetAlert(geofenceData[idx].startTime);
-          }
-        }
+        restartAlert();
       } else {
-        resetDenyAlert();
+        restartDenyAlert();
       }
     } catch (e) {
-      console.log('handleReset Error :', e);
+      console.log('handleRestart Error :', e);
     }
   };
 
@@ -81,10 +102,13 @@ const TabBar = (props) => {
       const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
       if (isDayChange) {
         const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-        startAlert(geofenceUpdate, geofenceData);
-        await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
+        if (geofenceData === null) {
+          startDenyAlert(1);
+        } else {
+          startAlert(geofenceUpdate, geofenceData);
+        }
       } else {
-        startDenyAlert();
+        startDenyAlert(2);
       }
     } catch (e) {
       console.log('handleStart Error : ', e);
@@ -182,7 +206,7 @@ const TabBar = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginRight: 7, marginTop: 5 }}
-            onPress={() => network === 'online' && handleReset()}
+            onPress={() => network === 'online' && handleRestart()}
           >
             <ImageBackground
               style={[{ width: 23, height: 23 }]}
