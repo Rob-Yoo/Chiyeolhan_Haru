@@ -168,6 +168,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           left: 40,
         }}
         EventComponent={MyEventComponent}
+        nowLineColor={'#FD6363'}
         isRefreshing={isRefreshing}
         scrollToTimeNow={day === 'today' ? true : false}
         network={network}

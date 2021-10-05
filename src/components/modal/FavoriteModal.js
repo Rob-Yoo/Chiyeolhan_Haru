@@ -13,7 +13,7 @@ import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
 
 import { KEY_VALUE_FAVORITE } from 'constant/const';
 
@@ -48,6 +48,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   const scrollViewRef = useRef();
   const [favorite, setFavorite] = useState(null);
   const [loading, setLoading] = useState(false);
+  let backupData = [];
 
   useEffect(() => {
     getFavoriteAsync(setFavorite, setLoading);
@@ -59,12 +60,15 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   };
 
   const deleteFavorite = (item) => {
-    console.log(item);
+    const filterData = favorite.filter((v) => v.address !== item.address);
+    setFavorite(filterData);
+    setFavoriteData(filterData);
   };
 
   if (!loading) {
     return <Text>LOADING</Text>;
   }
+
   return (
     <View style={{ flex: 1, marginTop: 100 }}>
       <ImageBackground
@@ -84,7 +88,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
         >
           {favorite?.map((item, index) => {
             return (
-              <View style={styles.favoriteCard}>
+              <View key={index} style={styles.favoriteCard}>
                 <TouchableOpacity
                   onPress={() => pressFavorite(item, index)}
                   key={`${index}`}
