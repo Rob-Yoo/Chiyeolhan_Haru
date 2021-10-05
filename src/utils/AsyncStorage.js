@@ -20,6 +20,7 @@ import {
   KEY_VALUE_FAVORITE,
   KEY_VALUE_SUCCESS,
   KEY_VALUE_DAY_CHANGE,
+  KEY_VALUE_START_TODO,
 } from 'constant/const';
 
 const setTomorrowData = async (array) => {
@@ -312,8 +313,9 @@ export const checkDayChange = async () => {
     const { TODAY } = getDate();
 
     if (today === null) {
+      // 맨처음 설치되었을 떄
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
-      console.log(await AsyncStorage.getItem(KEY_VALUE_TODAY));
+      await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
     } else if (today !== TODAY) {
       const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
       const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
@@ -339,13 +341,12 @@ export const checkDayChange = async () => {
       }
       // 성공한 일정 배열을 초기화해준다.
       await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
+      await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
+      await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'false'); // 날짜가 바뀌면 바뀐 일정들이 아직 시작이 안됬으므로 false로 바꿔준다.
       // 트래킹이 되고있는 일정이 남아있을 수 있기 때문에 멈춰준다.
       await BackgroundGeolocation.stop();
-      await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
       console.log('stop geofence');
       return true;
-    } else {
-      console.log('날짜가 바뀌지 않음');
     }
     return false;
   } catch (e) {
@@ -377,7 +378,6 @@ export const loadSuccessSchedules = async () => {
   try {
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     let isNeedUpdate = false;
-    let isChange = false;
     const currentTime = getCurrentTime();
     const todosRef = dbService.collection(`${UID}`);
 
@@ -386,12 +386,9 @@ export const loadSuccessSchedules = async () => {
         for (const schedule of successSchedules) {
           if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
-            isChange = true;
-          }
-          if (schedule.finishTime < currentTime) {
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
-            ); // 이미 끝난 성공한 일정은 삭제
+            ); // isDone이 true가 되면 삭제
             isNeedUpdate = true;
           }
         }
@@ -402,13 +399,8 @@ export const loadSuccessSchedules = async () => {
           );
           console.log('끝난 성공한 일정 사라짐: ', successSchedules);
         }
-      } else {
-        console.log('successSchedules 비어있음');
       }
-    } else {
-      console.log('successSchedules 없음');
     }
-    return isChange;
   } catch (e) {
     console.log('loadSuccessSchedules Error :', e);
   }
