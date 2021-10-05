@@ -1,7 +1,11 @@
 import { getCurrentTime, getDate } from 'utils/Time';
+import { getDataFromAsync } from 'utils/AsyncStorage';
+import { KEY_VALUE_SUCCESS } from 'constant/const';
 
-export const makeScheduleDate = (toDos, toDoArr, day) => {
+export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
   const { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } = getDate();
+  //const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+
   for (key in toDos) {
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -22,6 +26,7 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startTime: toDos[key].startTime,
         finishTime: toDos[key].finishTime,
         color:
+          netwrok === 'offline' ||
           (isDone && getCurrentTime() >= toDos[key].startTime) ||
           getCurrentTime() < toDos[key].startTime ||
           getCurrentTime() <= toDos[key].finishTime
@@ -68,7 +73,7 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: isDone ? '#54BCB6' : '#B9B9B9',
+        color: isDone || netwrok === 'offline' ? '#54BCB6' : '#B9B9B9',
         toDos: [...toDos[key].toDos],
         isDone,
       });

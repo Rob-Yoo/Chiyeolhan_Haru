@@ -189,30 +189,34 @@ const TabBar = (props) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: network === 'online' ? 'space-between' : 'flex-end',
             alignItems: 'flex-start',
             width: 120,
           }}
         >
-          <TouchableOpacity
-            onPress={() => network === 'online' && handleStart()}
-            style={{ marginTop: 5 }}
-          >
-            <IconHandleStart
-              style={styles.navIcon}
-              name="icon-handle-reset"
-              size={23}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginRight: 7, marginTop: 5 }}
-            onPress={() => network === 'online' && handleRestart()}
-          >
-            <ImageBackground
-              style={[{ width: 23, height: 23 }]}
-              source={{ uri: 'iconHandleStart' }}
-            />
-          </TouchableOpacity>
+          {network === 'online' ? (
+            <>
+              <TouchableOpacity
+                onPress={() => network === 'online' && handleStart()}
+                style={{ marginTop: 5 }}
+              >
+                <IconHandleStart
+                  style={styles.navIcon}
+                  name="icon-handle-reset"
+                  size={23}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginTop: 5 }}
+                onPress={() => network === 'online' && handleRestart()}
+              >
+                <ImageBackground
+                  style={[{ width: 23, height: 23 }]}
+                  source={{ uri: 'iconHandleStart' }}
+                />
+              </TouchableOpacity>
+            </>
+          ) : null}
           <TouchableOpacity
             style={{ marginTop: 5 }}
             onPress={() =>
@@ -235,7 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingVertical: 10,
+    paddingTop: 10,
   },
   tabUnderBar: {
     backgroundColor: '#229892',

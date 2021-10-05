@@ -12,7 +12,7 @@ import { edit, remove } from 'redux/store';
 
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 
-import { deleteToDoTaskList } from 'utils/TwoButtonAlert';
+import { deleteToDoTaskList, longTaskList } from 'utils/TwoButtonAlert';
 
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress } = props;
@@ -36,6 +36,10 @@ export const Task = (props) => {
     dispatch(remove({ targetId, index }));
   };
   const submitTask = () => {
+    if (taskTitle.length > 40) {
+      longTaskList();
+      return;
+    }
     if (taskTitle.length > 0 && taskTitle !== null)
       editTaskList(targetId, taskTitle);
     else if (taskTitle.length === 0) {

@@ -14,18 +14,32 @@ import { add } from 'redux/store';
 
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/Time';
-import {
-  CONTAINER_HEIGHT,
-  CONTAINER_WIDTH,
-} from 'react-native-week-view/src/utils';
+import { CONTAINER_HEIGHT } from 'react-native-week-view/src/utils';
+import { longTaskList } from 'utils/TwoButtonAlert';
 
+const useInput = (initialValue, validator) => {
+  const [value, setValue] = useState(initialValue);
+  const onChange = (e) => {
+    const {
+      target: { value },
+    } = e;
+    let willUpdate = true;
+    if (typeof validator === 'function') {
+      willUpdate = validator(value);
+    }
+    if (willUpdate) {
+      setValue(value);
+    }
+  };
+  return { value, onChange };
+};
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -37,6 +51,10 @@ const Pagination = ({ taskList, targetId }) => {
   };
 
   const addTaskList = () => {
+    if (taskTitle.length > 40) {
+      longTaskList();
+      return;
+    }
     toggleIsVisible();
     if (taskTitle !== null && taskTitle.length > 0)
       dispatch(add({ targetId, taskTitle }));
@@ -46,7 +64,9 @@ const Pagination = ({ taskList, targetId }) => {
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
         <Text style={styles.taskTitle}>수행 리스트</Text>
-        {network === 'offline' || targetId === 0 ? null : (
+        {network === 'offline' ||
+        targetId === 0 ||
+        toDos.finishTime < getCurrentTime() ? null : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
             size={19}
@@ -139,18 +159,16 @@ const Pagination = ({ taskList, targetId }) => {
         isVisible={isVisible}
         taskListVisibleHandler={() => toggleIsVisible()}
       >
-        <View>
-          <TextInput
-            onChangeText={(text) => {
-              setTaskTitle(text);
-            }}
-            onSubmitEditing={() => {
-              addTaskList(targetId, taskTitle);
-            }}
-            style={styles.modalInputTask}
-            returnKeyType="done"
-          />
-        </View>
+        <TextInput
+          onChangeText={(text) => {
+            setTaskTitle(text);
+          }}
+          onSubmitEditing={() => {
+            addTaskList(targetId, taskTitle);
+          }}
+          style={styles.modalInputTask}
+          returnKeyType="done"
+        />
       </ModalLayout>
     </View>
   );
