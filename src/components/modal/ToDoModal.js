@@ -117,7 +117,7 @@ export const ToDoModal = ({
     setVisible(!isVisible);
   };
   const getLocationData = (value) => {
-    console.log(value);
+    // console.log(value);
     setLocationData(value);
     setLocationName(value.location);
   };

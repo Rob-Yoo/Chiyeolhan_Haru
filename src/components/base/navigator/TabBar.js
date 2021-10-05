@@ -75,6 +75,7 @@ const TabBar = (props) => {
                       // 현재시간과 가장 가까운 다음 일정이 없을 때
                       restartNotifAlert();
                     } else {
+                      console.log('넘어간 일정 객체 : ', geofenceData[idx]);
                       restartNotifAlert(geofenceData[idx].startTime);
                     }
                   }

@@ -188,7 +188,7 @@ export const longTodoTitle = () =>
 
 export const longTaskList = () =>
   Alert.alert(
-    '일정의 수행 리스트를 너무 길게 설정했습니다.(다음 수행리스트를 이용하세요.)',
+    `일정의 수행 리스트를 너무 길게 설정했습니다.\n(다음 수행리스트를 이용하세요.)`,
     '',
     [{ text: '확인' }],
     {

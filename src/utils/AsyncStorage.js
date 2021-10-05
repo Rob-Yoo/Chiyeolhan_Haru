@@ -343,9 +343,13 @@ export const checkDayChange = async () => {
       await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
       await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
       await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'false'); // 날짜가 바뀌면 바뀐 일정들이 아직 시작이 안됬으므로 false로 바꿔준다.
+
       // 트래킹이 되고있는 일정이 남아있을 수 있기 때문에 멈춰준다.
-      await BackgroundGeolocation.stop();
-      console.log('stop geofence');
+      const geofences = await BackgroundGeolocation.getGeofences();
+      if (geofences.length !== 0) {
+        await BackgroundGeolocation.removeGeofence(`${UID}`);
+        await BackgroundGeolocation.stop();
+      }
       return true;
     }
     return false;
