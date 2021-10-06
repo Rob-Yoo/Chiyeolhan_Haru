@@ -118,38 +118,65 @@ const TabBar = (props) => {
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
-          const isFocused = state.index === index;
-          let label = options.tabBarLabel;
+        <View
+          style={{
+            flexDirection: 'row',
+            //backgroundColor: 'red'
+          }}
+        >
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const isFocused = state.index === index;
+            let label = options.tabBarLabel;
 
-          const onLongPress = () => {
-            if (visibleName === 'today') {
-              dispatch(setTabBar('yesterday'));
-              navigation.navigate('yesterday');
-            } else {
-              dispatch(setTabBar('today'));
-              navigation.navigate('today');
-            }
-          };
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              targt: route.key,
-              canPreventDefault: true,
-            });
-            if (!isFocused && !event.defulatPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
+            const onLongPress = () => {
+              if (visibleName === 'today') {
+                dispatch(setTabBar('yesterday'));
+                navigation.navigate('yesterday');
+              } else {
+                dispatch(setTabBar('today'));
+                navigation.navigate('today');
+              }
+            };
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                targt: route.key,
+                canPreventDefault: true,
+              });
+              if (!isFocused && !event.defulatPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
 
-          if (route.name === 'today' || route.name === 'yesterday') {
+            if (route.name === 'today' || route.name === 'yesterday') {
+              return (
+                <TouchableOpacity
+                  swipeEnabled={options.swipeEnabled}
+                  isFocused={isFocused}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  key={`tab_${index}`}
+                  style={{ marginRight: 30 }}
+                >
+                  <Text
+                    style={[
+                      styles.tabBarText,
+                      { color: isFocused ? '#229892' : '#ADADAD' },
+                    ]}
+                    isFocused={isFocused}
+                  >
+                    {label}
+                  </Text>
+                  {isFocused ? <View style={styles.tabUnderBar} /> : null}
+                </TouchableOpacity>
+              );
+            }
+
             return (
               <TouchableOpacity
-                swipeEnabled={options.swipeEnabled}
                 isFocused={isFocused}
                 onPress={onPress}
-                onLongPress={onLongPress}
                 key={`tab_${index}`}
               >
                 <Text
@@ -164,46 +191,27 @@ const TabBar = (props) => {
                 {isFocused ? <View style={styles.tabUnderBar} /> : null}
               </TouchableOpacity>
             );
-          }
-
-          return (
-            <TouchableOpacity
-              isFocused={isFocused}
-              onPress={onPress}
-              key={`tab_${index}`}
-              style={{ marginRight: 120 }}
-            >
-              <Text
-                style={[
-                  styles.tabBarText,
-                  { color: isFocused ? '#229892' : '#ADADAD' },
-                ]}
-                isFocused={isFocused}
-              >
-                {label}
-              </Text>
-              {isFocused ? <View style={styles.tabUnderBar} /> : null}
-            </TouchableOpacity>
-          );
-        })}
+          })}
+        </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: network === 'online' ? 'space-between' : 'flex-end',
             alignItems: 'flex-start',
             width: 120,
+            //backgroundColor: 'green',
           }}
         >
           {network === 'online' ? (
             <>
               <TouchableOpacity
                 onPress={() => network === 'online' && handleStart()}
-                style={{ marginTop: 5 }}
+                style={{ marginTop: 6 }}
               >
                 <IconHandleStart
                   style={styles.navIcon}
                   name="icon-handle-reset"
-                  size={23}
+                  size={21}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -211,7 +219,7 @@ const TabBar = (props) => {
                 onPress={() => network === 'online' && handleRestart()}
               >
                 <ImageBackground
-                  style={[{ width: 23, height: 23 }]}
+                  style={[{ width: 22, height: 22 }]}
                   source={{ uri: 'iconHandleStart' }}
                 />
               </TouchableOpacity>
@@ -243,12 +251,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   tabContainer: {
+    width: '100%',
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingTop: 20,
-    paddingBottom: 15,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
   },
   tabUnderBar: {
     backgroundColor: '#229892',

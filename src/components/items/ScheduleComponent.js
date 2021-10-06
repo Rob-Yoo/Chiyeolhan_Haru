@@ -154,14 +154,22 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         fixedHorizontally={true}
         weekStartsOn={weekStart}
         numberOfDays={1}
-        formatTimeLabel="HH:mm A"
+        formatTimeLabel="H:mm A"
         showTitle={false}
         showNowLine={true}
         headerStyle={{
           color: BACKGROUND_COLOR,
           borderColor: BACKGROUND_COLOR,
+          paddingTop: 20,
+          justifyContent: 'flex-start',
+          alignItems: 'center',
         }}
-        headerTextStyle={{ color: '#5E5E5E', marginRight: 120, fontSize: 10 }}
+        headerTextStyle={{
+          fontSize: 10,
+          color: '#5E5E5E',
+          marginRight: '35%',
+        }}
+        hourTextStyle={{ fontSize: 10 }}
         formatDateHeader={'M월 DD일'}
         eventContainerStyle={{
           maxWidth: CONTAINER_WIDTH * 0.5,
@@ -231,7 +239,7 @@ const styles = StyleSheet.create({
   alertButton: {
     position: 'absolute',
     top: 10,
-    right: 25,
+    right: 38,
     width: 18,
     height: 18,
     backgroundColor: '#54BCB6',

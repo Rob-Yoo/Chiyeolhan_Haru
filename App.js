@@ -36,10 +36,10 @@ const App = () => {
       // console.log(result);
     } catch (e) {
       console.warn(e);
-      await SplashScreen.hideAsync();
+      // await SplashScreen.hideAsync();
     } finally {
       setAppIsReady(true);
-      await SplashScreen.hideAsync();
+      // await SplashScreen.hideAsync();
     }
   };
 
