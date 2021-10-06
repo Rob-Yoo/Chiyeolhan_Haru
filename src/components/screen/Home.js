@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
@@ -62,14 +63,15 @@ const Home = ({ navigation }) => {
     await getToDos();
     await checkDayChange();
     await loadSuccessSchedules();
-    setLoading(false);
+    await SplashScreen.hideAsync();
+    //setLoading(false);
   };
 
   const getToDos = async () => {
     try {
       dispatch(setNetwork('online'));
       dispatch(setTabBar('today'));
-      setLoading(true);
+      //setLoading(true);
 
       let rowObj = {};
       let filterObj = {};

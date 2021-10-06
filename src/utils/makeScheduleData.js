@@ -1,5 +1,7 @@
 import { getCurrentTime, getDate } from 'utils/Time';
 
+const FAIL_COLOR = '#C3C3C3';
+const DEFAULT_COLOR = '#54BCB6';
 export const makeScheduleDate = (
   toDos,
   toDoArr,
@@ -36,8 +38,8 @@ export const makeScheduleDate = (
           (isDone && getCurrentTime() >= toDos[key].startTime) ||
           getCurrentTime() < toDos[key].startTime ||
           getCurrentTime() <= toDos[key].finishTime
-            ? '#54BCB6'
-            : '#B9B9B9',
+            ? DEFAULT_COLOR
+            : FAIL_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
         status,
@@ -59,7 +61,7 @@ export const makeScheduleDate = (
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: '#54BCB6',
+        color: DEFAULT_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
         status: null,
@@ -81,7 +83,7 @@ export const makeScheduleDate = (
         startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: isDone || netwrok === 'offline' ? '#54BCB6' : '#B9B9B9',
+        color: isDone || netwrok === 'offline' ? DEFAULT_COLOR : FAIL_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
         status: null,
