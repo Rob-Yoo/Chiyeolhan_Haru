@@ -57,14 +57,16 @@ const ScheduleLayout = ({
       ) : (
         <></>
       )}
-      <ToDoModal
-        navigation={navigation}
-        modalHandler={handleModal}
-        passModalData={passModalData}
-        setPassModalData={setPassModalData}
-        isModalVisible={isModalVisible}
-        isToday={isToday}
-      />
+      {network === 'online' ? (
+        <ToDoModal
+          navigation={navigation}
+          modalHandler={handleModal}
+          passModalData={passModalData}
+          setPassModalData={setPassModalData}
+          isModalVisible={isModalVisible}
+          isToday={isToday}
+        />
+      ) : null}
     </>
   );
 };

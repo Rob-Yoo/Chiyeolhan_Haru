@@ -117,7 +117,6 @@ export const ToDoModal = ({
     setVisible(!isVisible);
   };
   const getLocationData = (value) => {
-    // console.log(value);
     setLocationData(value);
     setLocationName(value.location);
   };
@@ -718,6 +717,7 @@ export const ToDoModal = ({
           height: SCREEN_HEIGHT,
           margin: 0,
         }}
+        backdropOpacity={0.3}
       >
         <Map
           modalHandler={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
@@ -738,6 +738,7 @@ export const ToDoModal = ({
           height: SCREEN_HEIGHT,
           margin: 0,
         }}
+        backdropOpacity={0}
       >
         <TouchableOpacity
           style={styles.background}

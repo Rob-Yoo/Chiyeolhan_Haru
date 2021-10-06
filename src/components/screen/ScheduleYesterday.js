@@ -11,6 +11,7 @@ const ScheduleYesterday = ({ navigation }) => {
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
+  const network = useSelector((state) => state.network);
 
   const passToModalData = (event) => {
     setPassModalData(event);
@@ -24,7 +25,7 @@ const ScheduleYesterday = ({ navigation }) => {
     }
   };
 
-  makeScheduleDate(storeData, yesterDayData, 'yesterday');
+  makeScheduleDate(storeData, yesterDayData, 'yesterday', network);
 
   return (
     <>
