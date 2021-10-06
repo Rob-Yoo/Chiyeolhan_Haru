@@ -237,10 +237,19 @@ const TabBar = (props) => {
 const styles = StyleSheet.create({
   wrap: {
     width: SCREEN_WIDTH,
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#fff',
     paddingTop: 10,
+    paddingHorizontal: 20,
+  },
+  tabContainer: {
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingTop: 20,
+    paddingBottom: 15,
   },
   tabUnderBar: {
     backgroundColor: '#229892',
@@ -250,19 +259,10 @@ const styles = StyleSheet.create({
     bottom: -10,
     right: -5,
   },
-  tabContainer: {
-    width: '100%',
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingTop: 20,
-    paddingBottom: 15,
-  },
   tabBarText: {
     fontFamily: 'GodoB',
     fontSize: 22,
     fontWeight: 'bold',
-    marginLeft: 25,
   },
   navIcon: { color: '#717171', width: 30, height: 30 },
 });

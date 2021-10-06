@@ -7,6 +7,8 @@ import { deleteToDoDispatch, init } from 'redux/store';
 
 import IconQuestion from '#assets/icons/icon-question';
 
+import { AlertView } from 'components/items/AlertView';
+
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
   deleteTomorrowAsyncStorageData,
@@ -25,7 +27,6 @@ import {
   CONTAINER_WIDTH,
   UID,
 } from 'constant/const';
-import { AlertView } from './layout/AlertView';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -163,7 +164,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         headerTextStyle={{ color: '#5E5E5E', marginRight: 120, fontSize: 10 }}
         formatDateHeader={'M월 DD일'}
         eventContainerStyle={{
-          maxWidth: CONTAINER_WIDTH * 0.53,
+          maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
           left: 40,
         }}
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
   },
-  allertButton: {
+  alertButton: {
     position: 'absolute',
     top: 10,
     right: 25,

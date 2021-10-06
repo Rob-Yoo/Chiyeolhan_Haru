@@ -26,6 +26,8 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="1hR-sk-wLg"/>
                                     <constraint firstAttribute="height" constant="128" id="oPf-3R-3Ov"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="r6U-ww-RTd"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="t0J-ks-HsV"/>
                                 </constraints>
                             </imageView>
                         </subviews>

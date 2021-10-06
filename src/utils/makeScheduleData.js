@@ -1,10 +1,13 @@
 import { getCurrentTime, getDate } from 'utils/Time';
-import { getDataFromAsync } from 'utils/AsyncStorage';
-import { KEY_VALUE_SUCCESS } from 'constant/const';
 
-export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
+export const makeScheduleDate = (
+  toDos,
+  toDoArr,
+  day,
+  netwrok = 'online',
+  waitingList = null,
+) => {
   const { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } = getDate();
-  //const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
 
   for (key in toDos) {
     if (
@@ -17,6 +20,8 @@ export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
       const startM = toDos[key].startTime?.replace(/\d\d:/, '');
       const endH = toDos[key].finishTime?.replace(/:\d\d/, '');
       const endM = toDos[key].finishTime?.replace(/\d\d:/, '');
+      const status = waitingList.includes(toDos[key].id) ? 'waiting' : null;
+      //console.log(status, toDos[key].title, toDos[key].id);
       toDoArr.push({
         id: toDos[key].id,
         description: toDos[key].title,
@@ -27,6 +32,7 @@ export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
         finishTime: toDos[key].finishTime,
         color:
           netwrok === 'offline' ||
+          status === 'waiting' ||
           (isDone && getCurrentTime() >= toDos[key].startTime) ||
           getCurrentTime() < toDos[key].startTime ||
           getCurrentTime() <= toDos[key].finishTime
@@ -34,6 +40,7 @@ export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
             : '#B9B9B9',
         toDos: [...toDos[key].toDos],
         isDone,
+        status,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -55,6 +62,7 @@ export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
         color: '#54BCB6',
         toDos: [...toDos[key].toDos],
         isDone,
+        status: null,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -76,6 +84,7 @@ export const makeScheduleDate = (toDos, toDoArr, day, netwrok = 'online') => {
         color: isDone || netwrok === 'offline' ? '#54BCB6' : '#B9B9B9',
         toDos: [...toDos[key].toDos],
         isDone,
+        status: null,
       });
     }
   }
