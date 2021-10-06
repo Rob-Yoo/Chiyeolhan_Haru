@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { cancelNotification } from 'utils/Notification';
 import { geofenceUpdate } from 'utils/BgGeofence';
+import { loadSuccessSchedules } from 'utils/AsyncStorage';
 import { getCurrentTime } from 'utils/Time';
 import { dbService } from 'utils/firebase';
 
@@ -34,24 +35,29 @@ export const checkGeofenceSchedule = async () => {
   try {
     const currentTime = getCurrentTime();
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
     const todosRef = dbService.collection(`${UID}`);
-    let isNeedUpdate = false;
+    let isNeedRestart = false;
 
-    if (geofenceData) {
-      if (geofenceData.length > 0) {
-        if (geofenceData[0].finishTime <= currentTime) {
-          const dbData = await todosRef
-            .where('id', '==', geofenceData[0].id)
-            .get();
-          dbData.forEach((todo) => {
-            if (todo.data().isDone == false) {
-              isNeedUpdate = true;
-            }
-          });
+    await loadSuccessSchedules();
+
+    if (isStartTodo) {
+      if (geofenceData) {
+        if (geofenceData.length > 0) {
+          if (geofenceData[0].finishTime <= currentTime) {
+            const dbData = await todosRef
+              .where('id', '==', geofenceData[0].id)
+              .get();
+            dbData.forEach((todo) => {
+              if (todo.data().isDone == false) {
+                isNeedRestart = true;
+              }
+            });
+          }
         }
       }
     }
-    return isNeedUpdate;
+    return isNeedRestart;
   } catch (e) {
     console.log('checkGeofenceSchedule Error :', e);
   }

@@ -42,7 +42,7 @@ const TabBar = (props) => {
   const handleRestart = async () => {
     try {
       // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
-      const isNeedReset = await checkGeofenceSchedule();
+      const isNeedRestart = await checkGeofenceSchedule();
       const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
       const currentTime = getCurrentTime();
       let idx = 0;
@@ -59,7 +59,6 @@ const TabBar = (props) => {
                 try {
                   if (geofenceData.length == 1) {
                     // 현재 일정이 마지막일 때
-                    restartAlert(geofenceUpdate, geofenceData, 1);
                     await geofenceUpdate(geofenceData);
                     restartNotifAlert();
                   } else {
@@ -70,7 +69,6 @@ const TabBar = (props) => {
                       cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
                       idx += 1;
                     }
-                    await geofenceUpdate(geofenceData, idx);
                     if (geofenceData.length === idx) {
                       // 현재시간과 가장 가까운 다음 일정이 없을 때
                       restartNotifAlert();
@@ -78,6 +76,7 @@ const TabBar = (props) => {
                       console.log('넘어간 일정 객체 : ', geofenceData[idx]);
                       restartNotifAlert(geofenceData[idx].startTime);
                     }
+                    await geofenceUpdate(geofenceData, idx);
                   }
                 } catch (e) {
                   console.log('startAlert Error : ', e);
@@ -88,7 +87,7 @@ const TabBar = (props) => {
           { cancelable: false },
         );
 
-      if (isNeedReset) {
+      if (isNeedRestart) {
         restartAlert();
       } else {
         restartDenyAlert();
