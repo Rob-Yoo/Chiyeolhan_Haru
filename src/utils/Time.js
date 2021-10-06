@@ -86,7 +86,6 @@ export const commonTimeExpression = (time) => {
   if (min < '10') {
     min = min.slice(1); // ex) "00" => "0"
   }
-
   if (hour > '12') {
     const pmHour = parseInt(hour) - 12;
     msg = min == '0' ? `오후 ${pmHour}시` : `오후 ${pmHour}시 ${min}분`;
@@ -97,6 +96,7 @@ export const commonTimeExpression = (time) => {
   } else {
     msg = min == '0' ? `오전 ${sdHour}시` : `오전 ${sdHour}시 ${min}분`;
   }
+  console.log('hour : ', hour, ', sdHour : ', sdHour);
   return msg;
 };
 
