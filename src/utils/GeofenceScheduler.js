@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { cancelNotification } from 'utils/Notification';
 import { geofenceUpdate } from 'utils/BgGeofence';
-import { loadSuccessSchedules } from 'utils/AsyncStorage';
 import { getCurrentTime } from 'utils/Time';
 import { dbService } from 'utils/firebase';
 
@@ -26,6 +25,38 @@ const getDataFromAsync = async (storageName) => {
     }
   } catch (e) {
     console.log('getDataFromAsync Error :', e);
+  }
+};
+
+const loadSuccessSchedules = async () => {
+  try {
+    let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    let isNeedUpdate = false;
+    const currentTime = getCurrentTime();
+    const todosRef = dbService.collection(`${UID}`);
+
+    if (successSchedules !== null) {
+      if (successSchedules.length > 0) {
+        for (const schedule of successSchedules) {
+          if (schedule.startTime <= currentTime) {
+            await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+            successSchedules = successSchedules.filter(
+              (success) => success.id !== schedule.id,
+            ); // isDone이 true가 되면 삭제
+            isNeedUpdate = true;
+          }
+        }
+        if (isNeedUpdate) {
+          await AsyncStorage.setItem(
+            KEY_VALUE_SUCCESS,
+            JSON.stringify(successSchedules),
+          );
+          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+        }
+      }
+    }
+  } catch (e) {
+    console.log('loadSuccessSchedules Error :', e);
   }
 };
 
