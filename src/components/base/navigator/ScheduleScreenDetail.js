@@ -9,11 +9,8 @@ import ScheduleYesterday from 'components/screen/ScheduleYesterday';
 import TabBar from 'components/base/navigator/TabBar';
 import { Fragment } from 'react';
 
-const Tab = createMaterialTopTabNavigator(tabNavigatorConfig);
-const tabNavigatorConfig = {
-  tabBarScrollEnabled: false,
-  swipeEnabled: false,
-};
+const Tab = createMaterialTopTabNavigator();
+
 export const SchedullScreenDetail = ({ navigation }) => {
   const tabBar = useSelector((state) => state.tabBar);
   return (

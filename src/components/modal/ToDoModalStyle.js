@@ -1,12 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { fontPercentage } from 'utils/responsive';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 const styles = StyleSheet.create({
-  modalStyle: {
-    margin: 0,
-    flex: 1,
-  },
   container: {
     position: 'absolute',
     height: '100%',
@@ -31,8 +28,6 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT > 668 ? '40%' : '45%',
     borderRadius: 50,
     marginTop: -10,
-    borderColor: '#fff',
-    borderWidth: 0.7,
   },
   modalTextView: {
     flexDirection: 'row',
@@ -45,7 +40,7 @@ const styles = StyleSheet.create({
     fontFamily: 'GodoB',
     color: '#FFFFFF',
     fontSize: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
   },
   titleText: {
     fontFamily: 'GodoB',
@@ -98,7 +93,7 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 13,
-    marginLeft: 50,
+    // marginLeft: 20,
     flex: 2,
   },
   taskInput: {
@@ -119,20 +114,19 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   modalInputTask: {
-    width: 200,
-    height: 50,
+    width: CONTAINER_WIDTH * 0.7,
+    height: 70,
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 20,
     paddingLeft: 10,
     shadowColor: '#00000029',
     shadowOffset: {
-      width: 3.4,
-      height: 5,
+      height: 2,
     },
+    shadowOpacity: 1,
+    shadowRadius: 3,
     justifyContent: 'center',
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
   },
   modalInputText: {
     color: '#B7B7B7',
@@ -151,13 +145,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
+    paddingHorizontal: 20,
   },
   modalTaskContainer: {
     backgroundColor: '#fff',

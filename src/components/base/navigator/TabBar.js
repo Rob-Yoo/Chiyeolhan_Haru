@@ -32,112 +32,135 @@ import {
   SCREEN_WIDTH,
 } from 'constant/const';
 
+const handleRestart = async () => {
+  try {
+    // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
+    const isNeedRestart = await checkGeofenceSchedule();
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const currentTime = getCurrentTime();
+    let idx = 0;
+
+    if (isNeedRestart) {
+      await skip();
+    } else {
+      skipDenyAlert();
+    }
+
+    const skip = async () => {
+      try {
+        if (geofenceData.length == 1) {
+          // 현재 일정이 마지막일 때
+          await geofenceUpdate(geofenceData);
+          skipNotifAlert();
+        } else {
+          for (const data of geofenceData) {
+            if (data.finishTime > currentTime) {
+              break;
+            }
+            cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
+            idx += 1;
+          }
+          if (geofenceData.length === idx) {
+            // 현재시간과 가장 가까운 다음 일정이 없을 때
+            skipNotifAlert();
+          } else {
+            console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+            skipNotifAlert(geofenceData[idx].title);
+          }
+          await geofenceUpdate(geofenceData, idx);
+        }
+      } catch (e) {
+        console.log('skip Error : ', e);
+      }
+    };
+  } catch (e) {
+    console.log('handleRestart Error :', e);
+  }
+};
+
+const handleStart = async () => {
+  try {
+    const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
+    if (isDayChange) {
+      const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+      if (geofenceData === null) {
+        startDenyAlert(1);
+      } else {
+        startAlert(geofenceUpdate, geofenceData);
+      }
+    } else {
+      startDenyAlert(2);
+    }
+  } catch (e) {
+    console.log('handleStart Error : ', e);
+  }
+};
+
 const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
-  //const [visibleName, setVisibleName] = useState(true);
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
   const dispatch = useDispatch();
-
-  const handleRestart = async () => {
-    try {
-      // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
-      const isNeedRestart = await checkGeofenceSchedule();
-      const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-      const currentTime = getCurrentTime();
-      let idx = 0;
-
-      if (isNeedRestart) {
-        await skip();
-      } else {
-        skipDenyAlert();
-      }
-
-      const skip = async () => {
-        try {
-          if (geofenceData.length == 1) {
-            // 현재 일정이 마지막일 때
-            await geofenceUpdate(geofenceData);
-            skipNotifAlert();
-          } else {
-            for (const data of geofenceData) {
-              if (data.finishTime > currentTime) {
-                break;
-              }
-              cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
-              idx += 1;
-            }
-            if (geofenceData.length === idx) {
-              // 현재시간과 가장 가까운 다음 일정이 없을 때
-              skipNotifAlert();
-            } else {
-              console.log('넘어간 일정 객체 : ', geofenceData[idx]);
-              skipNotifAlert(geofenceData[idx].title);
-            }
-            await geofenceUpdate(geofenceData, idx);
-          }
-        } catch (e) {
-          console.log('startAlert Error : ', e);
-        }
-      };
-    } catch (e) {
-      console.log('handleRestart Error :', e);
-    }
-  };
-
-  const handleStart = async () => {
-    try {
-      const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
-      if (isDayChange) {
-        const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-        if (geofenceData === null) {
-          startDenyAlert(1);
-        } else {
-          startAlert(geofenceUpdate, geofenceData);
-        }
-      } else {
-        startDenyAlert(2);
-      }
-    } catch (e) {
-      console.log('handleStart Error : ', e);
-    }
-  };
-
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
-          const isFocused = state.index === index;
-          let label = options.tabBarLabel;
+        <View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const isFocused = state.index === index;
+            let label = options.tabBarLabel;
 
-          const onLongPress = () => {
-            if (visibleName === 'today') {
-              dispatch(setTabBar('yesterday'));
-              navigation.navigate('yesterday');
-            } else {
-              dispatch(setTabBar('today'));
-              navigation.navigate('today');
-            }
-          };
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              targt: route.key,
-              canPreventDefault: true,
-            });
-            if (!isFocused && !event.defulatPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
+            const onLongPress = () => {
+              if (visibleName === 'today') {
+                dispatch(setTabBar('yesterday'));
+                navigation.navigate('yesterday');
+              } else {
+                dispatch(setTabBar('today'));
+                navigation.navigate('today');
+              }
+            };
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                targt: route.key,
+                canPreventDefault: true,
+              });
+              if (!isFocused && !event.defulatPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
 
-          if (route.name === 'today' || route.name === 'yesterday') {
+            if (route.name === 'today' || route.name === 'yesterday') {
+              return (
+                <TouchableOpacity
+                  isFocused={isFocused}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  key={`tab_${index}`}
+                  style={{ marginRight: 30 }}
+                >
+                  <Text
+                    style={[
+                      styles.tabBarText,
+                      { color: isFocused ? '#229892' : '#ADADAD' },
+                    ]}
+                    isFocused={isFocused}
+                  >
+                    {label}
+                  </Text>
+                  {isFocused ? <View style={styles.tabUnderBar} /> : null}
+                </TouchableOpacity>
+              );
+            }
+
             return (
               <TouchableOpacity
-                swipeEnabled={options.swipeEnabled}
                 isFocused={isFocused}
                 onPress={onPress}
-                onLongPress={onLongPress}
                 key={`tab_${index}`}
               >
                 <Text
@@ -152,46 +175,27 @@ const TabBar = (props) => {
                 {isFocused ? <View style={styles.tabUnderBar} /> : null}
               </TouchableOpacity>
             );
-          }
-
-          return (
-            <TouchableOpacity
-              isFocused={isFocused}
-              onPress={onPress}
-              key={`tab_${index}`}
-              style={{ marginRight: 120 }}
-            >
-              <Text
-                style={[
-                  styles.tabBarText,
-                  { color: isFocused ? '#229892' : '#ADADAD' },
-                ]}
-                isFocused={isFocused}
-              >
-                {label}
-              </Text>
-              {isFocused ? <View style={styles.tabUnderBar} /> : null}
-            </TouchableOpacity>
-          );
-        })}
+          })}
+        </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: network === 'online' ? 'space-between' : 'flex-end',
             alignItems: 'flex-start',
             width: 120,
+            //backgroundColor: 'green',
           }}
         >
           {network === 'online' ? (
             <>
               <TouchableOpacity
                 onPress={() => network === 'online' && handleStart()}
-                style={{ marginTop: 5 }}
+                style={{ marginTop: 6 }}
               >
                 <IconHandleStart
                   style={styles.navIcon}
                   name="icon-handle-reset"
-                  size={23}
+                  size={21}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -199,7 +203,7 @@ const TabBar = (props) => {
                 onPress={() => network === 'online' && handleRestart()}
               >
                 <ImageBackground
-                  style={[{ width: 23, height: 23 }]}
+                  style={[{ width: 22, height: 22 }]}
                   source={{ uri: 'iconHandleStart' }}
                 />
               </TouchableOpacity>
@@ -231,12 +235,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   tabContainer: {
+    width: '100%',
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingTop: 20,
-    paddingBottom: 15,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
   },
   tabUnderBar: {
     backgroundColor: '#229892',

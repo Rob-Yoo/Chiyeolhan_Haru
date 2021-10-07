@@ -15,7 +15,7 @@ import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
 import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
 
-import { KEY_VALUE_FAVORITE } from 'constant/const';
+import { SCREEN_HEIGHT, KEY_VALUE_FAVORITE } from 'constant/const';
 
 const defaultRender = () => {
   let defaultArray = [];
@@ -70,9 +70,13 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   }
 
   return (
-    <View style={{ flex: 1, marginTop: 100 }}>
+    <View style={{ marginTop: 100 }}>
       <ImageBackground
-        imageStyle={{ borderRadius: 50 }}
+        imageStyle={{
+          height: SCREEN_HEIGHT,
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+        }}
         style={[styles.modalTopContainer]}
         source={{ uri: 'favoriteBackground' }}
       >
@@ -160,7 +164,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
 const styles = StyleSheet.create({
   modalTopContainer: {
     justifyContent: 'center',
-    paddingVertical: 20,
+    paddingTop: 20,
     paddingHorizontal: 15,
   },
 

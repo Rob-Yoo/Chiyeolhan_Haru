@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from 'components/screen/Home';
 import OffHome from 'components/screen/OffHome';
-import { ModalStack } from 'components/base/navigator/Stack';
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
 import { Loading } from 'components/screen/Loading';
 
@@ -12,17 +11,33 @@ import { offlineAlert } from 'utils/TwoButtonAlert';
 
 export const Stack = createStackNavigator();
 
+const config = {
+  animation: 'timing',
+  config: {
+    duration: 660,
+  },
+};
+
 const HomeStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       initialRouteName="Home"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false,
+      }}
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="ScheduleToday"
         navigation={navigation}
         component={SchedullScreenDetail}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
       />
     </Stack.Navigator>
   );
@@ -96,7 +111,6 @@ const HomeNav = ({ navigation }) => {
         headerBackTitleVisible: false,
         headerTitle: false,
         headerShown: false,
-        swipeEnabled: false,
       }}
     >
       {network === 'online' ? (
@@ -104,7 +118,6 @@ const HomeNav = ({ navigation }) => {
       ) : (
         <Stack.Screen name="OffHome" component={OffHomeStack} />
       )}
-      <Stack.Screen name="ModalStack" component={ModalStack} />
     </Stack.Navigator>
   ) : (
     <Loading />

@@ -12,6 +12,7 @@ import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
+
   // const [isTerminate, setIsTerminate] = useState(false);
   // const appState = useRef(AppState.currentState);
 
@@ -39,12 +40,12 @@ const App = () => {
       await SplashScreen.hideAsync();
     } finally {
       setAppIsReady(true);
-      await SplashScreen.hideAsync();
     }
   };
 
   useEffect(() => {
     // AppState.addEventListener('change', _handleAppStateChange);
+
     prepare();
     // return () => {
     //   AppState.removeEventListener('change', _handleAppStateChange);

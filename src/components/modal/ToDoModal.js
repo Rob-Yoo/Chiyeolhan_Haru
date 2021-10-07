@@ -485,7 +485,6 @@ export const ToDoModal = ({
     <Modal
       navigation={navigation}
       isVisible={isModalVisible}
-      style={styles.modalStyle}
       onModalHide={() => clearData()}
       style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
     >
@@ -494,7 +493,15 @@ export const ToDoModal = ({
         activeOpacity={1}
         onPress={modalHandler}
       />
-      <View style={styles.modalInputContainer}>
+      <ImageBackground
+        source={{ uri: 'favoriteBackground' }}
+        imageStyle={{
+          height: SCREEN_HEIGHT,
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+        }}
+        style={styles.modalInputContainer}
+      >
         <View style={styles.modalTopContainer}>
           <View
             style={{
@@ -656,7 +663,9 @@ export const ToDoModal = ({
           <Text style={styles.taskTitle}>수행리스트</Text>
           <ScrollView
             contentContainerStyle={{
+              width: '100%',
               paddingBottom: 300,
+              alignItems: 'center',
             }}
           >
             {taskList.map((item, index) => (
@@ -705,7 +714,7 @@ export const ToDoModal = ({
             />
           )}
         </View>
-      </View>
+      </ImageBackground>
 
       {/* Map Modal*/}
       <Modal
