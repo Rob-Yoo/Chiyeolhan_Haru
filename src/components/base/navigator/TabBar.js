@@ -100,7 +100,6 @@ const TabBar = (props) => {
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
   const dispatch = useDispatch();
-
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
@@ -141,7 +140,7 @@ const TabBar = (props) => {
                   onPress={onPress}
                   onLongPress={onLongPress}
                   key={`tab_${index}`}
-                  style={{ marginRight: 30 }}
+                  style={{ marginRight: 25 }}
                 >
                   <Text
                     style={[
@@ -190,17 +189,17 @@ const TabBar = (props) => {
             <>
               <TouchableOpacity
                 onPress={() => network === 'online' && handleStart()}
-                style={{ marginTop: 6 }}
+                style={{ marginTop: 6, marginRight: -6 }}
               >
                 <IconHandleStart
                   style={styles.navIcon}
                   name="icon-handle-reset"
-                  size={21}
+                  size={20}
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ marginTop: 5 }}
-                onPress={() => network === 'online' && handleSkip()}
+                onPress={() => network === 'online' && handleRestart()}
               >
                 <ImageBackground
                   style={[{ width: 22, height: 22 }]}
@@ -217,7 +216,7 @@ const TabBar = (props) => {
                 : navigation.navigate('OffHome', { screen: 'OffHome' })
             }
           >
-            <IconHome name="icon-home" size={22} style={styles.navIcon} />
+            <IconHome name="icon-home" size={19} style={styles.navIcon} />
           </TouchableOpacity>
         </View>
       </View>

@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, AppState } from 'react-native';
-import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import RNRestart from 'react-native-restart';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
 import HomeContent from 'components/items/HomeContent';
-import { HomeTextItem } from 'components/items/HomeTextItem';
 import { Loading } from 'components/screen/Loading';
-
-import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
-import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
+import { HomeHeader } from 'components/items/HomeHeader';
 
 import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
@@ -21,10 +16,7 @@ import { getDate } from 'utils/Time';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
 
-const ScheduleButton = styled.TouchableOpacity``;
-
 const Home = ({ navigation }) => {
-  const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   let todoArr = [];
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
@@ -41,10 +33,7 @@ const Home = ({ navigation }) => {
       try {
         await BackgroundGeolocation.requestPermission();
         await loadSuccessSchedules();
-        const isDaychange = await checkDayChange();
-        if (isDaychange) {
-          RNRestart.Restart();
-        }
+        // const isDaychange = await checkDayChange();
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }
@@ -116,21 +105,7 @@ const Home = ({ navigation }) => {
   ) : (
     <View style={styles.wrap}>
       <View style={styles.homeContainer}>
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderText}>
-            <HomeTextItem />
-            <IconTaskListLeft />
-          </View>
-          <ScheduleButton>
-            <IconGoToScheduleButton
-              name="icon-go-to-schedule-button"
-              size={40}
-              color={'#229892'}
-              onPress={goToScheduleToday}
-              style={styles.iconScheduleButton}
-            />
-          </ScheduleButton>
-        </View>
+        <HomeHeader navigation={navigation} />
         <HomeContent todoArr={todoArr} />
       </View>
     </View>
@@ -151,22 +126,6 @@ const styles = StyleSheet.create({
     height: CONTAINER_HEIGHT,
     backgroundColor: '#ECF5F471',
   },
-  homeHeader: {
-    flex: 1.3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  homeHeaderText: { flex: 0.7, paddingLeft: 15 },
 
-  iconScheduleButton: { marginBottom: 10 },
-  updateBtn: {
-    width: 65,
-    height: 65,
-    borderRadius: 50,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -2,
-  },
+  iconScheduleButton: { marginBottom: 0 },
 });
