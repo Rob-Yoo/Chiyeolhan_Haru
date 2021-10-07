@@ -194,6 +194,7 @@ const setGeofenceDataArray = async (todayToDos) => {
           location: todo.data().location,
           startTime: todo.data().startTime,
           finishTime: todo.data().finishTime,
+          title: todo.data().title,
         };
       }
       if (todo.data().startTime > currentTime) {
@@ -204,6 +205,7 @@ const setGeofenceDataArray = async (todayToDos) => {
           latitude: todo.data().latitude,
           longitude: todo.data().longitude,
           location: todo.data().location,
+          title: todo.data().title,
         });
       }
     });

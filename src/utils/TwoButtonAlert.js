@@ -2,8 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { Alert } from 'react-native';
 
-import { commonTimeExpression } from 'utils/Time';
-
 import { KEY_VALUE_DAY_CHANGE, KEY_VALUE_START_TODO } from 'constant/const';
 
 export const alertStartTimePicker = () =>
@@ -41,33 +39,42 @@ export const noDataAlert = () =>
     cancelable: false,
   });
 
-export const restartNotifAlert = (time = 0) => {
-  let msg;
-
-  if (time == 0) {
-    msg = '다음 일정이 없으므로 위치 서비스를 종료합니다.';
+export const skipNotifAlert = (title = null) => {
+  let msg1;
+  let msg2 = '';
+  if (title == null) {
+    msg1 = `다음 일정이 없으므로\n위치 서비스를 종료합니다.`;
   } else {
-    const timeExpression = commonTimeExpression(time);
-    msg = `${timeExpression} 일정부터 다시 시작됩니다.`;
+    msg1 = `"${title}"`;
+    msg2 = '해당 일정에 위치 서비스를 제공하겠습니다.';
   }
-  Alert.alert(`${msg}`, '', [{ text: '확인' }], {
+  Alert.alert(`${msg1}`, `${msg2}`, [{ text: '확인' }], {
     cancelable: false,
   });
 };
 
-export const restartDenyAlert = () =>
+export const skipDenyAlert = () =>
   Alert.alert(
-    '다시 시작 버튼',
-    '일정 장소에 오지 않았을 경우 눌러주세요.',
+    'SKIP 버튼',
+    '목표 장소에 오지 않았을 경우 눌러주세요.',
     [{ text: '확인' }],
     {
       cancelable: false,
     },
   );
 
+const strtAlert = () => {
+  Alert.alert(
+    `일정이 시작됩니다.\n치열한 하루를 응원할께요!`,
+    '',
+    [{ text: '확인' }],
+    { cancelable: false },
+  );
+};
+
 export const startAlert = (geofenceUpdate, geofenceData) =>
   Alert.alert(
-    `오늘 일정에 대한\n 위치 서비스를 시작할까요?`,
+    `오늘 일정들에 대한\n 위치 서비스를 시작할까요?`,
     '',
     [
       {
@@ -80,6 +87,7 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
             await geofenceUpdate(geofenceData, 0);
             await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
             await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
+            strtAlert();
           } catch (e) {
             console.log('startAlert Error : ', e);
           }
@@ -93,9 +101,14 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
 
 export const startDenyAlert = (type) => {
   if (type == 1) {
-    Alert.alert('일정이 없습니다.', '', [{ text: '확인' }], {
-      cancelable: false,
-    });
+    Alert.alert(
+      '일정이 없습니다\n오늘 일정을 추가해보세요!',
+      '',
+      [{ text: '확인' }],
+      {
+        cancelable: false,
+      },
+    );
   } else {
     Alert.alert(
       `시작 버튼`,
@@ -109,7 +122,7 @@ export const startDenyAlert = (type) => {
 };
 
 export const addModifyBlockAlert = () =>
-  Alert.alert('다시 시작 버튼을 먼저 눌러주세요.', '', [{ text: '확인' }], {
+  Alert.alert('SKIP 버튼을 먼저 눌러주세요.', '', [{ text: '확인' }], {
     cancelable: false,
   });
 

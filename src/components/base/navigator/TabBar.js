@@ -18,8 +18,8 @@ import { getCurrentTime } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
-  restartNotifAlert,
-  restartDenyAlert,
+  skipNotifAlert,
+  skipDenyAlert,
   startDenyAlert,
   startAlert,
 } from 'utils/TwoButtonAlert';
@@ -47,51 +47,39 @@ const TabBar = (props) => {
       const currentTime = getCurrentTime();
       let idx = 0;
 
-      const restartAlert = () =>
-        Alert.alert(
-          '다시 시작',
-          '다시 치열한 하루를 보낼 준비됐나요?',
-          [
-            { text: '취소' },
-            {
-              text: '확인',
-              onPress: async () => {
-                try {
-                  if (geofenceData.length == 1) {
-                    // 현재 일정이 마지막일 때
-                    await geofenceUpdate(geofenceData);
-                    restartNotifAlert();
-                  } else {
-                    for (const data of geofenceData) {
-                      if (data.finishTime > currentTime) {
-                        break;
-                      }
-                      cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
-                      idx += 1;
-                    }
-                    if (geofenceData.length === idx) {
-                      // 현재시간과 가장 가까운 다음 일정이 없을 때
-                      restartNotifAlert();
-                    } else {
-                      console.log('넘어간 일정 객체 : ', geofenceData[idx]);
-                      restartNotifAlert(geofenceData[idx].startTime);
-                    }
-                    await geofenceUpdate(geofenceData, idx);
-                  }
-                } catch (e) {
-                  console.log('startAlert Error : ', e);
-                }
-              },
-            },
-          ],
-          { cancelable: false },
-        );
-
       if (isNeedRestart) {
-        restartAlert();
+        await skip();
       } else {
-        restartDenyAlert();
+        skipDenyAlert();
       }
+
+      const skip = async () => {
+        try {
+          if (geofenceData.length == 1) {
+            // 현재 일정이 마지막일 때
+            await geofenceUpdate(geofenceData);
+            skipNotifAlert();
+          } else {
+            for (const data of geofenceData) {
+              if (data.finishTime > currentTime) {
+                break;
+              }
+              cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
+              idx += 1;
+            }
+            if (geofenceData.length === idx) {
+              // 현재시간과 가장 가까운 다음 일정이 없을 때
+              skipNotifAlert();
+            } else {
+              console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+              skipNotifAlert(geofenceData[idx].title);
+            }
+            await geofenceUpdate(geofenceData, idx);
+          }
+        } catch (e) {
+          console.log('startAlert Error : ', e);
+        }
+      };
     } catch (e) {
       console.log('handleRestart Error :', e);
     }

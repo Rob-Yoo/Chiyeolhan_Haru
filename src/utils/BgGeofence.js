@@ -10,7 +10,6 @@ import {
   getCurrentTime,
 } from 'utils/Time';
 import {
-  completeNotification,
   notifHandler,
   arriveEarlyNotification,
   failNotification,
@@ -143,7 +142,7 @@ const findNearBy = async (data, currentTime) => {
             currentTime,
           );
           arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
-          completeNotification(timeDiff, nextSchedule); // 각 일정들마다 완료 알림 예약
+
           PushNotification.cancelLocalNotification(`${nextSchedule.id}F`); // failNotif 알림 취소
           await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
@@ -202,7 +201,6 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
     }
-    completeNotification(timeDiff, data[0]); // 현재 일정의 완료 알림 예약
 
     const nearBySchedules = await findNearBy(data, currentTime);
     if (nearBySchedules.length > 0) {
