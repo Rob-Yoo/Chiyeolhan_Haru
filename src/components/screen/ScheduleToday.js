@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
+import { getDataFromAsync } from 'utils/AsyncStorage';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
-import { KEY_VALUE_START_TIME } from 'constant/const';
+import { KEY_VALUE_START_TIME, KEY_VALUE_SUCCESS } from 'constant/const';
 
 const ScheduleToday = ({ navigation }) => {
   const todayData = [];
   const storeData = useSelector((state) => state.toDos);
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
+  const network = useSelector((state) => state.network);
+  let waitings = [];
+  const [waitingList, setWaitingList] = useState([]);
 
   const passToModalData = (event) => {
     setPassModalData(event);
@@ -28,7 +32,17 @@ const ScheduleToday = ({ navigation }) => {
     }
   };
 
-  makeScheduleDate(storeData, todayData, 'today');
+  useEffect(() => {
+    const getWaitingEvent = async () => {
+      const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+      successSchedules &&
+        successSchedules.map((schedule) => waitings.push(schedule.id));
+      waitings.length !== 0 && setWaitingList(waitings);
+    };
+    getWaitingEvent();
+  }, []);
+  //useEffect(() => [waitingList]);
+  makeScheduleDate(storeData, todayData, 'today', network, waitingList);
 
   return (
     <>

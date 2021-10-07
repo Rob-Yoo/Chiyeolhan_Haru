@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
@@ -23,7 +24,6 @@ import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
 const ScheduleButton = styled.TouchableOpacity``;
 
 const Home = ({ navigation }) => {
-  console.log('Home');
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   let todoArr = [];
   const dispatch = useDispatch();
@@ -31,7 +31,6 @@ const Home = ({ navigation }) => {
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
   const toDos = useSelector((state) => state.toDos);
-  console.log(`toDos:${JSON.stringify(toDos)}`);
   const appState = useRef(AppState.currentState);
 
   const __handleAppStateChange = async (nextAppState) => {
@@ -42,17 +41,13 @@ const Home = ({ navigation }) => {
       try {
         await BackgroundGeolocation.requestPermission();
         await loadSuccessSchedules();
-        const isDaychange = await checkDayChange();
-        if (isDaychange) {
-          RNRestart.Restart();
-        }
+        // const isDaychange = await checkDayChange();
       } catch (e) {
         console.log('requestPermission Deny:', e);
       }
     }
     appState.current = nextAppState;
   };
-
   useEffect(() => {
     AppState.addEventListener('change', __handleAppStateChange);
     readyForHome();
@@ -65,14 +60,15 @@ const Home = ({ navigation }) => {
     await getToDos();
     await checkDayChange();
     await loadSuccessSchedules();
-    setLoading(false);
+    await SplashScreen.hideAsync();
+    //setLoading(false);
   };
 
   const getToDos = async () => {
     try {
       dispatch(setNetwork('online'));
       dispatch(setTabBar('today'));
-      setLoading(true);
+      //setLoading(true);
 
       let rowObj = {};
       let filterObj = {};

@@ -3,13 +3,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { cancelNotification } from 'utils/Notification';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
+import { dbService } from 'utils/firebase';
 
 import {
+  UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_EARLY,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_SUCCESS,
+  KEY_VALUE_START_TODO,
 } from 'constant/const';
 
 const getDataFromAsync = async (storageName) => {
@@ -25,35 +28,67 @@ const getDataFromAsync = async (storageName) => {
   }
 };
 
+const loadSuccessSchedules = async () => {
+  try {
+    let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    let isNeedUpdate = false;
+    const currentTime = getCurrentTime();
+    const todosRef = dbService.collection(`${UID}`);
+
+    if (successSchedules !== null) {
+      if (successSchedules.length > 0) {
+        for (const schedule of successSchedules) {
+          if (schedule.startTime <= currentTime) {
+            await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+            successSchedules = successSchedules.filter(
+              (success) => success.id !== schedule.id,
+            ); // isDone이 true가 되면 삭제
+            isNeedUpdate = true;
+          }
+        }
+        if (isNeedUpdate) {
+          await AsyncStorage.setItem(
+            KEY_VALUE_SUCCESS,
+            JSON.stringify(successSchedules),
+          );
+          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+        }
+      }
+    }
+  } catch (e) {
+    console.log('loadSuccessSchedules Error :', e);
+  }
+};
+
 export const checkGeofenceSchedule = async () => {
   // 가장 최신의 지오펜스 일정 끝시간이 지났을 때 해당 일정이 성공한 일정 배열에 존재하는지 체크
   // 없으면 다음 일정으로 업데이트 해줘야한다.
   try {
-    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const currentTime = getCurrentTime();
-    let isNeedUpdate = false;
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+    const todosRef = dbService.collection(`${UID}`);
+    let isNeedRestart = false;
 
-    if (geofenceData) {
-      if (geofenceData.length > 0) {
-        if (geofenceData[0].finishTime <= currentTime) {
-          if (successSchedules) {
-            // successSchedules이 빈 배열 경우에는 무조건 true 반환
-            isNeedUpdate = successSchedules.every(
-              (schedule) => geofenceData[0].id !== schedule.id,
-            );
-          } else {
-            // successSchedules이 null인 경우는 앱을 처음 설치하고 첫 일정 장소에 들어오지 않는 경우이다.
-            isNeedUpdate = true;
+    await loadSuccessSchedules();
+
+    if (isStartTodo) {
+      if (geofenceData) {
+        if (geofenceData.length > 0) {
+          if (geofenceData[0].finishTime <= currentTime) {
+            const dbData = await todosRef
+              .where('id', '==', geofenceData[0].id)
+              .get();
+            dbData.forEach((todo) => {
+              if (todo.data().isDone == false) {
+                isNeedRestart = true;
+              }
+            });
           }
         }
       }
     }
-    console.log(
-      '안와서 다음 일정으로 업데이트가 수동으로 필요한가요? : ',
-      isNeedUpdate,
-    );
-    return isNeedUpdate;
+    return isNeedRestart;
   } catch (e) {
     console.log('checkGeofenceSchedule Error :', e);
   }
@@ -66,6 +101,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
     if (nearBySchedules) {
       // 일정이 현재 진행 중이라면 새로운 일정을 추가를 하면 현재 진행 중인 일정이 GEOFENCE 배열에서 사라진다.
@@ -121,12 +157,16 @@ export const geofenceScheduler = async (isChangeEarliest) => {
               JSON.stringify(geofenceData),
             );
             console.log('geofenceData : ', geofenceData);
-            await geofenceUpdate(geofenceData, 0);
+            if (isStartTodo) {
+              await geofenceUpdate(geofenceData, 0);
+            }
             console.log('nearBySchedule X isEarly X Progressing인 경우');
           }
         } else if (isChangeEarliest) {
-          // 현재 진행중인 일정에 neartBySchedules가 없고 도착 상태도 아니고 제일 빠른 시간의 일정이 바뀌었다면
-          await geofenceUpdate(geofenceData, 0);
+          // 현재 진행중인 일정에 neartBySchedules가 없고 도착 상태도 아니고 제일 빠른 시간의 일정이 바뀌었다.
+          if (isStartTodo) {
+            await geofenceUpdate(geofenceData, 0);
+          }
           console.log('nearBySchedule X isEarly X isChangeEarliest인 경우');
         }
       }

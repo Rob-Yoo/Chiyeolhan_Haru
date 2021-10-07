@@ -1,7 +1,16 @@
 import { getCurrentTime, getDate } from 'utils/Time';
 
-export const makeScheduleDate = (toDos, toDoArr, day) => {
+const FAIL_COLOR = '#C3C3C3';
+const DEFAULT_COLOR = '#54BCB6';
+export const makeScheduleDate = (
+  toDos,
+  toDoArr,
+  day,
+  netwrok = 'online',
+  waitingList = null,
+) => {
   const { DAY, MONTH, YEAR, TODAY, TOMORROW, YESTERDAY } = getDate();
+
   for (key in toDos) {
     if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -13,6 +22,8 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
       const startM = toDos[key].startTime?.replace(/\d\d:/, '');
       const endH = toDos[key].finishTime?.replace(/:\d\d/, '');
       const endM = toDos[key].finishTime?.replace(/\d\d:/, '');
+      const status = waitingList.includes(toDos[key].id) ? 'waiting' : null;
+      //console.log(status, toDos[key].title, toDos[key].id);
       toDoArr.push({
         id: toDos[key].id,
         description: toDos[key].title,
@@ -22,13 +33,16 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startTime: toDos[key].startTime,
         finishTime: toDos[key].finishTime,
         color:
+          netwrok === 'offline' ||
+          status === 'waiting' ||
           (isDone && getCurrentTime() >= toDos[key].startTime) ||
           getCurrentTime() < toDos[key].startTime ||
           getCurrentTime() <= toDos[key].finishTime
-            ? '#54BCB6'
-            : '#B9B9B9',
+            ? DEFAULT_COLOR
+            : FAIL_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
+        status,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -47,9 +61,10 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY + 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY + 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: '#54BCB6',
+        color: DEFAULT_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
+        status: null,
       });
     } else if (
       Object.keys(toDos[`${key}`]).length !== 0 &&
@@ -68,9 +83,10 @@ export const makeScheduleDate = (toDos, toDoArr, day) => {
         startDate: new Date(YEAR, MONTH - 1, DAY - 1, startH, startM),
         endDate: new Date(YEAR, MONTH - 1, DAY - 1, endH, endM),
         startTime: toDos[key].startTime,
-        color: isDone ? '#54BCB6' : '#B9B9B9',
+        color: isDone || netwrok === 'offline' ? DEFAULT_COLOR : FAIL_COLOR,
         toDos: [...toDos[key].toDos],
         isDone,
+        status: null,
       });
     }
   }

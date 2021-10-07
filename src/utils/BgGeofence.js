@@ -10,7 +10,6 @@ import {
   getCurrentTime,
 } from 'utils/Time';
 import {
-  completeNotification,
   notifHandler,
   arriveEarlyNotification,
   failNotification,
@@ -125,7 +124,6 @@ const findNearBy = async (data, currentTime) => {
 
   if (nextSchedules.length > 0) {
     for (const nextSchedule of nextSchedules) {
-      console.log('nextSchedule :', nextSchedule.location);
       const nextScheduleLocation = {
         lat: nextSchedule.latitude,
         lon: nextSchedule.longitude,
@@ -134,7 +132,6 @@ const findNearBy = async (data, currentTime) => {
         currentScheduleLocation,
         nextScheduleLocation,
       );
-      console.log(distance);
       if (distance > 200) {
         break;
       } else {
@@ -145,7 +142,7 @@ const findNearBy = async (data, currentTime) => {
             currentTime,
           );
           arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
-          completeNotification(timeDiff, nextSchedule); // 각 일정들마다 완료 알림 예약
+
           PushNotification.cancelLocalNotification(`${nextSchedule.id}F`); // failNotif 알림 취소
           await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
@@ -204,10 +201,8 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
     }
-    completeNotification(timeDiff, data[0]); // 현재 일정의 완료 알림 예약
 
     const nearBySchedules = await findNearBy(data, currentTime);
-    console.log('nearBySchedules :', nearBySchedules);
     if (nearBySchedules.length > 0) {
       // 다음 일정 장소가 현재 일정 장소의 200m 이내에 존재히면
       await AsyncStorage.setItem(
@@ -228,9 +223,6 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       data[0].startTime,
       data[0].finishTime,
     ); // 성공한 일정 저장
-    PushNotification.getScheduledLocalNotifications((notif) =>
-      console.log('예약된 알람 :', notif),
-    );
   } catch (e) {
     console.log('enterAction Error :', e);
   }
@@ -260,7 +252,6 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
       if (!nearBySchedules.includes(data[0])) {
         nearBySchedules.unshift(data[0]);
       }
-      console.log('allNearBySchedules :', nearBySchedules);
       const exitTimeCheck = (schedule) => currentTime > schedule.startTime;
       const isAllFinish = nearBySchedules.every(exitTimeCheck);
       if (isAllFinish) {
@@ -338,7 +329,8 @@ export const initBgGeofence = async () => {
       stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
       startOnBoot: true, // <-- Auto start tracking when device is powered-up.
     });
-
+    // const geo = await BackgroundGeolocation.getGeofences();
+    // console.log(geo);
     return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);

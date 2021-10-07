@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
-import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 import { deleteToDoDispatch, init } from 'redux/store';
+
+import IconQuestion from '#assets/icons/icon-question';
+
+import { AlertView } from 'components/items/AlertView';
 
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {
@@ -18,7 +21,12 @@ import { dbService } from 'utils/firebase';
 import { getCurrentTime, getDate } from 'utils/Time';
 import { geofenceUpdate } from 'utils/BgGeofence';
 
-import { KEY_VALUE_GEOFENCE, SCREEN_HEIGHT, UID } from 'constant/const';
+import {
+  KEY_VALUE_GEOFENCE,
+  SCREEN_HEIGHT,
+  CONTAINER_WIDTH,
+  UID,
+} from 'constant/const';
 
 const BACKGROUND_COLOR = '#ECF5F471';
 
@@ -133,69 +141,88 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [weekStart, setWeekStart] = useState(tempWeekStart);
   const [selectedDate, setSelectedDate] = useState(tempDate);
+  const [isVisibleAlert, setIsVisibleAlert] = useState(false);
+  const toggleAlert = () => {
+    setIsVisibleAlert(!isVisibleAlert);
+  };
 
   return (
-    <WeekView
-      events={events}
-      selectedDate={selectedDate}
-      fixedHorizontally={true}
-      weekStartsOn={weekStart}
-      numberOfDays={1}
-      formatTimeLabel="HH:mm A"
-      showTitle={false}
-      showNowLine={true}
-      headerStyle={{
-        color: BACKGROUND_COLOR,
-        borderColor: BACKGROUND_COLOR,
-      }}
-      headerTextStyle={{ color: '#5E5E5E', marginRight: 120 }}
-      formatDateHeader={'M월 DD일'}
-      eventContainerStyle={{
-        maxWidth: CONTAINER_WIDTH * 0.53,
-        minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
-        left: 40,
-      }}
-      EventComponent={MyEventComponent}
-      isRefreshing={isRefreshing}
-      scrollToTimeNow={day === 'today' ? true : false}
-      network={network}
-      scrollRefresh={() => scrollRefresh(dispatch)}
-      onEventPress={async (event) => {
-        passToModalData(event);
-      }}
-      onEventLongPress={async (event) => {
-        const targetId = event.id;
-        const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-        const currentTime = getCurrentTime();
-        const startTime = event.startTime;
+    <>
+      <WeekView
+        events={events}
+        selectedDate={selectedDate}
+        fixedHorizontally={true}
+        weekStartsOn={weekStart}
+        numberOfDays={1}
+        formatTimeLabel="H:mm A"
+        showTitle={false}
+        showNowLine={true}
+        headerStyle={{
+          color: BACKGROUND_COLOR,
+          borderColor: BACKGROUND_COLOR,
+          paddingTop: 20,
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}
+        headerTextStyle={{
+          fontSize: 10,
+          color: '#5E5E5E',
+          marginRight: '35%',
+        }}
+        hourTextStyle={{ fontSize: 10 }}
+        formatDateHeader={'M월 DD일'}
+        eventContainerStyle={{
+          maxWidth: CONTAINER_WIDTH * 0.5,
+          minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
+          left: 40,
+        }}
+        EventComponent={MyEventComponent}
+        nowLineColor={'#FD6363'}
+        isRefreshing={isRefreshing}
+        scrollToTimeNow={day === 'today' ? true : false}
+        network={network}
+        scrollRefresh={() => scrollRefresh(dispatch)}
+        onEventPress={async (event) => {
+          passToModalData(event);
+        }}
+        onEventLongPress={async (event) => {
+          const targetId = event.id;
+          const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+          const currentTime = getCurrentTime();
+          const startTime = event.startTime;
 
-        if (
-          (network === 'online' &&
-            day === 'today' &&
-            currentTime < startTime) ||
-          (network === 'online' && day === 'tomorrow')
-        ) {
-          try {
-            if ((await deleteToDoAlert(event)) === 'true') {
-              if (day === 'today') {
-                if (event.id == data[0].id) {
-                  await geofenceUpdate(data);
-                  await deleteTodayAsyncStorageData(targetId);
-                } else {
-                  await deleteGeofenceAsyncStorageData(targetId);
-                  await deleteTodayAsyncStorageData(targetId);
+          if (
+            (network === 'online' &&
+              day === 'today' &&
+              currentTime < startTime) ||
+            (network === 'online' && day === 'tomorrow')
+          ) {
+            try {
+              if ((await deleteToDoAlert(event)) === 'true') {
+                if (day === 'today') {
+                  if (event.id == data[0].id) {
+                    await geofenceUpdate(data);
+                    await deleteTodayAsyncStorageData(targetId);
+                  } else {
+                    await deleteGeofenceAsyncStorageData(targetId);
+                    await deleteTodayAsyncStorageData(targetId);
+                  }
+                } else if (day === 'tomorrow') {
+                  await deleteTomorrowAsyncStorageData(targetId);
                 }
-              } else if (day === 'tomorrow') {
-                await deleteTomorrowAsyncStorageData(targetId);
+                await dispatch(deleteToDoDispatch(targetId));
               }
-              await dispatch(deleteToDoDispatch(targetId));
+            } catch (e) {
+              console.log('long onPress delete Error', e);
             }
-          } catch (e) {
-            console.log('long onPress delete Error', e);
           }
-        }
-      }}
-    />
+        }}
+      />
+      <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
+        <IconQuestion name="icon-question" size={10} color="#fff" />
+        {isVisibleAlert ? <AlertView /> : null}
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -208,5 +235,16 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
+  },
+  alertButton: {
+    position: 'absolute',
+    top: 10,
+    right: 38,
+    width: 18,
+    height: 18,
+    backgroundColor: '#54BCB6',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -127,10 +127,10 @@ export const TimePicker = ({
         if (timeDiff >= 5) {
           handleConfirm(formatTime);
         } else {
-          alertFinsihTimePicker('시작시간보다 뒤로 설정해주세요.');
+          alertFinsihTimePicker('시작 시간 이후로 설정해주세요.');
         }
       } else {
-        alertFinsihTimePicker('시작시간부터 설정해주세요.');
+        alertFinsihTimePicker('시작 시간부터 설정해주세요.');
       }
     } catch (e) {
       console.log('checkValidFinishTime Error :', e);

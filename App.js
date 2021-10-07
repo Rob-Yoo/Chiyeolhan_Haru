@@ -12,56 +12,56 @@ import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
-  const [isTerminate, setIsTerminate] = useState(false);
-  const appState = useRef(AppState.currentState);
 
-  const _handleAppStateChange = async (nextAppState) => {
-    if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
-      setIsTerminate(false);
-    }
+  // const [isTerminate, setIsTerminate] = useState(false);
+  // const appState = useRef(AppState.currentState);
 
-    appState.current = nextAppState;
-  };
+  // const _handleAppStateChange = async (nextAppState) => {
+  //   if (
+  //     appState.current.match(/inactive|background/) &&
+  //     nextAppState === 'active'
+  //   ) {
+  //     setIsTerminate(false);
+  //   }
+
+  //   appState.current = nextAppState;
+  // };
 
   const prepare = async () => {
     try {
       await SplashScreen.preventAutoHideAsync();
       subscribeOnGeofence();
-      const result = await initBgGeofence();
-      setIsTerminate(result);
+      await initBgGeofence();
+      // const result = await initBgGeofence();
+      // setIsTerminate(result);
+      // console.log(result);
     } catch (e) {
       console.warn(e);
       await SplashScreen.hideAsync();
     } finally {
       setAppIsReady(true);
-      await SplashScreen.hideAsync();
     }
   };
 
   useEffect(() => {
-    AppState.addEventListener('change', _handleAppStateChange);
+    // AppState.addEventListener('change', _handleAppStateChange);
+
     prepare();
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange);
-    };
+    // return () => {
+    //   AppState.removeEventListener('change', _handleAppStateChange);
+    // };
   }, []);
 
   return (
     <>
-      {!isTerminate && appIsReady ? (
+      {appIsReady && (
         <>
-          {console.log('foreground')}
           <Provider store={store}>
             <NavigationContainer>
               <HomeNav />
             </NavigationContainer>
           </Provider>
         </>
-      ) : (
-        <></>
       )}
     </>
   );
