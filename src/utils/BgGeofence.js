@@ -13,7 +13,7 @@ import {
   notifHandler,
   arriveEarlyNotification,
   failNotification,
-  cancelNotification,
+  cancelAllNotif,
 } from 'utils/Notification';
 
 import {
@@ -237,7 +237,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
       if (currentTime < startTime) {
         const timeDiff = getTimeDiff(currentTime, finishTime);
         console.log('일정 시작 시간보다 전에 나감');
-        cancelNotification(data[0].id); //현재 일정의 예약된 모든 알림 삭제
+        cancelAllNotif(data[0].id); //현재 일정의 예약된 모든 알림 삭제
         failNotification(timeDiff, data[0].id); // 다시 해당 일정의 failNotification 알림 등록
         successSchedules = successSchedules.filter(
           (schedule) => schedule.id !== data[0].id,
@@ -268,7 +268,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
             ); // 성공한 일정 배열에서 삭제함
-            cancelNotification(schedule.id); //nearBy 일정들의 예약된 모든 알림 삭제
+            cancelAllNotif(schedule.id); //nearBy 일정들의 예약된 모든 알림 삭제
             timeDiff = getTimeDiff(currentTime, schedule.finishTime);
             failNotification(timeDiff, schedule.id); // 다시 nearBy 일정들의 failNotification 알림 등록
           }

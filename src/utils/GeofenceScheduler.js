@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { cancelNotification } from 'utils/Notification';
+import { cancelAllNotif } from 'utils/Notification';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import { getCurrentTime } from 'utils/Time';
 import { dbService } from 'utils/firebase';
@@ -68,7 +68,7 @@ export const checkGeofenceSchedule = async () => {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
     const todosRef = dbService.collection(`${UID}`);
-    let isNeedRestart = false;
+    let isNeedSkip = false;
 
     await loadSuccessSchedules();
 
@@ -81,14 +81,14 @@ export const checkGeofenceSchedule = async () => {
               .get();
             dbData.forEach((todo) => {
               if (todo.data().isDone == false) {
-                isNeedRestart = true;
+                isNeedSkip = true;
               }
             });
           }
         }
       }
     }
-    return isNeedRestart;
+    return isNeedSkip;
   } catch (e) {
     console.log('checkGeofenceSchedule Error :', e);
   }
@@ -107,24 +107,24 @@ export const geofenceScheduler = async (isChangeEarliest) => {
       // 일정이 현재 진행 중이라면 새로운 일정을 추가를 하면 현재 진행 중인 일정이 GEOFENCE 배열에서 사라진다.
       if (isChangeEarliest) {
         //추가 되기전 가장 최신 일정의 각 예약된 알림들을 모두 취소한다.
-        cancelNotification(geofenceData[1].id);
+        cancelAllNotif(geofenceData[1].id);
       } else if (progressing == null) {
         // 현재 일정이 진행 중이 아니고 EARLY로 들어온 것만 인식된 상황이라면 각 예약된 알림들을 모두 취소한다.
-        cancelNotification(geofenceData[0].id);
+        cancelAllNotif(geofenceData[0].id);
       }
 
       for (const schedule of nearBySchedules) {
         //nearBy 일정들의 각 예약된 알림들을 모두 취소한다.
-        cancelNotification(schedule.id);
+        cancelAllNotif(schedule.id);
       }
       await geofenceUpdate(geofenceData, 0);
       console.log('nearBySchedules인 경우');
     } else {
       if (isEarly) {
         if (isChangeEarliest) {
-          cancelNotification(geofenceData[1].id);
+          cancelAllNotif(geofenceData[1].id);
         } else {
-          cancelNotification(geofenceData[0].id);
+          cancelAllNotif(geofenceData[0].id);
         }
         await geofenceUpdate(geofenceData, 0);
         console.log('nearBySchedule X isEarly인 경우');
@@ -156,7 +156,6 @@ export const geofenceScheduler = async (isChangeEarliest) => {
               KEY_VALUE_GEOFENCE,
               JSON.stringify(geofenceData),
             );
-            console.log('geofenceData : ', geofenceData);
             if (isStartTodo) {
               await geofenceUpdate(geofenceData, 0);
             }
@@ -171,6 +170,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         }
       }
     }
+    console.log('geofenceData : ', geofenceData);
   } catch (e) {
     console.log('geofenceScheduler Error :', e);
   }

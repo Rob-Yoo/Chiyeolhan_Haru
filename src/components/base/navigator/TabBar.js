@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Text,
   ImageBackground,
-  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,7 +23,7 @@ import {
   startAlert,
 } from 'utils/TwoButtonAlert';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import { cancelNotification } from 'utils/Notification';
+import { cancelAllNotif } from 'utils/Notification';
 
 import {
   KEY_VALUE_GEOFENCE,
@@ -32,19 +31,13 @@ import {
   SCREEN_WIDTH,
 } from 'constant/const';
 
-const handleRestart = async () => {
+const handleSkip = async () => {
   try {
     // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
-    const isNeedRestart = await checkGeofenceSchedule();
+    const isNeedSkip = await checkGeofenceSchedule();
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const currentTime = getCurrentTime();
     let idx = 0;
-
-    if (isNeedRestart) {
-      await skip();
-    } else {
-      skipDenyAlert();
-    }
 
     const skip = async () => {
       try {
@@ -57,7 +50,7 @@ const handleRestart = async () => {
             if (data.finishTime > currentTime) {
               break;
             }
-            cancelNotification(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
+            cancelAllNotif(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
             idx += 1;
           }
           if (geofenceData.length === idx) {
@@ -73,8 +66,14 @@ const handleRestart = async () => {
         console.log('skip Error : ', e);
       }
     };
+
+    if (isNeedSkip) {
+      await skip();
+    } else {
+      skipDenyAlert();
+    }
   } catch (e) {
-    console.log('handleRestart Error :', e);
+    console.log('handleSkip Error :', e);
   }
 };
 
@@ -101,6 +100,7 @@ const TabBar = (props) => {
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
   const dispatch = useDispatch();
+
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
@@ -200,7 +200,7 @@ const TabBar = (props) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ marginTop: 5 }}
-                onPress={() => network === 'online' && handleRestart()}
+                onPress={() => network === 'online' && handleSkip()}
               >
                 <ImageBackground
                   style={[{ width: 22, height: 22 }]}
