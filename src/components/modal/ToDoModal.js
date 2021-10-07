@@ -31,7 +31,11 @@ import {
   getDataFromAsync,
 } from 'utils/AsyncStorage';
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import { failNotification, cancelNotification } from 'utils/Notification';
+import {
+  failNotification,
+  cancelAllNotif,
+  startNotification,
+} from 'utils/Notification';
 import {
   alertInValidSubmit,
   alertStartTimeError,
@@ -48,6 +52,7 @@ import {
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
   KEY_VALUE_TOMORROW_DATA,
+  KEY_VALUE_START_TODO,
   KEY_VALUE_SUCCESS,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
@@ -80,6 +85,7 @@ export const ToDoModal = ({
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
   const scrollView = useRef();
+
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (
@@ -113,13 +119,20 @@ export const ToDoModal = ({
   const handleIsOnGoing = () => {
     passModalData?.startDate < new Date() && setIsOngoing(true);
   };
+
+  const handleChange = (e) => {
+    setTitle(e.nativeEvent.text);
+  };
+
   const toggleIsVisible = (isVisible, setVisible) => {
     setVisible(!isVisible);
   };
+
   const getLocationData = (value) => {
     setLocationData(value);
     setLocationName(value.location);
   };
+
   const clearData = () => {
     setLocationData({});
     setLocationName(false);
@@ -135,232 +148,39 @@ export const ToDoModal = ({
     network !== 'offline' && setCanEdit(true);
   };
 
-  const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    if (network === 'offline') {
+  const handleTodoSubmit = async ({
+    todoStartTime,
+    todoFinishTime,
+    todoTitle,
+  }) => {
+    if (!canEdit) {
       modalHandler();
       return;
     }
-    const { latitude, location, longitude, address } =
-      passModalData === undefined || passModalData?.description
-        ? locationData
-        : passModalData;
-    const date = new Date();
-    const todoId =
-      `${date.getFullYear()}` +
-      `${isToday ? TODAY : TOMORROW}` +
-      `${todoStartTime}`;
-    const currentTime = getCurrentTime();
-    // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
-    // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
-    try {
-      const newData = {
-        id: todoId,
-        title: todoTitle,
-        startTime: todoStartTime,
-        finishTime: todoFinishTime,
-        location,
-        address,
-        longitude,
-        latitude,
-        date: isToday ? TODAY : TOMORROW,
-        toDos: [...taskList],
-        isDone: false,
-      };
-      dispatch(create(newData));
-      await toDosUpdateDB(newData, todoId);
-
-      if (isToday) {
-        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
-        const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
-        failNotification(timeDiff, todoId); // 일정이 끝시간땨에 실패 알림 예약
-      } else {
-        dbToAsyncTomorrow();
-      }
-
-      await handleFilterData(
-        location,
-        'location',
-        searchedList,
-        setSearchedList,
-      );
-
-      if (passModalData && passModalData.description === undefined) {
-        navigateFavorite();
-      }
+    if (isToday && todoStartTime < getCurrentTime()) {
       modalHandler();
-
-      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
-    } catch (e) {
-      console.log('toDoSumbit Error :', e);
-    }
-  };
-
-  const handleChange = (e) => {
-    setTitle(e.nativeEvent.text);
-  };
-
-  const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
-    let isNeedAlert = false;
-
-    for (const toDo of toDoArray) {
-      const id = Object.keys(toDo);
-      const startTime = toDo[id].startTime;
-      const finishTime = toDo[id].finishTime;
-
-      if (passModalData?.id !== id[0]) {
-        if (todoStartTime < startTime && startTime < todoFinishTime) {
-          isNeedAlert = true;
-          break;
-        }
-        if (todoStartTime < finishTime && finishTime < todoFinishTime) {
-          isNeedAlert = true;
-          break;
-        }
-        if (startTime <= todoStartTime && todoStartTime <= finishTime) {
-          isNeedAlert = true;
-          break;
-        }
-        if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
-          isNeedAlert = true;
-          break;
-        }
-      }
-    }
-    return isNeedAlert;
-  };
-
-  const toDoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
-    if (network === 'offline') {
-      modalHandler();
+      alertStartTimeError();
       return;
     }
-    const block = await checkGeofenceSchedule();
-    if (block) {
-      addModifyBlockAlert();
+    if (Object.keys(locationData).length == 0) {
+      alertNotFillIn('일정 장소를 등록해주세요.');
+    } else if (todoStartTime === undefined) {
+      alertNotFillIn('일정의 시작 시간을 등록해주세요.');
+    } else if (todoFinishTime === undefined) {
+      alertNotFillIn('일정의 끝 시간을 등록해주세요.');
+    } else if (todoTitle.length === 0) {
+      alertNotFillIn('일정의 제목을 입력해주세요');
     } else {
-      try {
-        let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
-        const currentTime = getCurrentTime();
-        const timeDiff = await getTimeDiff(currentTime, todoFinishTime);
-        const id = passModalData?.id;
-        const startTime = passModalData?.startTime;
-        let newID;
-        let isStartTimeChange = false;
-
-        if (startTime !== todoStartTime) {
-          // 시작시간이 바뀌면
-          isStartTimeChange = true;
-          const date = new Date();
-          newID =
-            `${date.getFullYear()}` +
-            `${isToday ? TODAY : TOMORROW}` +
-            `${todoStartTime}`;
-          //newID 생성
-          if (successSchedules !== null) {
-            let idx = 0;
-            let isNeedUpdate = false;
-            for (const schedule of successSchedules) {
-              if (schedule.id === id) {
-                successSchedules[idx].id = newID;
-                successSchedules[idx].startTime = todoStartTime;
-                isNeedUpdate = true;
-                break;
-              }
-              idx = idx + 1;
-            }
-            if (isNeedUpdate) {
-              await AsyncStorage.setItem(
-                KEY_VALUE_SUCCESS,
-                JSON.stringify(successSchedules),
-              );
-              console.log('Updated successSchedules :', successSchedules);
-            }
-          }
-        }
-
-        if (isStartTimeChange) {
-          const { location, longitude, latitude, address } = toDos[id];
-
-          dispatch(deleteToDoDispatch(id));
-          cancelNotification(id); //수정하려는 일정의 예약된 모든 알림 삭제
-
-          const newData = {
-            id: newID,
-            title: todoTitle,
-            startTime: todoStartTime,
-            finishTime: todoFinishTime,
-            location,
-            address,
-            longitude,
-            latitude,
-            date: isToday ? TODAY : TOMORROW,
-            toDos: [...taskList],
-            isDone: false,
-          };
-          dispatch(create(newData));
-          await toDosUpdateDB(newData, newID);
-        } else if (!isStartTimeChange) {
-          dispatch(
-            editToDoDispatch({
-              todoTitle,
-              todoStartTime,
-              todoFinishTime,
-              taskList,
-              id,
-            }),
-          );
-        }
-
-        const isChangeEarliest = isToday
-          ? await checkEarlistTodo(todoStartTime)
-          : true;
-        if (isToday) {
-          await dbToAsyncStorage(isChangeEarliest);
-          if (isStartTimeChange) {
-            failNotification(timeDiff, newID); // 일정이 끝시간때에 실패 알림 예약
-          } else {
-            failNotification(timeDiff, id); // 일정이 끝시간때에 실패 알림 예약
-          }
-        } else {
-          dbToAsyncTomorrow();
-        }
-        modalHandler();
-      } catch (e) {
-        console.log('todoModal todoEdit Error', e);
+      if (!passModalData?.description && isToday) {
+        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
+        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (!passModalData?.description && !isToday) {
+        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
+        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      } else if (passModalData?.description) {
+        //모달에 데이터가 있을때, 즉 일정을 수정할때
+        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
-    }
-  };
-
-  const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
-    try {
-      const toDoArray = isToday
-        ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
-        : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
-      let isNeedAlert = false;
-      if (toDoArray != null) {
-        if (toDoArray.length > 0) {
-          isNeedAlert = checkValidSubmit(
-            toDoArray,
-            todoStartTime,
-            todoFinishTime,
-          );
-        }
-        if (isNeedAlert) {
-          modalHandler();
-          alertInValidSubmit();
-        } else {
-          //passModalData 수정일때
-          !passModalData?.description
-            ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
-            : await toDoEdit(todoStartTime, todoFinishTime, todoTitle);
-        }
-      } else {
-        //일정 생성 일때
-        await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      }
-    } catch (e) {
-      console.log('handleAlert Error :', e);
     }
   };
 
@@ -398,38 +218,254 @@ export const ToDoModal = ({
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
-  const handleTodoSubmit = async ({
-    todoStartTime,
-    todoFinishTime,
-    todoTitle,
-  }) => {
-    if (!canEdit) {
+  const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
+    try {
+      const toDoArray = isToday
+        ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
+        : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
+      let isNeedAlert = false;
+      if (toDoArray != null) {
+        if (toDoArray.length > 0) {
+          // 추가하려는 일정이 시간표에 있는 일정들과 겹치는 지 검사
+          isNeedAlert = checkValidSubmit(
+            toDoArray,
+            todoStartTime,
+            todoFinishTime,
+          );
+        }
+        if (isNeedAlert) {
+          modalHandler();
+          alertInValidSubmit();
+        } else {
+          //passModalData 수정일때
+          !passModalData?.description
+            ? await toDoSubmit(todoStartTime, todoFinishTime, todoTitle)
+            : await toDoEdit(todoStartTime, todoFinishTime, todoTitle);
+        }
+      } else {
+        //일정 생성 일때
+        await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
+      }
+    } catch (e) {
+      console.log('handleAlert Error :', e);
+    }
+  };
+
+  const checkValidSubmit = (toDoArray, todoStartTime, todoFinishTime) => {
+    // 추가하려는 일정이 시간표에 있는 일정들과 겹치는지 검사
+    let isNeedAlert = false;
+
+    for (const toDo of toDoArray) {
+      const id = Object.keys(toDo);
+      const startTime = toDo[id].startTime;
+      const finishTime = toDo[id].finishTime;
+
+      if (passModalData?.id !== id[0]) {
+        if (todoStartTime < startTime && startTime < todoFinishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (todoStartTime < finishTime && finishTime < todoFinishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (startTime <= todoStartTime && todoStartTime <= finishTime) {
+          isNeedAlert = true;
+          break;
+        }
+        if (startTime <= todoFinishTime && todoFinishTime <= finishTime) {
+          isNeedAlert = true;
+          break;
+        }
+      }
+    }
+    return isNeedAlert;
+  };
+
+  const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    if (network === 'offline') {
       modalHandler();
       return;
     }
-    if (isToday && todoStartTime < getCurrentTime()) {
+    const { latitude, location, longitude, address } =
+      passModalData === undefined || passModalData?.description
+        ? locationData
+        : passModalData;
+    const date = new Date();
+    const todoId =
+      `${date.getFullYear()}` +
+      `${isToday ? TODAY : TOMORROW}` +
+      `${todoStartTime}`;
+    const currentTime = getCurrentTime();
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+
+    try {
+      const newData = {
+        id: todoId,
+        title: todoTitle,
+        startTime: todoStartTime,
+        finishTime: todoFinishTime,
+        location,
+        address,
+        longitude,
+        latitude,
+        date: isToday ? TODAY : TOMORROW,
+        toDos: [...taskList],
+        isDone: false,
+      };
+      dispatch(create(newData));
+      await toDosUpdateDB(newData, todoId);
+
+      if (isToday) {
+        // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
+        // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
+        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence 아니면 안함
+        if (isStartTodo) {
+          // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
+          const timeDiff = getTimeDiff(currentTime, todoFinishTime);
+          failNotification(timeDiff, todoId);
+        } else {
+          // 일정 시작 버튼이 안눌렸을 때 시작 버튼 눌러달라는 알림 예약
+          const timeDiff = getTimeDiff(currentTime, todoStartTime);
+          startNotification(timeDiff, todoId);
+        }
+      } else {
+        dbToAsyncTomorrow();
+      }
+
+      await handleFilterData(
+        location,
+        'location',
+        searchedList,
+        setSearchedList,
+      );
+
+      if (passModalData && passModalData.description === undefined) {
+        navigateFavorite();
+      }
       modalHandler();
-      alertStartTimeError();
+
+      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
+    } catch (e) {
+      console.log('toDoSumbit Error :', e);
+    }
+  };
+
+  const toDoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
+    if (network === 'offline') {
+      modalHandler();
       return;
     }
-    if (Object.keys(locationData).length == 0) {
-      alertNotFillIn('일정 장소를 등록해주세요.');
-    } else if (todoStartTime === undefined) {
-      alertNotFillIn('일정의 시작 시간을 등록해주세요.');
-    } else if (todoFinishTime === undefined) {
-      alertNotFillIn('일정의 끝 시간을 등록해주세요.');
-    } else if (todoTitle.length === 0) {
-      alertNotFillIn('일정의 제목을 입력해주세요');
+    const block = await checkGeofenceSchedule();
+    if (block) {
+      addModifyBlockAlert();
     } else {
-      if (!passModalData?.description && isToday) {
-        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
-        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (!passModalData?.description && !isToday) {
-        //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
-        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
-      } else if (passModalData?.description) {
-        //모달에 데이터가 있을때, 즉 일정을 수정할때
-        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
+      try {
+        const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+        const id = passModalData?.id;
+        const startTime = passModalData?.startTime;
+
+        let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+        let newID;
+        let isStartTimeChange = false;
+
+        if (startTime !== todoStartTime) {
+          // 시작시간이 바뀌면
+          isStartTimeChange = true;
+          const date = new Date();
+          newID =
+            `${date.getFullYear()}` +
+            `${isToday ? TODAY : TOMORROW}` +
+            `${todoStartTime}`;
+          //newID 생성
+          if (successSchedules !== null) {
+            let idx = 0;
+            let isNeedUpdate = false;
+            for (const schedule of successSchedules) {
+              if (schedule.id === id) {
+                successSchedules[idx].id = newID;
+                successSchedules[idx].startTime = todoStartTime;
+                successSchedules[idx].finishTime = todoFinishTime;
+                isNeedUpdate = true;
+                break;
+              }
+              idx = idx + 1;
+            }
+            if (isNeedUpdate) {
+              await AsyncStorage.setItem(
+                KEY_VALUE_SUCCESS,
+                JSON.stringify(successSchedules),
+              );
+              console.log('Updated successSchedules :', successSchedules);
+            }
+          }
+        }
+
+        if (isStartTimeChange) {
+          const { location, longitude, latitude, address } = toDos[id];
+
+          dispatch(deleteToDoDispatch(id));
+          cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제
+
+          const newData = {
+            id: newID,
+            title: todoTitle,
+            startTime: todoStartTime,
+            finishTime: todoFinishTime,
+            location,
+            address,
+            longitude,
+            latitude,
+            date: isToday ? TODAY : TOMORROW,
+            toDos: [...taskList],
+            isDone: false,
+          };
+          dispatch(create(newData));
+          await toDosUpdateDB(newData, newID);
+        } else if (!isStartTimeChange) {
+          dispatch(
+            editToDoDispatch({
+              todoTitle,
+              todoStartTime,
+              todoFinishTime,
+              taskList,
+              id,
+            }),
+          );
+        }
+
+        const isChangeEarliest = isToday
+          ? await checkEarlistTodo(todoStartTime)
+          : true;
+        if (isToday) {
+          await dbToAsyncStorage(isChangeEarliest);
+
+          const currentTime = getCurrentTime();
+
+          if (isStartTodo) {
+            // 시작 버튼이 눌렀을 경우에만 실패 알림 예약
+            const timeDiff = getTimeDiff(currentTime, todoFinishTime);
+            if (isStartTimeChange) {
+              failNotification(timeDiff, newID); // 일정이 끝시간때에 실패 알림 예약
+            } else {
+              failNotification(timeDiff, id); // 일정이 끝시간때에 실패 알림 예약
+            }
+          } else {
+            // 시작 버튼이 안 눌러젔을 경우에만 시작버튼 눌러달라는 알림 예약
+            const timeDiff = getTimeDiff(currentTime, todoStartTime);
+            if (isStartTimeChange) {
+              startNotification(timeDiff, newID); // 시작 버튼 눌러달라는 알림 예약
+            } else {
+              startNotification(timeDiff, id);
+            }
+          }
+        } else {
+          dbToAsyncTomorrow();
+        }
+        modalHandler();
+      } catch (e) {
+        console.log('todoModal todoEdit Error', e);
       }
     }
   };

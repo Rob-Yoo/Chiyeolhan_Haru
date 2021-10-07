@@ -4,8 +4,13 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { geofenceScheduler } from 'utils/GeofenceScheduler';
 import { dbService } from 'utils/firebase';
-import { cancelNotification } from 'utils/Notification';
-import { isEarliestTime, getCurrentTime, getDate } from 'utils/Time';
+import { cancelAllNotif, startNotification } from 'utils/Notification';
+import {
+  isEarliestTime,
+  getCurrentTime,
+  getDate,
+  getTimeDiff,
+} from 'utils/Time';
 
 import {
   UID,
@@ -140,7 +145,7 @@ export const deleteTodayAsyncStorageData = async (id) => {
       console.log('deleted Success Schedules : ', newSuccess);
     }
 
-    cancelNotification(id); //삭제하려는 일정의 예약된 모든 알림 삭제
+    cancelAllNotif(id); //삭제하려는 일정의 예약된 모든 알림 삭제
     PushNotification.getScheduledLocalNotifications((notif) =>
       console.log('예약된 알람 :', notif),
     );
@@ -185,7 +190,7 @@ const setGeofenceDataArray = async (todayToDos) => {
     todayToDos.forEach((todo) => {
       if (
         todo.data().startTime <= currentTime &&
-        currentTime <= todo.data().finishTime
+        currentTime < todo.data().finishTime
       ) {
         progressingSchedule = {
           id: todo.data().id,
@@ -209,7 +214,6 @@ const setGeofenceDataArray = async (todayToDos) => {
         });
       }
     });
-    console.log('geofenceDataArray : ', geofenceDataArray);
     await setGeofenceData(JSON.stringify(geofenceDataArray));
     if (progressingSchedule) {
       await setProgressingSchedule(JSON.stringify(progressingSchedule));
@@ -339,6 +343,9 @@ export const checkDayChange = async () => {
         await dbToAsyncStorage();
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
         const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        const currentTime = getCurrentTime();
+        const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+        startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
         console.log('바뀐 geofenceData :', geofenceData);
       }
       // 성공한 일정 배열을 초기화해준다.
@@ -363,7 +370,6 @@ export const checkDayChange = async () => {
 export const checkEarlistTodo = async (todoStartTime) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-    console.log(JSON.stringify(data));
     if (data != null) {
       if (data.length > 0) {
         const earliestTime = data[0].startTime;
