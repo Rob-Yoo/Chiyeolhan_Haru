@@ -660,12 +660,13 @@ export const ToDoModal = ({
         </View>
 
         <View style={styles.todoBottomContainer}>
-          <Text style={styles.taskTitle}>수행리스트</Text>
           <ScrollView
             contentContainerStyle={{
               width: '100%',
-              paddingBottom: 300,
               alignItems: 'center',
+              paddingTop: 5,
+              paddingBottom: 300,
+              paddingLeft: 60,
             }}
           >
             {taskList.map((item, index) => (
@@ -750,8 +751,8 @@ export const ToDoModal = ({
         backdropOpacity={0}
       >
         <TouchableOpacity
-          style={styles.background}
-          activeOpacity={1}
+          style={[styles.background, { opacity: 0 }]}
+          activeOpacity={0}
           onPress={() =>
             toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
           }

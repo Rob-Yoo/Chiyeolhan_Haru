@@ -176,11 +176,6 @@ export const TimePicker = ({
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      {/*<Button
-        color="#142423"
-        title={`${timeText}시간: ${time}`}
-        onPress={showTimePicker}
-      />*/}
       <TouchableOpacity onPress={showTimePicker}>
         <Text
           style={{ fontFamily: 'NotoSansKR-Bold', fontSize: 18, color: '#fff' }}
@@ -189,14 +184,15 @@ export const TimePicker = ({
         </Text>
       </TouchableOpacity>
       <DateTimePickerModal
-        isVisible={isVisible}
         mode="time"
-        onConfirm={checkValidTime}
-        onCancel={hideTimePicker}
         locale="en_GB"
-        //ios일때는 date android 일때는 value
-        date={lowTime}
+        isVisible={isVisible}
         minuteInterval={5}
+        cancelTextIOS="취소"
+        confirmTextIOS="완료"
+        onCancel={hideTimePicker}
+        onConfirm={checkValidTime}
+        date={lowTime === undefined ? new Date() : lowTime}
       />
     </View>
   );
