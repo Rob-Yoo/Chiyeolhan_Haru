@@ -4,9 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from 'components/screen/Home';
 import OffHome from 'components/screen/OffHome';
-import { Loading } from 'components/screen/Loading';
-
 import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
+import { Loading } from 'components/screen/Loading';
 
 import { offlineAlert } from 'utils/TwoButtonAlert';
 
