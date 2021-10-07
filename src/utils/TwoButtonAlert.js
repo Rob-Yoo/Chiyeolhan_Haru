@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { submitAllFailNotif } from 'utils/Notification';
 import { getCurrentTime } from 'utils/Time';
