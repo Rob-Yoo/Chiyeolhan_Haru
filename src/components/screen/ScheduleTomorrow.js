@@ -6,10 +6,16 @@ import RNRestart from 'react-native-restart';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
-import { checkDayChange } from 'utils/AsyncStorage';
+import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
+import { startBtnAlert } from 'utils/TwoButtonAlert';
+import { getCurrentTime, getTimeDiff } from 'utils/Time';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
-import { KEY_VALUE_START_TIME } from 'constant/const';
+import {
+  KEY_VALUE_START_TIME,
+  KEY_VALUE_START_TODO,
+  KEY_VALUE_GEOFENCE,
+} from 'constant/const';
 
 const ScheduleTomorrow = ({ navigation }) => {
   const tmorrowData = [];
@@ -17,12 +23,29 @@ const ScheduleTomorrow = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
 
+  const alertStartBtn = async () => {
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+
+    if (!isStartTodo) {
+      if (geofenceData !== null) {
+        const currentTime = getCurrentTime();
+        const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+        if (timeDiff <= 15) {
+          // 첫 일정의 시작 시간의 15분 전부터 시작 버튼을 눌러달라고 알림창을 띄움
+          startBtnAlert();
+        }
+      }
+    }
+  };
+
   useEffect(() => {
+    alertStartBtn();
     return async () => {
       const isDaychange = await checkDayChange();
       if (isDaychange) RNRestart.Restart();
     };
-  });
+  }, []);
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();

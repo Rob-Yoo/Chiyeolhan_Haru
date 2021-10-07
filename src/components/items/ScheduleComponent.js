@@ -142,6 +142,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const [weekStart, setWeekStart] = useState(tempWeekStart);
   const [selectedDate, setSelectedDate] = useState(tempDate);
   const [isVisibleAlert, setIsVisibleAlert] = useState(false);
+
   const toggleAlert = () => {
     setIsVisibleAlert(!isVisibleAlert);
   };

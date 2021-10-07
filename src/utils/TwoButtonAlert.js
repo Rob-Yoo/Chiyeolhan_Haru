@@ -1,8 +1,14 @@
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { Alert } from 'react-native';
+import { submitAllFailNotif } from 'utils/Notification';
+import { getCurrentTime } from 'utils/Time';
 
-import { KEY_VALUE_DAY_CHANGE, KEY_VALUE_START_TODO } from 'constant/const';
+import {
+  KEY_VALUE_DAY_CHANGE,
+  KEY_VALUE_START_TODO,
+  KEY_VALUE_GEOFENCE,
+} from 'constant/const';
 
 export const alertStartTimePicker = () =>
   Alert.alert(
@@ -63,18 +69,32 @@ export const skipDenyAlert = () =>
     },
   );
 
-const strtAlert = () => {
-  Alert.alert(
-    `일정이 시작됩니다.\n치열한 하루를 응원할께요!`,
-    '',
-    [{ text: '확인' }],
-    { cancelable: false },
-  );
+export const startBtnAlert = () =>
+  Alert.alert('시작 버튼을 눌러주세요!', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
+const strtAlert = (title = null) => {
+  if (title !== null) {
+    Alert.alert(
+      `"${title}"`,
+      '해당 일정부터 시작됩니다\n치열한 하루를 응원할께요!',
+      [{ text: '확인' }],
+      { cancelable: false },
+    );
+  } else {
+    Alert.alert(
+      `${title}`,
+      '다음 일정이 없습니다\n일정을 더 추가해보세요!',
+      [{ text: '확인' }],
+      { cancelable: false },
+    );
+  }
 };
 
-export const startAlert = (geofenceUpdate, geofenceData) =>
+export const startAlert = (geofenceUpdate, data) =>
   Alert.alert(
-    `오늘 일정들에 대한\n 위치 서비스를 시작할까요?`,
+    `치열한 하루를 시작해볼까요?`,
     '',
     [
       {
@@ -84,10 +104,24 @@ export const startAlert = (geofenceUpdate, geofenceData) =>
         text: '확인',
         onPress: async () => {
           try {
+            const currentTime = getCurrentTime();
+            // 시작 버튼 누르기 전 지나간 일정들 지오펜스 배열에서 제외
+            const geofenceData = data.filter((schedule) => {
+              return schedule.finishTime > currentTime;
+            });
+            submitAllFailNotif(geofenceData); // 모든 일정의 fail알림 등록
+            await AsyncStorage.setItem(
+              KEY_VALUE_GEOFENCE,
+              JSON.stringify(geofenceData),
+            );
             await geofenceUpdate(geofenceData, 0);
             await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
             await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
-            strtAlert();
+            if (geofenceData.length == 0) {
+              strtAlert();
+            } else {
+              strtAlert(geofenceData[0].title);
+            }
           } catch (e) {
             console.log('startAlert Error : ', e);
           }
@@ -109,7 +143,7 @@ export const startDenyAlert = (type) => {
         cancelable: false,
       },
     );
-  } else {
+  } else if (type == 2) {
     Alert.alert(
       `시작 버튼`,
       `치열한 하루를 시작할 때 눌러주세요.\n-\n위치 서비스를 시작하면 백그라운드에서 계속 동작하기 때문에 배터리가 소모될 수 있습니다.\n따라서, 첫 일정의 시작 시간 직전에 누르는 것이 좋습니다.`,
