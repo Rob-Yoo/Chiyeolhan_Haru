@@ -42,7 +42,7 @@ const setSuccessSchedule = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(array));
   } catch (e) {
-    console.log('setTomorrowData Error :', e);
+    console.log('setSuccessSchedule Error :', e);
   }
 };
 
@@ -158,13 +158,15 @@ const findNearBy = async (data, currentTime) => {
 const saveSuccessSchedules = async (id, startTime, finishTime) => {
   try {
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
-    if (successSchedules === null) {
+    if (successSchedules === null || successSchedules.length == 0) {
       const schedule = [{ id, startTime, finishTime }];
       await setSuccessSchedule(schedule);
     } else {
       let isOverlap = false;
 
       for (const schedule of successSchedules) {
+        // nearBy 스케줄이 존재하는 경우 가장 처음 일정을 삭제하거나 스킵하면 다음 일정의 지오펜스로 넘어가면서 다시 successSchedule에 담길 수 있기 때문에
+        // 겹치는 건 넣지 않는다.
         if (schedule.id === id) {
           isOverlap = true;
           break;
@@ -181,7 +183,6 @@ const saveSuccessSchedules = async (id, startTime, finishTime) => {
 };
 
 const enterAction = async (data, startTime, finishTime, currentTime) => {
-  const timeDiff = getTimeDiff(currentTime, data[0].finishTime);
   let isEarly = false;
 
   try {
@@ -331,7 +332,7 @@ export const initBgGeofence = async () => {
     });
     // const geo = await BackgroundGeolocation.getGeofences();
     // console.log(geo);
-    return state.didLaunchInBackground;
+    // return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);
   }

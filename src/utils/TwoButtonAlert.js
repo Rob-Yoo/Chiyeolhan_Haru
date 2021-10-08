@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { submitAllFailNotif } from 'utils/Notification';
+import { submitAllFailNotif, removeAllStartNotif } from 'utils/Notification';
 import { getCurrentTime } from 'utils/Time';
 
 import {
@@ -84,8 +84,8 @@ const strtAlert = (title = null) => {
     );
   } else {
     Alert.alert(
-      `${title}`,
-      '다음 일정이 없습니다\n일정을 더 추가해보세요!',
+      `일정이 없습니다\n일정을 더 추가해보세요!`,
+      '',
       [{ text: '확인' }],
       { cancelable: false },
     );
@@ -109,7 +109,10 @@ export const startAlert = (geofenceUpdate, data) =>
             const geofenceData = data.filter((schedule) => {
               return schedule.finishTime > currentTime;
             });
+
             submitAllFailNotif(geofenceData); // 모든 일정의 fail알림 등록
+            removeAllStartNotif(geofenceData); // startNotif 알림 삭제
+
             await AsyncStorage.setItem(
               KEY_VALUE_GEOFENCE,
               JSON.stringify(geofenceData),
@@ -117,6 +120,7 @@ export const startAlert = (geofenceUpdate, data) =>
             await geofenceUpdate(geofenceData, 0);
             await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
             await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
+
             if (geofenceData.length == 0) {
               strtAlert();
             } else {

@@ -14,7 +14,7 @@ import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
 import { getCurrentTime } from 'utils/Time';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
   skipNotifAlert,
@@ -79,6 +79,7 @@ const handleSkip = async () => {
 
 const handleStart = async () => {
   try {
+    await checkDayChange();
     const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
     if (isDayChange) {
       const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
