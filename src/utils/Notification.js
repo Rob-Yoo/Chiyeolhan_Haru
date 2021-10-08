@@ -2,7 +2,7 @@ import PushNotification from 'react-native-push-notification';
 
 import { getTimeDiff, getCurrentTime } from 'utils/Time';
 
-export const arriveOnTimeNotification = () => {
+export const arriveOnTimeNotification = (schedule) => {
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
     id: 'ON_TIME',
@@ -78,10 +78,16 @@ export const submitAllFailNotif = (geofenceData) => {
   }
 };
 
+export const removeAllStartNotif = (geofenceData) => {
+  for (const data of geofenceData) {
+    PushNotification.cancelLocalNotification(`${data.id}S`); //startNotif 알림 사라짐
+  }
+};
+
 export const notifHandler = (arriveType, schedule, timeDiff = 0) => {
   switch (arriveType) {
     case 'ON_TIME':
-      arriveOnTimeNotification();
+      arriveOnTimeNotification(schedule);
       PushNotification.cancelLocalNotification(`${schedule.id}F`);
       break;
     case 'LATE':

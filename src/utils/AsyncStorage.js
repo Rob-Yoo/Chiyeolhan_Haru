@@ -342,7 +342,7 @@ export const checkDayChange = async () => {
         // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
         await dbToAsyncStorage();
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
-        const geofenceData = await AsyncStorage.getItem(KEY_VALUE_GEOFENCE);
+        const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
         const currentTime = getCurrentTime();
         const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
         startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
@@ -370,7 +370,7 @@ export const checkDayChange = async () => {
 export const checkEarlistTodo = async (todoStartTime) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-    if (data != null) {
+    if (data !== null) {
       if (data.length > 0) {
         const earliestTime = data[0].startTime;
         if (isEarliestTime(earliestTime, todoStartTime)) {

@@ -46,6 +46,7 @@ const ScheduleTomorrow = ({ navigation }) => {
       if (isDaychange) RNRestart.Restart();
     };
   }, []);
+
   const passToModalData = (event) => {
     setPassModalData(event);
     toggleModal();
