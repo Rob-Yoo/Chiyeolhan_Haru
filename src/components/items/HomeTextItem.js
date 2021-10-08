@@ -1,7 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-const GREEN_COLOR = '#229892';
 
+const GREEN_COLOR = '#229892';
+const styles = StyleSheet.create({
+  homeText: {
+    fontWeight: '900',
+    fontSize: 25,
+    fontFamily: 'NotoSansKR-Bold',
+    letterSpacing: 0,
+    marginBottom: -10,
+  },
+  homeHeaderRectangle: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    width: 7,
+    height: 60,
+    backgroundColor: '#00A29A',
+    shadowColor: '#00000029',
+  },
+});
 export const HomeTextItem = () => {
   return (
     <>
@@ -11,21 +29,3 @@ export const HomeTextItem = () => {
     </>
   );
 };
-const styles = StyleSheet.create({
-  homeText: {
-    fontWeight: '900',
-    fontSize: 25,
-    fontFamily: 'NotoSansKR-Bold',
-    letterSpacing: 0,
-    marginBottom: -9,
-  },
-  homeHeaderRectangle: {
-    position: 'absolute',
-    top: 5,
-    left: 0,
-    width: 6,
-    height: 60,
-    backgroundColor: '#00A29A',
-    shadowColor: '#00000029',
-  },
-});

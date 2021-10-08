@@ -15,16 +15,12 @@ import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
 import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
 
-import {
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  KEY_VALUE_FAVORITE,
-} from 'constant/const';
+import { SCREEN_HEIGHT, KEY_VALUE_FAVORITE } from 'constant/const';
 
-const defaultRender = (favoriteLength) => {
+const defaultRender = () => {
   let defaultArray = [];
 
-  for (let i = 0; i + favoriteLength < 8; i++) {
+  for (let i = 0; i < 8; i++) {
     defaultArray.push(
       <View key={`DEFAULT${i}`} style={styles.favoriteCard}>
         <IconQuestion
@@ -50,8 +46,9 @@ const getFavoriteAsync = async (setFavorite, setLoading) => {
 
 export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   const scrollViewRef = useRef();
-  const [favorite, setFavorite] = useState('');
+  const [favorite, setFavorite] = useState(null);
   const [loading, setLoading] = useState(false);
+  let backupData = [];
 
   useEffect(() => {
     getFavoriteAsync(setFavorite, setLoading);
@@ -87,7 +84,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
           ref={scrollViewRef}
           contentContainerStyle={{
             flexDirection: 'row',
-            justifyContent: 'flex-start',
+            justifyContent: 'flex-end',
             flexWrap: 'wrap',
             flexGrow: 1,
             paddingBottom: 100,
@@ -133,25 +130,44 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
               </View>
             );
           })}
-          {defaultRender(favorite?.length)}
+          {defaultRender()}
+          <TouchableOpacity onPress={modalHandler} style={styles.buttonGoBack}>
+            <IconGobackButton
+              color="#54BCB6"
+              name="icon-go-back-button"
+              size={18}
+            />
+          </TouchableOpacity>
         </ScrollView>
-        <TouchableOpacity onPress={modalHandler} style={styles.buttonGoBack}>
-          <IconGobackButton
-            color="#54BCB6"
-            name="icon-go-back-button"
-            size={18}
-          />
-        </TouchableOpacity>
       </ImageBackground>
+      {/* <View
+        style={{
+          backgroundColor: '#fff',
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          height: 60,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <IconAngleDown
+          onPress={() => scrollToEndFavorite()}
+          name="icon-angle-down"
+          size={20}
+        />
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   modalTopContainer: {
-    paddingTop: 35,
-    paddingLeft: '18%',
+    justifyContent: 'center',
+    paddingTop: 20,
+    paddingHorizontal: 15,
   },
+
   searchInputViewBackButton: {
     width: 30,
     height: 30,
@@ -159,8 +175,8 @@ const styles = StyleSheet.create({
   favoriteCard: {
     margin: 10,
     padding: 10,
-    height: 125,
-    width: 125,
+    height: 140,
+    width: '39%',
     shadowRadius: 8,
     borderRadius: 20,
     shadowOpacity: 0.5,
@@ -185,7 +201,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     position: 'absolute',
-    top: SCREEN_HEIGHT * 0.0486,
-    left: SCREEN_WIDTH * 0.05,
+    top: 5,
+    left: 10,
   },
 });

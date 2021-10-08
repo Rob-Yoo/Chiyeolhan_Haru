@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import IconArrow from '#assets/icons/icon-arrow';
+
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 export const Nodata = () => {
   const navigation = useNavigation();
@@ -19,6 +20,7 @@ export const Nodata = () => {
           <Text style={styles.cardText}>치열한 하루!</Text>
           <View style={styles.statusbar} />
         </View>
+
         <Text style={styles.nodataText}>일정을 기록해보세요</Text>
         <TouchableOpacity onPress={() => navigation.navigate('ScheduleToday')}>
           <IconArrow name="icon-arrow" size={30} color="#229892" />
@@ -35,16 +37,16 @@ const styles = StyleSheet.create({
   },
   background: {
     position: 'absolute',
-    top: -500,
+    top: -200,
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT + 1000,
+    height: SCREEN_HEIGHT + 200,
     opacity: 0.3,
     backgroundColor: '#000000',
   },
   backgroundWhite: {
     position: 'absolute',
     width: '80%',
-    height: SCREEN_HEIGHT > 668 ? '55%' : '70%',
+    height: '60%',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
@@ -70,8 +72,8 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: '#fff',
-    width: 40,
-    height: 40,
+    width: SCREEN_HEIGHT > 668 ? 40 : 20,
+    height: SCREEN_HEIGHT > 668 ? 40 : 20,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -94,6 +96,5 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
-    marginBottom: 15,
   },
 });
