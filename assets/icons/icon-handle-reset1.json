@@ -1,0 +1,24 @@
+{
+  "name": "icon-handle-reset1",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "84886f324de5ba0d6729bf70f94f2a3d",
+      "css": "icon-handle-start1",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M834.8 0H165.2A165.5 165.5 0 0 0 0 165.2V834.8A165.5 165.5 0 0 0 165.2 1000H834.8A165.4 165.4 0 0 0 1000 834.8V165.2A165.5 165.5 0 0 0 834.8 0ZM935.5 698.5V834.7A100.8 100.8 0 0 1 834.8 935.4H165.2A100.8 100.8 0 0 1 64.5 834.8V275.9H935.5Z",
+        "width": 1000
+      },
+      "search": [
+        "icon-handle-start1"
+      ]
+    }
+  ]
+}

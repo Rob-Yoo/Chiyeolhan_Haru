@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { init, setNetwork, setTabBar } from 'redux/store';
 
-import HomeContent from 'components/items/HomeContent';
 import { Loading } from 'components/screen/Loading';
-import { HomeHeader } from 'components/items/HomeHeader';
+import { HomeTextItem } from 'components/items/HomeTextItem';
+import HomeContent from 'components/items/HomeContent';
+
+import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
+import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 import { getDate } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
@@ -23,9 +26,11 @@ import {
   CONTAINER_HEIGHT,
   CONTAINER_WIDTH,
 } from 'constant/const';
+const ScheduleButton = styled.TouchableOpacity``;
 
 const OffHome = ({ navigation, route }) => {
   const { TODAY } = getDate();
+  const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   const [isLoading, setLoading] = useState(true);
   const [fetchedToDo, setFetchObj] = useState({});
   let todoArr = [];
@@ -96,7 +101,21 @@ const OffHome = ({ navigation, route }) => {
       style={styles.homeBackground}
     >
       <View style={styles.homeContainer}>
-        <HomeHeader navigation={navigation} />
+        <View style={styles.homeHeader}>
+          <View style={styles.homeHeaderText}>
+            <HomeTextItem />
+            <IconTaskListLeft />
+          </View>
+          <ScheduleButton>
+            <IconGoToScheduleButton
+              name="icon-go-to-schedule-button"
+              size={40}
+              color={'#229892'}
+              onPress={goToScheduleToday}
+              style={styles.iconScheduleButton}
+            />
+          </ScheduleButton>
+        </View>
         <HomeContent todoArr={todoArr} />
       </View>
     </ImageBackground>

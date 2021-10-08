@@ -1,12 +1,10 @@
 import React from 'react';
-import { ImageBackground } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { View, Text } from 'react-native';
 
 export const Loading = () => {
   return (
-    <ImageBackground
-      style={[{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }]}
-      source={{ uri: 'SplashScreen' }}
-    />
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <Text>로딩</Text>
+    </View>
   );
 };
