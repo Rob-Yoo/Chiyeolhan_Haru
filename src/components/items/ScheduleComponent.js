@@ -42,7 +42,7 @@ const MyEventComponent = ({ event, position }) => {
       style={{
         flexDirection: timeDiff <= minutes20 ? 'row' : null,
         alignItems: timeDiff <= minutes20 ? 'center' : null,
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
       }}
     >
       <Text
@@ -60,13 +60,7 @@ const MyEventComponent = ({ event, position }) => {
       >
         {event.description}
       </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginLeft: SCREEN_HEIGHT > 668 ? 3 : 7,
-          paddingTop: 1,
-        }}
-      >
+      <View style={{ flexDirection: 'row', marginLeft: 2.5, paddingTop: 1 }}>
         <View
           style={{
             width:
@@ -76,8 +70,7 @@ const MyEventComponent = ({ event, position }) => {
                 : 3,
             height: 13,
             backgroundColor: '#fff',
-            marginRight: 3,
-            marginTop: 2.5,
+            marginRight: 4,
           }}
         />
         <Text
@@ -226,12 +219,10 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           }
         }}
       />
-      {network === 'online' ? (
-        <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
-          <IconQuestion name="icon-question" size={9} color="#fff" />
-          {isVisibleAlert ? <AlertView /> : null}
-        </TouchableOpacity>
-      ) : null}
+      <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
+        <IconQuestion name="icon-question" size={10} color="#fff" />
+        {isVisibleAlert ? <AlertView /> : null}
+      </TouchableOpacity>
     </>
   );
 };
@@ -248,10 +239,10 @@ const styles = StyleSheet.create({
   },
   alertButton: {
     position: 'absolute',
-    top: 18,
-    right: 41,
-    width: 16,
-    height: 16,
+    top: 10,
+    right: 38,
+    width: 18,
+    height: 18,
     backgroundColor: '#54BCB6',
     borderRadius: 50,
     justifyContent: 'center',
