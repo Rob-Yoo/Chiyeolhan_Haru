@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View,
   StyleSheet,
+  Alert,
   TouchableOpacity,
   Text,
   ImageBackground,
@@ -14,7 +15,8 @@ import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
 import { getCurrentTime } from 'utils/Time';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { dbService } from 'utils/firebase';
+import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
   skipNotifAlert,
@@ -26,15 +28,15 @@ import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
 import { cancelAllNotif } from 'utils/Notification';
 
 import {
+  UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
 } from 'constant/const';
 
-const handleSkip = async () => {
+const handleSkip = async (isNeedSkip) => {
   try {
     // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
-    const isNeedSkip = await checkGeofenceSchedule();
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const currentTime = getCurrentTime();
     let idx = 0;
@@ -67,18 +69,64 @@ const handleSkip = async () => {
       }
     };
 
-    if (isNeedSkip) {
+    if (isNeedSkip == 1) {
       await skip();
-    } else {
-      skipDenyAlert();
+    } else if (isNeedSkip == 2) {
+      const todosRef = dbService.collection(`${UID}`);
+
+      if (geofenceData.length == 1) {
+        // 현재 일정이 마지막일 때
+        cancelAllNotif(geofenceData[0].id);
+        await geofenceUpdate(geofenceData);
+        await todosRef.doc(`${geofenceData[0].id}`).update({ isSkip: true });
+        skipNotifAlert();
+        return geofenceData[0].id;
+      } else {
+        cancelAllNotif(geofenceData[0].id);
+        await geofenceUpdate(geofenceData);
+        await todosRef.doc(`${geofenceData[0].id}`).update({ isSkip: true });
+        skipNotifAlert(geofenceData[1].title);
+        return geofenceData[0].id;
+      }
     }
+    return null;
   } catch (e) {
     console.log('handleSkip Error :', e);
   }
 };
 
+const skipNotifHandler = async () => {
+  try {
+    const isNeedSkip = await checkGeofenceSchedule();
+
+    if (isNeedSkip) {
+      Alert.alert(
+        `다음 일정으로 넘기시겠습니까?`,
+        '',
+        [
+          { text: '취소' },
+          {
+            text: '확인',
+            onPress: () => {
+              const skipID = handleSkip(isNeedSkip);
+            },
+          },
+        ],
+        {
+          cancelable: false,
+        },
+      );
+    } else {
+      skipDenyAlert();
+    }
+  } catch (e) {
+    console.log('skipNotifHandler Error : ', e);
+  }
+};
+
 const handleStart = async () => {
   try {
+    await checkDayChange();
     const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
     if (isDayChange) {
       const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
@@ -200,7 +248,7 @@ const TabBar = (props) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ marginTop: 5 }}
-                onPress={() => network === 'online' && handleSkip()}
+                onPress={() => network === 'online' && skipNotifHandler()}
               >
                 <ImageBackground
                   style={[{ width: 22, height: 22 }]}

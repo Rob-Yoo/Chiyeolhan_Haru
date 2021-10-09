@@ -8,8 +8,6 @@ import store from 'redux/store';
 
 import HomeNav from 'components/base/navigator/HomeNav';
 
-import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
-
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -30,8 +28,8 @@ const App = () => {
   const prepare = async () => {
     try {
       await SplashScreen.preventAutoHideAsync();
-      subscribeOnGeofence();
-      await initBgGeofence();
+      // subscribeOnGeofence();
+      // await initBgGeofence();
       // const result = await initBgGeofence();
       // setIsTerminate(result);
       // console.log(result);

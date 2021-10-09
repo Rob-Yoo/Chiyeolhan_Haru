@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
+import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
 import App from './App';
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
@@ -34,6 +35,8 @@ PushNotification.configure({
   requestPermissions: Platform.OS === 'ios',
 });
 
+subscribeOnGeofence();
+initBgGeofence();
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately

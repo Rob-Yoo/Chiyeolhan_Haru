@@ -81,7 +81,16 @@ export const checkGeofenceSchedule = async () => {
               .get();
             dbData.forEach((todo) => {
               if (todo.data().isDone == false) {
-                isNeedSkip = true;
+                isNeedSkip = 1;
+              }
+            });
+          } else if (geofenceData[0].startTime <= currentTime) {
+            const dbData = await todosRef
+              .where('id', '==', geofenceData[0].id)
+              .get();
+            dbData.forEach((todo) => {
+              if (todo.data().isDone == false) {
+                isNeedSkip = 2;
               }
             });
           }
@@ -106,6 +115,14 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     if (nearBySchedules) {
       // 일정이 현재 진행 중이라면 새로운 일정을 추가를 하면 현재 진행 중인 일정이 GEOFENCE 배열에서 사라진다.
       if (isChangeEarliest) {
+        if (progressing) {
+          // progressing인 일정을 추가, 수정할 경우 geofence 배열에 넣어줘야한다.
+          geofenceData.unshift(progressing);
+          await AsyncStorage.setItem(
+            KEY_VALUE_GEOFENCE,
+            JSON.stringify(geofenceData),
+          );
+        }
         //추가 되기전 가장 최신 일정의 각 예약된 알림들을 모두 취소한다.
         cancelAllNotif(geofenceData[1].id);
       } else if (progressing == null) {
@@ -122,7 +139,22 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     } else {
       if (isEarly) {
         if (isChangeEarliest) {
-          cancelAllNotif(geofenceData[1].id);
+          if (progressing) {
+            // progressing인 일정을 추가 할 경우 geofence 배열에 넣어줘야한다.
+            if (geofenceData.length > 2) {
+              // 추가 하기 전 가장 최신 일정의 알림 삭제
+              cancelAllNotif(geofenceData[1].id);
+            }
+            geofenceData.unshift(progressing);
+            await AsyncStorage.setItem(
+              KEY_VALUE_GEOFENCE,
+              JSON.stringify(geofenceData),
+            );
+          } else if (geofenceData.length > 2) {
+            cancelAllNotif(geofenceData[1].id);
+          } else if (geofenceData.length == 1) {
+            cancelAllNotif(geofenceData[0].id);
+          }
         } else {
           cancelAllNotif(geofenceData[0].id);
         }

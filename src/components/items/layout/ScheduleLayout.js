@@ -7,6 +7,7 @@ import ToDoModal from 'components/modal/ToDoModal';
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 
 import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
+import { checkDayChange } from 'utils/AsyncStorage';
 import { addModifyBlockAlert } from 'utils/TwoButtonAlert';
 
 const styles = StyleSheet.create({
@@ -39,8 +40,9 @@ const ScheduleLayout = ({
   const network = useSelector((state) => state.network);
 
   const pressAddButton = async () => {
+    await checkDayChange();
     const block = await checkGeofenceSchedule();
-    if (block) {
+    if (block == 1) {
       addModifyBlockAlert();
     } else {
       handleModal();

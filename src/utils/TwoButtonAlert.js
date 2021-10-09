@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { submitAllFailNotif } from 'utils/Notification';
+import { submitAllFailNotif, removeAllStartNotif } from 'utils/Notification';
 import { getCurrentTime } from 'utils/Time';
 
 import {
@@ -61,8 +61,8 @@ export const skipNotifAlert = (title = null) => {
 
 export const skipDenyAlert = () =>
   Alert.alert(
-    'SKIP 버튼',
-    '목표 장소에 오지 않았을 경우 눌러주세요.',
+    'SKIP',
+    '목표 장소에 가지 않을 경우 눌러주세요.',
     [{ text: '확인' }],
     {
       cancelable: false,
@@ -84,8 +84,8 @@ const strtAlert = (title = null) => {
     );
   } else {
     Alert.alert(
-      `${title}`,
-      '다음 일정이 없습니다\n일정을 더 추가해보세요!',
+      `일정이 없습니다\n일정을 더 추가해보세요!`,
+      '',
       [{ text: '확인' }],
       { cancelable: false },
     );
@@ -109,7 +109,10 @@ export const startAlert = (geofenceUpdate, data) =>
             const geofenceData = data.filter((schedule) => {
               return schedule.finishTime > currentTime;
             });
+
             submitAllFailNotif(geofenceData); // 모든 일정의 fail알림 등록
+            removeAllStartNotif(geofenceData); // startNotif 알림 삭제
+
             await AsyncStorage.setItem(
               KEY_VALUE_GEOFENCE,
               JSON.stringify(geofenceData),
@@ -117,6 +120,7 @@ export const startAlert = (geofenceUpdate, data) =>
             await geofenceUpdate(geofenceData, 0);
             await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
             await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
+
             if (geofenceData.length == 0) {
               strtAlert();
             } else {
@@ -145,7 +149,7 @@ export const startDenyAlert = (type) => {
     );
   } else if (type == 2) {
     Alert.alert(
-      `시작 버튼`,
+      `시작`,
       `치열한 하루를 시작할 때 눌러주세요.\n-\n위치 서비스를 시작하면 백그라운드에서 계속 동작하기 때문에 배터리가 소모될 수 있습니다.\n따라서, 첫 일정의 시작 시간 직전에 누르는 것이 좋습니다.`,
       [{ text: '확인' }],
       {
