@@ -119,12 +119,13 @@ export const getDate = () => {
   const MONTH = date.getMonth() + 1;
   const DAY = date.getDate();
   const TODAY =
-    (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY}` : DAY);
+    (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) + (DAY < 10 ? `0${DAY}` : `${DAY}`);
   const YESTERDAY =
-    (MONTH < 10 ? `0${MONTH}` : MONTH) + (DAY < 10 ? `0${DAY - 1}` : DAY - 1);
+    (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) +
+    (DAY < 10 ? `0${DAY - 1}` : `${DAY - 1}`);
   const TOMORROW =
-    (MONTH < 10 ? `0${MONTH}` : MONTH) +
-    (DAY + 1 < 10 ? `0${DAY + 1}` : DAY + 1);
+    (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) +
+    (DAY + 1 < 10 ? `0${DAY + 1}` : `${DAY + 1}`);
   return {
     YEAR,
     MONTH,
