@@ -42,7 +42,7 @@ const ScheduleLayout = ({
   const pressAddButton = async () => {
     await checkDayChange();
     const block = await checkGeofenceSchedule();
-    if (block) {
+    if (block == 1) {
       addModifyBlockAlert();
     } else {
       handleModal();

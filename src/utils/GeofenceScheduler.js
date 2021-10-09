@@ -81,7 +81,16 @@ export const checkGeofenceSchedule = async () => {
               .get();
             dbData.forEach((todo) => {
               if (todo.data().isDone == false) {
-                isNeedSkip = true;
+                isNeedSkip = 1;
+              }
+            });
+          } else if (geofenceData[0].startTime <= currentTime) {
+            const dbData = await todosRef
+              .where('id', '==', geofenceData[0].id)
+              .get();
+            dbData.forEach((todo) => {
+              if (todo.data().isDone == false) {
+                isNeedSkip = 2;
               }
             });
           }

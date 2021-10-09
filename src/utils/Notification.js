@@ -19,7 +19,7 @@ export const arriveLateNotification = () => {
     //... You can use all the options from localNotifications
     id: 'LATE',
     title: '치열한 하루🏃‍♂️',
-    message: `늦었네요,,,다음에는 늦지 않기 약속,,,!😏`, // (required)
+    message: `늦었네요,,,다음에는 늦지 않기로 약속,,,!😏`, // (required)
     date: new Date(Date.now() + 1000 * 60),
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
