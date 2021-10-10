@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setTabBar } from 'redux/store';
+import { setTabBar, skip } from 'redux/store';
 
 import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
@@ -95,7 +95,7 @@ const handleSkip = async (isNeedSkip) => {
   }
 };
 
-const skipNotifHandler = async () => {
+const skipNotifHandler = async (storeSkipUpdate) => {
   try {
     const isNeedSkip = await checkGeofenceSchedule();
 
@@ -107,8 +107,11 @@ const skipNotifHandler = async () => {
           { text: '취소' },
           {
             text: '확인',
-            onPress: () => {
-              const skipID = handleSkip(isNeedSkip);
+            onPress: async () => {
+              const skipID = await handleSkip(isNeedSkip);
+              if (skipID !== null) {
+                storeSkipUpdate(skipID);
+              }
             },
           },
         ],
@@ -147,8 +150,11 @@ const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const storeSkipUpdate = (targetId) => {
+    dispatch(skip(targetId));
+  };
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
@@ -248,7 +254,9 @@ const TabBar = (props) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ marginTop: 5 }}
-                onPress={() => network === 'online' && skipNotifHandler()}
+                onPress={() =>
+                  network === 'online' && skipNotifHandler(storeSkipUpdate)
+                }
               >
                 <ImageBackground
                   style={[{ width: 22, height: 22 }]}
