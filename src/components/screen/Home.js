@@ -118,7 +118,7 @@ const Home = ({ navigation }) => {
   ) : (
     <View style={styles.wrap}>
       <View style={styles.homeContainer}>
-        <HomeHeader />
+        <HomeHeader navigation={navigation} />
         <HomeContent todoArr={todoArr} />
       </View>
     </View>
