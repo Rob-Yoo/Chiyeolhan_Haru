@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar } from 'redux/store';
 
@@ -24,13 +25,14 @@ import {
   CONTAINER_HEIGHT,
   CONTAINER_WIDTH,
 } from 'constant/const';
+import { HomeHeader } from '../items/HomeHeader';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
 const OffHome = ({ navigation, route }) => {
   const { TODAY } = getDate();
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [fetchedToDo, setFetchObj] = useState({});
   let todoArr = [];
   let rowObj = {};
@@ -58,6 +60,7 @@ const OffHome = ({ navigation, route }) => {
       mounted2.current = true;
     } else {
       setLoading(false);
+      SplashScreen.hideAsync();
     }
   }, [toDos]);
 
@@ -95,42 +98,26 @@ const OffHome = ({ navigation, route }) => {
   return isLoading ? (
     <Loading />
   ) : (
-    <ImageBackground
-      source={{ uri: 'homeBackground' }}
-      style={styles.homeBackground}
-    >
+    <View style={styles.wrap}>
       <View style={styles.homeContainer}>
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderText}>
-            <HomeTextItem />
-            <IconTaskListLeft />
-          </View>
-          <ScheduleButton>
-            <IconGoToScheduleButton
-              name="icon-go-to-schedule-button"
-              size={40}
-              color={'#229892'}
-              onPress={goToScheduleToday}
-              style={styles.iconScheduleButton}
-            />
-          </ScheduleButton>
-        </View>
+        <HomeHeader />
         <HomeContent todoArr={todoArr} />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  homeBackground: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-    paddingHorizontal: 20,
+  wrap: {
+    flex: 1,
+    backgroundColor: '#ECF5F471',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   homeContainer: {
     width: CONTAINER_WIDTH,
     height: CONTAINER_HEIGHT,
+    backgroundColor: '#ECF5F471',
   },
   homeHeader: {
     flex: 1.3,
