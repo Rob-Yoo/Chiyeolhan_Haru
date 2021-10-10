@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 
 import { Nodata } from 'components/items//Nodata';
@@ -14,9 +14,13 @@ const HomeContent = (props) => {
   let todoArr = props.todoArr;
   if (todoArr.length === 0) return <Nodata />;
 
+  const [nowIndex, setNowIndex] = useState(todoArr.length);
   const { TODAY } = getDate();
 
-  const [nowIndex, setNowIndex] = useState(todoArr.length);
+  useEffect(() => {
+    getNowTimeIndex();
+  }, []);
+
   const getNowTimeIndex = () => {
     let tempData = Number.MAX_SAFE_INTEGER;
     let tempIndex = todoArr.length;
@@ -66,10 +70,6 @@ const HomeContent = (props) => {
       });
     setNowIndex(tempIndex);
   };
-
-  useEffect(() => {
-    getNowTimeIndex();
-  }, []);
 
   return (
     <View style={styles.homeContainer}>

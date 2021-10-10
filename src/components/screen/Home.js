@@ -33,6 +33,18 @@ const Home = ({ navigation }) => {
   const toDos = useSelector((state) => state.toDos);
   const appState = useRef(AppState.currentState);
 
+  useEffect(() => {
+    AppState.addEventListener('change', __handleAppStateChange);
+    readyForHome();
+    return () => {
+      AppState.removeEventListener('change', __handleAppStateChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(setHomeRender(false));
+  }, [homeRender]);
+
   const __handleAppStateChange = async (nextAppState) => {
     if (
       appState.current.match(/inactive|background/) &&
@@ -51,13 +63,6 @@ const Home = ({ navigation }) => {
     }
     appState.current = nextAppState;
   };
-  useEffect(() => {
-    AppState.addEventListener('change', __handleAppStateChange);
-    readyForHome();
-    return () => {
-      AppState.removeEventListener('change', __handleAppStateChange);
-    };
-  }, []);
 
   const readyForHome = async () => {
     await getToDos();
@@ -93,10 +98,6 @@ const Home = ({ navigation }) => {
       console.log('getToDos Error :', e);
     }
   };
-
-  useEffect(() => {
-    dispatch(setHomeRender(false));
-  }, [homeRender]);
 
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
@@ -137,8 +138,6 @@ const Home = ({ navigation }) => {
   );
 };
 
-export default Home;
-
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
@@ -170,3 +169,5 @@ const styles = StyleSheet.create({
     right: -2,
   },
 });
+
+export default Home;

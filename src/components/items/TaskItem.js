@@ -19,13 +19,17 @@ export const Task = (props) => {
   const todosSelector = useSelector(
     (state) => targetId !== 0 && state.toDos[targetId]?.toDos,
   );
-
   const network = useSelector((state) => state.network);
   const [taskTitle, setTaskTitle] = useState(
     targetId !== 0 ? todosSelector[index] : null,
   );
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    todosSelector !== 0 && setTaskTitle(todosSelector[index]);
+  }, [todosSelector]);
+
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
@@ -52,9 +56,6 @@ export const Task = (props) => {
     deleteTaskList(targetId, index);
   };
 
-  useEffect(() => {
-    todosSelector !== 0 && setTaskTitle(todosSelector[index]);
-  }, [todosSelector]);
   return (
     <View style={styles.taskContainer}>
       <TouchableHighlight

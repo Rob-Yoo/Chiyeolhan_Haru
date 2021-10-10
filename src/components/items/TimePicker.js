@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
 import { useSelector } from 'react-redux';
 
 import { getTimeDiff } from 'utils/Time';

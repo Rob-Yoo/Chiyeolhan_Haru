@@ -7,67 +7,6 @@ import { getCurrentTime } from 'utils/Time';
 import { fontPercentage } from 'utils/responsive';
 
 import { SCREEN_HEIGHT } from 'constant/const';
-export const styles = StyleSheet.create({
-  card: {
-    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
-
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 0,
-      height: 15,
-    },
-    shadowOpacity: 1.5,
-    shadowRadius: 6.84,
-  },
-  todomanBackgroundCircle: {
-    width: SCREEN_HEIGHT > 668 ? 50 : 40,
-    height: SCREEN_HEIGHT > 668 ? 50 : 40,
-    backgroundColor: '#ffffff',
-    borderRadius: 50,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 0,
-      height: 15,
-    },
-    shadowOpacity: 1.5,
-    shadowRadius: 5.84,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardTitle: {
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize:
-      Dimensions.get('window').height > 668
-        ? fontPercentage(22)
-        : fontPercentage(20),
-
-    position: 'relative',
-  },
-  cardLocation: {
-    fontFamily: 'NotoSansKR-Medium',
-    fontSize: fontPercentage(12),
-    fontWeight: '800',
-    flexWrap: 'wrap',
-    // backgroundColor: 'red',
-    color: '#F4F4F4',
-    marginTop: 5,
-    marginLeft: 15,
-  },
-  cardTime: {
-    fontFamily: 'NotoSansKR-Bold',
-    fontSize: fontPercentage(15),
-  },
-  cardCalendar: {
-    flex: 0.2,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
-});
 
 export const Card = ({
   text,
@@ -177,3 +116,65 @@ export const Card = ({
     </View>
   );
 };
+
+export const styles = StyleSheet.create({
+  card: {
+    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
+
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    borderRadius: 20,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 0,
+      height: 15,
+    },
+    shadowOpacity: 1.5,
+    shadowRadius: 6.84,
+  },
+  todomanBackgroundCircle: {
+    width: SCREEN_HEIGHT > 668 ? 50 : 40,
+    height: SCREEN_HEIGHT > 668 ? 50 : 40,
+    backgroundColor: '#ffffff',
+    borderRadius: 50,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 0,
+      height: 15,
+    },
+    shadowOpacity: 1.5,
+    shadowRadius: 5.84,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    fontFamily: 'NotoSansKR-Bold',
+    fontSize:
+      Dimensions.get('window').height > 668
+        ? fontPercentage(22)
+        : fontPercentage(20),
+
+    position: 'relative',
+  },
+  cardLocation: {
+    fontFamily: 'NotoSansKR-Medium',
+    fontSize: fontPercentage(12),
+    fontWeight: '800',
+    flexWrap: 'wrap',
+    // backgroundColor: 'red',
+    color: '#F4F4F4',
+    marginTop: 5,
+    marginLeft: 15,
+  },
+  cardTime: {
+    fontFamily: 'NotoSansKR-Bold',
+    fontSize: fontPercentage(15),
+  },
+  cardCalendar: {
+    flex: 0.2,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
+});
