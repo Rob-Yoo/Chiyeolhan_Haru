@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
 
+import TabBar from 'components/base/navigator/TabBar';
 import ScheduleToday from 'components/screen/ScheduleToday';
 import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
 import ScheduleYesterday from 'components/screen/ScheduleYesterday';
-import TabBar from 'components/base/navigator/TabBar';
-import { Fragment } from 'react';
 
 const Tab = createMaterialTopTabNavigator();
 

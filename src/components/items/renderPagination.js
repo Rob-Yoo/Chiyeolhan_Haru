@@ -5,10 +5,10 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
+import { CONTAINER_HEIGHT } from 'react-native-week-view/src/utils';
 
 import { add } from 'redux/store';
 
@@ -21,7 +21,6 @@ import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/Time';
-import { CONTAINER_HEIGHT } from 'react-native-week-view/src/utils';
 import { longTaskList } from 'utils/TwoButtonAlert';
 
 const useInput = (initialValue, validator) => {
@@ -40,6 +39,7 @@ const useInput = (initialValue, validator) => {
   };
   return { value, onChange };
 };
+
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);

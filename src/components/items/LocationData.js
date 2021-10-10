@@ -6,11 +6,12 @@ export const LocationData = ({
   modalHandler,
   locationDataHandler,
 }) => {
+  const { location, address } = locationData;
   const searchedLocation = () => {
     locationDataHandler(locationData);
     modalHandler();
   };
-  const { location, address } = locationData;
+
   return (
     <View style={styles.locationInfoCard}>
       <View style={{ flex: 4 }}>

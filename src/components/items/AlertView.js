@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 export const AlertView = () => {
