@@ -55,6 +55,11 @@ const toDosSlice = createSlice({
       delete state[targetId];
       toDosDeleteDB(targetId);
     },
+    //투두스킵
+    skip: (state, action) => {
+      const targetId = action.payload;
+      state[targetId].isSkip = true;
+    },
   },
 });
 const networkSlice = createSlice({
@@ -102,6 +107,7 @@ export const {
   remove,
   deleteToDoDispatch,
   editToDoDispatch,
+  skip,
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
 export const { setTabBar } = tabBarSlice.actions;
