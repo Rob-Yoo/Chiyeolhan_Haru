@@ -188,14 +188,15 @@ export const TimePicker = ({
         </Text>
       </TouchableOpacity>
       <DateTimePickerModal
-        isVisible={isVisible}
         mode="time"
+        locale="en_GB"
         onConfirm={checkValidTime}
         onCancel={hideTimePicker}
-        locale="en_GB"
-        //ios일때는 date android 일때는 value
-        date={lowTime}
+        isVisible={isVisible}
+        cancelTextIOS="취소"
+        confirmTextIOS="완료"
         minuteInterval={5}
+        date={lowTime === undefined ? new Date() : lowTime}
       />
     </View>
   );
