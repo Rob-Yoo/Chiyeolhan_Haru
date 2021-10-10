@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import WeekView from 'react-native-week-view';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteToDoDispatch, init } from 'redux/store';
 
-import IconQuestion from '#assets/icons/icon-question';
-
 import { AlertView } from 'components/items/AlertView';
+
+import IconQuestion from '#assets/icons/icon-question';
 
 import { deleteToDoAlert } from 'utils/TwoButtonAlert';
 import {

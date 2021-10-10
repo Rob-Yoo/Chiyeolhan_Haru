@@ -6,6 +6,7 @@ import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import IconArrow from '#assets/icons/icon-arrow';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+
 export const Nodata = () => {
   const navigation = useNavigation();
 

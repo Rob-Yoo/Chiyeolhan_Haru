@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground, s } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,13 +19,12 @@ import {
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
-} from 'constant/const';
-import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
   CONTAINER_HEIGHT,
   CONTAINER_WIDTH,
 } from 'constant/const';
+
 const ScheduleButton = styled.TouchableOpacity``;
 
 const OffHome = ({ navigation, route }) => {

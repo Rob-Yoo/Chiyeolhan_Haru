@@ -314,11 +314,9 @@ export const subscribeOnGeofence = () => {
 export const initBgGeofence = async () => {
   try {
     const state = await BackgroundGeolocation.ready({
-      // Geolocation Config
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       locationAuthorizationRequest: 'Always',
       locationAuthorizationAlert: {
-        // ios only
         titleWhenNotEnabled: '위치 서비스 이용 제한',
         titleWhenOff: '위치 서비스 이용 제한',
         instructions:
@@ -326,13 +324,9 @@ export const initBgGeofence = async () => {
         settingsButton: '설정',
         cancelButton: '취소',
       },
-      // Application config
-      stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-      startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+      stopOnTerminate: false,
+      startOnBoot: true,
     });
-    // const geo = await BackgroundGeolocation.getGeofences();
-    // console.log(geo);
-    // return state.didLaunchInBackground;
   } catch (e) {
     console.log('initBgGeofence Error :', e);
   }
