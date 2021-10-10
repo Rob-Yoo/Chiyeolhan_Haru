@@ -20,6 +20,7 @@ import { dbService } from 'utils/firebase';
 import { getDate } from 'utils/Time';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
+import { HomeHeader } from '../items/HomeHeader';
 
 const ScheduleButton = styled.TouchableOpacity``;
 
@@ -117,21 +118,7 @@ const Home = ({ navigation }) => {
   ) : (
     <View style={styles.wrap}>
       <View style={styles.homeContainer}>
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderText}>
-            <HomeTextItem />
-            <IconTaskListLeft />
-          </View>
-          <ScheduleButton>
-            <IconGoToScheduleButton
-              name="icon-go-to-schedule-button"
-              size={40}
-              color={'#229892'}
-              onPress={goToScheduleToday}
-              style={styles.iconScheduleButton}
-            />
-          </ScheduleButton>
-        </View>
+        <HomeHeader navigation={navigation} />
         <HomeContent todoArr={todoArr} />
       </View>
     </View>

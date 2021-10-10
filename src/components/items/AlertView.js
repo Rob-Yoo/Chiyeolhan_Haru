@@ -9,7 +9,7 @@ export const AlertView = () => {
       style={{
         backgroundColor: '#fff',
         width: CONTAINER_WIDTH,
-        height: 325,
+        height: 360,
         position: 'absolute',
         right: 0,
         top: 30,

@@ -788,8 +788,8 @@ export const ToDoModal = ({
         backdropOpacity={0}
       >
         <TouchableOpacity
-          style={styles.background}
-          activeOpacity={1}
+          style={[styles.background, { opacity: 0 }]}
+          activeOpacity={0}
           onPress={() =>
             toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
           }

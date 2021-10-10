@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   modalInputTask: {
-    width: CONTAINER_WIDTH * 0.7,
-    height: 70,
+    width: CONTAINER_WIDTH * 0.75,
+    height: 55,
     backgroundColor: '#fff',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingLeft: 10,
     shadowColor: '#00000029',
     shadowOffset: {

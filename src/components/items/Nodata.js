@@ -38,16 +38,16 @@ const styles = StyleSheet.create({
   },
   background: {
     position: 'absolute',
-    top: -200,
+    top: -500,
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT + 200,
+    height: SCREEN_HEIGHT + 1000,
     opacity: 0.3,
     backgroundColor: '#000000',
   },
   backgroundWhite: {
     position: 'absolute',
     width: '80%',
-    height: '60%',
+    height: SCREEN_HEIGHT > 668 ? '55%' : '70%',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: '#fff',
-    width: SCREEN_HEIGHT > 668 ? 40 : 20,
-    height: SCREEN_HEIGHT > 668 ? 40 : 20,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -97,5 +97,6 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
+    marginBottom: 15,
   },
 });
