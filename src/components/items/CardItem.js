@@ -161,7 +161,6 @@ export const styles = StyleSheet.create({
     fontSize: fontPercentage(12),
     fontWeight: '800',
     flexWrap: 'wrap',
-    // backgroundColor: 'red',
     color: '#F4F4F4',
     marginTop: 5,
     marginLeft: 15,

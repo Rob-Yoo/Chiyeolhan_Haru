@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, AppState, TouchableOpacity } from 'react-native';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 
-import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 export const HomeHeader = ({ navigation }) => {
