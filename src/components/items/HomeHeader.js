@@ -13,7 +13,6 @@ export const HomeHeader = ({ navigation }) => {
     <View style={styles.homeHeader}>
       <View style={styles.homeHeaderText}>
         <HomeTextItem />
-        <IconTaskListLeft />
       </View>
       <TouchableOpacity>
         <IconGoToScheduleButton
@@ -30,7 +29,7 @@ export const HomeHeader = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   homeHeader: {
-    flex: 1.3,
+    flex: 1.1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
