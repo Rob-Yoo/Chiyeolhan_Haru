@@ -7,11 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { init, setNetwork, setTabBar } from 'redux/store';
 
 import { Loading } from 'components/screen/Loading';
-import { HomeTextItem } from 'components/items/HomeTextItem';
 import HomeContent from 'components/items/HomeContent';
-
-import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
-import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 import { getDate } from 'utils/Time';
 import { getDataFromAsync } from 'utils/AsyncStorage';
@@ -20,8 +16,6 @@ import {
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_TOMORROW_DATA,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
   CONTAINER_HEIGHT,
   CONTAINER_WIDTH,
 } from 'constant/const';

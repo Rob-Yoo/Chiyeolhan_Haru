@@ -117,7 +117,7 @@ const getSelectedDate = (day) => {
   }
 };
 
-const scrollRefresh = async (dispatch) => {
+export const scrollRefresh = async (dispatch) => {
   try {
     await loadSuccessSchedules();
 
@@ -226,7 +226,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           }
         }}
       />
-      {network === 'online' ? (
+      {network === 'online' && day === 'today' ? (
         <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
           <IconQuestion name="icon-question" size={9} color="#fff" />
           {isVisibleAlert ? <AlertView /> : null}

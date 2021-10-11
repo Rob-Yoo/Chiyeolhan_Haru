@@ -201,12 +201,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     paddingTop: 20,
   },
-  // searchInputView: {
-  //   backgroundColor: '#fff',
-  //   width: '90%',
-  //   height: 50,
-  //   borderRadius: 10,
-  // },
   searchInputViewBackButton: {
     width: '10%',
     height: 30,

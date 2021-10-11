@@ -111,7 +111,6 @@ export const ToDoModal = ({
     register('todoStartTime');
     register('todoFinishTime');
     register('todoTitle');
-    // register('todoTask', { min: 1 }),
     register('todoTask', { min: 1 });
     register('todoId');
   }, [register]);
@@ -481,7 +480,6 @@ export const ToDoModal = ({
 
     if (task.length === 0) {
       setTaskList([...taskList.slice(0, index), ...taskList.slice(index + 1)]);
-      //toggleIsVisible(inputIsVisible, setInputIsVisible);
     } else {
       if (task.length > 0 && index === false) {
         setTaskList([...taskList, task]);

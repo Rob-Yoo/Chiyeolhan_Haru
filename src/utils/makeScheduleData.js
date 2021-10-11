@@ -35,7 +35,7 @@ export const makeScheduleDate = (
           status === 'waiting' ||
           (((isDone && getCurrentTime() >= toDos[key].startTime) ||
             getCurrentTime() < toDos[key].startTime ||
-            getCurrentTime() <= toDos[key].finishTime) &&
+            getCurrentTime() < toDos[key].finishTime) &&
             !toDos[key].isSkip)
             ? DEFAULT_COLOR
             : FAIL_COLOR,
