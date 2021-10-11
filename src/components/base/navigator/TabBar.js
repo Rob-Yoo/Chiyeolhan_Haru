@@ -33,6 +33,7 @@ import {
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
 } from 'constant/const';
+import { scrollRefresh } from '../../items/ScheduleComponent';
 
 const handleSkip = async (isNeedSkip) => {
   try {
@@ -95,7 +96,7 @@ const handleSkip = async (isNeedSkip) => {
   }
 };
 
-const skipNotifHandler = async (storeSkipUpdate) => {
+const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
   try {
     const isNeedSkip = await checkGeofenceSchedule();
 
@@ -111,6 +112,8 @@ const skipNotifHandler = async (storeSkipUpdate) => {
               const skipID = await handleSkip(isNeedSkip);
               if (skipID !== null) {
                 storeSkipUpdate(skipID);
+              } else {
+                await scrollRefresh(dispatch);
               }
             },
           },
@@ -255,7 +258,8 @@ const TabBar = (props) => {
               <TouchableOpacity
                 style={{ marginTop: 5 }}
                 onPress={() =>
-                  network === 'online' && skipNotifHandler(storeSkipUpdate)
+                  network === 'online' &&
+                  skipNotifHandler(storeSkipUpdate, dispatch)
                 }
               >
                 <ImageBackground
@@ -296,7 +300,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingTop: 20,
+    paddingTop: 5,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
