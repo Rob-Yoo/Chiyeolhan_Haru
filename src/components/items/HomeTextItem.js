@@ -15,17 +15,17 @@ export const HomeTextItem = () => {
 
 const styles = StyleSheet.create({
   homeText: {
-    fontWeight: '900',
-    fontSize: 25,
-    fontFamily: 'NotoSansKR-Bold',
+    fontSize: 22,
+    fontFamily: 'NotoSansKR-Black',
     letterSpacing: 0,
+    marginBottom: -5,
   },
   homeHeaderRectangle: {
     position: 'absolute',
-    top: 9,
+    top: 3,
     left: 2,
     width: 5,
-    height: 61,
+    height: 55,
     backgroundColor: '#00A29A',
     shadowColor: '#00000029',
   },

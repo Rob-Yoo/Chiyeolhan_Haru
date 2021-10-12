@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     top: 10,
   },
   cardText: {
-    fontFamily: 'NotoSansKR-Bold',
+    fontFamily: 'NotoSansKR-Black',
     color: '#fff',
     fontSize: 20,
   },

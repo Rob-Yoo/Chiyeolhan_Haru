@@ -342,8 +342,10 @@ export const checkDayChange = async () => {
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
         const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
         const currentTime = getCurrentTime();
-        const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
-        startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
+        if (geofenceData.length > 0) {
+          const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+          startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
+        }
         console.log('바뀐 geofenceData :', geofenceData);
       }
       // 성공한 일정 배열을 초기화해준다.

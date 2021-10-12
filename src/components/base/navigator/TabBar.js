@@ -14,9 +14,14 @@ import { setTabBar, skip } from 'redux/store';
 import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
+import { fontPercentage } from 'utils/responsive';
 import { getCurrentTime } from 'utils/Time';
 import { dbService } from 'utils/firebase';
-import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
+import {
+  checkDayChange,
+  getDataFromAsync,
+  loadSuccessSchedules,
+} from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
   skipNotifAlert,
@@ -291,7 +296,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    paddingTop: 10,
+    paddingTop: 20,
     paddingHorizontal: 20,
   },
   tabContainer: {
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
   },
   tabBarText: {
     fontFamily: 'GodoB',
-    fontSize: 22,
+    fontSize: fontPercentage(22),
     fontWeight: 'bold',
   },
   navIcon: { color: '#717171', width: 30, height: 30 },
