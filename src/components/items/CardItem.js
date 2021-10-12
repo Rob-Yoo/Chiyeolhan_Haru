@@ -45,20 +45,8 @@ export const Card = ({
   };
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
-      <View
-        style={[
-          styles.card,
-          {
-            flex: 1,
-            maxWidth: SCREEN_HEIGHT > 668 ? 250 : 220,
-            maxHeight: SCREEN_HEIGHT > 668 ? 240 : 220,
-            justifyContent: 'space-evenly',
-            backgroundColor: '#54BCB6',
-          },
-        ]}
-        key={`CARD${id}`}
-      >
-        <View style={styles.todomanBackgroundCircle}>
+      <View style={[card.card, {}]} key={`CARD${id}`}>
+        <View style={card.todomanBackgroundCircle}>
           <IconTaskToDoman
             name="icon-todo-man"
             size={SCREEN_HEIGHT > 668 ? 25 : 20}
@@ -72,7 +60,7 @@ export const Card = ({
             maxHeight: 300,
           }}
         >
-          <Text style={styles.cardTitle}>{text}</Text>
+          <Text style={card.cardTitle}>{text}</Text>
           <View style={{ flexWrap: 'nowrap' }}>
             <View
               style={{
@@ -84,12 +72,12 @@ export const Card = ({
                 backgroundColor: '#00A29A',
               }}
             />
-            <Text style={styles.cardLocation}>
+            <Text style={card.cardLocation}>
               {location.length > 15 ? `${location.substr(0, 7)}...` : location}
             </Text>
           </View>
         </View>
-        <Text style={styles.cardTime}>
+        <Text style={card.cardTime}>
           {startTime}~{finishTime}
         </Text>
         <View style={{ position: 'relative' }}>
@@ -118,9 +106,9 @@ export const Card = ({
   );
 };
 
-export const styles = StyleSheet.create({
+export const card = StyleSheet.create({
   card: {
-    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
+    flex: 0.9,
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 20,
@@ -131,6 +119,9 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 1.5,
     shadowRadius: 6.84,
+    justifyContent: 'space-evenly',
+    backgroundColor: '#54BCB6',
+    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.55 : SCREEN_HEIGHT / 3,
   },
   todomanBackgroundCircle: {
     width: SCREEN_HEIGHT > 668 ? 40 : 30,

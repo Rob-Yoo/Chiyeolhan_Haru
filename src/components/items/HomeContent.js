@@ -9,6 +9,7 @@ import { renderPagination } from 'components/items/renderPagination';
 import { getCurrentTime, getDate } from 'utils/Time';
 
 import { SCREEN_HEIGHT } from 'constant/const';
+import { card } from './CardItem';
 
 const HomeContent = (props) => {
   let todoArr = props.todoArr;
@@ -94,22 +95,7 @@ const HomeContent = (props) => {
               return (
                 <View
                   key={index}
-                  style={{
-                    flex: 0.9,
-                    maxHeight:
-                      SCREEN_HEIGHT > 668
-                        ? SCREEN_HEIGHT / 3.5
-                        : SCREEN_HEIGHT / 3,
-                    backgroundColor: '#4daaa4',
-                    borderRadius: 20,
-                    shadowColor: '#00000029',
-                    shadowOffset: {
-                      width: 0,
-                      height: 15,
-                    },
-                    shadowOpacity: 1.5,
-                    shadowRadius: 6.84,
-                  }}
+                  style={[card.card, { backgroundColor: '#4daaa4' }]}
                 ></View>
               );
             else {
