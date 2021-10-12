@@ -16,7 +16,11 @@ import IconHandleStart from '#assets/icons/icon-handle-start';
 
 import { getCurrentTime } from 'utils/Time';
 import { dbService } from 'utils/firebase';
-import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
+import {
+  checkDayChange,
+  getDataFromAsync,
+  loadSuccessSchedules,
+} from 'utils/AsyncStorage';
 import { geofenceUpdate } from 'utils/BgGeofence';
 import {
   skipNotifAlert,

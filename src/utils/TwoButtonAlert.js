@@ -62,7 +62,7 @@ export const skipNotifAlert = (title = null) => {
 export const skipDenyAlert = () =>
   Alert.alert(
     'SKIP',
-    '목표 장소에 가지 않을 경우 눌러주세요.',
+    '목표 장소에 가지 않을 경우 눌러주세요!',
     [{ text: '확인' }],
     {
       cancelable: false,
@@ -149,8 +149,8 @@ export const startDenyAlert = (type) => {
     );
   } else if (type == 2) {
     Alert.alert(
-      `하루가 아직 끝나지 않았어요\n당신의 치열한 하루를 응원합니다!`,
-      ``,
+      `시작`,
+      `오늘 하루가 아직 끝나지 않았어요!`,
       [{ text: '확인' }],
       {
         cancelable: false,
