@@ -96,6 +96,22 @@ const Home = ({ navigation }) => {
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
+  if (todoArr.length === 1) {
+    todoArr.push({
+      address: todoArr.address,
+      date: todoArr.date,
+      finishTime: todoArr.finishTime,
+      id: todoArr.id,
+      isDone: todoArr.isDone,
+      isSkip: todoArr.isSkip,
+      latitude: todoArr.latitude,
+      location: todoArr.location,
+      longitude: todoArr.longitude,
+      startTime: todoArr.startTime,
+      title: ' ',
+      toDos: [],
+    });
+  }
   todoArr.sort((a, b) => {
     if (a.id < b.id) {
       return -1;

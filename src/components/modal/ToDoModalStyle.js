@@ -24,12 +24,11 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalTopContainer: {
-    alignItems: 'center',
     borderRadius: 10,
     backgroundColor: '#54BCB6',
     height: SCREEN_HEIGHT > 668 ? '45%' : '50%',
     borderRadius: 50,
-    marginTop: -10,
+    paddingHorizontal: 15,
   },
   modalTextView: {
     flexDirection: 'row',

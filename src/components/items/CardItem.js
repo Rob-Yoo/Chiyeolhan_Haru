@@ -51,7 +51,7 @@ export const Card = ({
           {
             flex: 1,
             maxWidth: SCREEN_HEIGHT > 668 ? 250 : 220,
-            maxHeight: SCREEN_HEIGHT > 668 ? 250 : 220,
+            maxHeight: SCREEN_HEIGHT > 668 ? 240 : 220,
             justifyContent: 'space-evenly',
             backgroundColor: '#54BCB6',
           },
@@ -61,7 +61,7 @@ export const Card = ({
         <View style={styles.todomanBackgroundCircle}>
           <IconTaskToDoman
             name="icon-todo-man"
-            size={SCREEN_HEIGHT > 668 ? 30 : 25}
+            size={SCREEN_HEIGHT > 668 ? 25 : 20}
             color="#229892"
           />
         </View>
@@ -121,7 +121,6 @@ export const Card = ({
 export const styles = StyleSheet.create({
   card: {
     maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
-
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 20,

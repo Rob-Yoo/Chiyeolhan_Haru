@@ -89,6 +89,22 @@ const OffHome = ({ navigation, route }) => {
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
+  if (todoArr.length === 1) {
+    todoArr.push({
+      address: '대한민국 서울특별시 양천구 목5동 906',
+      date: '1013',
+      finishTime: '',
+      id: '2021101302:20',
+      isDone: false,
+      isSkip: false,
+      latitude: 37.5345925,
+      location: ' ',
+      longitude: 126.8771469,
+      startTime: '             ',
+      title: ' ',
+      toDos: [],
+    });
+  }
   return isLoading ? (
     <Loading />
   ) : (

@@ -14,18 +14,20 @@ const HomeContent = (props) => {
   let todoArr = props.todoArr;
   if (todoArr.length === 0) return <Nodata />;
 
-  const [nowIndex, setNowIndex] = useState(todoArr.length);
+  const [nowIndex, setNowIndex] = useState(
+    todoArr[1].title === ' ' ? 0 : todoArr.length,
+  );
   const { TODAY } = getDate();
 
   useEffect(() => {
-    getNowTimeIndex();
+    todoArr[1].title !== ' ' && getNowTimeIndex();
   }, []);
 
   const getNowTimeIndex = () => {
     let tempData = Number.MAX_SAFE_INTEGER;
     let tempIndex = todoArr.length;
     todoArr
-      .filter((item) => item.date === TODAY)
+      .filter((item) => item.date === TODAY && item.title !== ' ')
       .map((item, index) => {
         const nowH = getCurrentTime().replace(/:\d\d/, '');
         const nowM = getCurrentTime().replace(/\d\d:/, '');
@@ -69,6 +71,7 @@ const HomeContent = (props) => {
         }
       });
     setNowIndex(tempIndex);
+    console.log(tempIndex);
   };
 
   return (
@@ -83,21 +86,46 @@ const HomeContent = (props) => {
         containerStyle={{
           width: SCREEN_HEIGHT > 668 ? 280 : 260,
         }}
+        scrollEnabled={todoArr[1].title === ' ' ? false : true}
       >
         {todoArr &&
           todoArr.map((item, index) => {
-            return (
-              <Card
-                key={`C` + index}
-                text={item.title}
-                startTime={item.startTime}
-                finishTime={item.finishTime}
-                location={item.location}
-                toDos={todoArr}
-                id={item.id}
-                isDone={item.isDone}
-              />
-            );
+            if (item.title === ' ')
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flex: 0.9,
+                    maxHeight:
+                      SCREEN_HEIGHT > 668
+                        ? SCREEN_HEIGHT / 3.5
+                        : SCREEN_HEIGHT / 3,
+                    backgroundColor: '#4daaa4',
+                    borderRadius: 20,
+                    shadowColor: '#00000029',
+                    shadowOffset: {
+                      width: 0,
+                      height: 15,
+                    },
+                    shadowOpacity: 1.5,
+                    shadowRadius: 6.84,
+                  }}
+                ></View>
+              );
+            else {
+              return (
+                <Card
+                  key={`C` + index}
+                  text={item.title}
+                  startTime={item.startTime}
+                  finishTime={item.finishTime}
+                  location={item.location}
+                  toDos={todoArr}
+                  id={item.id}
+                  isDone={item.isDone}
+                />
+              );
+            }
           })}
       </Swiper>
     </View>
