@@ -9,22 +9,16 @@ import * as SplashScreen from 'expo-splash-screen';
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
 import HomeContent from 'components/items/HomeContent';
-import { HomeTextItem } from 'components/items/HomeTextItem';
 import { Loading } from 'components/screen/Loading';
-
-import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
-import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 
 import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
 import { dbService } from 'utils/firebase';
 import { getDate } from 'utils/Time';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
-
-const ScheduleButton = styled.TouchableOpacity``;
+import { HomeHeader } from '../items/HomeHeader';
 
 const Home = ({ navigation }) => {
-  const goToScheduleToday = () => navigation.navigate('ScheduleToday');
   let todoArr = [];
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
@@ -117,21 +111,7 @@ const Home = ({ navigation }) => {
   ) : (
     <View style={styles.wrap}>
       <View style={styles.homeContainer}>
-        <View style={styles.homeHeader}>
-          <View style={styles.homeHeaderText}>
-            <HomeTextItem />
-            <IconTaskListLeft />
-          </View>
-          <ScheduleButton>
-            <IconGoToScheduleButton
-              name="icon-go-to-schedule-button"
-              size={40}
-              color={'#229892'}
-              onPress={goToScheduleToday}
-              style={styles.iconScheduleButton}
-            />
-          </ScheduleButton>
-        </View>
+        <HomeHeader navigation={navigation} />
         <HomeContent todoArr={todoArr} />
       </View>
     </View>

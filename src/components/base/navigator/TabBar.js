@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setTabBar } from 'redux/store';
+import { setTabBar, skip } from 'redux/store';
 
 import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
@@ -37,6 +37,7 @@ import {
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
 } from 'constant/const';
+import { scrollRefresh } from '../../items/ScheduleComponent';
 
 const handleSkip = async (isNeedSkip) => {
   try {
@@ -99,7 +100,7 @@ const handleSkip = async (isNeedSkip) => {
   }
 };
 
-const skipNotifHandler = async () => {
+const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
   try {
     const isNeedSkip = await checkGeofenceSchedule();
 
@@ -111,8 +112,13 @@ const skipNotifHandler = async () => {
           { text: '취소' },
           {
             text: '확인',
-            onPress: () => {
-              const skipID = handleSkip(isNeedSkip);
+            onPress: async () => {
+              const skipID = await handleSkip(isNeedSkip);
+              if (skipID !== null) {
+                storeSkipUpdate(skipID);
+              } else {
+                await scrollRefresh(dispatch);
+              }
             },
           },
         ],
@@ -151,8 +157,11 @@ const TabBar = (props) => {
   const { state, descriptors, navigation } = props;
   const visibleName = useSelector((state) => state.tabBar);
   const network = useSelector((state) => state.network);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const storeSkipUpdate = (targetId) => {
+    dispatch(skip(targetId));
+  };
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
@@ -193,7 +202,7 @@ const TabBar = (props) => {
                   onPress={onPress}
                   onLongPress={onLongPress}
                   key={`tab_${index}`}
-                  style={{ marginRight: 30 }}
+                  style={{ marginRight: 25 }}
                 >
                   <Text
                     style={[
@@ -242,17 +251,20 @@ const TabBar = (props) => {
             <>
               <TouchableOpacity
                 onPress={() => network === 'online' && handleStart()}
-                style={{ marginTop: 6 }}
+                style={{ marginTop: 6, marginRight: -6 }}
               >
                 <IconHandleStart
                   style={styles.navIcon}
                   name="icon-handle-reset"
-                  size={21}
+                  size={20}
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ marginTop: 5 }}
-                onPress={() => network === 'online' && skipNotifHandler()}
+                onPress={() =>
+                  network === 'online' &&
+                  skipNotifHandler(storeSkipUpdate, dispatch)
+                }
               >
                 <ImageBackground
                   style={[{ width: 22, height: 22 }]}
@@ -269,7 +281,7 @@ const TabBar = (props) => {
                 : navigation.navigate('OffHome', { screen: 'OffHome' })
             }
           >
-            <IconHome name="icon-home" size={22} style={styles.navIcon} />
+            <IconHome name="icon-home" size={19} style={styles.navIcon} />
           </TouchableOpacity>
         </View>
       </View>
@@ -292,7 +304,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingTop: 20,
+    paddingTop: 5,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },

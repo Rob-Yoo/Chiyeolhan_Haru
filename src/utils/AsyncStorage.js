@@ -280,8 +280,6 @@ export const saveSearchedData = async (searchedObject) => {
       const newSearchedArray = searchedArray;
       await setSearchedData(JSON.stringify(newSearchedArray));
     }
-    // const newData = await AsyncStorage.getItem(KEY_VALUE_SEARCHED);
-    // console.log(JSON.parse(newData));
   } catch (e) {
     console.log('searchedHistory Error :', e);
   }

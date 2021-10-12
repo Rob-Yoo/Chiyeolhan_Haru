@@ -7,6 +7,7 @@ import { getCurrentTime } from 'utils/Time';
 import { fontPercentage } from 'utils/responsive';
 
 import { SCREEN_HEIGHT } from 'constant/const';
+import { ProgressingBar } from 'components/items/ProgressingBar';
 
 export const Card = ({
   text,
@@ -42,7 +43,6 @@ export const Card = ({
       }
     }
   };
-
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
       <View
@@ -101,7 +101,7 @@ export const Card = ({
               borderRadius: 5,
               bottom: 0,
             }}
-          ></View>
+          />
           <View
             style={{
               width: width,
@@ -110,7 +110,8 @@ export const Card = ({
               borderRadius: 5,
               position: 'absolute',
             }}
-          ></View>
+          />
+          <ProgressingBar startTime={startTime} finishTime={finishTime} />
         </View>
       </View>
     </View>
@@ -161,7 +162,6 @@ export const styles = StyleSheet.create({
     fontSize: fontPercentage(12),
     fontWeight: '800',
     flexWrap: 'wrap',
-    // backgroundColor: 'red',
     color: '#F4F4F4',
     marginTop: 5,
     marginLeft: 15,

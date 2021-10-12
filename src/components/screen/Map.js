@@ -60,7 +60,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
             item.latitude === locationData.latitude,
         )
       ) {
-        //favorite 이란 얘기임
+        //favorite 일때
         const tempData = favoriteAsyncData.filter(
           (item) =>
             !(
@@ -77,7 +77,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
           ),
         );
       } else {
-        //favorite가 아니란 얘기임
+        //favorite가 아닐때
         await setFavoriteData([updateData, ...favoriteAsyncData]);
         favoriteAlert();
         return setIsFavoriteColor(

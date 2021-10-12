@@ -86,23 +86,6 @@ export const Favorite = ({ navigation, route }) => {
   }
   return (
     <>
-      {/* <View
-        style={{
-          flex: 1,
-          backgroundColor: '#54BCB6',
-          height: '80%',
-        }}
-      > */}
-      {/* <View
-        style={{
-          flex: 1,
-          // paddingTop: 80,
-          alignItems: 'center',
-          backgroundColor: 'transparent',
-          justifyContent: 'space-between',
-        }}
-      > */}
-
       <View style={{ height: '100%' }}>
         <ScrollView
           ref={scrollViewRef}
@@ -164,8 +147,6 @@ export const Favorite = ({ navigation, route }) => {
           size={20}
         />
       </View>
-      {/* </View> */}
-      {/* </View> */}
 
       <ToDoModal
         navigation={navigation}
@@ -201,9 +182,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   searchInputContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
     position: 'relative',
     backgroundColor: '#fff',
     width: '90%',
