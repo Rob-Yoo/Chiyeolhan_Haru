@@ -32,7 +32,7 @@ const BACKGROUND_COLOR = '#ECF5F471';
 
 const minutes20 = 1200000;
 const minutes15 = 900000;
-const munutes10 = 600000;
+const minutes10 = 600000;
 
 const MyEventComponent = ({ event, position }) => {
   const timeDiff = event.endDate - event.startDate;
@@ -51,7 +51,7 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+              (SCREEN_HEIGHT > 668 && timeDiff <= minutes10) ||
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 8
                 : 13,
@@ -63,21 +63,29 @@ const MyEventComponent = ({ event, position }) => {
       <View
         style={{
           flexDirection: 'row',
-          marginLeft: SCREEN_HEIGHT > 668 ? 3 : 7,
+          marginLeft:
+            (SCREEN_HEIGHT > 668 && timeDiff <= minutes20) ||
+            (SCREEN_HEIGHT < 668 && timeDiff <= minutes20)
+              ? 3
+              : 10,
           paddingTop: 1,
+          alignItems: 'center',
         }}
       >
         <View
           style={{
             width:
-              (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+              (SCREEN_HEIGHT > 668 && timeDiff <= minutes10) ||
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 2
                 : 3,
-            height: 13,
+            height:
+              (SCREEN_HEIGHT > 668 && timeDiff <= minutes10) ||
+              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
+                ? 9
+                : 10,
             backgroundColor: '#fff',
             marginRight: 3,
-            marginTop: 2.5,
           }}
         />
         <Text
@@ -85,10 +93,10 @@ const MyEventComponent = ({ event, position }) => {
             styles.text,
             {
               fontSize:
-                (SCREEN_HEIGHT > 668 && timeDiff <= munutes10) ||
+                (SCREEN_HEIGHT > 668 && timeDiff <= minutes10) ||
                 (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
-                  ? 8
-                  : 11,
+                  ? 6
+                  : 9,
             },
           ]}
         >

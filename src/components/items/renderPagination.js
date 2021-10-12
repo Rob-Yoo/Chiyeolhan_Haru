@@ -22,23 +22,7 @@ import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/Time';
 import { longTaskList } from 'utils/TwoButtonAlert';
-
-const useInput = (initialValue, validator) => {
-  const [value, setValue] = useState(initialValue);
-  const onChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    let willUpdate = true;
-    if (typeof validator === 'function') {
-      willUpdate = validator(value);
-    }
-    if (willUpdate) {
-      setValue(value);
-    }
-  };
-  return { value, onChange };
-};
+import { fontPercentage } from 'utils/responsive';
 
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
@@ -69,7 +53,7 @@ const Pagination = ({ taskList, targetId }) => {
         toDos.finishTime < getCurrentTime() ? null : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
-            size={19}
+            size={15}
             color={'#229892'}
             onPress={() =>
               network === 'online' &&
@@ -219,7 +203,7 @@ const styles = StyleSheet.create({
   taskTitle: {
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 22,
+    fontSize: fontPercentage(16),
     marginRight: 10,
   },
   taskText: {

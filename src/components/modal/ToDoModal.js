@@ -662,7 +662,11 @@ export const ToDoModal = ({
               )}
               <Text style={styles.titleText}>위치</Text>
               <Text style={styles.modalLocationText}>
-                {locationName ? locationName : '물음표를 눌러주세요'}
+                {locationName
+                  ? locationName.length > 11
+                    ? `${locationName.substring(0, 12)}...`
+                    : locationName
+                  : '물음표를 눌러주세요'}
               </Text>
             </View>
           </View>

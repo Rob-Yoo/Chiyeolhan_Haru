@@ -51,7 +51,7 @@ export const Card = ({
           {
             flex: 1,
             maxWidth: SCREEN_HEIGHT > 668 ? 250 : 220,
-            maxHeight: SCREEN_HEIGHT > 668 ? 250 : 220,
+            maxHeight: SCREEN_HEIGHT > 668 ? 240 : 220,
             justifyContent: 'space-evenly',
             backgroundColor: '#54BCB6',
           },
@@ -61,7 +61,7 @@ export const Card = ({
         <View style={styles.todomanBackgroundCircle}>
           <IconTaskToDoman
             name="icon-todo-man"
-            size={SCREEN_HEIGHT > 668 ? 35 : 30}
+            size={SCREEN_HEIGHT > 668 ? 25 : 20}
             color="#229892"
           />
         </View>
@@ -77,10 +77,10 @@ export const Card = ({
             <View
               style={{
                 position: 'absolute',
-                top: 5,
-                left: 5,
-                width: 5,
-                height: 20,
+                top: 7,
+                left: 7,
+                width: 3,
+                height: 14,
                 backgroundColor: '#00A29A',
               }}
             />
@@ -121,7 +121,6 @@ export const Card = ({
 export const styles = StyleSheet.create({
   card: {
     maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.5 : SCREEN_HEIGHT / 3,
-
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 20,
@@ -134,8 +133,8 @@ export const styles = StyleSheet.create({
     shadowRadius: 6.84,
   },
   todomanBackgroundCircle: {
-    width: SCREEN_HEIGHT > 668 ? 50 : 40,
-    height: SCREEN_HEIGHT > 668 ? 50 : 40,
+    width: SCREEN_HEIGHT > 668 ? 40 : 30,
+    height: SCREEN_HEIGHT > 668 ? 40 : 30,
     backgroundColor: '#ffffff',
     borderRadius: 50,
     shadowColor: '#00000029',
@@ -149,17 +148,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardTitle: {
-    fontFamily: 'NotoSansKR-Bold',
+    fontFamily: 'NotoSansKR-Black',
     fontSize:
       Dimensions.get('window').height > 668
-        ? fontPercentage(22)
-        : fontPercentage(20),
+        ? fontPercentage(25)
+        : fontPercentage(25),
 
     position: 'relative',
   },
   cardLocation: {
     fontFamily: 'NotoSansKR-Medium',
-    fontSize: fontPercentage(12),
+    fontSize: fontPercentage(10),
     fontWeight: '800',
     flexWrap: 'wrap',
     color: '#F4F4F4',
@@ -168,7 +167,7 @@ export const styles = StyleSheet.create({
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: fontPercentage(15),
+    fontSize: fontPercentage(10),
   },
   cardCalendar: {
     flex: 0.2,
