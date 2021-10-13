@@ -44,9 +44,11 @@ export const AlertView = () => {
           source={{ uri: 'iconHandleStart' }}
         />
         {` - 스킵 버튼\n`}
+
         <Text
           style={[styles.noticeText, styles.hilighted]}
         >{`배터리 소모를 최소화`}</Text>
+
         {`하기 위해 하나의 일정에만 위치 서비스를 제공해서 해당 목표 장소에 도착하면 다음 목표 장소로 위치 서비스를 넘깁니다. 따라서 만약 목표 장소에 `}
         <Text
           style={[styles.noticeText, styles.hilighted]}
@@ -68,7 +70,8 @@ export const AlertView = () => {
 
 const styles = StyleSheet.create({
   hilighted: {
-    backgroundColor: '#FECC02',
+    backgroundColor: '#2DACA540',
+    //color: '#FECC02',
   },
   noticeText: {
     fontFamily: 'GodoB',
