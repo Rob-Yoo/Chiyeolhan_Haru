@@ -23,6 +23,7 @@ import {
 
 const defaultRender = (favoriteLength) => {
   let defaultArray = [];
+  favoriteLength = favoriteLength === undefined ? 0 : favoriteLength;
 
   for (let i = 0; i + favoriteLength < 8; i++) {
     defaultArray.push(
@@ -50,9 +51,8 @@ const getFavoriteAsync = async (setFavorite, setLoading) => {
 
 export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   const scrollViewRef = useRef();
-  const [favorite, setFavorite] = useState('');
+  const [favorite, setFavorite] = useState([]);
   const [loading, setLoading] = useState(false);
-  let backupData = [];
 
   useEffect(() => {
     getFavoriteAsync(setFavorite, setLoading);
@@ -74,7 +74,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   }
 
   return (
-    <View style={{ marginTop: 100 }}>
+    <View style={{ height: SCREEN_HEIGHT / 1.2, marginTop: '40%' }}>
       <ImageBackground
         imageStyle={{
           height: SCREEN_HEIGHT,

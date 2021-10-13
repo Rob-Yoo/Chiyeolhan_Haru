@@ -84,7 +84,6 @@ export const ToDoModal = ({
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue } = useForm();
   const titleRef = useRef();
-  const scrollView = useRef();
 
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
