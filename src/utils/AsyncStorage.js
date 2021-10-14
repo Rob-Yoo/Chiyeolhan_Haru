@@ -339,14 +339,24 @@ export const checkDayChange = async () => {
         // 오늘이 지나면
         // TOMORROW 데이터들을 각각 TODAY_DATA, GEOFENCE 어싱크 스토리지에 넣어놓고 비워둠.
         await dbToAsyncStorage();
-        await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
+
         const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+        const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+
+        if (progressing) {
+          geofenceData.unshift(progressing);
+          await AsyncStorage.setItem(
+            KEY_VALUE_GEOFENCE,
+            JSON.stringify(geofenceData),
+          );
+        }
+
         const currentTime = getCurrentTime();
         if (geofenceData.length > 0) {
           const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
           startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
         }
-        console.log('바뀐 geofenceData :', geofenceData);
+        await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
       }
       // 성공한 일정 배열을 초기화해준다.
       await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
