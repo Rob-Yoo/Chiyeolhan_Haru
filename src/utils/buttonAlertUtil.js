@@ -1,8 +1,8 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { submitAllFailNotif, removeAllStartNotif } from 'utils/Notification';
-import { getCurrentTime } from 'utils/Time';
+import { submitAllFailNotif, removeAllStartNotif } from 'utils/notificationUtil';
+import { getCurrentTime } from 'utils/timeUtil';
 
 import {
   KEY_VALUE_DAY_CHANGE,

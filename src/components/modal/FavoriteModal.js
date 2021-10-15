@@ -13,7 +13,7 @@ import IconGobackButton from '#assets/icons/icon-go-back-button';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
-import { getDataFromAsync, setFavoriteData } from 'utils/AsyncStorage';
+import { getDataFromAsync, setFavoriteData } from 'utils/asyncStorageUtil';
 
 import {
   SCREEN_HEIGHT,

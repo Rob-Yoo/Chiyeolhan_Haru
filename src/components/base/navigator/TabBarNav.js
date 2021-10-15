@@ -11,26 +11,27 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setTabBar, skip } from 'redux/store';
 
+import { scrollRefresh } from 'components/items/ScheduleComponent';
+
 import IconHome from '#assets/icons/icon-home';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
-import { fontPercentage } from 'utils/responsive';
-import { getCurrentTime } from 'utils/Time';
-import { dbService } from 'utils/firebase';
+import { fontPercentage } from 'utils/responsiveUtil';
+import { getCurrentTime } from 'utils/timeUtil';
+import { dbService } from 'utils/firebaseUtil';
 import {
   checkDayChange,
-  getDataFromAsync,
-  loadSuccessSchedules,
-} from 'utils/AsyncStorage';
-import { geofenceUpdate } from 'utils/BgGeofence';
+  getDataFromAsync
+} from 'utils/asyncStorageUtil';
+import { geofenceUpdate } from 'utils/bgGeofenceUtil';
 import {
   skipNotifAlert,
   skipDenyAlert,
   startDenyAlert,
   startAlert,
-} from 'utils/TwoButtonAlert';
-import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import { cancelAllNotif } from 'utils/Notification';
+} from 'utils/buttonAlertUtil';
+import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
+import { cancelAllNotif } from 'utils/notificationUtil';
 
 import {
   UID,
@@ -38,7 +39,6 @@ import {
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
 } from 'constant/const';
-import { scrollRefresh } from '../../items/ScheduleComponent';
 
 const handleSkip = async (isNeedSkip) => {
   try {

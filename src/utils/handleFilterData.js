@@ -1,4 +1,4 @@
-import { deleteSearchedData, saveSearchedData } from 'utils/AsyncStorage';
+import { deleteSearchedData, saveSearchedData } from 'utils/asyncStorageUtil';
 
 //검색기록 async storage update
 export const handleFilterData = async (

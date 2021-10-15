@@ -13,7 +13,7 @@ import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconStarBorder from '#assets/icons/icon-star-border';
 
-import { deleteSearchedData, deleteAllSearchedData } from 'utils/AsyncStorage';
+import { deleteSearchedData, deleteAllSearchedData } from 'utils/asyncStorageUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 

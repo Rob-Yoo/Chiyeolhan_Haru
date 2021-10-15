@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from 'components/screen/Home';
-import OffHome from 'components/screen/OffHome';
-import { SchedullScreenDetail } from 'components/base/navigator/ScheduleScreenDetail';
-import { Loading } from 'components/screen/Loading';
+import Home from 'components/screen/HomeScreen';
+import OffHome from 'components/screen/OffHomeScreen';
+import { ScheduleDetail } from 'components/base/navigator/ScheduleDetailNav';
+import { Loading } from 'components/screen/LoadingScreen';
 
-import { offlineAlert } from 'utils/TwoButtonAlert';
+import { offlineAlert } from 'utils/buttonAlertUtil';
 
 export const Stack = createStackNavigator();
 
@@ -31,7 +31,7 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen
         name="ScheduleToday"
         navigation={navigation}
-        component={SchedullScreenDetail}
+        component={ScheduleDetail}
         options={{
           transitionSpec: {
             open: config,
@@ -53,7 +53,7 @@ const OffHomeStack = ({ navigation }) => {
       <Stack.Screen
         name="ScheduleToday"
         navigation={navigation}
-        component={SchedullScreenDetail}
+        component={ScheduleDetail}
       />
     </Stack.Navigator>
   );

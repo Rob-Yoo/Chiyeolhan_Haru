@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar } from 'redux/store';
 
-import { Loading } from 'components/screen/Loading';
+import { Loading } from 'components/screen/LoadingScreen';
+import { HomeHeader } from 'components/items/HomeHeader';
 import HomeContent from 'components/items/HomeContent';
 
-import { getDate } from 'utils/Time';
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { getDate } from 'utils/timeUtil';
+import { getDataFromAsync } from 'utils/asyncStorageUtil';
 
 import {
   KEY_VALUE_YESTERDAY_DATA,
@@ -19,7 +20,6 @@ import {
   CONTAINER_HEIGHT,
   CONTAINER_WIDTH,
 } from 'constant/const';
-import { HomeHeader } from '../items/HomeHeader';
 
 const ScheduleButton = styled.TouchableOpacity``;
 

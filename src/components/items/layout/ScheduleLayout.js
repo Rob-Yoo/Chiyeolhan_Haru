@@ -6,9 +6,9 @@ import ToDoModal from 'components/modal/ToDoModal';
 
 import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 
-import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
-import { checkDayChange } from 'utils/AsyncStorage';
-import { addModifyBlockAlert } from 'utils/TwoButtonAlert';
+import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
+import { checkDayChange } from 'utils/asyncStorageUtil';
+import { addModifyBlockAlert } from 'utils/buttonAlertUtil';
 
 const styles = StyleSheet.create({
   addToDoButton: {

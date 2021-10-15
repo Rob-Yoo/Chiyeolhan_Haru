@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
-import { fontPercentage } from 'utils/responsive';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 

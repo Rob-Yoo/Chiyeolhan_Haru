@@ -2,15 +2,15 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import { geofenceScheduler } from 'utils/GeofenceScheduler';
-import { dbService } from 'utils/firebase';
-import { cancelAllNotif, startNotification } from 'utils/Notification';
+import { geofenceScheduler } from 'utils/gfSchedulerUtil';
+import { dbService } from 'utils/firebaseUtil';
+import { cancelAllNotif, startNotification } from 'utils/notificationUtil';
 import {
   isEarliestTime,
   getCurrentTime,
   getDate,
   getTimeDiff,
-} from 'utils/Time';
+} from 'utils/timeUtil';
 
 import {
   UID,

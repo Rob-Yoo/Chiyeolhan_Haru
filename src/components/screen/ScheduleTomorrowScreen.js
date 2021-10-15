@@ -6,9 +6,9 @@ import RNRestart from 'react-native-restart';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
-import { checkDayChange, getDataFromAsync } from 'utils/AsyncStorage';
-import { startBtnAlert } from 'utils/TwoButtonAlert';
-import { getCurrentTime, getTimeDiff } from 'utils/Time';
+import { checkDayChange, getDataFromAsync } from 'utils/asyncStorageUtil';
+import { startBtnAlert } from 'utils/buttonAlertUtil';
+import { getCurrentTime, getTimeDiff } from 'utils/timeUtil';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
 import {

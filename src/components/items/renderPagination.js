@@ -20,9 +20,9 @@ import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
-import { getCurrentTime } from 'utils/Time';
-import { longTaskList } from 'utils/TwoButtonAlert';
-import { fontPercentage } from 'utils/responsive';
+import { getCurrentTime } from 'utils/timeUtil';
+import { longTaskList } from 'utils/buttonAlertUtil';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
@@ -158,7 +158,7 @@ const Pagination = ({ taskList, targetId }) => {
   );
 };
 
-export const renderPagination = (index, total, context) => {
+export const RenderPagination = (index, total, context) => {
   if (context.props.toDos[index] !== undefined) {
     const taskList = context?.props?.toDos[index].toDos;
     const targetId = context?.props?.toDos[index].id;

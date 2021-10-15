@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useSelector } from 'react-redux';
 
-import { getTimeDiff } from 'utils/Time';
+import { getTimeDiff } from 'utils/timeUtil';
 import {
   alertStartTimePicker,
   alertFinsihTimePicker,
-} from 'utils/TwoButtonAlert';
+} from 'utils/buttonAlertUtil';
 
 import { KEY_VALUE_START_TIME } from 'constant/const';
 

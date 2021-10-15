@@ -4,9 +4,9 @@ import Swiper from 'react-native-swiper';
 
 import { Nodata } from 'components/items//Nodata';
 import { Card } from 'components/items/CardItem';
-import { renderPagination } from 'components/items/renderPagination';
+import { RenderPagination } from 'components/items/RenderPagination';
 
-import { getCurrentTime, getDate } from 'utils/Time';
+import { getCurrentTime, getDate } from 'utils/timeUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 import { card } from './CardItem';
@@ -79,7 +79,7 @@ const HomeContent = (props) => {
     <View style={styles.homeContainer}>
       <Swiper
         toDos={todoArr}
-        renderPagination={renderPagination}
+        RenderPagination={RenderPagination}
         loop={false}
         style={styles.swiperStyle}
         index={nowIndex}

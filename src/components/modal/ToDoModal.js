@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 
-import Map from 'components/screen/Map';
+import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
 import { ToDoModalInput } from 'components/modal/ToDoModalInput';
@@ -29,13 +29,13 @@ import {
   dbToAsyncStorage,
   dbToAsyncTomorrow,
   getDataFromAsync,
-} from 'utils/AsyncStorage';
-import { checkGeofenceSchedule } from 'utils/GeofenceScheduler';
+} from 'utils/asyncStorageUtil';
+import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import {
   failNotification,
   cancelAllNotif,
   startNotification,
-} from 'utils/Notification';
+} from 'utils/notificationUtil';
 import {
   alertInValidSubmit,
   alertStartTimeError,
@@ -44,9 +44,9 @@ import {
   longTaskList,
   longTodoTitle,
   addModifyBlockAlert,
-} from 'utils/TwoButtonAlert';
-import { getCurrentTime, getTimeDiff, getDate } from 'utils/Time';
-import { toDosUpdateDB } from 'utils/Database';
+} from 'utils/buttonAlertUtil';
+import { getCurrentTime, getTimeDiff, getDate } from 'utils/timeUtil';
+import { toDosUpdateDB } from 'utils/databaseUtil';
 
 import {
   KEY_VALUE_TODAY_DATA,

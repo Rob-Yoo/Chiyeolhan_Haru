@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { getDataFromAsync } from 'utils/asyncStorageUtil';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
 import { KEY_VALUE_START_TIME, KEY_VALUE_SUCCESS } from 'constant/const';

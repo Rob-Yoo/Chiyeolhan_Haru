@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-import { getCurrentTime } from 'utils/Time';
+import { getCurrentTime } from 'utils/timeUtil';
 
 const UPDATE_EVERY_MILLISECONDS = 60 * 1000; // 1 minute
 

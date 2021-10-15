@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 
-import { getCurrentTime } from 'utils/Time';
-import { fontPercentage } from 'utils/responsive';
+import { getCurrentTime } from 'utils/timeUtil';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 import { ProgressingBar } from 'components/items/ProgressingBar';

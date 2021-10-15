@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { cancelAllNotif } from 'utils/Notification';
-import { geofenceUpdate } from 'utils/BgGeofence';
-import { getCurrentTime } from 'utils/Time';
-import { dbService } from 'utils/firebase';
+import { cancelAllNotif } from 'utils/notificationUtil';
+import { geofenceUpdate } from 'utils/bgGeofenceUtil';
+import { getCurrentTime } from 'utils/timeUtil';
+import { dbService } from 'utils/firebaseUtil';
 
 import {
   UID,

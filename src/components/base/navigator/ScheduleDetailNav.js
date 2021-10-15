@@ -3,14 +3,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
 
-import TabBar from 'components/base/navigator/TabBar';
-import ScheduleToday from 'components/screen/ScheduleToday';
-import ScheduleTomorrow from 'components/screen/ScheduleTomorrow';
-import ScheduleYesterday from 'components/screen/ScheduleYesterday';
+import TabBar from 'components/base/navigator/TabBarNav';
+import ScheduleToday from 'components/screen/ScheduleTodayScreen';
+import ScheduleTomorrow from 'components/screen/ScheduleTomorrowScreen';
+import ScheduleYesterday from 'components/screen/ScheduleYesterdayScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
-export const SchedullScreenDetail = ({ navigation }) => {
+export const ScheduleDetail = ({ navigation }) => {
   const tabBar = useSelector((state) => state.tabBar);
   return (
     <Fragment>

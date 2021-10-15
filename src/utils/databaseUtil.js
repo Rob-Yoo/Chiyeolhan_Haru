@@ -1,4 +1,4 @@
-import { dbService } from 'utils/firebase';
+import { dbService } from 'utils/firebaseUtil';
 
 import { UID } from 'constant/const';
 

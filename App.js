@@ -8,7 +8,7 @@ import store from 'redux/store';
 
 import HomeNav from 'components/base/navigator/HomeNav';
 
-import { getDataFromAsync, dbToAsyncStorage } from 'utils/AsyncStorage';
+import { getDataFromAsync, dbToAsyncStorage } from 'utils/asyncStorageUtil';
 
 import {
   KEY_VALUE_INSTALLED,

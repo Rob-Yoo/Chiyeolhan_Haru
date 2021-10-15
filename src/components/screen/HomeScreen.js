@@ -8,14 +8,14 @@ import * as SplashScreen from 'expo-splash-screen';
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
 import HomeContent from 'components/items/HomeContent';
-import { Loading } from 'components/screen/Loading';
+import { HomeHeader } from 'components/items/HomeHeader';
+import { Loading } from 'components/screen/LoadingScreen';
 
-import { checkDayChange, loadSuccessSchedules } from 'utils/AsyncStorage';
-import { dbService } from 'utils/firebase';
-import { getDate } from 'utils/Time';
+import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
+import { dbService } from 'utils/firebaseUtil';
+import { getDate } from 'utils/timeUtil';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
-import { HomeHeader } from '../items/HomeHeader';
 
 const Home = ({ navigation }) => {
   let todoArr = [];

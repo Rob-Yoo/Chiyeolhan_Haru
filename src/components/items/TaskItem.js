@@ -12,7 +12,7 @@ import { edit, remove } from 'redux/store';
 
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 
-import { deleteToDoTaskList, longTaskList } from 'utils/TwoButtonAlert';
+import { deleteToDoTaskList, longTaskList } from 'utils/buttonAlertUtil';
 
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress } = props;

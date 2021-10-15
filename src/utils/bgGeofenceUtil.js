@@ -8,13 +8,13 @@ import {
   getLateTimeDiff,
   getTimeDiff,
   getCurrentTime,
-} from 'utils/Time';
+} from 'utils/timeUtil';
 import {
   notifHandler,
   arriveEarlyNotification,
   failNotification,
   cancelAllNotif,
-} from 'utils/Notification';
+} from 'utils/notificationUtil';
 
 import {
   UID,

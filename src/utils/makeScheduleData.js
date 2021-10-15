@@ -1,4 +1,4 @@
-import { getCurrentTime, getDate } from 'utils/Time';
+import { getCurrentTime, getDate } from 'utils/timeUtil';
 
 const FAIL_COLOR = '#C3C3C3';
 const DEFAULT_COLOR = '#54BCB6';

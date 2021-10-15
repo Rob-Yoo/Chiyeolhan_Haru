@@ -9,17 +9,17 @@ import { AlertView } from 'components/items/AlertView';
 
 import IconQuestion from '#assets/icons/icon-question';
 
-import { deleteToDoAlert } from 'utils/TwoButtonAlert';
+import { deleteToDoAlert } from 'utils/buttonAlertUtil';
 import {
   deleteTomorrowAsyncStorageData,
   deleteTodayAsyncStorageData,
   deleteGeofenceAsyncStorageData,
   getDataFromAsync,
   loadSuccessSchedules,
-} from 'utils/AsyncStorage';
-import { dbService } from 'utils/firebase';
-import { getCurrentTime, getDate } from 'utils/Time';
-import { geofenceUpdate } from 'utils/BgGeofence';
+} from 'utils/asyncStorageUtil';
+import { dbService } from 'utils/firebaseUtil';
+import { getCurrentTime, getDate } from 'utils/timeUtil';
+import { geofenceUpdate } from 'utils/bgGeofenceUtil';
 
 import {
   KEY_VALUE_GEOFENCE,

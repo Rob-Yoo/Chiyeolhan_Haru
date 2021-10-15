@@ -13,7 +13,7 @@ import IconQuestion from '#assets/icons/icon-question';
 import IconAngleDown from '#assets/icons/icon-angle-down';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 
-import { getDataFromAsync } from 'utils/AsyncStorage';
+import { getDataFromAsync } from 'utils/asyncStorageUtil';
 
 import { KEY_VALUE_FAVORITE } from 'constant/const';
 

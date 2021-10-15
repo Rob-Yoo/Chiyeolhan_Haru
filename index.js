@@ -3,7 +3,7 @@ import { registerRootComponent } from 'expo';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 
-import { initBgGeofence, subscribeOnGeofence } from 'utils/BgGeofence';
+import { initBgGeofence, subscribeOnGeofence } from 'utils/bgGeofenceUtil';
 
 import App from './App';
 

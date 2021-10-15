@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
-import { View, StyleSheet, AppState, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
