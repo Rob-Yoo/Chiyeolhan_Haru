@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
+import { geofenceDataModel } from "model/geofenceDataModel";
+
 import { geofenceScheduler } from 'utils/gfSchedulerUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { cancelAllNotif, startNotification } from 'utils/notificationUtil';
@@ -192,26 +194,10 @@ const setGeofenceDataArray = async (todayToDos) => {
         todo.data().startTime <= currentTime &&
         currentTime < todo.data().finishTime
       ) {
-        progressingSchedule = {
-          id: todo.data().id,
-          latitude: todo.data().latitude,
-          longitude: todo.data().longitude,
-          location: todo.data().location,
-          startTime: todo.data().startTime,
-          finishTime: todo.data().finishTime,
-          title: todo.data().title,
-        };
+		progressingSchedule = geofenceDataModel(todo.data());
       }
       if (todo.data().startTime > currentTime) {
-        geofenceDataArray.push({
-          id: todo.data().id,
-          startTime: todo.data().startTime,
-          finishTime: todo.data().finishTime,
-          latitude: todo.data().latitude,
-          longitude: todo.data().longitude,
-          location: todo.data().location,
-          title: todo.data().title,
-        });
+        geofenceDataArray.push(geofenceDataModel(todo.data()));
       }
     });
     await setGeofenceData(JSON.stringify(geofenceDataArray));

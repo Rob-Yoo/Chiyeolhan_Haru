@@ -4,7 +4,7 @@ import Swiper from 'react-native-swiper';
 
 import { Nodata } from 'components/items//Nodata';
 import { Card } from 'components/items/CardItem';
-import { RenderPagination } from 'components/items/RenderPagination';
+import { renderPagination } from 'components/items/RenderPagination';
 
 import { getCurrentTime, getDate } from 'utils/timeUtil';
 
@@ -79,7 +79,7 @@ const HomeContent = (props) => {
     <View style={styles.homeContainer}>
       <Swiper
         toDos={todoArr}
-        RenderPagination={RenderPagination}
+        renderPagination={renderPagination}
         loop={false}
         style={styles.swiperStyle}
         index={nowIndex}
