@@ -12,7 +12,7 @@ export const geofenceDataModel = (data) => {
 	};
 }
 
-export const todoDataModel = (data) => {
+export const todoAsyncModel = (data) => {
 	return {
 		id: data.id,
         startTime: data.startTime,
@@ -27,7 +27,7 @@ export const todoDataModel = (data) => {
 	};
 }
 
-export const dbModel = (id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList) => {
+export const todoDbModel = (id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList) => {
 	const { TODAY, TOMORROW } = getDate();
 
 	return {

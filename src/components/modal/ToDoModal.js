@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 
-import { dbModel } from "model/dataModel";
+import { todoDbModel } from "model/dataModel";
 
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
@@ -300,7 +300,7 @@ export const ToDoModal = ({
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
     try {
-      const newData = dbModel(id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList);
+      const newData = todoDbModel(id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList);
       dispatch(create(newData));
       await toDosUpdateDB(newData, id);
 
@@ -396,7 +396,7 @@ export const ToDoModal = ({
           dispatch(deleteToDoDispatch(id));
           cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제
 
-          const newData = dbModel(newID, todoTitle, todoStartTime, todoFinishTime, location, address, longitude, latitude, isToday, taskList);
+          const newData = todoDbModel(newID, todoTitle, todoStartTime, todoFinishTime, location, address, longitude, latitude, isToday, taskList);
           dispatch(create(newData));
           await toDosUpdateDB(newData, newID);
         } else if (!isStartTimeChange) {

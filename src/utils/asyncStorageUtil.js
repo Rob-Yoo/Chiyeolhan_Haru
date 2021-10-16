@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import { geofenceDataModel, todoDataModel } from "model/dataModel";
+import { geofenceDataModel, todoAsyncModel } from "model/dataModel";
 
 import { geofenceScheduler } from 'utils/gfSchedulerUtil';
 import { dbService } from 'utils/firebaseUtil';
@@ -162,7 +162,7 @@ const setTodayToDoArray = async (todayToDos) => {
     todayToDos.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
-      obj[targetId] = todoDataModel(todo.data());
+      obj[targetId] = todoAsyncModel(todo.data());
       todayToDoArray.push(obj);
     });
     // console.log('todayToDoArray : ', todayToDoArray);
@@ -223,7 +223,7 @@ export const dbToAsyncTomorrow = async () => {
     data.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
-      obj[targetId] = todoDataModel(todo.data());
+      obj[targetId] = todoAsyncModel(todo.data());
       tomorrowDataArray.push(obj);
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
