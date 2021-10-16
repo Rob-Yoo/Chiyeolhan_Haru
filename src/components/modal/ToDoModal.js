@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 
+import { todoDbModel } from "model/dataModel";
+
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
@@ -280,7 +282,7 @@ export const ToDoModal = ({
     return isNeedAlert;
   };
 
-  const toDoSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
+  const toDoSubmit = async (startTime, finishTime, title) => {
     if (network === 'offline') {
       modalHandler();
       return;
@@ -290,44 +292,31 @@ export const ToDoModal = ({
         ? locationData
         : passModalData;
     const date = new Date();
-    const todoId =
+    const id =
       `${date.getFullYear()}` +
       `${isToday ? TODAY : TOMORROW}` +
-      `${todoStartTime}`;
+      `${startTime}`;
     const currentTime = getCurrentTime();
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
     try {
-      const newData = {
-        id: todoId,
-        title: todoTitle,
-        startTime: todoStartTime,
-        finishTime: todoFinishTime,
-        location,
-        address,
-        longitude,
-        latitude,
-        date: isToday ? TODAY : TOMORROW,
-        toDos: [...taskList],
-        isDone: false,
-        isSkip: false,
-      };
+      const newData = todoDbModel(id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList);
       dispatch(create(newData));
-      await toDosUpdateDB(newData, todoId);
+      await toDosUpdateDB(newData, id);
 
       if (isToday) {
         // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
         // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
-        const isChangeEarliest = await checkEarlistTodo(todoStartTime);
+        const isChangeEarliest = await checkEarlistTodo(startTime);
         dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
         if (isStartTodo) {
           // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
-          const timeDiff = getTimeDiff(currentTime, todoFinishTime);
-          failNotification(timeDiff, todoId);
+          const timeDiff = getTimeDiff(currentTime, finishTime);
+          failNotification(timeDiff, id);
         } else {
           // 일정 시작 버튼이 안눌렸을 때 시작 버튼 눌러달라는 알림 예약
-          const timeDiff = getTimeDiff(currentTime, todoStartTime);
-          startNotification(timeDiff, todoId);
+          const timeDiff = getTimeDiff(currentTime, startTime);
+          startNotification(timeDiff, id);
         }
       } else {
         dbToAsyncTomorrow();
@@ -407,20 +396,7 @@ export const ToDoModal = ({
           dispatch(deleteToDoDispatch(id));
           cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제
 
-          const newData = {
-            id: newID,
-            title: todoTitle,
-            startTime: todoStartTime,
-            finishTime: todoFinishTime,
-            location,
-            address,
-            longitude,
-            latitude,
-            date: isToday ? TODAY : TOMORROW,
-            toDos: [...taskList],
-            isDone: false,
-            isSkip: false,
-          };
+          const newData = todoDbModel(newID, todoTitle, todoStartTime, todoFinishTime, location, address, longitude, latitude, isToday, taskList);
           dispatch(create(newData));
           await toDosUpdateDB(newData, newID);
         } else if (!isStartTimeChange) {

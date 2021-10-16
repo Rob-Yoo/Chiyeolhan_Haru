@@ -108,9 +108,9 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
-    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+	const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+	const todosRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules) {
       // 일정이 현재 진행 중이라면 새로운 일정을 추가를 하면 현재 진행 중인 일정이 GEOFENCE 배열에서 사라진다.
@@ -164,20 +164,13 @@ export const geofenceScheduler = async (isChangeEarliest) => {
       } else {
         if (progressing) {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
-          let addProgressing = false;
-          if (successSchedules) {
-            const isDoneIdx = successSchedules.findIndex((schedule) => {
-              if (schedule.id === progressing.id) {
-                return true;
-              }
-            });
-            // isDoneIdx가 -1이라는 뜻은 현재 일정이 성공한 일정이 아니라는 뜻으로 아직 일정 장소에 안들어왔다는 소리이다.
-            if (isDoneIdx == -1) {
-              addProgressing = true;
-            }
-          } else {
-            addProgressing = true;
-          }
+		  let addProgressing = false;
+		  const dbData = await todosRef.where('id', '==', progressing.id).get();
+
+		  if (dbData.isDone === false) {
+			addProgressing = true;
+		  }
+		  
           if (addProgressing) {
             // 아래와 같이 하는 이유는 새로운 일정을 생성하면 geofenceArray에다 DB에서 아직 시작시간이 지나지 않은 일정들만 가져온다.
             // 이런 이유 떄문에 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우에는 현재 일정이 사라져버린다.
