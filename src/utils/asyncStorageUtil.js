@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
-import { geofenceDataModel } from "model/geofenceDataModel";
+import { geofenceDataModel, todoDataModel } from "model/dataModel";
 
 import { geofenceScheduler } from 'utils/gfSchedulerUtil';
 import { dbService } from 'utils/firebaseUtil';
@@ -162,18 +162,7 @@ const setTodayToDoArray = async (todayToDos) => {
     todayToDos.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
-      obj[targetId] = {
-        id: todo.data().id,
-        startTime: todo.data().startTime,
-        finishTime: todo.data().finishTime,
-        latitude: todo.data().latitude,
-        longitude: todo.data().longitude,
-        location: todo.data().location,
-        date: todo.data().date,
-        address: todo.data().address,
-        title: todo.data().title,
-        toDos: todo.data().toDos,
-      };
+      obj[targetId] = todoDataModel(todo.data());
       todayToDoArray.push(obj);
     });
     // console.log('todayToDoArray : ', todayToDoArray);
@@ -234,18 +223,7 @@ export const dbToAsyncTomorrow = async () => {
     data.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
-      obj[targetId] = {
-        id: todo.data().id,
-        startTime: todo.data().startTime,
-        finishTime: todo.data().finishTime,
-        latitude: todo.data().latitude,
-        longitude: todo.data().longitude,
-        location: todo.data().location,
-        date: todo.data().date,
-        address: todo.data().address,
-        title: todo.data().title,
-        toDos: todo.data().toDos,
-      };
+      obj[targetId] = todoDataModel(todo.data());
       tomorrowDataArray.push(obj);
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
