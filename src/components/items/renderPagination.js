@@ -24,6 +24,7 @@ import { getCurrentTime } from 'utils/timeUtil';
 import { longTaskList } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 
+const IconTaskListLeftSize = 98;
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -50,7 +51,18 @@ const Pagination = ({ taskList, targetId }) => {
         <Text style={styles.taskTitle}>수행 리스트</Text>
         {network === 'offline' ||
         targetId === 0 ||
-        toDos.finishTime < getCurrentTime() ? null : (
+        toDos.finishTime < getCurrentTime() ? (
+          <IconTaskListAdd
+            name="icon-tasklist-add-button"
+            size={18}
+            color={'#229892'}
+            onPress={() =>
+              network === 'online' &&
+              toDos.finishTime > getCurrentTime() &&
+              toggleIsVisible()
+            }
+          />
+        ) : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
             size={15}
@@ -77,23 +89,23 @@ const Pagination = ({ taskList, targetId }) => {
                   {index === 0 ? (
                     <IconTaskListLeft
                       name="icon-tasklist-left"
-                      size={106}
+                      size={IconTaskListLeftSize}
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -15 : -10,
-                        top: 0,
+                        left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                        top: 2,
                       }}
                     />
                   ) : (
                     <IconTaskListLeftFin
                       name="icon-tasklist-left-fin"
-                      size={106}
+                      size={IconTaskListLeftSize}
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -15 : -10,
-                        top: 0,
+                        left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                        top: 2,
                       }}
                     />
                   )}
@@ -117,12 +129,12 @@ const Pagination = ({ taskList, targetId }) => {
               <View style={{ alignItems: 'center' }}>
                 <IconTaskListLeft
                   name="icon-tasklist-left"
-                  size={106}
+                  size={IconTaskListLeftSize}
                   color="#707070"
                   style={{
                     position: 'absolute',
-                    left: SCREEN_HEIGHT > 668 ? -15 : -10,
-                    top: 0,
+                    left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                    top: 2,
                   }}
                 />
                 <TouchableOpacity
@@ -171,26 +183,26 @@ export const renderPagination = (index, total, context) => {
 const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
-    top: SCREEN_HEIGHT > 668 ? CONTAINER_HEIGHT * 0.6 : CONTAINER_HEIGHT * 0.5,
-    left: SCREEN_HEIGHT > 668 ? -50 : -70,
+    top: CONTAINER_HEIGHT * 0.485,
+    left: SCREEN_HEIGHT > 668 ? -51.5 : -70,
     width: 400,
     height: '100%',
   },
   taskHeader: {
-    paddingHorizontal: 40,
+    paddingHorizontal: 39,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
   },
 
   task: {
-    backgroundColor: '#FFF',
+    //backgroundColor: '#FFF',
     width: '80%',
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
-    marginLeft: 20,
+    // marginLeft: 20,
     paddingVertical: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -203,8 +215,8 @@ const styles = StyleSheet.create({
   taskTitle: {
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: fontPercentage(16),
-    marginRight: 10,
+    fontSize: fontPercentage(16.5),
+    marginRight: 5,
   },
   taskText: {
     maxWidth: '100%',

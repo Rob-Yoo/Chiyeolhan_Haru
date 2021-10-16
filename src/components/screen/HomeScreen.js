@@ -136,17 +136,18 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
-    backgroundColor: '#ECF5F471',
+    //backgroundColor: '#ECF5F471',
     justifyContent: 'center',
     alignItems: 'center',
   },
   homeContainer: {
+    flex: 2.25,
     width: CONTAINER_WIDTH,
-    height: CONTAINER_HEIGHT,
-    backgroundColor: '#ECF5F471',
+    // height: CONTAINER_HEIGHT,
+    //backgroundColor: '#ECF5F471',
   },
   homeHeader: {
-    flex: 1.3,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -154,15 +155,6 @@ const styles = StyleSheet.create({
   homeHeaderText: { flex: 0.7, paddingLeft: 15 },
 
   iconScheduleButton: { marginBottom: 10 },
-  updateBtn: {
-    width: 65,
-    height: 65,
-    borderRadius: 50,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -2,
-  },
 });
 
 export default Home;

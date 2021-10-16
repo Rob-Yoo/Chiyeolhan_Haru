@@ -121,7 +121,7 @@ const HomeContent = (props) => {
 const styles = StyleSheet.create({
   /*Home*/
   homeContainer: {
-    flex: 5,
+    flex: 2.25,
     alignItems: 'center',
   },
   swiperStyle: { height: '100%' },

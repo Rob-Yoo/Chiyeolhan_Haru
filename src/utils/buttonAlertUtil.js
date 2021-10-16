@@ -1,7 +1,10 @@
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { submitAllFailNotif, removeAllStartNotif } from 'utils/notificationUtil';
+import {
+  submitAllFailNotif,
+  removeAllStartNotif,
+} from 'utils/notificationUtil';
 import { getCurrentTime } from 'utils/timeUtil';
 
 import {
@@ -246,3 +249,5 @@ export const longTaskList = () =>
       cancelable: false,
     },
   );
+
+//지난일정 수행리스트 일때 알림 보내기
