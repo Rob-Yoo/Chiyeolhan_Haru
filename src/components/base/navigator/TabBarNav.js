@@ -19,10 +19,7 @@ import IconHandleStart from '#assets/icons/icon-handle-start';
 import { fontPercentage } from 'utils/responsiveUtil';
 import { getCurrentTime } from 'utils/timeUtil';
 import { dbService } from 'utils/firebaseUtil';
-import {
-  checkDayChange,
-  getDataFromAsync
-} from 'utils/asyncStorageUtil';
+import { checkDayChange, getDataFromAsync } from 'utils/asyncStorageUtil';
 import { geofenceUpdate } from 'utils/bgGeofenceUtil';
 import {
   skipNotifAlert,
@@ -268,7 +265,7 @@ const TabBar = (props) => {
                 }
               >
                 <ImageBackground
-                  style={[{ width: 22, height: 22 }]}
+                  style={[{ width: 22, height: 21 }]}
                   source={{ uri: 'iconHandleStart' }}
                 />
               </TouchableOpacity>
@@ -305,7 +302,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingTop: 5,
+    paddingTop: 2,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
@@ -314,7 +311,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 3,
     position: 'absolute',
-    bottom: -10,
+    bottom: -7.5,
     right: -5,
   },
   tabBarText: {

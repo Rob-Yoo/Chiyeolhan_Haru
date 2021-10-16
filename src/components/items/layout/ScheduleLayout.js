@@ -12,11 +12,13 @@ import { addModifyBlockAlert } from 'utils/buttonAlertUtil';
 
 const styles = StyleSheet.create({
   addToDoButton: {
-    width: 60,
-    height: 60,
-    bottom: 50,
-    right: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    height: 50,
     position: 'absolute',
+    bottom: 44,
+    right: 19,
     backgroundColor: '#FFF',
     borderRadius: 50,
     shadowColor: '#00000029',
@@ -54,7 +56,7 @@ const ScheduleLayout = ({
       <View style={{ flex: 1 }}>{children}</View>
       {isToday !== 'yesterday' && network === 'online' ? (
         <TouchableOpacity style={styles.addToDoButton} onPress={pressAddButton}>
-          <AddToDoIcon name="icon-add-todo" size={60} color={'#54BCB6'} />
+          <AddToDoIcon name="icon-add-todo" size={50} color={'#54BCB6'} />
         </TouchableOpacity>
       ) : (
         <></>
