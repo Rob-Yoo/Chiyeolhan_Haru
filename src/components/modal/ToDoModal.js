@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 
-import { todoDbModel } from "model/dataModel";
+import { todoDbModel } from 'model/dataModel';
 
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
@@ -84,7 +84,7 @@ export const ToDoModal = ({
   const [task, setTask] = useState(false);
   const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, unregister } = useForm();
   const titleRef = useRef();
 
   useEffect(() => {
@@ -145,6 +145,11 @@ export const ToDoModal = ({
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
     setIsOngoing(false);
+    unregister('todoStartTime');
+    unregister('todoFinishTime');
+    unregister('todoTitle');
+    unregister('todoTask', { min: 1 });
+    unregister('todoId');
     network !== 'offline' && setCanEdit(true);
   };
 
@@ -300,7 +305,18 @@ export const ToDoModal = ({
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
     try {
-      const newData = todoDbModel(id, title, startTime, finishTime, location, address, longitude, latitude, isToday, taskList);
+      const newData = todoDbModel(
+        id,
+        title,
+        startTime,
+        finishTime,
+        location,
+        address,
+        longitude,
+        latitude,
+        isToday,
+        taskList,
+      );
       dispatch(create(newData));
       await toDosUpdateDB(newData, id);
 
@@ -396,7 +412,18 @@ export const ToDoModal = ({
           dispatch(deleteToDoDispatch(id));
           cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제
 
-          const newData = todoDbModel(newID, todoTitle, todoStartTime, todoFinishTime, location, address, longitude, latitude, isToday, taskList);
+          const newData = todoDbModel(
+            newID,
+            todoTitle,
+            todoStartTime,
+            todoFinishTime,
+            location,
+            address,
+            longitude,
+            latitude,
+            isToday,
+            taskList,
+          );
           dispatch(create(newData));
           await toDosUpdateDB(newData, newID);
         } else if (!isStartTimeChange) {

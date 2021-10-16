@@ -5,6 +5,7 @@ import { HomeTextItem } from 'components/items/HomeTextItem';
 
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
 import PixelRatio from 'react-native/Libraries/Utilities/PixelRatio';
+import { Dimensions } from 'react-native';
 
 export const HomeHeader = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
