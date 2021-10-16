@@ -23,6 +23,7 @@ import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 import { getCurrentTime } from 'utils/timeUtil';
 import { longTaskList } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
+import { passedTodoAlert } from '../../utils/buttonAlertUtil';
 
 const IconTaskListLeftSize = 98;
 const Pagination = ({ taskList, targetId }) => {
@@ -45,33 +46,28 @@ const Pagination = ({ taskList, targetId }) => {
       dispatch(add({ targetId, taskTitle }));
     setTaskTitle(null);
   };
+
+  const handlePaginationAddButton = () => {
+    if (toDos.finishTime < getCurrentTime()) {
+      passedTodoAlert();
+    } else {
+      network === 'online' &&
+        toDos.finishTime > getCurrentTime() &&
+        toggleIsVisible();
+    }
+  };
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
         <Text style={styles.taskTitle}>수행 리스트</Text>
-        {network === 'offline' ||
-        targetId === 0 ||
-        toDos.finishTime < getCurrentTime() ? (
-          <IconTaskListAdd
-            name="icon-tasklist-add-button"
-            size={18}
-            color={'#229892'}
-            onPress={() =>
-              network === 'online' &&
-              toDos.finishTime > getCurrentTime() &&
-              toggleIsVisible()
-            }
-          />
-        ) : (
+        {network === 'offline' ? null : (
           <IconTaskListAdd
             name="icon-tasklist-add-button"
             size={15}
             color={'#229892'}
-            onPress={() =>
-              network === 'online' &&
-              toDos.finishTime > getCurrentTime() &&
-              toggleIsVisible()
-            }
+            onPress={() => {
+              handlePaginationAddButton();
+            }}
           />
         )}
       </View>
