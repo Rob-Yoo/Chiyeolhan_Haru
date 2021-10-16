@@ -8,20 +8,17 @@ import { renderPagination } from 'components/items/RenderPagination';
 
 import { getCurrentTime, getDate } from 'utils/timeUtil';
 
-import { SCREEN_HEIGHT } from 'constant/const';
-import { card } from './CardItem';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 const HomeContent = (props) => {
   let todoArr = props.todoArr;
   if (todoArr.length === 0) return <Nodata />;
 
-  const [nowIndex, setNowIndex] = useState(
-    todoArr[1].title === ' ' ? 0 : todoArr.length,
-  );
+  const [nowIndex, setNowIndex] = useState(todoArr.length);
   const { TODAY } = getDate();
 
   useEffect(() => {
-    todoArr[1].title !== ' ' && getNowTimeIndex();
+    getNowTimeIndex();
   }, []);
 
   const getNowTimeIndex = () => {
@@ -72,7 +69,6 @@ const HomeContent = (props) => {
         }
       });
     setNowIndex(tempIndex);
-    console.log(tempIndex);
   };
 
   return (
@@ -83,35 +79,31 @@ const HomeContent = (props) => {
         loop={false}
         style={styles.swiperStyle}
         index={nowIndex}
-        scrollViewStyle={{ overflow: 'visible' }}
+        scrollViewStyle={{
+          overflow: 'visible',
+        }}
         containerStyle={{
           width: SCREEN_HEIGHT > 668 ? 280 : 260,
+          //width: SCREEN_WIDTH * 0.6,
+          //backgroundColor: 'red',
+          flexGrow: 1,
+          justifyContent: 'center',
         }}
-        scrollEnabled={todoArr[1].title === ' ' ? false : true}
       >
         {todoArr &&
           todoArr.map((item, index) => {
-            if (item.title === ' ')
-              return (
-                <View
-                  key={index}
-                  style={[card.card, { backgroundColor: '#4daaa4' }]}
-                ></View>
-              );
-            else {
-              return (
-                <Card
-                  key={`C` + index}
-                  text={item.title}
-                  startTime={item.startTime}
-                  finishTime={item.finishTime}
-                  location={item.location}
-                  toDos={todoArr}
-                  id={item.id}
-                  isDone={item.isDone}
-                />
-              );
-            }
+            return (
+              <Card
+                key={`C` + index}
+                text={item.title}
+                startTime={item.startTime}
+                finishTime={item.finishTime}
+                location={item.location}
+                toDos={todoArr}
+                id={item.id}
+                isDone={item.isDone}
+              />
+            );
           })}
       </Swiper>
     </View>

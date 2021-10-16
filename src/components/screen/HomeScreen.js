@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, AppState } from 'react-native';
+import { View, StyleSheet, AppState, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
@@ -95,22 +95,7 @@ const Home = ({ navigation }) => {
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
-  if (todoArr.length === 1) {
-    todoArr.push({
-      address: todoArr.address,
-      date: todoArr.date,
-      finishTime: todoArr.finishTime,
-      id: todoArr.id,
-      isDone: todoArr.isDone,
-      isSkip: todoArr.isSkip,
-      latitude: todoArr.latitude,
-      location: todoArr.location,
-      longitude: todoArr.longitude,
-      startTime: todoArr.startTime,
-      title: ' ',
-      toDos: [],
-    });
-  }
+
   todoArr.sort((a, b) => {
     if (a.id < b.id) {
       return -1;
@@ -124,19 +109,20 @@ const Home = ({ navigation }) => {
   return isLoading || homeRender ? (
     <Loading />
   ) : (
-    <View style={styles.wrap}>
-      <View style={styles.homeContainer}>
-        <HomeHeader navigation={navigation} />
-        <HomeContent todoArr={todoArr} />
+    <ImageBackground source={{ uri: 'favoriteBackground' }} style={{ flex: 1 }}>
+      <View style={styles.wrap}>
+        <View style={styles.homeContainer}>
+          <HomeHeader navigation={navigation} />
+          <HomeContent todoArr={todoArr} />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
-    //backgroundColor: '#ECF5F471',
     justifyContent: 'center',
     alignItems: 'center',
   },

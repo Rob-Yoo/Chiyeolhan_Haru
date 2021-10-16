@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
   },
   homeHeaderRectangle: {
     position: 'absolute',
-    top: 6.5,
+    top: 6,
     left: -1,
     width: 5,
-    height: 58,
+    height: 50,
     backgroundColor: '#00A29A',
     shadowColor: '#00000029',
   },

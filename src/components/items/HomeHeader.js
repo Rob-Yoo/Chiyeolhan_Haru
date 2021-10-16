@@ -14,15 +14,22 @@ export const HomeHeader = ({ navigation }) => {
       <View style={styles.homeHeaderText}>
         <HomeTextItem />
       </View>
-      <TouchableOpacity>
-        <IconGoToScheduleButton
-          name="icon-go-to-schedule-button"
-          size={35}
-          color={'#229892'}
-          onPress={goToScheduleToday}
-          // style={styles.iconScheduleButton}
-        />
-      </TouchableOpacity>
+      <View
+        style={{
+          height: '25%',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <TouchableOpacity>
+          <IconGoToScheduleButton
+            name="icon-go-to-schedule-button"
+            size={35}
+            color={'#229892'}
+            onPress={goToScheduleToday}
+            // style={styles.iconScheduleButton}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

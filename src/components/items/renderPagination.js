@@ -14,7 +14,7 @@ import { add } from 'redux/store';
 
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
-import { SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
@@ -25,7 +25,7 @@ import { longTaskList } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 import { passedTodoAlert } from '../../utils/buttonAlertUtil';
 
-const IconTaskListLeftSize = 98;
+const IconTaskListLeftSize = 90;
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -59,17 +59,21 @@ const Pagination = ({ taskList, targetId }) => {
   return (
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
-        <Text style={styles.taskTitle}>수행 리스트</Text>
-        {network === 'offline' ? null : (
-          <IconTaskListAdd
-            name="icon-tasklist-add-button"
-            size={15}
-            color={'#229892'}
-            onPress={() => {
-              handlePaginationAddButton();
-            }}
-          />
-        )}
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+          onPress={() => {
+            handlePaginationAddButton();
+          }}
+        >
+          <Text style={styles.taskTitle}>수행 리스트</Text>
+          {network === 'offline' ? null : (
+            <IconTaskListAdd
+              name="icon-tasklist-add-button"
+              size={15}
+              color={'#229892'}
+            />
+          )}
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 1 }}>
@@ -89,7 +93,7 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                        left: SCREEN_HEIGHT > 668 ? -19 : -10,
                         top: 2,
                       }}
                     />
@@ -100,7 +104,7 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                        left: SCREEN_HEIGHT > 668 ? -19 : -10,
                         top: 2,
                       }}
                     />
@@ -129,7 +133,7 @@ const Pagination = ({ taskList, targetId }) => {
                   color="#707070"
                   style={{
                     position: 'absolute',
-                    left: SCREEN_HEIGHT > 668 ? -27 : -10,
+                    left: SCREEN_HEIGHT > 668 ? -19 : -10,
                     top: 2,
                   }}
                 />
@@ -179,9 +183,9 @@ export const renderPagination = (index, total, context) => {
 const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
-    top: CONTAINER_HEIGHT * 0.485,
-    left: SCREEN_HEIGHT > 668 ? -51.5 : -70,
-    width: 400,
+    top: CONTAINER_HEIGHT * 0.525,
+    left: SCREEN_HEIGHT > 668 ? -48 : -58,
+    width: SCREEN_WIDTH,
     height: '100%',
   },
   taskHeader: {
@@ -231,8 +235,8 @@ const styles = StyleSheet.create({
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 80,
-    borderRadius: 20,
+    height: 70,
+    borderRadius: 10,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,

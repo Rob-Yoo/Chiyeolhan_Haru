@@ -8,19 +8,11 @@ import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 import { ProgressingBar } from 'components/items/ProgressingBar';
-import PixelRatio from 'react-native/Libraries/Utilities/PixelRatio';
 
-export const Card = ({
-  text,
-  finishTime: finishTime,
-  startTime: startTime,
-  location,
-  id,
-  isDone,
-}) => {
+export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState('0%');
   useEffect(() => {
-    getProgressBarWidth();
+    id !== undefined && getProgressBarWidth();
   }, []);
 
   const getProgressBarWidth = () => {
@@ -47,7 +39,7 @@ export const Card = ({
 
   return (
     <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
-      <View style={[card.card, {}]} key={`CARD${id}`}>
+      <View style={[card.card]} key={`CARD${id}`}>
         <View style={card.todomanBackgroundCircle}>
           <IconTaskToDoman
             name="icon-todo-man"
@@ -75,7 +67,7 @@ export const Card = ({
               }}
             />
             <Text style={card.cardLocation}>
-              {location.length > 15 ? `${location.substr(0, 7)}...` : location}
+              {location?.length > 15 ? `${location.substr(0, 7)}...` : location}
             </Text>
           </View>
         </View>
@@ -110,7 +102,7 @@ export const Card = ({
 
 export const card = StyleSheet.create({
   card: {
-    flex: 0.71,
+    flex: SCREEN_HEIGHT > 668 ? 0.5 : 0.9,
     paddingHorizontal: 17,
     paddingVertical: 17,
     borderRadius: 20,
@@ -123,6 +115,7 @@ export const card = StyleSheet.create({
     // shadowRadius: 6.84,
     justifyContent: 'space-evenly',
     backgroundColor: 'rgba(84,188,182,1)',
+
     maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 4.5 : SCREEN_HEIGHT / 3,
   },
   todomanBackgroundCircle: {
