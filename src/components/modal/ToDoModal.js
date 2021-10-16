@@ -622,7 +622,7 @@ export const ToDoModal = ({
                     backgroundColor: locationName
                       ? 'transparent'
                       : 'rgba(0,0,0,0.3)',
-                    borderWidth: locationName ? 15 : null,
+                    borderWidth: locationName ? 8 : null,
                     borderColor: locationName ? '#EFEFEF' : null,
                   },
                 ]}
