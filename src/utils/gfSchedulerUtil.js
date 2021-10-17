@@ -105,6 +105,7 @@ export const checkGeofenceSchedule = async () => {
 
 export const geofenceScheduler = async (isChangeEarliest) => {
   try {
+    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
@@ -165,10 +166,25 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         if (progressing) {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
           let addProgressing = false;
+          let isDone = true;
+          let match;
           const dbData = await todosRef.where('id', '==', progressing.id).get();
 
-          if (dbData.isDone === false) {
-            addProgressing = true;
+          dbData.forEach((schedule) => {
+            isDone = schedule.data().isDone;
+          });
+
+          if (!isDone) {
+            if (successSchedules) {
+              if (successSchedules.length > 0) {
+                match = successSchedules.find(
+                  (schedule) => schedule.id === progressing.id,
+                );
+              }
+              if (match === undefined) {
+                addProgressing = true;
+              }
+            }
           }
 
           if (addProgressing) {
