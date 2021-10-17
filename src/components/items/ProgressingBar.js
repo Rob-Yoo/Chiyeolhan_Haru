@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { getCurrentTime } from 'utils/timeUtil';
 
@@ -51,12 +51,17 @@ export const ProgressingBar = ({ startTime, finishTime }) => {
       style={[
         {
           width: `${currentWidth}%`,
-          height: 10,
-          backgroundColor: '#fff',
-          borderRadius: 5,
           position: 'absolute',
         },
       ]}
     />
   );
 };
+
+export const progressingBar = StyleSheet.create({
+  defaultBar: {
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+  },
+});

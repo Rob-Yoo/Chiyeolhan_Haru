@@ -32,7 +32,7 @@ const defaultRender = (favoriteLength) => {
           name="icon-question"
           style={{ position: 'absolute' }}
           color={'#B1E4E2'}
-          size={100}
+          size={80}
         />
       </View>,
     );
@@ -110,7 +110,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
                     name="location"
                     style={{ position: 'absolute' }}
                     color={'#B1E4E2'}
-                    size={100}
+                    size={80}
                   />
                   <Text
                     style={{

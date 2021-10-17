@@ -81,13 +81,15 @@ const HomeContent = (props) => {
         index={nowIndex}
         scrollViewStyle={{
           overflow: 'visible',
+          paddingHorizontal: SCREEN_HEIGHT > 668 ? 39.75 : 15,
+          // paddingHorizontal: SCREEN_HEIGHT > 668 ? 39.75 : 15,
         }}
         containerStyle={{
-          width: SCREEN_HEIGHT > 668 ? 280 : 260,
-          //width: SCREEN_WIDTH * 0.6,
+          //width: SCREEN_HEIGHT > 668 ? 270 : 260,
+          width: SCREEN_HEIGHT > 668 ? 220 : 260,
           //backgroundColor: 'red',
+          //width: SCREEN_WIDTH * 0.6,
           flexGrow: 1,
-          justifyContent: 'center',
         }}
       >
         {todoArr &&

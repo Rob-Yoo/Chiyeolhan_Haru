@@ -93,7 +93,8 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                        //left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
                         top: 2,
                       }}
                     />
@@ -104,7 +105,9 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                        //left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
+
                         top: 2,
                       }}
                     />
@@ -133,7 +136,9 @@ const Pagination = ({ taskList, targetId }) => {
                   color="#707070"
                   style={{
                     position: 'absolute',
-                    left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                    //left: SCREEN_HEIGHT > 668 ? -19 : -10,
+                    left: SCREEN_HEIGHT > 668 ? -13 : -10,
+
                     top: 2,
                   }}
                 />
@@ -184,7 +189,8 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: CONTAINER_HEIGHT * 0.525,
-    left: SCREEN_HEIGHT > 668 ? -48 : -58,
+    //left: SCREEN_HEIGHT > 668 ? -48 : -58,
+    left: SCREEN_HEIGHT > 668 ? -80 : -58,
     width: SCREEN_WIDTH,
     height: '100%',
   },
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
-    // marginLeft: 20,
+    marginLeft: 20,
     paddingVertical: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -245,6 +251,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     marginTop: 10,
-    marginLeft: 20,
+    marginLeft: 8,
   },
 });

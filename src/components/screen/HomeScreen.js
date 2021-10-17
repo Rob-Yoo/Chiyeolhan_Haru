@@ -109,7 +109,7 @@ const Home = ({ navigation }) => {
   return isLoading || homeRender ? (
     <Loading />
   ) : (
-    <ImageBackground source={{ uri: 'favoriteBackground' }} style={{ flex: 1 }}>
+    <ImageBackground source={{ uri: 'homeBackground' }} style={{ flex: 1 }}>
       <View style={styles.wrap}>
         <View style={styles.homeContainer}>
           <HomeHeader navigation={navigation} />
