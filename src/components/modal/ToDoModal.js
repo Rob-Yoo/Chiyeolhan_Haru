@@ -552,34 +552,33 @@ export const ToDoModal = ({
           >
             {isToday !== 'yesterday' && network !== 'offline' ? (
               <TouchableOpacity
-                style={{
-                  marginLeft: 30,
-                  marginTop: 10,
-                  backgroundColor: '#fff',
-                  borderRadius: 50,
-                  width: 35,
-                  height: 35,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 15,
-                  paddingLeft: 1,
-                }}
+                style={styles.favoriteIconBackground}
                 onPress={() =>
                   toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
                 }
               >
                 <IconFavorite
                   name="icon-favorite"
-                  size={19}
+                  size={16}
                   color={'#00A29A'}
                 />
               </TouchableOpacity>
-            ) : null}
+            ) : (
+              <View
+                style={[
+                  styles.favoriteIconBackground,
+                  { backgroundColor: null },
+                ]}
+              />
+            )}
             <View style={styles.modalTextView}>
               {canEdit ? (
                 <>
                   <TouchableOpacity>
-                    <Text onPress={modalHandler} style={styles.modalTopText}>
+                    <Text
+                      onPress={modalHandler}
+                      style={[styles.modalTopText, { marginRight: 40 }]}
+                    >
                       취소
                     </Text>
                   </TouchableOpacity>
@@ -646,7 +645,9 @@ export const ToDoModal = ({
               {network === 'offline' ||
               (passModalData && passModalData.startDate < new Date()) ? (
                 <View style={styles.modalInputTitle}>
-                  <Text>{title}</Text>
+                  <Text style={[styles.titleText, { color: '#2D2E33' }]}>
+                    {title}
+                  </Text>
                 </View>
               ) : (
                 <TextInput
@@ -683,7 +684,7 @@ export const ToDoModal = ({
             />
             <Text
               style={{
-                fontFamily: 'NotoSansKR-Bold',
+                fontFamily: 'NotoSansKR-Black',
                 fontSize: 18,
                 color: '#fff',
                 paddingHorizontal: 10,

@@ -182,7 +182,11 @@ export const TimePicker = ({
       />*/}
       <TouchableOpacity onPress={showTimePicker}>
         <Text
-          style={{ fontFamily: 'NotoSansKR-Bold', fontSize: 18, color: '#fff' }}
+          style={{
+            fontFamily: 'NotoSansKR-Black',
+            fontSize: 15,
+            color: '#fff',
+          }}
         >
           {time}
         </Text>
