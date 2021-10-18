@@ -166,6 +166,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         if (progressing) {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
           let addProgressing = false;
+
           let isDone = true;
           let match;
           const dbData = await todosRef.where('id', '==', progressing.id).get();

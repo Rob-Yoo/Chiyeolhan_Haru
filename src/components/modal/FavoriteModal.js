@@ -32,7 +32,7 @@ const defaultRender = (favoriteLength) => {
           name="icon-question"
           style={{ position: 'absolute' }}
           color={'#B1E4E2'}
-          size={100}
+          size={80}
         />
       </View>,
     );
@@ -74,7 +74,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   }
 
   return (
-    <View style={{ height: SCREEN_HEIGHT / 1.2, marginTop: '40%' }}>
+    <View style={{ marginTop: '27.8%', height: SCREEN_HEIGHT / 1.27 }}>
       <ImageBackground
         imageStyle={{
           height: SCREEN_HEIGHT,
@@ -110,7 +110,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
                     name="location"
                     style={{ position: 'absolute' }}
                     color={'#B1E4E2'}
-                    size={100}
+                    size={80}
                   />
                   <Text
                     style={{
@@ -163,29 +163,33 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 125,
     width: 125,
-    shadowRadius: 8,
     borderRadius: 20,
-    shadowOpacity: 0.5,
+    shadowColor: '#0000001A',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 15,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    shadowColor: '#00000029',
   },
   buttonGoBack: {
     width: 30,
     height: 30,
     backgroundColor: '#fff',
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    shadowColor: '#00000029',
+    shadowColor: '#00000041',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
+    shadowRadius: 2,
+    shadowOpacity: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
     position: 'absolute',
     top: SCREEN_HEIGHT * 0.0486,
     left: SCREEN_WIDTH * 0.06,

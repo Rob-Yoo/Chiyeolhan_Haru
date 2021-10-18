@@ -4,35 +4,53 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { HomeTextItem } from 'components/items/HomeTextItem';
 
 import IconGoToScheduleButton from '#assets/icons/icon-go-to-schedule-button';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 export const HomeHeader = ({ navigation }) => {
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
-
   return (
     <View style={styles.homeHeader}>
       <View style={styles.homeHeaderText}>
         <HomeTextItem />
       </View>
-      <TouchableOpacity>
-        <IconGoToScheduleButton
-          name="icon-go-to-schedule-button"
-          size={35}
-          color={'#229892'}
-          onPress={goToScheduleToday}
-          style={styles.iconScheduleButton}
-        />
-      </TouchableOpacity>
+      <View
+        style={{
+          height: '25%',
+          marginTop: 10,
+          justifyContent: 'flex-end',
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            width: 50,
+            height: 50,
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+          }}
+        >
+          <IconGoToScheduleButton
+            name="icon-go-to-schedule-button"
+            size={SCREEN_HEIGHT > 668 ? 32 : 40}
+            color={'#229892'}
+            onPress={goToScheduleToday}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   homeHeader: {
-    flex: 1.1,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginBottom: 50,
+    alignItems: 'center',
   },
-  homeHeaderText: { flex: 0.7, paddingLeft: 15 },
+  homeHeaderText: {
+    flex: 0.7,
+    paddingLeft: 15,
+    marginLeft: -1,
+    marginTop: 19,
+  },
 });

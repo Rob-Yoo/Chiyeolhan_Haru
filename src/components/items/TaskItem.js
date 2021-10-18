@@ -137,10 +137,10 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 80,
-    borderRadius: 20,
+    height: 70,
+    borderRadius: 10,
     paddingHorizontal: 10,
-    marginLeft: 20,
+    marginLeft: 18,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,

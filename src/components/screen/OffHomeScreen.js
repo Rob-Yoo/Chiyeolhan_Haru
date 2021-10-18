@@ -138,15 +138,6 @@ const styles = StyleSheet.create({
   homeHeaderText: { flex: 0.7, paddingLeft: 15 },
 
   iconScheduleButton: { marginBottom: 10 },
-  updateBtn: {
-    width: 65,
-    height: 65,
-    borderRadius: 50,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -2,
-  },
 });
 
 export default OffHome;

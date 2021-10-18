@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, PixelRatio } from 'react-native';
 
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 
@@ -8,18 +8,13 @@ import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 import { ProgressingBar } from 'components/items/ProgressingBar';
+import { progressingBar } from './ProgressingBar';
+const cardSize = 300 / PixelRatio.get();
 
-export const Card = ({
-  text,
-  finishTime: finishTime,
-  startTime: startTime,
-  location,
-  id,
-  isDone,
-}) => {
+export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState('0%');
   useEffect(() => {
-    getProgressBarWidth();
+    id !== undefined && getProgressBarWidth();
   }, []);
 
   const getProgressBarWidth = () => {
@@ -43,15 +38,12 @@ export const Card = ({
       }
     }
   };
+
   return (
-    <View style={{ flex: 1, flexDirection: 'row' }}>
-      <View style={[card.card, {}]} key={`CARD${id}`}>
+    <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
+      <View style={[card.card]} key={`CARD${id}`}>
         <View style={card.todomanBackgroundCircle}>
-          <IconTaskToDoman
-            name="icon-todo-man"
-            size={SCREEN_HEIGHT > 668 ? 25 : 20}
-            color="#229892"
-          />
+          <IconTaskToDoman name="icon-todo-man" size={20} color="#229892" />
         </View>
         <View
           style={{
@@ -64,17 +56,25 @@ export const Card = ({
           <View style={{ flexWrap: 'nowrap' }}>
             <View
               style={{
-                position: 'absolute',
-                top: 7,
-                left: 7,
-                width: 3,
-                height: 14,
-                backgroundColor: '#00A29A',
+                position: 'relative',
               }}
-            />
-            <Text style={card.cardLocation}>
-              {location.length > 15 ? `${location.substr(0, 7)}...` : location}
-            </Text>
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  left: 7,
+                  width: 3,
+                  height: 14,
+                  backgroundColor: '#00A29A',
+                }}
+              />
+              <Text style={card.cardLocation}>
+                {location?.length > 15
+                  ? `${location.substr(0, 7)}...`
+                  : location}
+              </Text>
+            </View>
           </View>
         </View>
         <Text style={card.cardTime}>
@@ -82,22 +82,22 @@ export const Card = ({
         </Text>
         <View style={{ position: 'relative' }}>
           <View
-            style={{
-              width: '100%',
-              height: 10,
-              backgroundColor: '#C4C4C4',
-              borderRadius: 5,
-              bottom: 0,
-            }}
+            style={[
+              progressingBar.defaultBar,
+              {
+                width: '100%',
+                backgroundColor: '#C4C4C4',
+              },
+            ]}
           />
           <View
-            style={{
-              width: width,
-              height: 10,
-              backgroundColor: '#FFFFFF',
-              borderRadius: 5,
-              position: 'absolute',
-            }}
+            style={[
+              progressingBar.defaultBar,
+              {
+                width: width,
+                position: 'absolute',
+              },
+            ]}
           />
           <ProgressingBar startTime={startTime} finishTime={finishTime} />
         </View>
@@ -108,9 +108,9 @@ export const Card = ({
 
 export const card = StyleSheet.create({
   card: {
-    flex: 0.9,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    flex: SCREEN_HEIGHT > 668 ? 0.8 : 0.9,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -120,21 +120,22 @@ export const card = StyleSheet.create({
     shadowOpacity: 1.5,
     shadowRadius: 6.84,
     justifyContent: 'space-evenly',
-    backgroundColor: '#54BCB6',
-    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 3.55 : SCREEN_HEIGHT / 3,
+    backgroundColor: 'rgba(84,188,182,1)',
+    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 4.5 : SCREEN_HEIGHT / 3,
+    minWidth: cardSize,
   },
   todomanBackgroundCircle: {
-    width: SCREEN_HEIGHT > 668 ? 40 : 30,
-    height: SCREEN_HEIGHT > 668 ? 40 : 30,
+    width: 30,
+    height: 30,
     backgroundColor: '#ffffff',
     borderRadius: 50,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
-      height: 15,
+      height: 1,
     },
-    shadowOpacity: 1.5,
-    shadowRadius: 5.84,
+    shadowOpacity: 0.4,
+    shadowRadius: 0.9,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -153,18 +154,15 @@ export const card = StyleSheet.create({
     fontWeight: '800',
     flexWrap: 'wrap',
     color: '#F4F4F4',
+    marginLeft: 14,
     marginTop: 5,
-    marginLeft: 15,
+    marginBottom: 10,
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
     fontSize: fontPercentage(10),
+    marginBottom: -5,
   },
-  cardCalendar: {
-    flex: 0.2,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
+
   cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
 });

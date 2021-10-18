@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, AppState } from 'react-native';
+import { View, StyleSheet, AppState, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
@@ -95,22 +95,7 @@ const Home = ({ navigation }) => {
   for (key in toDos) {
     if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
   }
-  if (todoArr.length === 1) {
-    todoArr.push({
-      address: todoArr.address,
-      date: todoArr.date,
-      finishTime: todoArr.finishTime,
-      id: todoArr.id,
-      isDone: todoArr.isDone,
-      isSkip: todoArr.isSkip,
-      latitude: todoArr.latitude,
-      location: todoArr.location,
-      longitude: todoArr.longitude,
-      startTime: todoArr.startTime,
-      title: ' ',
-      toDos: [],
-    });
-  }
+
   todoArr.sort((a, b) => {
     if (a.id < b.id) {
       return -1;
@@ -136,17 +121,15 @@ const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
-    backgroundColor: '#ECF5F471',
     justifyContent: 'center',
     alignItems: 'center',
   },
   homeContainer: {
+    flex: 2.25,
     width: CONTAINER_WIDTH,
-    height: CONTAINER_HEIGHT,
-    backgroundColor: '#ECF5F471',
   },
   homeHeader: {
-    flex: 1.3,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -154,15 +137,6 @@ const styles = StyleSheet.create({
   homeHeaderText: { flex: 0.7, paddingLeft: 15 },
 
   iconScheduleButton: { marginBottom: 10 },
-  updateBtn: {
-    width: 65,
-    height: 65,
-    borderRadius: 50,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    position: 'absolute',
-    right: -2,
-  },
 });
 
 export default Home;

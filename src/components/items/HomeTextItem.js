@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { fontPercentage } from 'utils/responsiveUtil';
 
-const GREEN_COLOR = '#229892';
+const GREEN_COLOR = '#2A9C96';
 
 export const HomeTextItem = () => {
   return (
@@ -15,17 +16,17 @@ export const HomeTextItem = () => {
 
 const styles = StyleSheet.create({
   homeText: {
-    fontSize: 22,
+    fontSize: fontPercentage(21),
     fontFamily: 'NotoSansKR-Black',
     letterSpacing: 0,
-    marginBottom: -5,
+    marginBottom: -2,
   },
   homeHeaderRectangle: {
     position: 'absolute',
-    top: 3,
-    left: 2,
+    bottom: 0,
+    left: -1,
     width: 5,
-    height: 55,
+    height: 52,
     backgroundColor: '#00A29A',
     shadowColor: '#00000029',
   },

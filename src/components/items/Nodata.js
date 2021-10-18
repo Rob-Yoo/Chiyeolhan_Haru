@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   },
   backgroundWhite: {
     position: 'absolute',
+    top: SCREEN_HEIGHT > 668 ? 80 : 30,
     width: '80%',
     height: SCREEN_HEIGHT > 668 ? '55%' : '70%',
     justifyContent: 'space-around',

@@ -191,7 +191,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         eventContainerStyle={{
           maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
-          left: 40,
+          left: 47,
         }}
         EventComponent={MyEventComponent}
         nowLineColor={'#FD6363'}
