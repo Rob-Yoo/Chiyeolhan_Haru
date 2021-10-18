@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, PixelRatio } from 'react-native';
 
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 
@@ -9,6 +9,7 @@ import { fontPercentage } from 'utils/responsiveUtil';
 import { SCREEN_HEIGHT } from 'constant/const';
 import { ProgressingBar } from 'components/items/ProgressingBar';
 import { progressingBar } from './ProgressingBar';
+const cardSize = 300 / PixelRatio.get();
 
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState('0%');
@@ -121,7 +122,7 @@ export const card = StyleSheet.create({
     justifyContent: 'space-evenly',
     backgroundColor: 'rgba(84,188,182,1)',
     maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 4.5 : SCREEN_HEIGHT / 3,
-    marginLeft: -22,
+    minWidth: cardSize,
   },
   todomanBackgroundCircle: {
     width: 30,
@@ -162,11 +163,6 @@ export const card = StyleSheet.create({
     fontSize: fontPercentage(10),
     marginBottom: -5,
   },
-  cardCalendar: {
-    flex: 0.2,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
+
   cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
 });

@@ -138,7 +138,6 @@ const Pagination = ({ taskList, targetId }) => {
                     position: 'absolute',
                     //left: SCREEN_HEIGHT > 668 ? -19 : -10,
                     left: SCREEN_HEIGHT > 668 ? -13 : -10,
-
                     top: 2,
                   }}
                 />
@@ -189,8 +188,7 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: CONTAINER_HEIGHT * 0.525,
-    //left: SCREEN_HEIGHT > 668 ? -48 : -58,
-    left: SCREEN_HEIGHT > 668 ? -80 : -58,
+    left: SCREEN_HEIGHT > 668 ? -72 : -58,
     width: SCREEN_WIDTH,
     height: '100%',
   },
@@ -233,7 +231,7 @@ const styles = StyleSheet.create({
   modalInputTask: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    width: 350,
+    width: '80%',
     height: 60,
     marginBottom: 20,
   },
@@ -251,6 +249,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
     marginTop: 10,
-    marginLeft: 8,
+    marginLeft: 18,
   },
 });

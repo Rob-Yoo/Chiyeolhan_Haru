@@ -4,7 +4,7 @@ import Swiper from 'react-native-swiper';
 
 import { Nodata } from 'components/items//Nodata';
 import { Card } from 'components/items/CardItem';
-import { renderPagination } from 'components/items/RenderPagination';
+import { renderPagination } from 'components/items/renderPagination';
 
 import { getCurrentTime, getDate } from 'utils/timeUtil';
 
@@ -81,14 +81,10 @@ const HomeContent = (props) => {
         index={nowIndex}
         scrollViewStyle={{
           overflow: 'visible',
-          paddingHorizontal: SCREEN_HEIGHT > 668 ? 39.75 : 15,
-          // paddingHorizontal: SCREEN_HEIGHT > 668 ? 39.75 : 15,
+          paddingHorizontal: SCREEN_HEIGHT > 668 ? 12 : 6,
         }}
         containerStyle={{
-          //width: SCREEN_HEIGHT > 668 ? 270 : 260,
-          width: SCREEN_HEIGHT > 668 ? 220 : 260,
-          //backgroundColor: 'red',
-          //width: SCREEN_WIDTH * 0.6,
+          width: SCREEN_HEIGHT > 668 ? 210 : 260,
           flexGrow: 1,
         }}
       >
@@ -118,7 +114,9 @@ const styles = StyleSheet.create({
     flex: 2.25,
     alignItems: 'center',
   },
-  swiperStyle: { height: '100%' },
+  swiperStyle: {
+    height: '100%',
+  },
 });
 
 export default HomeContent;

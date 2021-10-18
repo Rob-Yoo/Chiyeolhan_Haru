@@ -109,14 +109,12 @@ const Home = ({ navigation }) => {
   return isLoading || homeRender ? (
     <Loading />
   ) : (
-    <ImageBackground source={{ uri: 'homeBackground' }} style={{ flex: 1 }}>
-      <View style={styles.wrap}>
-        <View style={styles.homeContainer}>
-          <HomeHeader navigation={navigation} />
-          <HomeContent todoArr={todoArr} />
-        </View>
+    <View style={styles.wrap}>
+      <View style={styles.homeContainer}>
+        <HomeHeader navigation={navigation} />
+        <HomeContent todoArr={todoArr} />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -129,8 +127,6 @@ const styles = StyleSheet.create({
   homeContainer: {
     flex: 2.25,
     width: CONTAINER_WIDTH,
-    // height: CONTAINER_HEIGHT,
-    //backgroundColor: '#ECF5F471',
   },
   homeHeader: {
     flex: 1,
