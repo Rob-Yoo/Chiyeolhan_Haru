@@ -731,7 +731,7 @@ export const ToDoModal = ({
                 (!(isToday && passModalData?.startDate < new Date()) &&
                   toggleIsVisible(inputIsVisible, setInputIsVisible))
               }
-            ></TouchableOpacity>
+            />
           </ScrollView>
 
           {task ? (
