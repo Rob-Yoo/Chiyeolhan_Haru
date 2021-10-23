@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { PixelRatio, StyleSheet } from 'react-native';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 import { fontPercentage } from 'utils/responsiveUtil';
@@ -26,9 +26,10 @@ const styles = StyleSheet.create({
   modalTopContainer: {
     borderRadius: 10,
     backgroundColor: '#54BCB6',
-    height: SCREEN_HEIGHT > 668 ? '45%' : '50%',
+    height: SCREEN_HEIGHT > 668 ? '40%' : '40%',
+    //height: height,
     borderRadius: 50,
-    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 10,
+    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 20,
     paddingTop: SCREEN_HEIGHT > 668 ? 20 : 0,
   },
   modalTextView: {
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: CONTAINER_WIDTH,
     //backgroundColor: 'red',
+    paddingHorizontal: SCREEN_HEIGHT > 668 ? null : 20,
   },
   modalTopText: {
     fontFamily: 'GodoB',
@@ -62,14 +64,14 @@ const styles = StyleSheet.create({
     paddingLeft: 1,
   },
   imageBackgroundMapStyle: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     borderRadius: 100,
     marginRight: 20,
   },
   imageBackgroundStyle: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
@@ -84,8 +86,8 @@ const styles = StyleSheet.create({
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-    marginTop: '27.8%',
-    height: SCREEN_HEIGHT / 1.27,
+    marginTop: '40%',
+    height: SCREEN_HEIGHT / 1.3,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },

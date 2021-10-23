@@ -252,6 +252,6 @@ export const longTaskList = () =>
 
 //지난일정 수행리스트 일때 알림 보내기
 export const passedTodoAlert = () =>
-  Alert.alert(`이미 지난 일정입니다.`, [{ text: '확인' }], {
+  Alert.alert(`이미 지난 일정입니다.`, '', [{ text: '확인' }], {
     canvelable: false,
   });
