@@ -87,6 +87,10 @@ export const ToDoModal = ({
   const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue, unregister } = useForm();
+  const titleInputRef = useRef();
+  useEffect(() => {
+    isModalVisible && titleInputRef?.current?.focus();
+  }, [isModalVisible]);
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -662,7 +666,8 @@ export const ToDoModal = ({
                     placeholder="제목을 입력해 주세요"
                     style={styles.modalInputTitle}
                     value={title}
-                    autoFocus={true}
+                    ref={titleInputRef}
+                    // autoFocus={true}
                     onChange={(e) => handleChange(e)}
                     onChangeText={
                       title.length > 20

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#54BCB6',
     borderRadius: 50,
-    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 20,
+    paddingHorizontal: 25,
     height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
   },
   modalTextView: {

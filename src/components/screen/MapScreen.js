@@ -284,6 +284,7 @@ const Map = ({
       locationDataHandler={locationDataHandler}
       searchedList={searchedList}
       setSearchedList={setSearchedList}
+      isFind={isFind}
     />
   ) : (
     <ActivityIndicator size="large" color="#229892" />
@@ -298,14 +299,11 @@ const styles = StyleSheet.create({
   iconFindCurrentLocation: {
     width: 45,
     height: 45,
-
-    shadowColor: '#00000029',
+    shadowColor: '#00000050',
     shadowOffset: {
-      width: 5.4,
-      height: 6,
+      height: 2,
     },
-    shadowOpacity: 5,
-    shadowRadius: 2.84,
+    shadowOpacity: 0.5,
   },
 });
 

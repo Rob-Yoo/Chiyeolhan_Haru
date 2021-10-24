@@ -13,7 +13,10 @@ import IconSearchedSearch from '#assets/icons/icon-searched-search';
 import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconStarBorder from '#assets/icons/icon-star-border';
 
-import { deleteSearchedData, deleteAllSearchedData } from 'utils/asyncStorageUtil';
+import {
+  deleteSearchedData,
+  deleteAllSearchedData,
+} from 'utils/asyncStorageUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
 
@@ -56,16 +59,7 @@ export const MapSearch = ({
         }}
       >
         <View style={styles.searchInputContainer}>
-          <View
-            style={{
-              width: '90%',
-              backgroundColor: '#fff',
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderRadius: 10,
-              paddingHorizontal: 10,
-            }}
-          >
+          <View style={styles.searchInput}>
             <IconGobackButton
               name="icon-go-back-button"
               size={18}
@@ -169,6 +163,21 @@ const styles = StyleSheet.create({
     top: 0,
     width: '100%',
   },
+  searchInput: {
+    width: '90%',
+    height: 40,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    shadowColor: '#0000002E',
+    shadowOpacity: 0.6,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
   searchedHistoryContainer: {
     flex: 1,
     width: '100%',
@@ -194,12 +203,12 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     height: 140,
     backgroundColor: '#54BCB6',
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    paddingTop: 20,
+    paddingBottom: 20,
   },
   searchInputViewBackButton: {
     width: '10%',
@@ -212,6 +221,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 19,
+    fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
     fontSize: 20,
