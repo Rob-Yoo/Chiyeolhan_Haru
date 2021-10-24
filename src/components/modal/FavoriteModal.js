@@ -74,7 +74,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   }
 
   return (
-    <View style={{ marginTop: '40%', height: SCREEN_HEIGHT / 1.3 }}>
+    <View style={{ marginTop: '30%', height: SCREEN_HEIGHT / 1.3 }}>
       <View style={{ height: '100%' }}>
         <ImageBackground
           imageStyle={{

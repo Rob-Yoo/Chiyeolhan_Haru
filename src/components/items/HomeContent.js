@@ -81,10 +81,10 @@ const HomeContent = (props) => {
         index={nowIndex}
         scrollViewStyle={{
           overflow: 'visible',
-          paddingHorizontal: SCREEN_HEIGHT > 668 ? 12 : 6,
+          paddingHorizontal: SCREEN_HEIGHT > 668 ? 6.5 : 6,
         }}
         containerStyle={{
-          width: SCREEN_HEIGHT > 668 ? 210 : 260,
+          width: SCREEN_HEIGHT > 668 ? 240 : 260,
           flexGrow: 1,
         }}
       >

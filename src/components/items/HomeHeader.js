@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   homeHeaderText: {
     flex: 0.7,
     paddingLeft: 15,
-    marginLeft: -1,
+    marginLeft: 0,
     marginTop: 19,
   },
 });

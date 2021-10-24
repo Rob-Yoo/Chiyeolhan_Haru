@@ -532,11 +532,25 @@ export const ToDoModal = ({
           }}
           style={[
             styles.modalInputContainer,
-            { marginTop: canEdit ? '40%' : '50%' },
-            { marginTop: SCREEN_HEIGHT < 668 ? '30%' : '40%' },
+            {
+              marginTop:
+                SCREEN_HEIGHT < 668
+                  ? '30%'
+                  : isToday === 'yesterday'
+                  ? '45%'
+                  : '40%',
+            },
           ]}
         >
-          <View style={styles.modalTopContainer}>
+          <View
+            style={[
+              styles.modalTopContainer,
+              {
+                paddingTop:
+                  SCREEN_HEIGHT > 668 ? (isToday === 'yesterday' ? 0 : 20) : 0,
+              },
+            ]}
+          >
             <View
               style={{
                 width: '100%',
@@ -591,7 +605,7 @@ export const ToDoModal = ({
                 ) : (
                   <TouchableOpacity
                     style={styles.modalTopText}
-                    onPress={handleSubmit(handleTodoSubmit)}
+                    onPress={() => modalHandler()}
                   >
                     <Text style={styles.modalTopText}>닫기</Text>
                   </TouchableOpacity>
@@ -622,13 +636,11 @@ export const ToDoModal = ({
                     },
                   ]}
                 >
-                  {locationName ? (
-                    <></>
-                  ) : (
+                  {isToday === 'yesterday' ? null : (
                     <IconQuestion
                       name="icon-question"
                       size={SCREEN_HEIGHT > 668 ? 100 : 70}
-                      color={'#FFFFFF'}
+                      color={locationName ? 'transparent' : '#FFFFFF'}
                       onPress={() =>
                         toggleIsVisible(mapIsVisible, setMapIsVisible)
                       }
