@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   modalTopContainer: {
     borderRadius: 10,
     backgroundColor: '#54BCB6',
-    height: SCREEN_HEIGHT > 668 ? '40%' : '40%',
+    height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
     //height: height,
     borderRadius: 50,
     paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 20,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: 'GodoB',
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     marginBottom: 6,
   },
   favoriteIconBackground: {
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-    marginTop: '40%',
-    height: SCREEN_HEIGHT / 1.3,
+    height: SCREEN_HEIGHT / 1.2,
+
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
     fontFamily: 'GodoB',
     fontSize: 11,
     // marginLeft: 20,
-    flex: 2,
+    position: 'absolute',
+    top: 40,
+    left: 15,
   },
   taskInput: {
     backgroundColor: '#fff',
@@ -145,6 +147,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     justifyContent: 'center',
   },
+  modalInputCantEdit: {
+    shadowColor: null,
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    backgroundColor: '#f8f8f8',
+  },
   modalInputText: {
     color: '#B7B7B7',
     marginVertical: 10,
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   todoBottomContainer: {
-    paddingTop: 30,
+    // paddingTop: 10,
     width: '100%',
     height: '100%',
     flexDirection: 'row',

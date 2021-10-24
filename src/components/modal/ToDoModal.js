@@ -78,7 +78,6 @@ export const ToDoModal = ({
   const toDos = useSelector((state) => state.toDos);
   const [locationName, setLocationName] = useState('');
   const [locationData, setLocationData] = useState({});
-  const [inputIsVisible, setInputIsVisible] = useState(false);
   const [searchedList, setSearchedList] = useState([]);
   const [mapIsVisible, setMapIsVisible] = useState(false);
   const [favoriteIsVisible, setFavoriteIsVisible] = useState(false);
@@ -88,7 +87,6 @@ export const ToDoModal = ({
   const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue, unregister } = useForm();
-  const titleRef = useRef();
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -156,10 +154,6 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   }) => {
-    if (!canEdit) {
-      modalHandler();
-      return;
-    }
     if (isToday && todoStartTime < getCurrentTime()) {
       modalHandler();
       alertStartTimeError();
@@ -525,13 +519,22 @@ export const ToDoModal = ({
           onPress={modalHandler}
         />
         <ImageBackground
-          source={{ uri: 'favoriteBackground' }}
+          source={{
+            uri:
+              SCREEN_HEIGHT > 668
+                ? 'favoriteBackground11'
+                : 'favoriteBackground',
+          }}
           imageStyle={{
             height: SCREEN_HEIGHT,
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
-          style={styles.modalInputContainer}
+          style={[
+            styles.modalInputContainer,
+            { marginTop: canEdit ? '40%' : '50%' },
+            { marginTop: SCREEN_HEIGHT < 668 ? '30%' : '40%' },
+          ]}
         >
           <View style={styles.modalTopContainer}>
             <View
@@ -644,11 +647,10 @@ export const ToDoModal = ({
                   </View>
                 ) : (
                   <TextInput
-                    autoFocus={true}
                     placeholder="제목을 입력해 주세요"
                     style={styles.modalInputTitle}
                     value={title}
-                    ref={titleRef}
+                    autoFocus={true}
                     onChange={(e) => handleChange(e)}
                     onChangeText={
                       title.length > 20
@@ -698,13 +700,13 @@ export const ToDoModal = ({
 
           <View style={styles.todoBottomContainer}>
             <Text style={styles.taskTitle}>수행리스트</Text>
+
             <TaskList
               taskList={taskList}
               setTaskList={setTaskList}
-              isToday={isToday}
-              passModalDat={passModalData}
               task={task}
               taskSubmit={taskSubmit}
+              canEdit={canEdit}
             />
           </View>
         </ImageBackground>
