@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { PixelRatio, StyleSheet } from 'react-native';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 
 import { fontPercentage } from 'utils/responsiveUtil';
@@ -26,9 +26,10 @@ const styles = StyleSheet.create({
   modalTopContainer: {
     borderRadius: 10,
     backgroundColor: '#54BCB6',
-    height: SCREEN_HEIGHT > 668 ? '45%' : '50%',
+    height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
+    //height: height,
     borderRadius: 50,
-    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 10,
+    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 20,
     paddingTop: SCREEN_HEIGHT > 668 ? 20 : 0,
   },
   modalTextView: {
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: CONTAINER_WIDTH,
     //backgroundColor: 'red',
+    paddingHorizontal: SCREEN_HEIGHT > 668 ? null : 20,
   },
   modalTopText: {
     fontFamily: 'GodoB',
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: 'GodoB',
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     marginBottom: 6,
   },
   favoriteIconBackground: {
@@ -62,14 +64,14 @@ const styles = StyleSheet.create({
     paddingLeft: 1,
   },
   imageBackgroundMapStyle: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     borderRadius: 100,
     marginRight: 20,
   },
   imageBackgroundStyle: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.35,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
@@ -84,8 +86,8 @@ const styles = StyleSheet.create({
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
     backgroundColor: '#e2ece9',
-    marginTop: '27.8%',
-    height: SCREEN_HEIGHT / 1.27,
+    height: SCREEN_HEIGHT / 1.2,
+
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
@@ -108,7 +110,9 @@ const styles = StyleSheet.create({
     fontFamily: 'GodoB',
     fontSize: 11,
     // marginLeft: 20,
-    flex: 2,
+    position: 'absolute',
+    top: 40,
+    left: 15,
   },
   taskInput: {
     backgroundColor: '#fff',
@@ -143,6 +147,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     justifyContent: 'center',
   },
+  modalInputCantEdit: {
+    shadowColor: null,
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    backgroundColor: '#f8f8f8',
+  },
   modalInputText: {
     color: '#B7B7B7',
     marginVertical: 10,
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   todoBottomContainer: {
-    paddingTop: 30,
+    // paddingTop: 10,
     width: '100%',
     height: '100%',
     flexDirection: 'row',

@@ -74,76 +74,78 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   }
 
   return (
-    <View style={{ marginTop: '27.8%', height: SCREEN_HEIGHT / 1.27 }}>
-      <ImageBackground
-        imageStyle={{
-          height: SCREEN_HEIGHT,
-          borderTopLeftRadius: 50,
-          borderTopRightRadius: 50,
-        }}
-        style={[styles.modalTopContainer]}
-        source={{ uri: 'favoriteBackground' }}
-      >
-        <ScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            flexWrap: 'wrap',
-            flexGrow: 1,
-            paddingBottom: 100,
+    <View style={{ marginTop: '40%', height: SCREEN_HEIGHT / 1.3 }}>
+      <View style={{ height: '100%' }}>
+        <ImageBackground
+          imageStyle={{
+            height: SCREEN_HEIGHT,
+            borderTopLeftRadius: 50,
+            borderTopRightRadius: 50,
           }}
+          style={[styles.modalTopContainer]}
+          source={{ uri: 'favoriteBackground' }}
         >
-          {favorite?.map((item, index) => {
-            return (
-              <View key={index} style={styles.favoriteCard}>
-                <TouchableOpacity
-                  onPress={() => pressFavorite(item, index)}
-                  key={`${index}`}
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <IconSearchedLocation
-                    name="location"
-                    style={{ position: 'absolute' }}
-                    color={'#B1E4E2'}
-                    size={80}
-                  />
-                  <Text
+          <ScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              flexGrow: 1,
+              paddingBottom: 100,
+            }}
+          >
+            {favorite?.map((item, index) => {
+              return (
+                <View key={index} style={styles.favoriteCard}>
+                  <TouchableOpacity
+                    onPress={() => pressFavorite(item, index)}
+                    key={`${index}`}
                     style={{
-                      fontFamily: 'notoSansKR-Bold',
-                      fontSize: item.location.length > 10 ? 18 : 23,
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
-                    {item.location}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => deleteFavorite(item)}
-                  style={{ position: 'absolute', top: 10, right: 10 }}
-                >
-                  <IconMinusCircle
-                    name="minus-circle"
-                    size={18}
-                    color="#54BCB6"
-                  />
-                </TouchableOpacity>
-              </View>
-            );
-          })}
-          {defaultRender(favorite?.length)}
-        </ScrollView>
-        <TouchableOpacity onPress={modalHandler} style={styles.buttonGoBack}>
-          <IconGobackButton
-            color="#54BCB6"
-            name="icon-go-back-button"
-            size={18}
-          />
-        </TouchableOpacity>
-      </ImageBackground>
+                    <IconSearchedLocation
+                      name="location"
+                      style={{ position: 'absolute' }}
+                      color={'#B1E4E2'}
+                      size={80}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: 'notoSansKR-Bold',
+                        fontSize: item.location.length > 10 ? 18 : 23,
+                      }}
+                    >
+                      {item.location}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => deleteFavorite(item)}
+                    style={{ position: 'absolute', top: 10, right: 10 }}
+                  >
+                    <IconMinusCircle
+                      name="minus-circle"
+                      size={18}
+                      color="#54BCB6"
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+            {defaultRender(favorite?.length)}
+          </ScrollView>
+          <TouchableOpacity onPress={modalHandler} style={styles.buttonGoBack}>
+            <IconGobackButton
+              color="#54BCB6"
+              name="icon-go-back-button"
+              size={18}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
     </View>
   );
 };

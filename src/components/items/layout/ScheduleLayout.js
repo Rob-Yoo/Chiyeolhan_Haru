@@ -10,26 +10,6 @@ import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { checkDayChange } from 'utils/asyncStorageUtil';
 import { addModifyBlockAlert } from 'utils/buttonAlertUtil';
 
-const styles = StyleSheet.create({
-  addToDoButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 50,
-    height: 50,
-    position: 'absolute',
-    bottom: 44,
-    right: 19,
-    backgroundColor: '#FFF',
-    borderRadius: 50,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
-});
 const ScheduleLayout = ({
   navigation,
   isToday,
@@ -76,3 +56,23 @@ const ScheduleLayout = ({
 };
 
 export default ScheduleLayout;
+const styles = StyleSheet.create({
+  addToDoButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    bottom: 44,
+    right: 19,
+    backgroundColor: '#FFF',
+    borderRadius: 50,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 3.4,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  },
+});
