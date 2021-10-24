@@ -255,6 +255,7 @@ const Map = ({
       await getLocation();
     };
     getLoctionTrigger();
+    return () => setLocation(false);
   }, [isFind]);
 
   const getLocation = async () => {
