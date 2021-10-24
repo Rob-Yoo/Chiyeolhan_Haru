@@ -9,7 +9,7 @@ import { fontPercentage } from 'utils/responsiveUtil';
 import { SCREEN_HEIGHT } from 'constant/const';
 import { ProgressingBar } from 'components/items/ProgressingBar';
 import { progressingBar } from './ProgressingBar';
-const cardSize = 300 / PixelRatio.get();
+const cardSize = 390 / PixelRatio.get();
 
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState('0%');
@@ -108,7 +108,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 
 export const card = StyleSheet.create({
   card: {
-    flex: SCREEN_HEIGHT > 668 ? 0.8 : 0.9,
+    flex: SCREEN_HEIGHT > 668 ? 0.6 : 0.9,
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderRadius: 20,

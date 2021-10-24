@@ -26,18 +26,15 @@ const styles = StyleSheet.create({
   modalTopContainer: {
     borderRadius: 10,
     backgroundColor: '#54BCB6',
-    height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
-    //height: height,
     borderRadius: 50,
-    paddingHorizontal: SCREEN_HEIGHT > 668 ? 25 : 20,
-    paddingTop: SCREEN_HEIGHT > 668 ? 20 : 0,
+    paddingHorizontal: 25,
+    height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
   },
   modalTextView: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 20,
     width: CONTAINER_WIDTH,
-    //backgroundColor: 'red',
     paddingHorizontal: SCREEN_HEIGHT > 668 ? null : 20,
   },
   modalTopText: {
@@ -53,7 +50,6 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   favoriteIconBackground: {
-    marginTop: 10,
     backgroundColor: '#fff',
     borderRadius: 50,
     width: 32,
@@ -85,9 +81,7 @@ const styles = StyleSheet.create({
   },
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
-    backgroundColor: '#e2ece9',
     height: SCREEN_HEIGHT / 1.2,
-
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
@@ -122,6 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalInputTitle: {
+    fontFamily: 'GodoB',
     width: 140,
     height: 25,
     backgroundColor: '#fff',
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   modalInputTask: {
-    width: CONTAINER_WIDTH * 0.75,
+    width: CONTAINER_WIDTH * 0.7,
     height: 55,
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -165,7 +160,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   todoBottomContainer: {
-    // paddingTop: 10,
     width: '100%',
     height: '100%',
     flexDirection: 'row',

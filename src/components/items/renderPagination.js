@@ -187,8 +187,8 @@ export const renderPagination = (index, total, context) => {
 const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
-    top: CONTAINER_HEIGHT * 0.525,
-    left: SCREEN_HEIGHT > 668 ? -72 : -58,
+    top: CONTAINER_HEIGHT * 0.49,
+    left: SCREEN_HEIGHT > 668 ? -SCREEN_WIDTH * 0.19 : -58,
     width: SCREEN_WIDTH,
     height: '100%',
   },
@@ -201,7 +201,6 @@ const styles = StyleSheet.create({
   },
 
   task: {
-    //backgroundColor: '#FFF',
     width: '80%',
     borderRadius: 20,
     paddingHorizontal: 10,

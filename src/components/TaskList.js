@@ -11,13 +11,7 @@ import { fontPercentage } from 'utils/responsiveUtil';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SCREEN_HEIGHT } from '../constant/const';
 
-export const TaskList = ({
-  taskList,
-  taskSubmit,
-  isToday,
-  passModalData,
-  canEdit,
-}) => {
+export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
   let scrollViewInnerRef = useRef();
   const scrollViewRef = useRef();
   const textInputRef = useRef();
@@ -45,9 +39,9 @@ export const TaskList = ({
       }}
       contentContainerStyle={{
         width: '100%',
-        paddingTop: 20,
+        paddingTop: 30,
         paddingHorizontal: 20,
-        paddingBottom: SCREEN_HEIGHT > 668 ? 260 : 200,
+        paddingBottom: SCREEN_HEIGHT > 668 ? 270 : 200,
         alignItems: 'flex-end',
       }}
       alwaysBounceVertical={false}
@@ -103,9 +97,9 @@ export const TaskList = ({
             value={task}
           />
         </View>
-      ) : (
+      ) : taskList.length === 0 ? (
         <View style={styles.modalInputTask} />
-      )}
+      ) : null}
     </KeyboardAwareScrollView>
   );
 };

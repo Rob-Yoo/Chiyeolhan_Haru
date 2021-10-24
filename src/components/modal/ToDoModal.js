@@ -87,6 +87,10 @@ export const ToDoModal = ({
   const [canEdit, setCanEdit] = useState(true);
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue, unregister } = useForm();
+  const titleInputRef = useRef();
+  useEffect(() => {
+    isModalVisible && titleInputRef?.current?.focus();
+  }, [isModalVisible]);
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -532,11 +536,25 @@ export const ToDoModal = ({
           }}
           style={[
             styles.modalInputContainer,
-            { marginTop: canEdit ? '40%' : '50%' },
-            { marginTop: SCREEN_HEIGHT < 668 ? '30%' : '40%' },
+            {
+              marginTop:
+                SCREEN_HEIGHT < 668
+                  ? '30%'
+                  : isToday === 'yesterday'
+                  ? '45%'
+                  : '40%',
+            },
           ]}
         >
-          <View style={styles.modalTopContainer}>
+          <View
+            style={[
+              styles.modalTopContainer,
+              {
+                paddingTop:
+                  SCREEN_HEIGHT > 668 ? (isToday === 'yesterday' ? 0 : 20) : 0,
+              },
+            ]}
+          >
             <View
               style={{
                 width: '100%',
@@ -591,7 +609,7 @@ export const ToDoModal = ({
                 ) : (
                   <TouchableOpacity
                     style={styles.modalTopText}
-                    onPress={handleSubmit(handleTodoSubmit)}
+                    onPress={() => modalHandler()}
                   >
                     <Text style={styles.modalTopText}>닫기</Text>
                   </TouchableOpacity>
@@ -622,13 +640,11 @@ export const ToDoModal = ({
                     },
                   ]}
                 >
-                  {locationName ? (
-                    <></>
-                  ) : (
+                  {isToday === 'yesterday' ? null : (
                     <IconQuestion
                       name="icon-question"
                       size={SCREEN_HEIGHT > 668 ? 100 : 70}
-                      color={'#FFFFFF'}
+                      color={locationName ? 'transparent' : '#FFFFFF'}
                       onPress={() =>
                         toggleIsVisible(mapIsVisible, setMapIsVisible)
                       }
@@ -650,7 +666,8 @@ export const ToDoModal = ({
                     placeholder="제목을 입력해 주세요"
                     style={styles.modalInputTitle}
                     value={title}
-                    autoFocus={true}
+                    ref={titleInputRef}
+                    // autoFocus={true}
                     onChange={(e) => handleChange(e)}
                     onChangeText={
                       title.length > 20
