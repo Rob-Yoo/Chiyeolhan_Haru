@@ -88,7 +88,12 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
             borderTopRightRadius: 50,
           }}
           style={[styles.modalTopContainer]}
-          source={{ uri: 'favoriteBackground' }}
+          source={{
+            uri:
+              SCREEN_HEIGHT > 668
+                ? 'favoriteBackground11'
+                : 'favoriteBackground',
+          }}
         >
           <ScrollView
             ref={scrollViewRef}
@@ -157,8 +162,8 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
 
 const styles = StyleSheet.create({
   modalTopContainer: {
-    paddingTop: 35,
-    paddingLeft: '18%',
+    paddingTop: 12,
+    paddingLeft: '16.8%',
   },
 
   searchInputViewBackButton: {
@@ -166,10 +171,9 @@ const styles = StyleSheet.create({
     height: 30,
   },
   favoriteCard: {
-    margin: 10,
     padding: 10,
-    height: 125,
-    width: 125,
+    height: 140,
+    width: 140,
     borderRadius: 20,
     shadowColor: '#0000001A',
     shadowOffset: {
@@ -181,6 +185,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
+    margin: 10,
+    marginBottom: 13,
   },
   buttonGoBack: {
     width: 30,

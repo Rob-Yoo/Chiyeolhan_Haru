@@ -114,6 +114,13 @@ export const ToDoModal = ({
     register('todoTitle');
     register('todoTask', { min: 1 });
     register('todoId');
+    return () => {
+      unregister('todoStartTime');
+      unregister('todoFinishTime');
+      unregister('todoTitle');
+      unregister('todoTask', { min: 1 });
+      unregister('todoId');
+    };
   }, [register]);
 
   const handleIsOnGoing = () => {
@@ -145,11 +152,7 @@ export const ToDoModal = ({
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
     setIsOngoing(false);
-    unregister('todoStartTime');
-    unregister('todoFinishTime');
-    unregister('todoTitle');
-    unregister('todoTask', { min: 1 });
-    unregister('todoId');
+
     network !== 'offline' && setCanEdit(true);
   };
 
