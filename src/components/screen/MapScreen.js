@@ -188,7 +188,8 @@ const CurrentMap = ({
       {/*MapView*/}
       <MapView
         style={styles.map}
-        provider={PROVIDER_GOOGLE}
+        //provider={PROVIDER_GOOGLE}
+        userInterfaceStyle={'light'}
         region={{
           ...locationResult,
           latitudeDelta: 0.004,
@@ -255,8 +256,10 @@ const Map = ({
       await getLocation();
     };
     getLoctionTrigger();
-    return () => setLocation(false);
-  }, [isFind]);
+    return () => {
+      setLocation(false);
+    };
+  }, []);
 
   const getLocation = async () => {
     try {
@@ -264,7 +267,7 @@ const Map = ({
       if (status != 'granted') {
         setFind(false);
       } else {
-        const locationData = await Location.getCurrentPositionAsync();
+        const locationData = await Location.getLastKnownPositionAsync();
         const curretLocation = {
           latitude: locationData.coords.latitude,
           longitude: locationData.coords.longitude,
