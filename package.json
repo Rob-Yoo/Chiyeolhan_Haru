@@ -48,7 +48,7 @@
     "react-native-tab-view": "^2.16.0",
     "react-native-unimodules": "~0.14.5",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "^0.11",
+    "react-native-web": "^0.13",
     "react-native-week-view": "https://github.com/6mn12j/react-native-week-view.git",
     "react-navigation": "^4.4.4",
     "react-navigation-tabs": "^2.11.1",

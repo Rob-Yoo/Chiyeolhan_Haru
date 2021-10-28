@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, AppState, ImageBackground } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  AppState,
+  ImageBackground,
+  StatusBar,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
@@ -27,6 +33,7 @@ const Home = ({ navigation }) => {
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
+    StatusBar.setBarStyle('dark-content');
     AppState.addEventListener('change', __handleAppStateChange);
     readyForHome();
     return () => {
@@ -109,12 +116,14 @@ const Home = ({ navigation }) => {
   return isLoading || homeRender ? (
     <Loading />
   ) : (
-    <View style={styles.wrap}>
-      <View style={styles.homeContainer}>
-        <HomeHeader navigation={navigation} />
-        <HomeContent todoArr={todoArr} />
+    <>
+      <View style={styles.wrap}>
+        <View style={styles.homeContainer}>
+          <HomeHeader navigation={navigation} />
+          <HomeContent todoArr={todoArr} />
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

@@ -104,8 +104,8 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
 
     if (isNeedSkip) {
       Alert.alert(
-        `다음 일정으로 넘기시겠습니까?`,
-        '',
+        `스킵 버튼`,
+        '일정을 스킵하시겠습니까?',
         [
           { text: '취소' },
           {
@@ -273,11 +273,9 @@ const TabBar = (props) => {
           ) : null}
           <TouchableOpacity
             style={{ marginTop: 5 }}
-            onPress={() =>
-              network === 'online'
-                ? navigation.navigate('Home', { screen: 'Home' })
-                : navigation.navigate('OffHome', { screen: 'OffHome' })
-            }
+            onPress={() => {
+              navigation.goBack();
+            }}
           >
             <IconHome name="icon-home" size={19} style={styles.navIcon} />
           </TouchableOpacity>

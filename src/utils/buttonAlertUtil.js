@@ -52,7 +52,8 @@ export const skipNotifAlert = (title = null) => {
   let msg1;
   let msg2 = '';
   if (title == null) {
-    msg1 = `다음 일정이 없으므로\n위치 서비스를 종료합니다.`;
+    msg1 = `다음 일정이 없습니다`;
+    msg2 = '새로운 일정 추가시 위치 서비스가 다시 제공됩니다.';
   } else {
     msg1 = `"${title}"`;
     msg2 = '해당 일정에 위치 서비스를 제공하겠습니다.';
@@ -64,8 +65,8 @@ export const skipNotifAlert = (title = null) => {
 
 export const skipDenyAlert = () =>
   Alert.alert(
-    'SKIP',
-    '목표 장소에 가지 않을 경우 눌러주세요!',
+    '스킵 버튼',
+    '일정이 진행 중일 때 눌러주세요!',
     [{ text: '확인' }],
     {
       cancelable: false,
@@ -152,7 +153,7 @@ export const startDenyAlert = (type) => {
     );
   } else if (type == 2) {
     Alert.alert(
-      `시작`,
+      `시작 버튼`,
       `오늘 하루가 아직 끝나지 않았어요!`,
       [{ text: '확인' }],
       {
@@ -163,7 +164,7 @@ export const startDenyAlert = (type) => {
 };
 
 export const addModifyBlockAlert = () =>
-  Alert.alert('SKIP 버튼을 먼저 눌러주세요.', '', [{ text: '확인' }], {
+  Alert.alert('스킵 버튼을 먼저 눌러주세요.', '', [{ text: '확인' }], {
     cancelable: false,
   });
 

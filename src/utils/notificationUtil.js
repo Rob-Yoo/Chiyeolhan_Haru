@@ -43,7 +43,7 @@ export const failNotification = (time, id) => {
     //... You can use all the options from localNotifications
     id: `${id}F`,
     title: '치열한 하루🚨',
-    message: `지금 들어와서 SKIP 버튼을 눌러주세요!`, // (required)
+    message: `지금 들어와서 스킵 버튼을 눌러주세요!`, // (required)
     date: new Date(Date.now() + 1000 * (time * 60) + 1000), // 시작 시간에 알림
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
