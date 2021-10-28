@@ -265,7 +265,11 @@ const Map = ({
       if (status != 'granted') {
         setFind(false);
       } else {
-        const locationData = await Location.getLastKnownPositionAsync();
+        let locationData;
+        locationData = await Location.getLastKnownPositionAsync();
+        if (locationData === null) {
+          locationData = await Location.getCurrentPositionAsync();
+        }
         const curretLocation = {
           latitude: locationData.coords.latitude,
           longitude: locationData.coords.longitude,
