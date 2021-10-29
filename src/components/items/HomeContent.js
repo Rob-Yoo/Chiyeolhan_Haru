@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 
@@ -9,10 +9,30 @@ import { renderPagination } from 'components/items/renderPagination';
 import { getCurrentTime, getDate } from 'utils/timeUtil';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { useSelector } from 'react-redux';
 
-const HomeContent = (props) => {
-  let todoArr = props.todoArr;
-  if (todoArr.length === 0) return <Nodata />;
+const makeToDoArr = (toDos) => {
+  const { TODAY } = getDate();
+  let todoArr = [];
+  for (key in toDos) {
+    if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
+  }
+
+  todoArr.sort((a, b) => {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  });
+  return todoArr;
+};
+
+const HomeContent = () => {
+  const toDos = useSelector((state) => state.toDos);
+  const todoArr = useMemo(() => makeToDoArr(toDos), [toDos]);
 
   const [nowIndex, setNowIndex] = useState(todoArr.length);
   const { TODAY } = getDate();
@@ -71,9 +91,12 @@ const HomeContent = (props) => {
     setNowIndex(tempIndex);
   };
 
+  if (todoArr.length === 0) return <Nodata />;
+
   return (
     <View style={styles.homeContainer}>
       <Swiper
+        key={todoArr.length}
         toDos={todoArr}
         renderPagination={renderPagination}
         loop={false}

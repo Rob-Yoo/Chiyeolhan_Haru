@@ -24,12 +24,11 @@ import { getDate } from 'utils/timeUtil';
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
 
 const Home = ({ navigation }) => {
-  let todoArr = [];
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
-  const toDos = useSelector((state) => state.toDos);
+
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
@@ -69,7 +68,6 @@ const Home = ({ navigation }) => {
     await checkDayChange();
     await loadSuccessSchedules();
     await SplashScreen.hideAsync();
-    //setLoading(false);
   };
 
   const getToDos = async () => {
@@ -99,20 +97,6 @@ const Home = ({ navigation }) => {
     }
   };
 
-  for (key in toDos) {
-    if (toDos[key].date === TODAY) todoArr.push(toDos[key]);
-  }
-
-  todoArr.sort((a, b) => {
-    if (a.id < b.id) {
-      return -1;
-    }
-    if (a.id > b.id) {
-      return 1;
-    }
-    return 0;
-  });
-
   return isLoading || homeRender ? (
     <Loading />
   ) : (
@@ -120,7 +104,7 @@ const Home = ({ navigation }) => {
       <View style={styles.wrap}>
         <View style={styles.homeContainer}>
           <HomeHeader navigation={navigation} />
-          <HomeContent todoArr={todoArr} />
+          <HomeContent />
         </View>
       </View>
     </>
