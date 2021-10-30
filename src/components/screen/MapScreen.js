@@ -124,7 +124,9 @@ const CurrentMap = ({
 
   const handleFindCurrentLocation = async () => {
     try {
-      const result = await Location.getLastKnownPositionAsync();
+      console.log('handleFindCurrentLocation');
+      //const result = await Location.getLastKnownPositionAsync();
+      const result = await Location.getCurrentPositionAsync;
       const {
         coords: { latitude, longitude },
       } = result;
@@ -265,7 +267,9 @@ const Map = ({
       if (status != 'granted') {
         setFind(false);
       } else {
-        const locationData = await Location.getLastKnownPositionAsync();
+        const locationData = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Lowest,
+        });
         const curretLocation = {
           latitude: locationData.coords.latitude,
           longitude: locationData.coords.longitude,

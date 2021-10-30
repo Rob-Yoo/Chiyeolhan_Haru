@@ -10,60 +10,73 @@ export const AlertView = () => {
       style={{
         backgroundColor: '#fff',
         width: CONTAINER_WIDTH,
-        height: 360,
+        height: 170,
         position: 'absolute',
         right: 0,
         top: 30,
         borderRadius: 10,
         padding: 15,
-        borderWidth: 0.5,
+        borderWidth: 2,
+        borderColor: '#54BCB6',
       }}
     >
       <Text
         style={{
           fontFamily: 'GodoB',
           color: '#229892',
-          fontSize: 20,
-          marginBottom: 10,
+          fontSize: 14,
+          marginBottom: 15,
         }}
       >
         도움말
       </Text>
-      <Text style={[styles.noticeText, { marginBottom: 5 }]}>
-        <IconHandleStart name="icon-handle-reset" size={17} />
-        {` - 시작 버튼 
-위치 서비스를 시작하는 버튼입니다. 위치 서비스를 일찍 시작하면 앱을 종료해도 백그라운드에서 동작하기 때문에 배터리가 소모될 수 있습니다.`}
-
-        <Text style={[styles.noticeText, styles.hilighted]}>
-          {` 따라서, 오늘 첫 일정의 시작 시간 직전에 누르는 것이 좋습니다.`}
+      <View style={{ display: 'flex', flexDirection: 'row', marginBottom: 15 }}>
+        <IconHandleStart
+          name="icon-handle-reset"
+          color="#717171"
+          size={17}
+          style={{ marginRight: 15 }}
+        />
+        <Text style={[styles.noticeText, { marginBottom: 5 }]}>
+          {`오늘 스케줄을 시작할 때 눌러주세요.`}
         </Text>
-      </Text>
-      <Text style={styles.noticeText}>
+      </View>
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
         <ImageBackground
-          style={[{ width: 19, height: 19 }]}
+          style={[{ width: 19, height: 19, marginRight: 15 }]}
           source={{ uri: 'iconHandleStart' }}
         />
-        {` - 스킵 버튼\n`}
+        <Text style={styles.noticeText}>
+          {`일정을 스킵할 때 눌러주세요.\n`}
 
-        <Text
-          style={[styles.noticeText, styles.hilighted]}
-        >{`배터리 소모를 최소화`}</Text>
-
-        {`하기 위해 하나의 일정에만 위치 서비스를 제공해서 해당 목표 장소에 도착하면 다음 목표 장소로 위치 서비스를 넘깁니다. 따라서 만약 목표 장소에 `}
-        <Text
-          style={[styles.noticeText, styles.hilighted]}
-        >{`안 올 경우에`}</Text>
-        {`는 이 버튼을 눌러야 다음 목표 장소에 위치 서비스를 제공할 수 있습니다. 이 버튼은 현재 일정의 `}
-        <Text>시작 시간 이후부터 동작</Text>
-        {`합니다.`}
-      </Text>
-      <Text style={styles.noticeText}>
-        {`\n * 위치 서비스는 사용자의 위치를 계속 추적 
-    하지 않고 목표 장소의`}
-        <Text style={[styles.noticeText, styles.hilighted]}>200m 반경 </Text>
-        {`안에 사
-    용자가 들어왔는지 나갔는지만 판단합니다.`}
-      </Text>
+          <View>
+            <Text
+              style={[
+                styles.noticeText,
+                {
+                  fontSize: 10,
+                  color: '#BDBFBF',
+                  marginTop: 15,
+                },
+              ]}
+            >
+              {`[스킵] 버튼을 눌러 해당 스케줄을 넘겨주세요! \n `}
+            </Text>
+            <Text
+              style={[
+                styles.noticeText,
+                {
+                  fontSize: 10,
+                  color: '#BDBFBF',
+                  marginTop: -8,
+                },
+              ]}
+            >
+              {`* 버튼을 누르지 않으면 해당 일정에서 \n 플래너가 계속 멈춰 있습니다. `}
+            </Text>
+          </View>
+        </Text>
+      </View>
     </View>
   );
 };

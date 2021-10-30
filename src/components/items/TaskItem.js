@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 70,
+    height: 74,
     borderRadius: 10,
     paddingHorizontal: 10,
     marginLeft: 18,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
       width: 3.4,
       height: 5,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.6,
     shadowRadius: 3.84,
     justifyContent: 'center',
   },

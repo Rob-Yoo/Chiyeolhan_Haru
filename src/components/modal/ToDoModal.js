@@ -291,67 +291,72 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const { latitude, location, longitude, address } =
-      passModalData === undefined || passModalData?.description
-        ? locationData
-        : passModalData;
-    const date = new Date();
-    const id =
-      `${date.getFullYear()}` +
-      `${isToday ? TODAY : TOMORROW}` +
-      `${startTime}`;
-    const currentTime = getCurrentTime();
-    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+    const block = await checkGeofenceSchedule();
+    if (block == 1) {
+      addModifyBlockAlert();
+    } else {
+      const { latitude, location, longitude, address } =
+        passModalData === undefined || passModalData?.description
+          ? locationData
+          : passModalData;
+      const date = new Date();
+      const id =
+        `${date.getFullYear()}` +
+        `${isToday ? TODAY : TOMORROW}` +
+        `${startTime}`;
+      const currentTime = getCurrentTime();
+      const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
-    try {
-      const newData = todoDbModel(
-        id,
-        title,
-        startTime,
-        finishTime,
-        location,
-        address,
-        longitude,
-        latitude,
-        isToday,
-        taskList,
-      );
-      dispatch(create(newData));
-      await toDosUpdateDB(newData, id);
+      try {
+        const newData = todoDbModel(
+          id,
+          title,
+          startTime,
+          finishTime,
+          location,
+          address,
+          longitude,
+          latitude,
+          isToday,
+          taskList,
+        );
+        dispatch(create(newData));
+        await toDosUpdateDB(newData, id);
 
-      if (isToday) {
-        // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
-        // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
-        const isChangeEarliest = await checkEarlistTodo(startTime);
-        dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
-        if (isStartTodo) {
-          // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
-          const timeDiff = getTimeDiff(currentTime, finishTime);
-          failNotification(timeDiff, id);
+        if (isToday) {
+          // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
+          // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
+          const isChangeEarliest = await checkEarlistTodo(startTime);
+          dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
+          if (isStartTodo) {
+            // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
+            const timeDiff = getTimeDiff(currentTime, finishTime);
+            failNotification(timeDiff, id);
+          } else {
+            // 일정 시작 버튼이 안눌렸을 때 시작 버튼 눌러달라는 알림 예약
+            const timeDiff = getTimeDiff(currentTime, startTime);
+            startNotification(timeDiff, id);
+          }
         } else {
-          // 일정 시작 버튼이 안눌렸을 때 시작 버튼 눌러달라는 알림 예약
-          const timeDiff = getTimeDiff(currentTime, startTime);
-          startNotification(timeDiff, id);
+          dbToAsyncTomorrow();
         }
-      } else {
-        dbToAsyncTomorrow();
+
+        await handleFilterData(
+          location,
+          'location',
+          searchedList,
+          setSearchedList,
+        );
+
+        if (passModalData && passModalData.description === undefined) {
+          navigateFavorite();
+        }
+        modalHandler();
+
+        await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
+      } catch (e) {
+        console.log('toDoSumbit Error :', e);
       }
-
-      await handleFilterData(
-        location,
-        'location',
-        searchedList,
-        setSearchedList,
-      );
-
-      if (passModalData && passModalData.description === undefined) {
-        navigateFavorite();
-      }
-      modalHandler();
-
-      await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
-    } catch (e) {
-      console.log('toDoSumbit Error :', e);
     }
   };
 
@@ -668,6 +673,7 @@ export const ToDoModal = ({
                   <TextInput
                     placeholder="제목을 입력해 주세요"
                     style={styles.modalInputTitle}
+                    placeholderTextColor="#A2A2A2"
                     value={title}
                     ref={titleInputRef}
                     // autoFocus={true}

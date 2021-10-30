@@ -71,6 +71,7 @@ export const MapSearch = ({
             <TextInput
               style={styles.searchInputViewInput}
               ref={searchInput}
+              placeholderTextColor="#A2A2A2"
               onTouchStart={() => {
                 !searchedHistoryVisible && setSearchedHistroyVisible(true);
               }}
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     width: '80%',
     height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
-    fontSize: 19,
+    fontSize: 15,
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {

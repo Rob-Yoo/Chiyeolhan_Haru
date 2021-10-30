@@ -9,6 +9,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <React/RCTDevLoadingView.h>
 
 #import <UMCore/UMModuleRegistry.h>
 #import <UMReactNativeAdapter/UMNativeModulesProxy.h>
@@ -52,6 +53,15 @@ static void InitializeFlipper(UIApplication *application) {
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
   InitializeFlipper(application);
 #endif
+  
+  NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.js" fallbackResource:nil];
+
+    RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
+                                                moduleProvider:nil
+                                                 launchOptions:launchOptions];
+    #if RCT_DEV
+     [bridge moduleForClass:[RCTDevLoadingView class]];
+    #endif
   
 // @generated begin react-native-maps-init - expo prebuild (DO NOT MODIFY) sync-25729c1d9c97f86f8f34dc861e6a45d9de6899d0
 #if __has_include(<GoogleMaps/GoogleMaps.h>)

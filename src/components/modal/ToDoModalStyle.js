@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalInputTitle: {
-    fontFamily: 'GodoB',
     width: 140,
     height: 25,
     backgroundColor: '#fff',
@@ -124,8 +123,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginRight: 10,
     paddingLeft: 5,
-    fontSize: 12,
-    paddingTop: 5,
+    fontSize: 11,
+    paddingHorizontal: 2,
   },
   modalInputTask: {
     width: CONTAINER_WIDTH * 0.7,
