@@ -124,7 +124,9 @@ const CurrentMap = ({
 
   const handleFindCurrentLocation = async () => {
     try {
-      const result = await Location.getLastKnownPositionAsync();
+      console.log('handleFindCurrentLocation');
+      //const result = await Location.getLastKnownPositionAsync();
+      const result = await Location.getCurrentPositionAsync;
       const {
         coords: { latitude, longitude },
       } = result;

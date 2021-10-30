@@ -7,34 +7,48 @@ import { getCurrentTime } from 'utils/timeUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT } from 'constant/const';
-import { ProgressingBar } from 'components/items/ProgressingBar';
-import { progressingBar } from './ProgressingBar';
+import * as Progress from 'react-native-progress';
+
 const cardSize = 390 / PixelRatio.get();
 
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
-  const [width, setWidth] = useState('0%');
+  const [width, setWidth] = useState(0);
+
   useEffect(() => {
-    id !== undefined && getProgressBarWidth();
+    if (finishTime > getCurrentTime() && startTime < getCurrentTime()) {
+      getProgressBarWidth();
+      let intervalCallback = setInterval(() => {
+        if (finishTime < getCurrentTime()) {
+          clearInterval(intervalCallback);
+        }
+      }, 60000);
+    } else {
+      getProgressBarWidth();
+    }
   }, []);
 
   const getProgressBarWidth = () => {
     if (getCurrentTime() >= finishTime) {
-      setWidth('100%');
+      setWidth(1);
       return;
     } else {
       const date = new Date();
-      const hour =
-        date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-      const minute =
-        date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-      const currentTime = (hour.toString() + minute.toString()) * 1;
-      startTime = startTime.replace(':', '');
-      finishTime = finishTime.replace(':', '');
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const currentTime = hour * 60 + minute * 1;
+
+      if (typeof startTime === 'string') {
+        startTime =
+          startTime?.split(':')[0] * 60 + startTime?.split(':')[1] * 1;
+        finishTime =
+          finishTime?.split(':')[0] * 60 + finishTime?.split(':')[1] * 1;
+      }
       if (startTime < currentTime && finishTime > currentTime) {
         const denominator = finishTime - startTime;
         const numerator = currentTime - startTime;
-        let width = Math.floor((numerator / denominator) * 100);
-        setWidth(`${width}%`);
+        let width = (numerator / denominator).toFixed(2) * 1;
+        console.log(width);
+        setWidth(width);
       }
     }
   };
@@ -62,10 +76,10 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
               <View
                 style={{
                   position: 'absolute',
-                  top: 5,
-                  left: 7,
-                  width: 3,
-                  height: 14,
+                  top: 12,
+                  left: 17,
+                  width: 2,
+                  height: 11,
                   backgroundColor: '#00A29A',
                 }}
               />
@@ -80,26 +94,17 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
         <Text style={card.cardTime}>
           {startTime}~{finishTime}
         </Text>
-        <View style={{ position: 'relative' }}>
-          <View
-            style={[
-              progressingBar.defaultBar,
-              {
-                width: '100%',
-                backgroundColor: '#C4C4C4',
-              },
-            ]}
+        <View style={{ position: 'relative', marginBottom: -11 }}>
+          <Progress.Bar
+            progress={width}
+            width={180}
+            color={'#fff'}
+            unfilledColor={'#C4C4C4'}
+            borderWidth={0}
+            useNativeDriver
           />
-          <View
-            style={[
-              progressingBar.defaultBar,
-              {
-                width: width,
-                position: 'absolute',
-              },
-            ]}
-          />
-          <ProgressingBar startTime={startTime} finishTime={finishTime} />
+
+          {/* <ProgressingBar startTime={startTime} finishTime={finishTime} /> */}
         </View>
       </View>
     </View>
@@ -109,8 +114,9 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 export const card = StyleSheet.create({
   card: {
     flex: SCREEN_HEIGHT > 668 ? 0.6 : 0.9,
-    paddingHorizontal: 15,
+    paddingHorizontal: 18,
     paddingVertical: 12,
+    paddingTop: 2,
     borderRadius: 20,
     shadowColor: '#00000029',
     shadowOffset: {
@@ -125,17 +131,17 @@ export const card = StyleSheet.create({
     minWidth: cardSize,
   },
   todomanBackgroundCircle: {
-    width: 30,
-    height: 30,
+    width: 32,
+    height: 32,
     backgroundColor: '#ffffff',
     borderRadius: 50,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.4,
-    shadowRadius: 0.9,
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -145,7 +151,7 @@ export const card = StyleSheet.create({
       Dimensions.get('window').height > 668
         ? fontPercentage(25)
         : fontPercentage(25),
-
+    marginTop: 7,
     position: 'relative',
   },
   cardLocation: {
@@ -154,8 +160,8 @@ export const card = StyleSheet.create({
     fontWeight: '800',
     flexWrap: 'wrap',
     color: '#F4F4F4',
-    marginLeft: 14,
-    marginTop: 5,
+    marginLeft: 24,
+    marginTop: 8,
     marginBottom: 10,
   },
   cardTime: {
@@ -165,4 +171,9 @@ export const card = StyleSheet.create({
   },
 
   cardCalendarText: { fontFamily: 'notoSansKR-Bold' },
+  defaultBar: {
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+  },
 });

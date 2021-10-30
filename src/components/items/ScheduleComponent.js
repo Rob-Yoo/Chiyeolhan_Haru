@@ -56,6 +56,7 @@ const MyEventComponent = ({ event, position }) => {
               (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
                 ? 8
                 : 13,
+            marginBottom: timeDiff >= minutes25 ? 5 : 0,
           },
         ]}
       >
@@ -192,6 +193,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
           left: 47,
+          borderRadius: 12,
         }}
         EventComponent={MyEventComponent}
         nowLineColor={'#FD6363'}

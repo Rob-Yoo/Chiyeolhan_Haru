@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
   },
   favoriteCard: {
     padding: 10,
-    height: 140,
-    width: 140,
+    height: SCREEN_HEIGHT > 668 ? 140 : 105,
+    width: SCREEN_HEIGHT > 668 ? 140 : 105,
     borderRadius: 20,
     shadowColor: '#0000001A',
     shadowOffset: {

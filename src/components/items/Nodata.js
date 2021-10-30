@@ -16,7 +16,7 @@ export const Nodata = () => {
       <View style={styles.backgroundWhite}>
         <View style={styles.noDataCard}>
           <View style={styles.circle}>
-            <IconTaskToDoman name="icon-todo-man" size={30} color="#229892" />
+            <IconTaskToDoman name="icon-todo-man" size={20} color="#229892" />
           </View>
           <Text style={styles.cardText}>치열한 하루!</Text>
           <View style={styles.statusbar} />
@@ -24,7 +24,7 @@ export const Nodata = () => {
 
         <Text style={styles.nodataText}>일정을 기록해보세요</Text>
         <TouchableOpacity onPress={() => navigation.navigate('ScheduleToday')}>
-          <IconArrow name="icon-arrow" size={30} color="#229892" />
+          <IconArrow name="icon-arrow" size={26} color="#229892" />
         </TouchableOpacity>
       </View>
     </View>
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
   },
   backgroundWhite: {
     position: 'absolute',
-    top: SCREEN_HEIGHT > 668 ? 80 : 30,
+    top: SCREEN_HEIGHT > 668 ? 110 : 30,
     width: '80%',
-    height: SCREEN_HEIGHT > 668 ? '55%' : '70%',
+    height: SCREEN_HEIGHT > 668 ? '50%' : '70%',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    paddingVertical: 20,
+    paddingVertical: 25,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
   },
   noDataCard: {
-    width: 200,
+    width: 215,
     height: 200,
     backgroundColor: '#54BCB6',
     borderRadius: 20,
@@ -74,23 +74,32 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: '#fff',
-    width: 40,
-    height: 40,
+    width: 33,
+    height: 33,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    left: 10,
-    top: 10,
+    left: 18,
+    top: 22,
+    shadowColor: '#00000029',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 0.9,
   },
   cardText: {
     fontFamily: 'NotoSansKR-Black',
+    marginTop: 45,
     color: '#fff',
     fontSize: 20,
   },
   statusbar: {
     width: '80%',
-    height: 4,
+    height: 6,
+    marginTop: 10,
     backgroundColor: '#fff',
     borderRadius: 10,
   },
@@ -98,6 +107,6 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
-    marginBottom: 15,
+    marginBottom: 0,
   },
 });
