@@ -115,17 +115,28 @@ export const getCurrentTime = () => {
 
 export const getDate = () => {
   const date = new Date();
+  const yesterday = new Date(date.setDate(date.getDate() - 1));
+  const tomorrow = new Date(date.setDate(date.getDate() + 1));
   const YEAR = date.getFullYear();
   const MONTH = date.getMonth() + 1;
   const DAY = date.getDate();
   const TODAY =
     (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) + (DAY < 10 ? `0${DAY}` : `${DAY}`);
+
   const YESTERDAY =
-    (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) +
-    (DAY < 10 ? `0${DAY - 1}` : `${DAY - 1}`);
+    (yesterday.getMonth() + 1 < 10
+      ? `0${yesterday.getMonth() + 1}`
+      : `${yesterday.getMonth() + 1}`) +
+    (yesterday.getDate() < 10
+      ? `0${yesterday.getDate()}`
+      : `${yesterday.getDate()}`);
   const TOMORROW =
-    (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) +
-    (DAY + 1 < 10 ? `0${DAY + 1}` : `${DAY + 1}`);
+    (tomorrow.getMonth() + 1 < 10
+      ? `0${tomorrow.getMonth() + 1}`
+      : `${tomorrow.getMonth() + 1}`) +
+    (tomorrow.getDate() < 10
+      ? `0${tomorrow.getDate()}`
+      : `${tomorrow.getDate()}`);
   return {
     YEAR,
     MONTH,
