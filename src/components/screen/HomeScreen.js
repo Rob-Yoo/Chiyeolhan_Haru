@@ -86,9 +86,11 @@ const Home = ({ navigation }) => {
         return;
       }
       for (key in rowObj) {
+        console.log(rowObj[key].date, YESTERDAY);
         if (rowObj[key].date >= YESTERDAY)
           filterObj = { ...filterObj, [key]: rowObj[key] };
       }
+      console.log(rowObj);
       await dispatch(init(filterObj));
       setLoading(false);
       return;
@@ -116,6 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#ECF5F471',
   },
   homeContainer: {
     flex: 2.25,

@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
+  PixelRatio,
 } from 'react-native';
 
 import IconQuestion from '#assets/icons/icon-question';
@@ -76,23 +77,19 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   return (
     <View
       style={{
-        marginTop: SCREEN_HEIGHT > 668 ? '30%' : '18%',
-        height: SCREEN_HEIGHT / 1.3,
+        marginTop: SCREEN_HEIGHT > 668 ? '40%' : '30%',
       }}
     >
       <View style={{ height: '100%' }}>
         <ImageBackground
           imageStyle={{
-            height: SCREEN_HEIGHT,
+            width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
           style={[styles.modalTopContainer]}
           source={{
-            uri:
-              SCREEN_HEIGHT > 668
-                ? 'favoriteBackground11'
-                : 'favoriteBackground',
+            uri: 'favoriteBackground',
           }}
         >
           <ScrollView
@@ -172,8 +169,8 @@ const styles = StyleSheet.create({
   },
   favoriteCard: {
     padding: 10,
-    height: SCREEN_HEIGHT > 668 ? 140 : 105,
-    width: SCREEN_HEIGHT > 668 ? 140 : 105,
+    height: SCREEN_WIDTH > 375 ? 135 : SCREEN_WIDTH * 0.32,
+    width: SCREEN_WIDTH > 375 ? 135 : SCREEN_WIDTH * 0.32,
     borderRadius: 20,
     shadowColor: '#0000001A',
     shadowOffset: {

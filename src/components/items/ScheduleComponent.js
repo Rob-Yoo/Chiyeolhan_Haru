@@ -9,6 +9,8 @@ import { AlertView } from 'components/items/AlertView';
 
 import IconQuestion from '#assets/icons/icon-question';
 
+import { fontPercentage } from 'utils/responsiveUtil';
+
 import { deleteToDoAlert } from 'utils/buttonAlertUtil';
 import {
   deleteTomorrowAsyncStorageData,
@@ -29,7 +31,8 @@ import {
 } from 'constant/const';
 
 const BACKGROUND_COLOR = '#ECF5F471';
-
+const minutes45 = 2700000;
+const minutes40 = 2400000;
 const minutes25 = 1500000;
 const minutes20 = 1200000;
 const minutes15 = 900000;
@@ -41,9 +44,11 @@ const MyEventComponent = ({ event, position }) => {
     <View
       color={event.color}
       style={{
-        flexDirection: timeDiff <= minutes25 ? 'row' : null,
-        alignItems: timeDiff <= minutes25 ? 'center' : null,
+        flexDirection: timeDiff <= minutes45 ? 'row' : null,
+        alignItems: timeDiff <= minutes40 ? 'center' : null,
         justifyContent: 'flex-start',
+        paddingVertical: timeDiff <= minutes40 ? 4 : 15,
+        paddingHorizontal: timeDiff <= minutes40 ? 0 : 15,
       }}
     >
       <Text
@@ -52,11 +57,8 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              (SCREEN_HEIGHT > 668 && timeDiff <= minutes10) ||
-              (SCREEN_HEIGHT < 668 && timeDiff <= minutes15)
-                ? 8
-                : 13,
-            marginBottom: timeDiff >= minutes25 ? 5 : 0,
+              timeDiff <= minutes20 ? fontPercentage(9) : fontPercentage(15),
+            marginBottom: timeDiff <= minutes40 ? 0 : 10,
           },
         ]}
       >
@@ -70,7 +72,7 @@ const MyEventComponent = ({ event, position }) => {
             (SCREEN_HEIGHT < 668 && timeDiff <= minutes25)
               ? 3
               : 10,
-          paddingTop: 1,
+          //paddingTop: 1,
           alignItems: 'center',
         }}
       >
@@ -178,22 +180,26 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         headerStyle={{
           color: BACKGROUND_COLOR,
           borderColor: BACKGROUND_COLOR,
-          paddingTop: 20,
+          paddingTop: 11,
           justifyContent: 'flex-start',
           alignItems: 'center',
         }}
         headerTextStyle={{
-          fontSize: 10,
+          fontSize: fontPercentage(9),
           color: '#5E5E5E',
-          marginRight: '35%',
+          marginRight: '26%',
         }}
-        hourTextStyle={{ fontSize: 10 }}
+        hourTextStyle={{
+          color: '#5E5E5E',
+          fontFamily: 'NotoSansKR-Regular',
+          fontSize: fontPercentage(8),
+        }}
         formatDateHeader={'M월 DD일'}
         eventContainerStyle={{
           maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
-          left: 47,
-          borderRadius: 12,
+          left: 62,
+          borderRadius: 8,
         }}
         EventComponent={MyEventComponent}
         nowLineColor={'#FD6363'}
@@ -252,17 +258,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'left',
     fontWeight: 'bold',
-    fontFamily: 'NotoSansKR-bold',
+    fontFamily: 'GodoB',
   },
   description: {
     fontSize: 16,
   },
   alertButton: {
     position: 'absolute',
-    top: 18,
-    right: 41,
-    width: 16,
-    height: 16,
+    top: 10,
+    right: 30,
+    width: 14,
+    height: 14,
     backgroundColor: '#54BCB6',
     borderRadius: 50,
     justifyContent: 'center',

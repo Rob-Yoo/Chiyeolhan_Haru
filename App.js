@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
+import DeviceInfo from 'react-native-device-info';
+
 import store from 'redux/store';
 
 import HomeNav from 'components/base/navigator/HomeNav';
@@ -17,6 +19,7 @@ import {
 } from 'constant/const';
 
 const App = () => {
+  //console.log(DeviceInfo.getUniqueId());
   const [appIsReady, setAppIsReady] = useState(false);
 
   const loadSavedData = async () => {

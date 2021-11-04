@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#54BCB6',
     borderRadius: 50,
     paddingHorizontal: 25,
-    height: SCREEN_HEIGHT > 668 ? '37%' : '40%',
+    height: SCREEN_HEIGHT > 668 ? '40%' : '40%',
   },
   modalTextView: {
     flexDirection: 'row',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 100,
+    borderRadius: 200,
   },
   modalLocationText: {
     fontFamily: 'NotoSansKR-Bold',
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     // marginLeft: 20,
     position: 'absolute',
     top: 40,
-    left: 15,
+    left: 20,
   },
   taskInput: {
     backgroundColor: '#fff',
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalInputTitle: {
-    width: 140,
+    width: (136 * SCREEN_WIDTH) / 400,
     height: 25,
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     fontSize: 11,
     paddingHorizontal: 2,
+    paddingTop: 4,
   },
   modalInputTask: {
     width: CONTAINER_WIDTH * 0.7,

@@ -93,7 +93,7 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        //left: SCREEN_HEIGHT > 668 ? -19 : -10,
+
                         left: SCREEN_HEIGHT > 668 ? -13 : -10,
                         top: 2,
                       }}
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: CONTAINER_HEIGHT * 0.49,
-    left: SCREEN_HEIGHT > 668 ? -SCREEN_WIDTH * 0.19 : -58,
+    left: -SCREEN_WIDTH * 0.19,
     width: SCREEN_WIDTH,
     height: '100%',
   },

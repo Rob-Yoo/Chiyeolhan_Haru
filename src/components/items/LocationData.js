@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 export const LocationData = ({
   locationData,
@@ -19,12 +20,13 @@ export const LocationData = ({
         <View
           style={{
             flexDirection: 'row',
-            width: '100%',
+            width: '90%',
             flexWrap: 'nowrap',
             paddingRight: 40,
           }}
         >
           <Text style={styles.address}>도로명</Text>
+          <View style={{ width: 2, height: 17, marginHorizontal: 1.5 }} />
           <Text style={styles.addressText}>{address}</Text>
         </View>
       </View>
@@ -44,11 +46,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '90%',
-    height: 130,
+    height: 100,
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 10,
-    maxHeight: 130,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     marginBottom: 20,
     position: 'absolute',
     left: 20,
@@ -59,28 +61,32 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
     color: '#000000',
-    marginBottom: 15,
   },
   addressText: {
     color: '#000000BA',
-    marginRight: 2,
-    paddingHorizontal: 10,
+    fontSize: fontPercentage(10),
+    marginRight: 10,
+    paddingTop: 2,
+    paddingVertical: -2,
   },
   address: {
     fontFamily: 'NotoSansKR-Regular',
     color: '#C4C4C4',
-    width: 43,
-    height: 24,
-    borderWidth: 2,
+    height: 17,
+    paddingTop: -1,
+    borderWidth: 1.5,
     borderColor: '#C4C4C4',
+    fontSize: fontPercentage(11),
     marginRight: 4,
+    marginLeft: 10,
   },
+
   locationFinButton: {
-    flex: 1,
+    flex: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
-    height: 50,
+    width: 100,
+    height: 52,
     borderRadius: 10,
     backgroundColor: '#54BCB6',
   },

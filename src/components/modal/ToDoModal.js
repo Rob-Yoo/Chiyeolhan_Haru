@@ -4,10 +4,9 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ScrollView,
   ImageBackground,
   Keyboard,
-  TouchableWithoutFeedback,
+  PixelRatio,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -21,7 +20,6 @@ import { todoDbModel } from 'model/dataModel';
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
-import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
@@ -512,7 +510,6 @@ export const ToDoModal = ({
       setValue('todoFinishTime', newTime);
     }
   };
-
   return (
     <Modal
       navigation={navigation}
@@ -532,13 +529,10 @@ export const ToDoModal = ({
         />
         <ImageBackground
           source={{
-            uri:
-              SCREEN_HEIGHT > 668
-                ? 'favoriteBackground11'
-                : 'favoriteBackground',
+            uri: 'favoriteBackground',
           }}
           imageStyle={{
-            height: SCREEN_HEIGHT,
+            width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
@@ -550,7 +544,7 @@ export const ToDoModal = ({
                   ? '30%'
                   : isToday === 'yesterday'
                   ? '45%'
-                  : '40%',
+                  : '38%',
             },
           ]}
         >

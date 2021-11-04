@@ -6,7 +6,7 @@ import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import { getCurrentTime } from 'utils/timeUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 
-import { SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_WIDTH } from 'constant/const';
 import * as Progress from 'react-native-progress';
 
 const cardSize = 390 / PixelRatio.get();
@@ -47,7 +47,6 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
         const denominator = finishTime - startTime;
         const numerator = currentTime - startTime;
         let width = (numerator / denominator).toFixed(2) * 1;
-        console.log(width);
         setWidth(width);
       }
     }
@@ -76,10 +75,10 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
               <View
                 style={{
                   position: 'absolute',
-                  top: 12,
-                  left: 17,
+                  top: 10.5,
+                  left: 14.7,
                   width: 2,
-                  height: 11,
+                  height: fontPercentage(11.5),
                   backgroundColor: '#00A29A',
                 }}
               />
@@ -94,17 +93,21 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
         <Text style={card.cardTime}>
           {startTime}~{finishTime}
         </Text>
-        <View style={{ position: 'relative', marginBottom: -11 }}>
+        <View
+          style={{
+            position: 'relative',
+            marginBottom: -11,
+          }}
+        >
           <Progress.Bar
             progress={width}
-            width={180}
             color={'#fff'}
             unfilledColor={'#C4C4C4'}
             borderWidth={0}
+            width={SCREEN_WIDTH * 0.58 * 0.745}
+            style={{ marginLeft: -3 }}
             useNativeDriver
           />
-
-          {/* <ProgressingBar startTime={startTime} finishTime={finishTime} /> */}
         </View>
       </View>
     </View>
@@ -113,11 +116,11 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 
 export const card = StyleSheet.create({
   card: {
-    flex: SCREEN_HEIGHT > 668 ? 0.6 : 0.9,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    paddingTop: 2,
-    borderRadius: 20,
+    flex: 1,
+    paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
+    borderRadius: 15,
+    justifyContent: 'space-evenly',
+    backgroundColor: 'rgba(84,188,182,1)',
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
@@ -125,10 +128,10 @@ export const card = StyleSheet.create({
     },
     shadowOpacity: 1.5,
     shadowRadius: 6.84,
-    justifyContent: 'space-evenly',
-    backgroundColor: 'rgba(84,188,182,1)',
-    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_HEIGHT / 4.5 : SCREEN_HEIGHT / 3,
-    minWidth: cardSize,
+    marginHorizontal: 10,
+    height: SCREEN_WIDTH * 0.485,
+    paddingBottom: 15,
+    paddingTop: 1.5,
   },
   todomanBackgroundCircle: {
     width: 32,
@@ -144,29 +147,30 @@ export const card = StyleSheet.create({
     shadowRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 2,
   },
   cardTitle: {
     fontFamily: 'NotoSansKR-Black',
     fontSize:
       Dimensions.get('window').height > 668
-        ? fontPercentage(25)
+        ? fontPercentage(25.4)
         : fontPercentage(25),
-    marginTop: 7,
+    marginTop: 13,
     position: 'relative',
   },
   cardLocation: {
     fontFamily: 'NotoSansKR-Medium',
-    fontSize: fontPercentage(10),
+    fontSize: fontPercentage(10.7),
     fontWeight: '800',
     flexWrap: 'wrap',
     color: '#F4F4F4',
-    marginLeft: 24,
+    marginLeft: 20,
     marginTop: 8,
     marginBottom: 10,
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: fontPercentage(10),
+    fontSize: fontPercentage(10.5),
     marginBottom: -5,
   },
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import ToDoModal from 'components/modal/ToDoModal';
@@ -9,6 +9,7 @@ import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { checkDayChange } from 'utils/asyncStorageUtil';
 import { addModifyBlockAlert } from 'utils/buttonAlertUtil';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constant/const';
 
 const ScheduleLayout = ({
   navigation,
@@ -36,7 +37,11 @@ const ScheduleLayout = ({
       <View style={{ flex: 1 }}>{children}</View>
       {isToday !== 'yesterday' && network === 'online' ? (
         <TouchableOpacity style={styles.addToDoButton} onPress={pressAddButton}>
-          <AddToDoIcon name="icon-add-todo" size={50} color={'#54BCB6'} />
+          <AddToDoIcon
+            name="icon-add-todo"
+            size={(2 * SCREEN_WIDTH) / 15}
+            color={'#54BCB6'}
+          />
         </TouchableOpacity>
       ) : (
         <></>
@@ -60,19 +65,19 @@ const styles = StyleSheet.create({
   addToDoButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 50,
-    height: 50,
+    width: (52 * SCREEN_WIDTH) / 375,
+    height: (52 * SCREEN_WIDTH) / 375,
     position: 'absolute',
-    bottom: 44,
+    bottom: (SCREEN_HEIGHT * 35) / 650,
     right: 19,
     backgroundColor: '#FFF',
-    borderRadius: 50,
+    borderRadius: 100,
     shadowColor: '#00000029',
     shadowOffset: {
-      width: 3.4,
-      height: 5,
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
   },
 });

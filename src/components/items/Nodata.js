@@ -33,7 +33,7 @@ export const Nodata = () => {
 
 const styles = StyleSheet.create({
   wrap: {
-    flex: 5,
+    flex: 2.25,
     alignItems: 'center',
   },
   background: {
@@ -41,19 +41,20 @@ const styles = StyleSheet.create({
     top: -500,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT + 1000,
-    opacity: 0.3,
+    opacity: 0.4,
     backgroundColor: '#000000',
   },
   backgroundWhite: {
     position: 'absolute',
-    top: SCREEN_HEIGHT > 668 ? 110 : 30,
     width: '80%',
-    height: SCREEN_HEIGHT > 668 ? '50%' : '70%',
+    height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
+    top: SCREEN_HEIGHT > 668 ? -20 : 30,
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 28,
     paddingVertical: 25,
+    paddingVertical: SCREEN_WIDTH * 0.0811,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontFamily: 'NotoSansKR-Black',
-    marginTop: 45,
+    marginTop: 35,
     color: '#fff',
     fontSize: 20,
   },
@@ -107,6 +108,6 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
-    marginBottom: 0,
+    marginBottom: 4,
   },
 });

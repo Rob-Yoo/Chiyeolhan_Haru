@@ -36,6 +36,7 @@ import {
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
 } from 'constant/const';
+import { SCREEN_HEIGHT } from '../../../constant/const';
 
 const handleSkip = async (isNeedSkip) => {
   try {
@@ -200,7 +201,7 @@ const TabBar = (props) => {
                   onPress={onPress}
                   onLongPress={onLongPress}
                   key={`tab_${index}`}
-                  style={{ marginRight: 25 }}
+                  style={{ marginRight: 27 }}
                 >
                   <Text
                     style={[
@@ -241,20 +242,19 @@ const TabBar = (props) => {
             flexDirection: 'row',
             justifyContent: network === 'online' ? 'space-between' : 'flex-end',
             alignItems: 'flex-start',
-            width: 120,
-            //backgroundColor: 'green',
+            width: '29.5%',
           }}
         >
           {network === 'online' ? (
             <>
               <TouchableOpacity
                 onPress={() => network === 'online' && handleStart()}
-                style={{ marginTop: 6, marginRight: -6 }}
+                style={{ marginTop: 6, marginRight: 0 }}
               >
                 <IconHandleStart
                   style={styles.navIcon}
                   name="icon-handle-reset"
-                  size={20}
+                  size={(4 * SCREEN_WIDTH) / 85}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -265,7 +265,12 @@ const TabBar = (props) => {
                 }
               >
                 <ImageBackground
-                  style={[{ width: 22, height: 21 }]}
+                  style={[
+                    {
+                      width: fontPercentage(20),
+                      height: fontPercentage(20),
+                    },
+                  ]}
                   source={{ uri: 'iconHandleStart' }}
                 />
               </TouchableOpacity>
@@ -274,10 +279,16 @@ const TabBar = (props) => {
           <TouchableOpacity
             style={{ marginTop: 5 }}
             onPress={() => {
-              navigation.goBack();
+              network === 'online'
+                ? navigation.navigate('Home', { screen: 'Home' })
+                : navigation.navigate('OffHome', { screen: 'OffHome' });
             }}
           >
-            <IconHome name="icon-home" size={19} style={styles.navIcon} />
+            <IconHome
+              name="icon-home"
+              size={(4 * SCREEN_WIDTH) / 90}
+              style={[styles.navIcon]}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -288,36 +299,47 @@ const TabBar = (props) => {
 const styles = StyleSheet.create({
   wrap: {
     width: SCREEN_WIDTH,
+    height: (SCREEN_HEIGHT * 27) / 230 - 30,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'flex-end',
     backgroundColor: '#fff',
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingLeft: 30,
+    paddingRight: 25,
+    paddingVertical: (4 * SCREEN_HEIGHT) / 180,
   },
   tabContainer: {
     width: '100%',
+    height: '100%',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    paddingTop: 2,
-    paddingBottom: 10,
-    paddingHorizontal: 10,
+    paddingLeft: 2,
   },
+
   tabUnderBar: {
     backgroundColor: '#229892',
-    width: 50,
-    height: 3,
+    width: (SCREEN_WIDTH * 47) / 370,
+    height:
+      SCREEN_HEIGHT > 1000
+        ? (4 * SCREEN_HEIGHT) / 815
+        : (2.5 * SCREEN_HEIGHT) / 815,
     position: 'absolute',
-    bottom: -7.5,
-    right: -5,
+    top: fontPercentage(30),
+    left: fontPercentage(-4.2),
   },
   tabBarText: {
     fontFamily: 'GodoB',
-    fontSize: fontPercentage(22),
     fontWeight: 'bold',
+    fontSize: fontPercentage(21),
+    marginBottom: 3.6,
   },
-  navIcon: { color: '#717171', width: 30, height: 30 },
+  navIcon: {
+    color: '#717171',
+    width: fontPercentage(22),
+    height: fontPercentage(22),
+  },
 });
 
 export default TabBar;

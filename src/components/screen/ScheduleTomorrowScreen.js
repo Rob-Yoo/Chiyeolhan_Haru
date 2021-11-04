@@ -7,7 +7,8 @@ import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
 import { checkDayChange, getDataFromAsync } from 'utils/asyncStorageUtil';
-import { startBtnAlert } from 'utils/buttonAlertUtil';
+import { startBtnAlert, skipBtnAlert } from 'utils/buttonAlertUtil';
+import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { getCurrentTime, getTimeDiff } from 'utils/timeUtil';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
@@ -39,8 +40,20 @@ const ScheduleTomorrow = ({ navigation }) => {
     }
   };
 
+  const alertSkipBtn = async () => {
+    const isNeedSkip = await checkGeofenceSchedule();
+    const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
+
+    if (isStartTodo) {
+      if (isNeedSkip === 1) {
+        skipBtnAlert();
+      }
+    }
+  };
+
   useEffect(() => {
     alertStartBtn();
+    alertSkipBtn();
     return async () => {
       const isDaychange = await checkDayChange();
       if (isDaychange) RNRestart.Restart();

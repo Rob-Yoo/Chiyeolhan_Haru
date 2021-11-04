@@ -49,6 +49,7 @@
 		EE7CC9DE2D7645779733A411 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F4DE704F88343C48F3B474E /* icon-schedulte-timeset-button.ttf */; };
 		FA3FBBBC89AB49CAB20BA5A7 /* icon-add-todo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F7510C83724B96950DDFFF /* icon-add-todo.ttf */; };
 		FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1516193F5D9443FB2B987C5 /* icon-fail.ttf */; };
+		619E43ACBB804ED7866B1B62 /* GodoM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7E193CD990B845B0B820EBFB /* GodoM.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		F9533D472D12409D91C0245B /* GodoB.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GodoB.otf; path = ../assets/fonts/GodoB.otf; sourceTree = "<group>"; };
 		FC713D3976404481B3797388 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
+		7E193CD990B845B0B820EBFB /* GodoM.otf */ = {isa = PBXFileReference; name = "GodoM.otf"; path = "../assets/fonts/GodoM.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +286,7 @@
 				0E28D74CDB3940AB975BD4ED /* NotoSansKR-Black.otf */,
 				2D558D1EC5E3431A9BF4FB22 /* NotoSansKR-Light.otf */,
 				36D1E8F277534F3CBC46B030 /* NotoSansKR-Thin.otf */,
+				7E193CD990B845B0B820EBFB /* GodoM.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				DC2A78241A944620A4442ADA /* NotoSansKR-Black.otf in Resources */,
 				05E738C9C83B42AF84139210 /* NotoSansKR-Light.otf in Resources */,
 				DB95965703D04930B3EF3686 /* NotoSansKR-Thin.otf in Resources */,
+				619E43ACBB804ED7866B1B62 /* GodoM.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
