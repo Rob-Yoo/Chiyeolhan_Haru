@@ -26,7 +26,14 @@ export const LocationData = ({
           }}
         >
           <Text style={styles.address}>도로명</Text>
-          <View style={{ width: 2, height: 17, marginHorizontal: 1.5 }} />
+          <View
+            style={{
+              width: 2,
+              height: 17,
+              marginHorizontal: 3,
+              backgroundColor: '#C4C4C4',
+            }}
+          />
           <Text style={styles.addressText}>{address}</Text>
         </View>
       </View>
@@ -61,10 +68,11 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
     color: '#000000',
+    marginBottom: 5,
   },
   addressText: {
     color: '#000000BA',
-    fontSize: fontPercentage(10),
+    fontSize: fontPercentage(11),
     marginRight: 10,
     paddingTop: 2,
     paddingVertical: -2,
@@ -72,13 +80,14 @@ const styles = StyleSheet.create({
   address: {
     fontFamily: 'NotoSansKR-Regular',
     color: '#C4C4C4',
-    height: 17,
-    paddingTop: -1,
+
     borderWidth: 1.5,
     borderColor: '#C4C4C4',
-    fontSize: fontPercentage(11),
-    marginRight: 4,
-    marginLeft: 10,
+    fontSize: fontPercentage(10),
+    // marginRight: 4,
+    // marginLeft: 10,
+    paddingBottom: 5,
+    height: 17,
   },
 
   locationFinButton: {
@@ -91,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#54BCB6',
   },
   locationFinText: {
-    fontFamily: 'NotoSansKR-Bold',
+    fontFamily: 'GodoB',
     fontSize: 20,
     color: '#FFFFFF',
   },

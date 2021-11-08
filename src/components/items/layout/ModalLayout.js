@@ -17,13 +17,14 @@ export const ModalLayout = ({
   taskListVisibleHandler,
 }) => {
   return (
-    <Modal style={{ margin: 0 }} isVisible={isVisible}>
+    <Modal style={{ margin: 0, alignItems: 'center' }} isVisible={isVisible}>
       <TouchableOpacity
         style={styles.background}
         activeOpacity={1}
         onPress={taskListVisibleHandler}
       />
-      <View style={{ alignItems: 'center' }}>{children}</View>
+
+      {children}
     </Modal>
   );
 };

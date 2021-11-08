@@ -9,18 +9,20 @@ import { fontPercentage } from 'utils/responsiveUtil';
 import { SCREEN_WIDTH } from 'constant/const';
 import * as Progress from 'react-native-progress';
 
-const cardSize = 390 / PixelRatio.get();
-
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (finishTime > getCurrentTime() && startTime < getCurrentTime()) {
+    if (finishTime > getCurrentTime() && startTime <= getCurrentTime()) {
       getProgressBarWidth();
       let intervalCallback = setInterval(() => {
-        if (finishTime < getCurrentTime()) {
+        if (
+          finishTime <=
+          new Date().getHours() * 60 + new Date().getMinutes() * 1
+        ) {
           clearInterval(intervalCallback);
         }
+        getProgressBarWidth();
       }, 60000);
     } else {
       getProgressBarWidth();
@@ -28,7 +30,11 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   }, []);
 
   const getProgressBarWidth = () => {
-    if (getCurrentTime() >= finishTime) {
+    if (
+      typeof finishTime === 'number'
+        ? new Date().getHours() * 60 + new Date().getMinutes() * 1
+        : getCurrentTime() >= finishTime
+    ) {
       setWidth(1);
       return;
     } else {
@@ -47,6 +53,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
         const denominator = finishTime - startTime;
         const numerator = currentTime - startTime;
         let width = (numerator / denominator).toFixed(2) * 1;
+
         setWidth(width);
       }
     }

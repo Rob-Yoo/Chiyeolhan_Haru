@@ -9,7 +9,7 @@ import styles from 'components/modal/ToDoModalStyle';
 import { fontPercentage } from 'utils/responsiveUtil';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SCREEN_HEIGHT } from '../constant/const';
+import { SCREEN_HEIGHT } from '../../constant/const';
 
 export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
   let scrollViewInnerRef = useRef();
@@ -22,7 +22,7 @@ export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
   };
 
   const scrollToInput = (reactNode) => {
-    console.log('scrollToInput');
+    //console.log('scrollToInput');
     scrollViewRef.current?.update();
     scrollViewRef.current?.scrollToFocusedInput(reactNode);
   };
@@ -33,15 +33,15 @@ export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
       ref={scrollViewRef}
       bounces={false}
       keyboardDismissMode="on-drag"
-      extraHeight={SCREEN_HEIGHT / 2}
+      extraHeight={SCREEN_HEIGHT / 2 + 10}
       onContentSizeChange={() => {
         scrollViewRef.current?.scrollToEnd();
       }}
       contentContainerStyle={{
         width: '100%',
-        paddingTop: 30,
-        paddingHorizontal: 20,
-        paddingBottom: SCREEN_HEIGHT > 668 ? 270 : 200,
+        paddingTop: 17,
+        paddingHorizontal: 24,
+        paddingBottom: SCREEN_HEIGHT > 668 ? 300 : 200,
         alignItems: 'flex-end',
       }}
       alwaysBounceVertical={false}

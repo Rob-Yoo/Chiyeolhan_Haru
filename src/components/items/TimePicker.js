@@ -9,6 +9,7 @@ import {
   alertStartTimePicker,
   alertFinsihTimePicker,
 } from 'utils/buttonAlertUtil';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 import { KEY_VALUE_START_TIME } from 'constant/const';
 
@@ -175,16 +176,11 @@ export const TimePicker = ({
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      {/*<Button
-        color="#142423"
-        title={`${timeText}시간: ${time}`}
-        onPress={showTimePicker}
-      />*/}
-      <TouchableOpacity onPress={showTimePicker}>
+      <TouchableOpacity onPress={showTimePicker} style={{ marginLeft: -7.2 }}>
         <Text
           style={{
             fontFamily: 'NotoSansKR-Black',
-            fontSize: 15,
+            fontSize: fontPercentage(15),
             color: '#fff',
           }}
         >

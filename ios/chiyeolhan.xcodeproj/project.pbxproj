@@ -21,6 +21,7 @@
 		5A1EFDF007084D579FB4DE28 /* icon-question.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4A2ECCDBA1F407E89C72442 /* icon-question.ttf */; };
 		6020F6FE33C24C1FAFDEEDD1 /* libPods-chiyeolhan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA89DD5DB79323917D0E2FAC /* libPods-chiyeolhan.a */; };
 		619297F28E614273ADFCC33C /* icon-searched-search.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3A489EA565346379F1CA0B2 /* icon-searched-search.ttf */; };
+		619E43ACBB804ED7866B1B62 /* GodoM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7E193CD990B845B0B820EBFB /* GodoM.otf */; };
 		6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */; };
 		84C6BE9FE443426BA9B398B0 /* icon-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17A686E5291B441392442ED3 /* icon-favorite.ttf */; };
 		89B107F4C79D42FFB5D0E9D0 /* icon-find-current-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 970CBDA560A14BFD96DA4EA6 /* icon-find-current-location.ttf */; };
@@ -49,7 +50,6 @@
 		EE7CC9DE2D7645779733A411 /* icon-schedulte-timeset-button.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F4DE704F88343C48F3B474E /* icon-schedulte-timeset-button.ttf */; };
 		FA3FBBBC89AB49CAB20BA5A7 /* icon-add-todo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0F7510C83724B96950DDFFF /* icon-add-todo.ttf */; };
 		FF76DF3907B84E4F92410C11 /* icon-fail.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1516193F5D9443FB2B987C5 /* icon-fail.ttf */; };
-		619E43ACBB804ED7866B1B62 /* GodoM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7E193CD990B845B0B820EBFB /* GodoM.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +96,7 @@
 		67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-handle-reset2.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-reset2.ttf"; sourceTree = "<group>"; };
 		7315AE65832F4FA0B8AB26D5 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		7DC3CCE822854A00B0F979D1 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		7E193CD990B845B0B820EBFB /* GodoM.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GodoM.otf; path = ../assets/fonts/GodoM.otf; sourceTree = "<group>"; };
 		821CF2AB066F4503BD7C739E /* icon-handle-start.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-handle-start.ttf"; path = "../assets/icons/ttf-svgs/icon-handle-start.ttf"; sourceTree = "<group>"; };
 		865DFAD803E843ED9434E930 /* icon-modal-question.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-modal-question.ttf"; path = "../assets/icons/ttf-svgs/icon-modal-question.ttf"; sourceTree = "<group>"; };
 		8962AD622E97470C8E8E6B1D /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Medium.otf"; path = "../assets/fonts/NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
@@ -132,7 +133,6 @@
 		F9533D472D12409D91C0245B /* GodoB.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GodoB.otf; path = ../assets/fonts/GodoB.otf; sourceTree = "<group>"; };
 		FC713D3976404481B3797388 /* icon-tasklist-left.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "icon-tasklist-left.ttf"; path = "../assets/icons/ttf-svgs/icon-tasklist-left.ttf"; sourceTree = "<group>"; };
 		FF68E0F4D35040C1AFE2BC82 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
-		7E193CD990B845B0B820EBFB /* GodoM.otf */ = {isa = PBXFileReference; name = "GodoM.otf"; path = "../assets/fonts/GodoM.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

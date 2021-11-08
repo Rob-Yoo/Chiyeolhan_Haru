@@ -20,9 +20,9 @@ import { Loading } from 'components/screen/LoadingScreen';
 import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
+import DeviceInfo from 'react-native-device-info';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
-
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
@@ -86,11 +86,9 @@ const Home = ({ navigation }) => {
         return;
       }
       for (key in rowObj) {
-        console.log(rowObj[key].date, YESTERDAY);
         if (rowObj[key].date >= YESTERDAY)
           filterObj = { ...filterObj, [key]: rowObj[key] };
       }
-      console.log(rowObj);
       await dispatch(init(filterObj));
       setLoading(false);
       return;

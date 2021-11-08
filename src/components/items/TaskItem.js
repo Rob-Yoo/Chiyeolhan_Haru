@@ -15,7 +15,7 @@ import { ModalLayout } from 'components/items/layout/ModalLayout';
 import { deleteToDoTaskList, longTaskList } from 'utils/buttonAlertUtil';
 
 export const Task = (props) => {
-  const { text: taskText, targetId, index, canPress } = props;
+  const { text: taskText, targetId, index, canPress, taskStyle } = props;
   const todosSelector = useSelector(
     (state) => targetId !== 0 && state.toDos[targetId]?.toDos,
   );
@@ -101,19 +101,17 @@ export const Task = (props) => {
         taskListVisibleHandler={() => toggleIsVisible()}
         setHandler={() => setTaskTitle(taskTitle)}
       >
-        <View>
-          <TextInput
-            onChangeText={(text) => {
-              setTaskTitle(text);
-            }}
-            value={taskTitle}
-            onSubmitEditing={() => {
-              submitTask();
-            }}
-            style={styles.modalInputTask}
-            returnKeyType="done"
-          />
-        </View>
+        <TextInput
+          onChangeText={(text) => {
+            setTaskTitle(text);
+          }}
+          value={taskTitle}
+          onSubmitEditing={() => {
+            submitTask();
+          }}
+          style={taskStyle}
+          returnKeyType="done"
+        />
       </ModalLayout>
     </View>
   );
@@ -131,8 +129,8 @@ const styles = StyleSheet.create({
   },
   taskContainer: {
     alignItems: 'center',
-    marginTop: 10,
     maxHeight: 100,
+    marginTop: 10,
   },
   task: {
     backgroundColor: '#FFF',

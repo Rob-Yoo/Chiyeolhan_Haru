@@ -27,7 +27,6 @@ const makeToDoArr = (toDos) => {
     }
     return 0;
   });
-  console.log(todoArr);
   return todoArr;
 };
 

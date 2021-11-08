@@ -37,6 +37,7 @@ const minutes25 = 1500000;
 const minutes20 = 1200000;
 const minutes15 = 900000;
 const minutes10 = 600000;
+const minutes5 = 300000;
 
 const MyEventComponent = ({ event, position }) => {
   const timeDiff = event.endDate - event.startDate;
@@ -47,7 +48,8 @@ const MyEventComponent = ({ event, position }) => {
         flexDirection: timeDiff <= minutes45 ? 'row' : null,
         alignItems: timeDiff <= minutes40 ? 'center' : null,
         justifyContent: 'flex-start',
-        paddingVertical: timeDiff <= minutes40 ? 4 : 15,
+        paddingVertical:
+          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : 15,
         paddingHorizontal: timeDiff <= minutes40 ? 0 : 15,
       }}
     >
@@ -57,7 +59,7 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              timeDiff <= minutes20 ? fontPercentage(9) : fontPercentage(15),
+              timeDiff <= minutes15 ? fontPercentage(9) : fontPercentage(15),
             marginBottom: timeDiff <= minutes40 ? 0 : 10,
           },
         ]}
@@ -72,8 +74,6 @@ const MyEventComponent = ({ event, position }) => {
             (SCREEN_HEIGHT < 668 && timeDiff <= minutes25)
               ? 3
               : 10,
-          //paddingTop: 1,
-          alignItems: 'center',
         }}
       >
         <View

@@ -299,21 +299,24 @@ const TabBar = (props) => {
 const styles = StyleSheet.create({
   wrap: {
     width: SCREEN_WIDTH,
-    height: (SCREEN_HEIGHT * 27) / 230 - 30,
+    height:
+      SCREEN_HEIGHT < 668
+        ? (SCREEN_HEIGHT * 27) / 230 - 10
+        : (SCREEN_HEIGHT * 27) / 230 - 30,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-end',
     backgroundColor: '#fff',
     paddingLeft: 30,
     paddingRight: 25,
-    paddingVertical: (4 * SCREEN_HEIGHT) / 180,
+    paddingVertical: SCREEN_HEIGHT > 668 ? (4 * SCREEN_HEIGHT) / 180 : 10,
   },
   tabContainer: {
     width: '100%',
     height: '100%',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: SCREEN_HEIGHT > 668 ? 'flex-end' : 'center',
     justifyContent: 'space-between',
     paddingLeft: 2,
   },
