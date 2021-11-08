@@ -4,10 +4,9 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ScrollView,
   ImageBackground,
   Keyboard,
-  TouchableWithoutFeedback,
+  PixelRatio,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -21,7 +20,6 @@ import { todoDbModel } from 'model/dataModel';
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
-import { ToDoModalInput } from 'components/modal/ToDoModalInput';
 import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
@@ -61,7 +59,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from 'constant/const';
-import { TaskList } from '../TaskList';
+import { TaskList } from '../items/TaskList';
 
 export const ToDoModal = ({
   modalHandler,
@@ -512,7 +510,6 @@ export const ToDoModal = ({
       setValue('todoFinishTime', newTime);
     }
   };
-
   return (
     <Modal
       navigation={navigation}
@@ -532,13 +529,10 @@ export const ToDoModal = ({
         />
         <ImageBackground
           source={{
-            uri:
-              SCREEN_HEIGHT > 668
-                ? 'favoriteBackground11'
-                : 'favoriteBackground',
+            uri: 'favoriteBackground',
           }}
           imageStyle={{
-            height: SCREEN_HEIGHT,
+            width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
@@ -550,7 +544,7 @@ export const ToDoModal = ({
                   ? '30%'
                   : isToday === 'yesterday'
                   ? '45%'
-                  : '40%',
+                  : '39%',
             },
           ]}
         >
@@ -608,7 +602,10 @@ export const ToDoModal = ({
                     <TouchableOpacity>
                       <Text
                         onPress={handleSubmit(handleTodoSubmit)}
-                        style={styles.modalTopText}
+                        style={[
+                          styles.modalTopText,
+                          { marginRight: passModalData ? 0 : 25.4 },
+                        ]}
                       >
                         완료
                       </Text>
@@ -619,7 +616,14 @@ export const ToDoModal = ({
                     style={styles.modalTopText}
                     onPress={() => modalHandler()}
                   >
-                    <Text style={styles.modalTopText}>닫기</Text>
+                    <Text
+                      style={[
+                        styles.modalTopText,
+                        { marginRight: passModalData ? 25.4 : 0 },
+                      ]}
+                    >
+                      닫기
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -630,6 +634,8 @@ export const ToDoModal = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                paddingHorizontal: 2,
+                paddingRight: 23,
               }}
             >
               <ImageBackground
@@ -665,7 +671,12 @@ export const ToDoModal = ({
                 {network === 'offline' ||
                 (passModalData && passModalData.startDate < new Date()) ? (
                   <View style={styles.modalInputTitle}>
-                    <Text style={[styles.titleText, { color: '#2D2E33' }]}>
+                    <Text
+                      style={[
+                        styles.titleText,
+                        { color: '#2D2E33', paddingVertical: 5 },
+                      ]}
+                    >
                       {title}
                     </Text>
                   </View>
@@ -688,8 +699,8 @@ export const ToDoModal = ({
                 <Text style={styles.titleText}>위치</Text>
                 <Text style={styles.modalLocationText}>
                   {locationName
-                    ? locationName.length > 11
-                      ? `${locationName.substring(0, 12)}...`
+                    ? locationName.length > 20
+                      ? `${locationName.substring(0, 20)}...`
                       : locationName
                     : '물음표를 눌러주세요'}
                 </Text>
@@ -709,10 +720,11 @@ export const ToDoModal = ({
                   fontFamily: 'NotoSansKR-Black',
                   fontSize: 18,
                   color: '#fff',
-                  paddingHorizontal: 10,
+                  paddingHorizontal: 9,
+                  marginRight: 1,
                 }}
               >
-                ~
+                {`   ~   `}
               </Text>
               <TimePicker
                 isStart={false}

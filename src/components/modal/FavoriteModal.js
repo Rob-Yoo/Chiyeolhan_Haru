@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
+  PixelRatio,
 } from 'react-native';
 
 import IconQuestion from '#assets/icons/icon-question';
@@ -76,23 +77,19 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
   return (
     <View
       style={{
-        marginTop: SCREEN_HEIGHT > 668 ? '30%' : '18%',
-        height: SCREEN_HEIGHT / 1.3,
+        marginTop: SCREEN_HEIGHT > 668 ? '39%' : '30%',
       }}
     >
       <View style={{ height: '100%' }}>
         <ImageBackground
           imageStyle={{
-            height: SCREEN_HEIGHT,
+            width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
           style={[styles.modalTopContainer]}
           source={{
-            uri:
-              SCREEN_HEIGHT > 668
-                ? 'favoriteBackground11'
-                : 'favoriteBackground',
+            uri: 'favoriteBackground',
           }}
         >
           <ScrollView
@@ -102,6 +99,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
               justifyContent: 'flex-start',
               flexWrap: 'wrap',
               flexGrow: 1,
+              paddingTop: 10,
               paddingBottom: 100,
             }}
           >
@@ -172,8 +170,8 @@ const styles = StyleSheet.create({
   },
   favoriteCard: {
     padding: 10,
-    height: SCREEN_HEIGHT > 668 ? 140 : 105,
-    width: SCREEN_HEIGHT > 668 ? 140 : 105,
+    height: SCREEN_WIDTH > 375 ? 136 : SCREEN_WIDTH * 0.32,
+    width: SCREEN_WIDTH > 375 ? 136 : SCREEN_WIDTH * 0.32,
     borderRadius: 20,
     shadowColor: '#0000001A',
     shadowOffset: {
@@ -185,12 +183,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
-    margin: 10,
-    marginBottom: 13,
+    marginHorizontal: 11,
+    marginVertical: 12.5,
   },
   buttonGoBack: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     backgroundColor: '#fff',
     borderRadius: 50,
     shadowColor: '#00000041',
@@ -204,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
     position: 'absolute',
-    top: SCREEN_HEIGHT * 0.0486,
+    top: SCREEN_HEIGHT * 0.0275,
     left: SCREEN_WIDTH * 0.06,
   },
 });

@@ -78,6 +78,11 @@ export const startBtnAlert = () =>
     cancelable: false,
   });
 
+export const skipBtnAlert = () =>
+  Alert.alert('스킵 버튼을 눌러주세요!', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
 const strtAlert = (title = null) => {
   if (title !== null) {
     Alert.alert(

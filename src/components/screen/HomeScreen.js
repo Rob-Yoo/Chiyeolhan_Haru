@@ -20,9 +20,9 @@ import { Loading } from 'components/screen/LoadingScreen';
 import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
+import DeviceInfo from 'react-native-device-info';
 
 import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
-
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#ECF5F471',
   },
   homeContainer: {
     flex: 2.25,

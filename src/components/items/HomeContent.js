@@ -104,11 +104,14 @@ const HomeContent = () => {
         index={nowIndex}
         scrollViewStyle={{
           overflow: 'visible',
-          paddingHorizontal: SCREEN_HEIGHT > 668 ? 6.5 : 6,
         }}
         containerStyle={{
-          width: SCREEN_HEIGHT > 668 ? 240 : 260,
+          width: SCREEN_WIDTH * 0.57,
+          maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.57 : 200,
           flexGrow: 1,
+          alignContent: 'center',
+          paddingTop: 1,
+          //backgroundColor: 'red',
         }}
       >
         {todoArr &&
@@ -134,11 +137,12 @@ const HomeContent = () => {
 const styles = StyleSheet.create({
   /*Home*/
   homeContainer: {
-    flex: 2.25,
+    flex: SCREEN_HEIGHT > 668 ? 2.28 : 3,
     alignItems: 'center',
+    // backgroundColor: 'red',
   },
   swiperStyle: {
-    height: '100%',
+    maxHeight: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.59 : 260,
   },
 });
 

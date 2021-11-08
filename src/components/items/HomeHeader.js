@@ -16,8 +16,8 @@ export const HomeHeader = ({ navigation }) => {
       <View
         style={{
           height: '25%',
-          marginTop: 10,
           justifyContent: 'flex-end',
+          marginTop: 19,
         }}
       >
         <TouchableOpacity
@@ -30,7 +30,7 @@ export const HomeHeader = ({ navigation }) => {
         >
           <IconGoToScheduleButton
             name="icon-go-to-schedule-button"
-            size={SCREEN_HEIGHT > 668 ? 32 : 40}
+            size={SCREEN_HEIGHT > 668 ? 32 : 35}
             color={'#229892'}
             onPress={goToScheduleToday}
           />

@@ -4,6 +4,7 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -125,8 +126,7 @@ const CurrentMap = ({
   const handleFindCurrentLocation = async () => {
     try {
       console.log('handleFindCurrentLocation');
-      //const result = await Location.getLastKnownPositionAsync();
-      const result = await Location.getCurrentPositionAsync;
+      const result = await Location.getLastKnownPositionAsync();
       const {
         coords: { latitude, longitude },
       } = result;
@@ -293,7 +293,9 @@ const Map = ({
       isFind={isFind}
     />
   ) : (
-    <ActivityIndicator size="large" color="#229892" />
+    <View style={{ flex: 0.9, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator size="large" color="#229892" />
+    </View>
   );
 };
 

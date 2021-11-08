@@ -93,7 +93,6 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        //left: SCREEN_HEIGHT > 668 ? -19 : -10,
                         left: SCREEN_HEIGHT > 668 ? -13 : -10,
                         top: 2,
                       }}
@@ -105,14 +104,13 @@ const Pagination = ({ taskList, targetId }) => {
                       color="#707070"
                       style={{
                         position: 'absolute',
-                        //left: SCREEN_HEIGHT > 668 ? -19 : -10,
                         left: SCREEN_HEIGHT > 668 ? -13 : -10,
-
                         top: 2,
                       }}
                     />
                   )}
                   <Task
+                    taskStyle={styles.modatalTask}
                     index={index}
                     text={item}
                     targetId={targetId}
@@ -136,7 +134,6 @@ const Pagination = ({ taskList, targetId }) => {
                   color="#707070"
                   style={{
                     position: 'absolute',
-                    //left: SCREEN_HEIGHT > 668 ? -19 : -10,
                     left: SCREEN_HEIGHT > 668 ? -13 : -10,
                     top: 2,
                   }}
@@ -147,7 +144,10 @@ const Pagination = ({ taskList, targetId }) => {
                     toDos?.finishTime > getCurrentTime() &&
                     toggleIsVisible()
                   }
-                  style={styles.modatalTask}
+                  style={[
+                    styles.modatalTask,
+                    { marginTop: 10, marginLeft: 18 },
+                  ]}
                 />
               </View>
             )
@@ -166,7 +166,7 @@ const Pagination = ({ taskList, targetId }) => {
           onSubmitEditing={() => {
             addTaskList(targetId, taskTitle);
           }}
-          style={styles.modalInputTask}
+          style={styles.modatalTask}
           returnKeyType="done"
         />
       </ModalLayout>
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: CONTAINER_HEIGHT * 0.49,
-    left: SCREEN_HEIGHT > 668 ? -SCREEN_WIDTH * 0.19 : -58,
+    left: -SCREEN_WIDTH * 0.19,
     width: SCREEN_WIDTH,
     height: '100%',
   },
@@ -200,21 +200,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  task: {
-    width: '80%',
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-    paddingVertical: 20,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      width: 3.4,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-  },
   taskTitle: {
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
@@ -227,27 +212,19 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
-  modalInputTask: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width: '80%',
-    height: 60,
-    marginBottom: 20,
-  },
-
+  /* TaskItem 의 task랑 같은 값. */
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 70,
+    height: 74,
     borderRadius: 10,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 3.4,
       height: 5,
     },
+    paddingLeft: 20,
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
-    marginTop: 10,
-    marginLeft: 18,
   },
 });
