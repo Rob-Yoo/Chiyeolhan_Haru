@@ -227,5 +227,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
+    fontSize: 15,
   },
 });

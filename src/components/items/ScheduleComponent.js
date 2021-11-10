@@ -186,8 +186,9 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         }}
         headerTextStyle={{
           fontSize: fontPercentage(9),
-          color: '#5E5E5E',
-          marginRight: '26%',
+          letterSpacing: -0.5,
+          marginRight: '34.5%',
+          color: '#5e5e5e',
         }}
         hourTextStyle={{
           color: '#5E5E5E',
@@ -245,7 +246,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       />
       {network === 'online' && day === 'today' ? (
         <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
-          <IconQuestion name="icon-question" size={9} color="#fff" />
+          <IconQuestion name="icon-question" size={7.6} color="#fff" />
           {isVisibleAlert ? <AlertView /> : null}
         </TouchableOpacity>
       ) : null}
@@ -267,8 +268,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 30,
-    width: 14,
-    height: 14,
+    width: 6.6 * 2,
+    height: 6.6 * 2,
     backgroundColor: '#54BCB6',
     borderRadius: 50,
     justifyContent: 'center',

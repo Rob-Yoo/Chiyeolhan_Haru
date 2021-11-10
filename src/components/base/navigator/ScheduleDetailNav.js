@@ -14,7 +14,7 @@ export const ScheduleDetail = ({ navigation }) => {
   const tabBar = useSelector((state) => state.tabBar);
   return (
     <Fragment>
-      <SafeAreaView style={{ backgroundColor: '#fff' }} />
+      <SafeAreaView style={{ backgroundColor: '#fff', minHeight: 40 }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: '#ECF5F471' }}>
         <Tab.Navigator
           initialRouteName="today"

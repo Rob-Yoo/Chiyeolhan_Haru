@@ -329,7 +329,7 @@ PODS:
   - RNBackgroundGeolocation (4.1.1):
     - CocoaLumberjack (~> 3.7.2)
     - React-Core
-  - RNCAsyncStorage (1.12.1):
+  - RNCAsyncStorage (1.15.11):
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
@@ -605,7 +605,7 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNBackgroundFetch: 182d0ff90747bacbb3d4e168ecc2194442d0a2d3
   RNBackgroundGeolocation: b6159114ccbde8f0ddac48d82022b40f2e88a2ed
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
+  RNCAsyncStorage: eb05c0284dd6b50b32f92fad55e2a41e03358c43
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPushNotificationIOS: 5ee247e594d0b5df3cd7be74b51035a0d91807eb
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
@@ -621,6 +621,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: 20008142911657224d60307fcfc2270b3f908967
+PODFILE CHECKSUM: 29f74f8ab4db4083d46f3d48273f986a5c499906
 
 COCOAPODS: 1.11.2

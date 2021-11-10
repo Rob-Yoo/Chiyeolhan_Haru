@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
     alignItems: SCREEN_HEIGHT > 668 ? 'flex-end' : 'center',
     justifyContent: 'space-between',
     paddingLeft: 2,
+    paddingTop: 5,
   },
 
   tabUnderBar: {
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     fontFamily: 'GodoB',
     fontWeight: 'bold',
     fontSize: fontPercentage(21),
-    marginBottom: 3.6,
+    marginBottom: 0,
   },
   navIcon: {
     color: '#717171',

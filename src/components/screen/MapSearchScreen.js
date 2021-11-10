@@ -214,14 +214,14 @@ const styles = StyleSheet.create({
   searchInputViewBackButton: {
     width: '10%',
     height: 30,
-    paddingTop: 5,
-    paddingHorizontal: 10,
+    paddingTop: 6,
+    paddingHorizontal: 5,
   },
   searchInputViewInput: {
     width: '80%',
-    height: SCREEN_HEIGHT * 0.07,
+    //height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
