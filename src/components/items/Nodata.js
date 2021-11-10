@@ -5,12 +5,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import IconArrow from '#assets/icons/icon-arrow';
 
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
-import { ratio } from '../../constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, ratio } from 'constant/const';
 
 export const Nodata = () => {
   const navigation = useNavigation();
-  console.log(ratio);
   return (
     <View style={styles.wrap}>
       <View style={styles.background} />
@@ -118,6 +116,6 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
-    marginBottom: 4,
+    marginBottom: 10,
   },
 });

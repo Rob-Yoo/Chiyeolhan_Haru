@@ -28,6 +28,10 @@ import {
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { Loading } from './LoadingScreen';
+import {
+  limitRequestAlert,
+  requestDeniedAlert,
+} from '../../utils/buttonAlertUtil';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -175,7 +179,10 @@ const CurrentMap = ({
           noDataAlert();
           break;
         case 'OVER_QUERY_LIMIT':
-          console.log('API 할당량 넘었음');
+          limitRequestAlert();
+          break;
+        case 'REQUEST_DENIED':
+          requestDeniedAlert();
           break;
         default:
           console.log(`Error ${status}`);

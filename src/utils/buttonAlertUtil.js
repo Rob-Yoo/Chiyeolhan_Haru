@@ -47,6 +47,14 @@ export const noDataAlert = () =>
   Alert.alert('검색 결과가 없습니다.', '', [{ text: '확인' }], {
     cancelable: false,
   });
+export const requestDeniedAlert = () =>
+  Alert.alert('검색 요청 권한이 없습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+export const limitRequestAlert = () =>
+  Alert.alert('검색 요청 횟수를 초과 하였습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
 
 export const skipNotifAlert = (title = null) => {
   let msg1;
