@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
