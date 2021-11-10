@@ -161,6 +161,7 @@ const TabBar = (props) => {
   const storeSkipUpdate = (targetId) => {
     dispatch(skip(targetId));
   };
+
   return (
     <View style={styles.wrap}>
       <View style={styles.tabContainer}>
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingLeft: 30,
     paddingRight: 25,
-    paddingVertical: SCREEN_HEIGHT > 668 ? (4 * SCREEN_HEIGHT) / 180 : 10,
+    paddingVertical: SCREEN_HEIGHT > 736 ? (4 * SCREEN_HEIGHT) / 180 : 10,
   },
   tabContainer: {
     width: '100%',

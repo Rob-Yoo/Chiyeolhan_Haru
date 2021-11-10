@@ -27,6 +27,7 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
+import { Loading } from './LoadingScreen';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -125,7 +126,6 @@ const CurrentMap = ({
 
   const handleFindCurrentLocation = async () => {
     try {
-      console.log('handleFindCurrentLocation');
       const result = await Location.getLastKnownPositionAsync();
       const {
         coords: { latitude, longitude },
@@ -293,9 +293,7 @@ const Map = ({
       isFind={isFind}
     />
   ) : (
-    <View style={{ flex: 0.9, alignItems: 'center', justifyContent: 'center' }}>
-      <ActivityIndicator size="large" color="#229892" />
-    </View>
+    <Loading />
   );
 };
 

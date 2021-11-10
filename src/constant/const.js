@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, PixelRatio } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 //async storage key
@@ -34,3 +34,4 @@ export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
 export const CONTENT_OFFSET = 16;
 export const CONTAINER_HEIGHT = SCREEN_HEIGHT - 20;
 export const CONTAINER_WIDTH = SCREEN_WIDTH - 50;
+export const ratio = PixelRatio.get();

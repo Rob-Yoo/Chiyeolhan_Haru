@@ -6,10 +6,11 @@ import IconTaskToDoman from '#assets/icons/icon-todo-man';
 import IconArrow from '#assets/icons/icon-arrow';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { ratio } from '../../constant/const';
 
 export const Nodata = () => {
   const navigation = useNavigation();
-
+  console.log(ratio);
   return (
     <View style={styles.wrap}>
       <View style={styles.background} />
@@ -40,38 +41,47 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -500,
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT + 1000,
-    opacity: 0.4,
+    height: SCREEN_HEIGHT * ratio,
+    opacity: 0.37,
     backgroundColor: '#000000',
   },
   backgroundWhite: {
     position: 'absolute',
-    width: '80%',
-    height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
-    top: SCREEN_HEIGHT > 668 ? -20 : 30,
+    width: 131.5 * 2,
+    height: 172.5 * 2,
+    // height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
+    top: SCREEN_HEIGHT > 668 ? -20 : 0,
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 28,
     paddingVertical: 25,
     paddingVertical: SCREEN_WIDTH * 0.0811,
-    shadowColor: '#00000029',
+    backgroundColor: '#f7fbfa',
+    shadowColor: 'rgba(0, 0, 0, 0.15)',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 2.5,
     },
-    shadowOpacity: 15.5,
-    shadowRadius: 5.84,
+    shadowRadius: 7.5,
+    shadowOpacity: 1,
   },
   noDataCard: {
-    width: 215,
-    height: 200,
-    backgroundColor: '#54BCB6',
+    //width: SCREEN_WIDTH * 0.5,
+    width: 194,
+    height: 181,
     borderRadius: 20,
     marginBottom: 30,
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingTop: 40,
+    paddingTop: 42.5,
+    backgroundColor: '#54bcb6',
+    shadowColor: 'rgba(45, 172, 165, 0)',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowRadius: 7.5,
+    shadowOpacity: 1,
   },
   circle: {
     backgroundColor: '#fff',
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   statusbar: {
-    width: '80%',
+    width: 158,
     height: 6,
     marginTop: 10,
     backgroundColor: '#fff',

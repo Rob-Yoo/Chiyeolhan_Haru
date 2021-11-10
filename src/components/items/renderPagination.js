@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
     top: CONTAINER_HEIGHT * 0.49,
     left: -SCREEN_WIDTH * 0.19,
     width: SCREEN_WIDTH,
-    height: '100%',
+    height: SCREEN_HEIGHT,
+    paddingBottom: 150,
   },
   taskHeader: {
     paddingHorizontal: 39,

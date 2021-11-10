@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
       SCREEN_HEIGHT > 668
         ? (51 * SCREEN_HEIGHT) / 812
         : (51 * SCREEN_HEIGHT) / 690,
-    backgroundColor: '#00A29A',
-    shadowColor: '#00000029',
+    backgroundColor: '#229892',
   },
 });
