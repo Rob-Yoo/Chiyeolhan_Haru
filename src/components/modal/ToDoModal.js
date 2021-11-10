@@ -11,7 +11,7 @@ import {
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { create, editToDoDispatch, deleteToDoDispatch } from 'redux/store';
 

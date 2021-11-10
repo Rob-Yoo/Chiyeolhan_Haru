@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import RNRestart from 'react-native-restart';
 
