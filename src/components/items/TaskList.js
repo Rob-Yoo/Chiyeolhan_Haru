@@ -17,12 +17,10 @@ export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
   const textInputRef = useRef();
   const [task, setTask] = useState('');
   const handleText = (text) => {
-    console.log('handleText');
     setTask(text);
   };
 
   const scrollToInput = (reactNode) => {
-    //console.log('scrollToInput');
     scrollViewRef.current?.update();
     scrollViewRef.current?.scrollToFocusedInput(reactNode);
   };
@@ -41,7 +39,8 @@ export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
         width: '100%',
         paddingTop: 17,
         paddingHorizontal: 24,
-        paddingBottom: SCREEN_HEIGHT > 668 ? 300 : 200,
+        // paddingBottom: SCREEN_HEIGHT > 668 ? 300 : 200,
+        paddingBottom: SCREEN_HEIGHT * 0.33,
         alignItems: 'flex-end',
       }}
       alwaysBounceVertical={false}

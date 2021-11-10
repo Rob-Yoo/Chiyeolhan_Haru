@@ -19,7 +19,6 @@ import {
 } from 'constant/const';
 
 const App = () => {
-  //console.log(DeviceInfo.getUniqueId());
   const [appIsReady, setAppIsReady] = useState(false);
 
   const loadSavedData = async () => {

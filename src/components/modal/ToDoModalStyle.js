@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    backgroundColor: 'rgba(171, 171, 171, 0.2)',
+    backgroundColor: 'rgba(171, 171, 171, 0.16)',
   },
   toDoModalContainer: {
     flex: 1,
@@ -135,13 +135,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     paddingLeft: 10,
-    shadowColor: '#00000029',
-    shadowOffset: {
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 3,
     justifyContent: 'center',
+    shadowColor: 'rgba(0, 0, 0, 0.22)',
+    shadowOffset: {
+      width: 0,
+      height: 1.5,
+    },
+    shadowRadius: 3,
+    shadowOpacity: 1,
   },
   modalInputCantEdit: {
     shadowColor: null,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 10,
+    paddingBottom: 12,
   },
   todoBottomContainer: {
     width: '100%',
