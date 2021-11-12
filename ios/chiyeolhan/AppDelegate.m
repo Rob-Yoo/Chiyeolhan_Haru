@@ -1,4 +1,8 @@
 #import "AppDelegate.h"
+#if RCT_DEV
+#import <React/RCTDevLoadingView.h>
+#endif
+
 // @generated begin react-native-maps-import - expo prebuild (DO NOT MODIFY) sync-f2f83125c99c0d74b42a2612947510c4e08c423a
 #if __has_include(<GoogleMaps/GoogleMaps.h>)
 #import <GoogleMaps/GoogleMaps.h>
@@ -9,7 +13,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
-#import <React/RCTDevLoadingView.h>
+//#import <React/RCTDevLoadingView.h>
 
 #import <UMCore/UMModuleRegistry.h>
 #import <UMReactNativeAdapter/UMNativeModulesProxy.h>

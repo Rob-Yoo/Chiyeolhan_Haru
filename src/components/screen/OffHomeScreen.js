@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -11,6 +10,7 @@ import { HomeHeader } from 'components/items/HomeHeader';
 import HomeContent from 'components/items/HomeContent';
 
 import { getDate } from 'utils/timeUtil';
+import { offlineAlert } from 'utils/buttonAlertUtil';
 import { getDataFromAsync } from 'utils/asyncStorageUtil';
 
 import {
@@ -21,8 +21,6 @@ import {
   CONTAINER_WIDTH,
 } from 'constant/const';
 
-const ScheduleButton = styled.TouchableOpacity``;
-
 const OffHome = ({ navigation, route }) => {
   const { TODAY } = getDate();
   const goToScheduleToday = () => navigation.navigate('ScheduleToday');
@@ -30,36 +28,28 @@ const OffHome = ({ navigation, route }) => {
   const [fetchedToDo, setFetchObj] = useState({});
   let todoArr = [];
   let rowObj = {};
-  const mounted = useRef(false);
-  const mounted2 = useRef(false);
   const dispatch = useDispatch();
   const toDos = useSelector((state) => state.toDos);
 
   useEffect(() => {
-    getToDos();
-    dispatch(setNetwork('offline'));
-    dispatch(setTabBar('today'));
-  }, []);
+    StatusBar.setBarStyle('dark-content');
 
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
+    const readyToHome = async () => {
+      await getToDos();
       dispatch(init(fetchedToDo));
-    }
-  }, [fetchedToDo]);
-
-  useEffect(() => {
-    if (!mounted2.current) {
-      mounted2.current = true;
-    } else {
+      console.log(fetchedToDo);
       setLoading(false);
       SplashScreen.hideAsync();
-    }
-  }, [toDos]);
+      offlineAlert();
+    };
+
+    readyToHome();
+  }, []);
 
   const getToDos = async () => {
     try {
+      dispatch(setNetwork('offline'));
+      dispatch(setTabBar('today'));
       let todayAsyncData = (await getDataFromAsync(KEY_VALUE_TODAY_DATA)) ?? [];
       let tomorrowAsyncData =
         (await getDataFromAsync(KEY_VALUE_TOMORROW_DATA)) ?? [];
@@ -80,7 +70,6 @@ const OffHome = ({ navigation, route }) => {
         ...todayAsyncData,
         ...tomorrowAsyncData,
       );
-
       setFetchObj(rowObj);
     } catch (e) {
       console.log('getToDos Error :', e);

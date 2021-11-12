@@ -7,8 +7,6 @@ import OffHome from 'components/screen/OffHomeScreen';
 import { ScheduleDetail } from 'components/base/navigator/ScheduleDetailNav';
 import { Loading } from 'components/screen/LoadingScreen';
 
-import { offlineAlert } from 'utils/buttonAlertUtil';
-
 export const Stack = createStackNavigator();
 
 const config = {
@@ -95,7 +93,6 @@ const HomeNav = ({ navigation }) => {
   const _handleIsNotConnected = async () => {
     try {
       if (network === 'online') {
-        offlineAlert();
         setNetwork('offline');
         console.log('Offline');
       }

@@ -90,7 +90,6 @@ const Home = ({ navigation }) => {
           filterObj = { ...filterObj, [key]: rowObj[key] };
       }
       await dispatch(init(filterObj));
-
       setLoading(false);
       return;
     } catch (e) {
