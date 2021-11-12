@@ -114,15 +114,16 @@ export const getCurrentTime = () => {
 };
 
 export const getDate = () => {
-  const date = new Date();
-  const yesterday = new Date(date.setDate(date.getDate() - 1));
-  const tomorrow = new Date(date.setDate(date.getDate() + 1));
-  const YEAR = date.getFullYear();
-  const MONTH = date.getMonth() + 1;
-  const DAY = date.getDate();
+  let now = new Date();
+  const today = new Date();
+  const yesterday = new Date(now.setDate(now.getDate() - 1));
+  const tomorrow = new Date(now.setDate(now.getDate() + 2));
+
+  const YEAR = today.getFullYear();
+  const MONTH = today.getMonth() + 1;
+  const DAY = today.getDate();
   const TODAY =
     (MONTH < 10 ? `0${MONTH}` : `${MONTH}`) + (DAY < 10 ? `0${DAY}` : `${DAY}`);
-
   const YESTERDAY =
     (yesterday.getMonth() + 1 < 10
       ? `0${yesterday.getMonth() + 1}`
