@@ -40,8 +40,6 @@ export const todoDbModel = (
   taskList,
 ) => {
   const { TODAY, TOMORROW } = getDate();
-  console.log(TODAY, TOMORROW);
-
   return {
     id,
     title,
