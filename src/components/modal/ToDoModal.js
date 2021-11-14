@@ -409,7 +409,8 @@ export const ToDoModal = ({
         }
 
         if (isStartTimeChange) {
-          const { location, longitude, latitude, address } = toDos[id];
+          const { location, longitude, latitude, address } =
+            locationData.location ? locationData : toDos[id];
 
           dispatch(deleteToDoDispatch(id));
           cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제

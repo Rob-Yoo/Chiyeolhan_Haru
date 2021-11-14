@@ -34,11 +34,21 @@ export const toDosSlice = createSlice({
         todoFinishTime,
         todoStartTime,
         todoTitle,
+        location,
+        longitude,
+        latitude,
+        address,
         id: targetId,
       } = action.payload;
       state[targetId].finishTime = todoFinishTime;
       state[targetId].startTime = todoStartTime;
       state[targetId].title = todoTitle;
+      state[targetId].location = location ? location : state[targetId].location;
+      state[targetId].longitude = longitude
+        ? longitude
+        : state[targetId].longitude;
+      state[targetId].latitude = latitude ? latitude : state[targetId].latitude;
+      state[targetId].address = address ? address : state[targetId].address;
       state[targetId].toDos = [...taskList];
       toDosUpdateDB(state[targetId], targetId);
     },
