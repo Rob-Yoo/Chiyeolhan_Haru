@@ -2,7 +2,7 @@ import { combineReducers, configureStore, createSlice } from '@reduxjs/toolkit';
 
 import { toDosUpdateDB, toDosDeleteDB } from 'utils/databaseUtil';
 
-const toDosSlice = createSlice({
+export const toDosSlice = createSlice({
   name: 'toDoReducer',
   initialState: {},
   reducers: {
@@ -60,6 +60,12 @@ const toDosSlice = createSlice({
       const targetId = action.payload;
       state[targetId].isSkip = true;
     },
+    //isDone 업데이트
+    updateIsDone: (state, action) => {
+      console.log('updateIsdone');
+      const targetId = action.payload;
+      state[targetId].isDone = true;
+    },
   },
 });
 const networkSlice = createSlice({
@@ -108,6 +114,7 @@ export const {
   deleteToDoDispatch,
   editToDoDispatch,
   skip,
+  updateIsDone,
 } = toDosSlice.actions;
 export const { setNetwork } = networkSlice.actions;
 export const { setTabBar } = tabBarSlice.actions;
