@@ -181,7 +181,8 @@ const setGeofenceDataArray = async (todayToDos) => {
     todayToDos.forEach((todo) => {
       if (
         todo.data().startTime <= currentTime &&
-        currentTime < todo.data().finishTime
+        currentTime < todo.data().finishTime &&
+        todo.data().isSkip === false
       ) {
         progressingSchedule = geofenceDataModel(todo.data());
       }
@@ -372,6 +373,7 @@ export const loadSuccessSchedules = async () => {
         for (const schedule of successSchedules) {
           if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
+            //리덕스 업데이트
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
             ); // isDone이 true가 되면 삭제
