@@ -42,6 +42,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 
   const getProgressBarWidth = () => {
     //console.log('getProgress');
+    if (isDone === false) return;
     if (typeof startTime === 'string') {
       startTime = stringToNumberTime(startTime);
       finishTime = stringToNumberTime(finishTime);

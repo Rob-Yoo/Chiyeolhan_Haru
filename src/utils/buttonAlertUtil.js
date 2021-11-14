@@ -202,7 +202,7 @@ export const alertInValidSubmit = () =>
 export const deleteToDoAlert = async (id) =>
   new Promise((resolve) => {
     Alert.alert(
-      `일정을 삭제 하시겠습니까?`,
+      `삭제하시겠습니까?`,
       '',
       [
         {

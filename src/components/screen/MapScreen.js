@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { GOOGLE_PLACES_API_KEY } from '@env';
@@ -18,6 +12,8 @@ import { handleFilterData } from 'utils/handleFilterData';
 import {
   noDataAlert,
   favoriteAlert,
+  limitRequestAlert,
+  requestDeniedAlert,
   deleteFavoriteAlert,
 } from 'utils/buttonAlertUtil';
 
@@ -28,10 +24,8 @@ import {
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
 import { Loading } from './LoadingScreen';
-import {
-  limitRequestAlert,
-  requestDeniedAlert,
-} from '../../utils/buttonAlertUtil';
+
+import IconFindCurrent from '#assets/icons/icon-find-current-location';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -216,13 +210,25 @@ const CurrentMap = ({
       {/*MapView End*/}
 
       <TouchableOpacity
-        style={{ position: 'absolute', top: 150, right: 10 }}
+        style={{
+          position: 'absolute',
+          top: 155,
+          right: 15,
+          backgroundColor: '#fff',
+          borderRadius: 100,
+          shadowColor: '#00000050',
+          shadowOffset: {
+            height: 2,
+          },
+          shadowOpacity: 0.5,
+        }}
         onPress={() => handleFindCurrentLocation()}
       >
-        <ImageBackground
+        <IconFindCurrent
+          name="icon-find-current-location"
+          size={17}
+          color="#575757"
           style={styles.iconFindCurrentLocation}
-          activeOpacity={1}
-          source={{ uri: 'iconFindCurrentLocation' }}
         />
       </TouchableOpacity>
 
@@ -310,13 +316,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   iconFindCurrentLocation: {
-    width: 45,
-    height: 45,
-    shadowColor: '#00000050',
-    shadowOffset: {
-      height: 2,
-    },
-    shadowOpacity: 0.5,
+    width: 30,
+    height: 30,
+    paddingVertical: 6.5,
+    paddingHorizontal: 6.95,
   },
 });
 

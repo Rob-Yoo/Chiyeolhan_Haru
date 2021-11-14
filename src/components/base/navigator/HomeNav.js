@@ -12,7 +12,7 @@ export const Stack = createStackNavigator();
 const config = {
   animation: 'timing',
   config: {
-    duration: 660,
+    duration: 500,
   },
 };
 
