@@ -30,6 +30,8 @@ import {
   KEY_VALUE_START_TODO,
 } from 'constant/const';
 
+import toDoReducer, { updateIsDone } from 'redux/store';
+
 const setTomorrowData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW_DATA, array);
@@ -374,6 +376,7 @@ export const loadSuccessSchedules = async () => {
           if (schedule.startTime <= currentTime) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
             //리덕스 업데이트
+            toDoReducer.dispatch(updateIsDone(schedule.id));
             successSchedules = successSchedules.filter(
               (success) => success.id !== schedule.id,
             ); // isDone이 true가 되면 삭제

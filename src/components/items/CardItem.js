@@ -8,15 +8,19 @@ import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_WIDTH } from 'constant/const';
 import * as Progress from 'react-native-progress';
-import { NetInfoCellularGeneration } from '@react-native-community/netinfo';
 
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState(0);
-
   useEffect(() => {
     if (finishTime > getCurrentTime() && startTime <= getCurrentTime()) {
       getProgressBarWidth();
       let intervalCallback = setInterval(() => {
+        if (isDone === false) {
+          setWidth(0);
+          clearInterval(intervalCallback);
+          return;
+        }
+        getProgressBarWidth();
         if (
           finishTime <=
           new Date().getHours() * 60 + new Date().getMinutes() * 1
@@ -24,13 +28,11 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
           console.log('clearIntervael');
           clearInterval(intervalCallback);
         }
-        getProgressBarWidth();
       }, 60000);
     } else {
-      console.log('here');
       getProgressBarWidth();
     }
-  }, []);
+  }, [isDone]);
 
   const stringToNumberTime = (time) => {
     if (typeof time === 'string')
@@ -39,6 +41,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   };
 
   const getProgressBarWidth = () => {
+    //console.log('getProgress');
     if (typeof startTime === 'string') {
       startTime = stringToNumberTime(startTime);
       finishTime = stringToNumberTime(finishTime);
@@ -48,7 +51,6 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
       new Date().getHours() * 60 + new Date().getMinutes() * 1
     ) {
       setWidth(1);
-      console.log('progress return');
       return;
     } else {
       const date = new Date();
@@ -60,7 +62,6 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
         const denominator = finishTime - startTime;
         const numerator = currentTime - startTime;
         let width = (numerator / denominator).toFixed(2) * 1;
-        console.log(width);
         setWidth(width);
       }
     }
