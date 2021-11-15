@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { GOOGLE_PLACES_API_KEY } from '@env';
@@ -26,6 +26,8 @@ import {
 import { Loading } from './LoadingScreen';
 
 import IconFindCurrent from '#assets/icons/icon-find-current-location';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+import { invalidRequestAlert } from '../../utils/buttonAlertUtil';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -135,26 +137,67 @@ const CurrentMap = ({
     }
   };
 
-  const _handlePlacesAPI = async (text) => {
+  const _handleCandidate = async (text) => {
     try {
-      const place = text.replaceAll(' ', '%20');
       const response = await fetch(
-        `${GOOGLE_API_URL}?input=${place}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&language=ko&components=country:kr&key=${GOOGLE_PLACES_API_KEY}`,
       );
       const data = await response.json();
       const status = data.status;
+      let result;
+      switch (status) {
+        case 'OK':
+          result = data.predictions[0].place_id;
+          break;
+        case 'ZERO_RESULTS':
+          result = 'ZERO_RESULTS';
+          break;
+        case 'OVER_QUERY_LIMIT':
+          result = 'OVER_QUERY_LIMIT';
+          break;
+        case 'REQUEST_DENIED':
+          result = 'REQUEST_DENIED';
+          break;
+        case 'INVALID_REQUEST':
+          result = 'INVALID_REQUEST';
+          break;
+        default:
+          console.log(`Error ${status}`);
+      }
+      return result;
+    } catch (e) {
+      console.log('_handleCandidate Error : ', e);
+    }
+  };
+
+  const _handlePlacesAPI = async (text) => {
+    try {
+      //const place = text.replaceAll(' ', '%20');
+      const result = await _handleCandidate(text);
+      let status;
+      let data;
+
+      if (result.length > 16) {
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result}&key=${GOOGLE_PLACES_API_KEY}`,
+        );
+        // ${GOOGLE_API_URL}?input=${text}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}
+        data = await response.json();
+        status = data.status;
+      } else {
+        status = result;
+      }
+
       switch (status) {
         case 'OK':
           const {
-            candidates: [
-              {
-                formatted_address: address,
-                geometry: {
-                  location: { lat: latitude, lng: longitude },
-                },
-                name: location,
+            result: {
+              name: location,
+              formatted_address: address,
+              geometry: {
+                location: { lat: latitude, lng: longitude },
               },
-            ],
+            },
           } = data;
           setResult({
             latitude,
@@ -177,6 +220,9 @@ const CurrentMap = ({
           break;
         case 'REQUEST_DENIED':
           requestDeniedAlert();
+          break;
+        case 'INVALID_REQUEST':
+          invalidRequestAlert();
           break;
         default:
           console.log(`Error ${status}`);
