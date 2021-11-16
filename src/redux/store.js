@@ -21,7 +21,7 @@ export const toDosSlice = createSlice({
       state[targetId].toDos.push(taskTitle);
       toDosUpdateDB(state[targetId], targetId);
     },
-    //수행리스트 수정
+    //체크리스트 수정
     edit: (state, action) => {
       const { targetId, taskTitle, index } = action.payload;
       state[targetId].toDos[index] = taskTitle;
@@ -52,7 +52,7 @@ export const toDosSlice = createSlice({
       state[targetId].toDos = [...taskList];
       toDosUpdateDB(state[targetId], targetId);
     },
-    //수행리스트 제거
+    //체크리스트 제거
     remove: (state, action) => {
       const { targetId, index } = action.payload;
       const todos = state[targetId].toDos;

@@ -81,7 +81,17 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
             maxHeight: 300,
           }}
         >
-          <Text style={card.cardTitle}>{text}</Text>
+          <Text
+            style={[
+              card.cardTitle,
+              {
+                fontSize: fontPercentage(25.4),
+                maxHeight: 60,
+              },
+            ]}
+          >
+            {text.length > 7 ? `${text.substring(0, 6)}..` : text}
+          </Text>
           <View style={{ flexWrap: 'nowrap' }}>
             <View
               style={{
@@ -99,8 +109,8 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
                 }}
               />
               <Text style={card.cardLocation}>
-                {location?.length > 15
-                  ? `${location.substr(0, 7)}...`
+                {location?.length > 13
+                  ? `${location.substr(0, 13)}...`
                   : location}
               </Text>
             </View>
@@ -167,10 +177,7 @@ export const card = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'NotoSansKR-Black',
-    fontSize:
-      Dimensions.get('window').height > 668
-        ? fontPercentage(25.4)
-        : fontPercentage(25),
+
     marginTop: 13,
     position: 'relative',
   },

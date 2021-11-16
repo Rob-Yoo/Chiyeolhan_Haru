@@ -65,7 +65,7 @@ const Pagination = ({ taskList, targetId }) => {
             handlePaginationAddButton();
           }}
         >
-          <Text style={styles.taskTitle}>수행 리스트</Text>
+          <Text style={styles.taskTitle}>체크 리스트</Text>
           {network === 'offline' ? null : (
             <IconTaskListAdd
               name="icon-tasklist-add-button"
@@ -125,7 +125,7 @@ const Pagination = ({ taskList, targetId }) => {
             })}
 
           {
-            /*수행 리스트  없을때*/
+            /*체크 리스트  없을때*/
             !taskList.length && (
               <View style={{ alignItems: 'center' }}>
                 <IconTaskListLeft

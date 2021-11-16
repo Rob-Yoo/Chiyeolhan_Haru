@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useSelector } from 'react-redux';
@@ -70,17 +70,19 @@ Number.prototype.zf = function (len) {
 };
 
 export const TimePicker = ({
-  isStart,
-  timeText,
-  pickerHandler,
   isToday,
+  isStart,
   timeDate,
   isOngoing,
+  pickerHandler,
+  prevTime,
 }) => {
   const network = useSelector((state) => state.network);
   const [isVisible, setVisible] = useState(false);
-  const [time, setTime] = useState('00:00');
-  const [lowTime, setLowTime] = useState(new Date());
+  const [time, setTime] = useState('00:00'); //보여주는 포맷 시간
+  const [lowTime, setLowTime] = useState(
+    prevTime !== null ? prevTime : new Date(),
+  );
   const timeObject = new Date();
   const hour =
     timeObject.getHours() < 10
@@ -168,6 +170,14 @@ export const TimePicker = ({
       pickerHandler(`${hour}:${minute}`);
     }
   }, []);
+
+  useEffect(() => {
+    if (!isStart && prevTime) {
+      setLowTime(prevTime);
+      timeDate && prevTime && checkValidFinishTime(prevTime.format('HH:mm'));
+    }
+  }, [prevTime]);
+
   const handleConfirm = (formatTime) => {
     setTime(formatTime);
     pickerHandler(formatTime);
