@@ -9,6 +9,7 @@ import { getDataFromAsync } from 'utils/asyncStorageUtil';
 import { makeScheduleDate } from 'utils/makeScheduleData';
 
 import { KEY_VALUE_START_TIME, KEY_VALUE_SUCCESS } from 'constant/const';
+import { Keyboard } from 'react-native';
 
 const ScheduleToday = ({ navigation, route }) => {
   const todayData = [];
@@ -27,6 +28,7 @@ const ScheduleToday = ({ navigation, route }) => {
   };
   const toggleModal = async () => {
     try {
+      Keyboard.dismiss();
       setModalVisible(!isModalVisible);
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {

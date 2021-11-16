@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
@@ -13,14 +13,15 @@ import {
   KEY_VALUE_GEOFENCE,
 } from 'constant/const';
 
-export const alertStartTimePicker = () =>
+export const alertStartTimePicker = () => {
+  Keyboard.dismiss();
   Alert.alert(
     `현재 시간보다 이전 시간대는\n선택할 수 없습니다.`,
     '',
     [{ text: '확인' }],
     { cancelable: false },
   );
-
+};
 export const alertFinsihTimePicker = (message) =>
   Alert.alert(`${message}`, '', [{ text: '확인' }], { cancelable: false });
 
@@ -48,9 +49,23 @@ export const noDataAlert = () =>
     cancelable: false,
   });
 export const requestDeniedAlert = () =>
-  Alert.alert('검색 요청 권한이 없습니다.', '', [{ text: '확인' }], {
-    cancelable: false,
-  });
+  Alert.alert(
+    '검색 요청 권한이 없습니다.',
+    '앱을 재시작해주세요!',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+export const invalidRequestAlert = () =>
+  Alert.alert(
+    '유효하지 않은 요청입니다.',
+    '앱을 재시작해주세요!',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
 export const limitRequestAlert = () =>
   Alert.alert('검색 요청 횟수를 초과 하였습니다.', '', [{ text: '확인' }], {
     cancelable: false,
@@ -227,7 +242,7 @@ export const deleteToDoAlert = async (id) =>
 export const deleteToDoTaskList = async () =>
   new Promise((resolve) => {
     Alert.alert(
-      `수행 리스트를 삭제 하시겠습니까?`,
+      `체크 리스트를 삭제 하시겠습니까?`,
       '',
       [
         {
@@ -256,7 +271,7 @@ export const longTodoTitle = () =>
 
 export const longTaskList = () =>
   Alert.alert(
-    `일정의 수행 리스트를 너무 길게 설정했습니다.\n(다음 수행리스트를 이용하세요.)`,
+    `일정의 체크 리스트를 너무 길게 설정했습니다.\n(다음 체크리스트를 이용하세요.)`,
     '',
     [{ text: '확인' }],
     {
@@ -264,7 +279,7 @@ export const longTaskList = () =>
     },
   );
 
-//지난일정 수행리스트 일때 알림 보내기
+//지난일정 체크리스트 일때 알림 보내기
 export const passedTodoAlert = () =>
   Alert.alert(`이미 지난 일정입니다.`, '', [{ text: '확인' }], {
     canvelable: false,

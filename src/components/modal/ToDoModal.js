@@ -5,8 +5,8 @@ import {
   View,
   Text,
   ImageBackground,
-  Keyboard,
   PixelRatio,
+  Keyboard,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm } from 'react-hook-form';
@@ -86,9 +86,9 @@ export const ToDoModal = ({
   const [title, setTitle] = useState('');
   const { register, handleSubmit, setValue, unregister } = useForm();
   const titleInputRef = useRef();
-  useEffect(() => {
-    isModalVisible && titleInputRef?.current?.focus();
-  }, [isModalVisible]);
+
+  const [prevTime, setPrevTime] = useState(null);
+
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -107,16 +107,16 @@ export const ToDoModal = ({
   }, [passModalData]);
 
   useEffect(() => {
+    register('todoTask', { min: 1 });
     register('todoStartTime');
     register('todoFinishTime');
     register('todoTitle');
-    register('todoTask', { min: 1 });
     register('todoId');
     return () => {
+      unregister('todoTask', { min: 1 });
       unregister('todoStartTime');
       unregister('todoFinishTime');
       unregister('todoTitle');
-      unregister('todoTask', { min: 1 });
       unregister('todoId');
     };
   }, [register]);
@@ -150,7 +150,7 @@ export const ToDoModal = ({
     setValue('todoTask', undefined);
     setValue('todoId', undefined);
     setIsOngoing(false);
-
+    setPrevTime(null);
     network !== 'offline' && setCanEdit(true);
   };
 
@@ -193,7 +193,7 @@ export const ToDoModal = ({
   ) => {
     if (!!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
-      modalHandler();
+      //modalHandler();
       return;
     }
     handleAlert(todoStartTime, todoFinishTime, todoTitle);
@@ -236,7 +236,7 @@ export const ToDoModal = ({
           );
         }
         if (isNeedAlert) {
-          modalHandler();
+          //modalHandler();
           alertInValidSubmit();
         } else {
           //passModalData 수정일때
@@ -320,7 +320,6 @@ export const ToDoModal = ({
         );
         dispatch(create(newData));
         await toDosUpdateDB(newData, id);
-        console.log(isToday);
         if (isToday) {
           // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
           // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
@@ -494,6 +493,18 @@ export const ToDoModal = ({
     }
   };
 
+  const stringTimeToDate = (string) => {
+    const Hours = string.split(':')[0];
+    const Minute = string.split(':')[1];
+    return new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate(),
+      Hours,
+      Minute,
+    );
+  };
+
   const timeHandler = async (text, isStart) => {
     let newTime;
     const restMin = text.slice(0, 4);
@@ -504,6 +515,25 @@ export const ToDoModal = ({
       newTime = restMin + '5';
     }
 
+    if (isStart && !passModalData) {
+      setPrevTime(stringTimeToDate(newTime));
+    } else if (isStart && passModalData) {
+      if (
+        passModalData &&
+        isStart &&
+        text !== passModalData.startDate &&
+        passModalData.endDate > new Date()
+      ) {
+        const endDate = passModalData.endDate;
+        setPrevTime(
+          new Date(
+            Date.parse(endDate) +
+              (stringTimeToDate(text) - passModalData.startDate),
+          ),
+        );
+      }
+    }
+
     if (isStart) {
       await AsyncStorage.setItem(KEY_VALUE_START_TIME, newTime);
       setValue('todoStartTime', newTime);
@@ -511,17 +541,23 @@ export const ToDoModal = ({
       setValue('todoFinishTime', newTime);
     }
   };
+  useEffect(() => {
+    isModalVisible && titleInputRef?.current?.focus();
+  }, [isModalVisible]);
+
   return (
     <Modal
       navigation={navigation}
       isVisible={isModalVisible}
+      onModalWillHide={() => Keyboard.dismiss()}
       onModalHide={() => clearData()}
+      animationIn="slideInUp"
+      animationOut="slideOutDown"
       style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
     >
       <TouchableOpacity
         style={{ height: '100%', position: 'absolute' }}
         activeOpacity={1}
-        onPress={() => Keyboard.dismiss()}
       >
         <TouchableOpacity
           style={styles.background}
@@ -657,7 +693,9 @@ export const ToDoModal = ({
                       size={SCREEN_HEIGHT > 668 ? 100 : 70}
                       color={locationName ? 'transparent' : '#FFFFFF'}
                       onPress={() =>
-                        toggleIsVisible(mapIsVisible, setMapIsVisible)
+                        passModalData
+                          ? null
+                          : toggleIsVisible(mapIsVisible, setMapIsVisible)
                       }
                     />
                   )}
@@ -684,7 +722,6 @@ export const ToDoModal = ({
                     placeholderTextColor="#A2A2A2"
                     value={title}
                     ref={titleInputRef}
-                    // autoFocus={true}
                     onChange={(e) => handleChange(e)}
                     onChangeText={
                       title.length > 20
@@ -694,10 +731,10 @@ export const ToDoModal = ({
                   />
                 )}
                 <Text style={styles.titleText}>위치</Text>
-                <Text style={styles.modalLocationText}>
+                <Text style={[styles.modalLocationText]}>
                   {locationName
                     ? locationName.length > 20
-                      ? `${locationName.substring(0, 20)}...`
+                      ? `${locationName.substring(0, 23)}...`
                       : locationName
                     : '물음표를 눌러주세요'}
                 </Text>
@@ -711,6 +748,7 @@ export const ToDoModal = ({
                 isToday={isToday}
                 timeDate={passModalData?.startDate}
                 isOngoing={isOngoing}
+                prevTime={prevTime}
               />
               <Text
                 style={{
@@ -729,12 +767,13 @@ export const ToDoModal = ({
                 pickerHandler={(text) => timeHandler(text, false)}
                 timeDate={passModalData?.endDate}
                 isOngoing={isOngoing}
+                prevTime={prevTime}
               />
             </View>
           </View>
 
           <View style={styles.todoBottomContainer}>
-            <Text style={styles.taskTitle}>수행리스트</Text>
+            <Text style={styles.taskTitle}>체크리스트</Text>
 
             <TaskList
               taskList={taskList}

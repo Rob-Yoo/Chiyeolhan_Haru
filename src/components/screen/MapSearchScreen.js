@@ -132,10 +132,25 @@ export const MapSearch = ({
                           />
                         )}
                       </Text>
-                      <Text style={styles.searchedText}>{item.text}</Text>
+                      <Text
+                        style={[
+                          styles.searchedText,
+                          {
+                            maxHeight: 40,
+                            minWidth: 239.5,
+                            maxWidth: 230,
+                          },
+                        ]}
+                      >
+                        {item.text}
+                      </Text>
+                      <Text style={{ marginTop: 4.5 }}>...</Text>
                       <Text
                         id={item.id}
-                        style={styles.searchedDeleteText}
+                        style={[
+                          styles.searchedDeleteText,
+                          { backgroundColor: '#fff' },
+                        ]}
                         onPress={() => deleteHistory(item.id)}
                       >
                         삭제
@@ -185,7 +200,7 @@ const styles = StyleSheet.create({
     height: 800,
     backgroundColor: '#fff',
   },
-  icon: { marginRight: 10 },
+  icon: { marginRight: 10, minWidth: 20 },
   searchedText: {
     fontSize: 20,
     fontWeight: '500',
