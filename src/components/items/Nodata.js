@@ -46,9 +46,8 @@ const styles = StyleSheet.create({
   backgroundWhite: {
     position: 'absolute',
     width: 131.5 * 2,
-    height: 172.5 * 2,
-    // height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
-    top: SCREEN_HEIGHT > 668 ? -20 : 0,
+    height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
+    top: SCREEN_HEIGHT > 668 ? 10 : 0,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 28,

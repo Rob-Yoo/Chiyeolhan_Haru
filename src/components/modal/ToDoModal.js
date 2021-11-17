@@ -641,8 +641,8 @@ export const ToDoModal = ({
                         onPress={handleSubmit(handleTodoSubmit)}
                         style={[
                           styles.modalTopText,
-                          // { marginRight: passModalData ? 0 : 25.4 },
-                          { marginRight: 5 },
+                          { marginRight: 25.4 },
+                          //{ marginRight: 5 },
                         ]}
                       >
                         완료
@@ -654,7 +654,7 @@ export const ToDoModal = ({
                     style={styles.modalTopText}
                     onPress={() => modalHandler()}
                   >
-                    <Text style={[styles.modalTopText, { marginRight: 5 }]}>
+                    <Text style={[styles.modalTopText, { marginRight: 25.4 }]}>
                       닫기
                     </Text>
                   </TouchableOpacity>

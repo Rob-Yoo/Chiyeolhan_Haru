@@ -18,7 +18,7 @@ import {
   deleteAllSearchedData,
 } from 'utils/asyncStorageUtil';
 
-import { SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 export const MapSearch = ({
   _handlePlacesAPI,
@@ -137,8 +137,9 @@ export const MapSearch = ({
                           styles.searchedText,
                           {
                             maxHeight: 40,
-                            minWidth: 239.5,
-                            maxWidth: 230,
+                            minWidth: 260,
+                            maxWidth: SCREEN_WIDTH * 0.6,
+                            // backgroundColor: 'red',
                           },
                         ]}
                       >
@@ -237,6 +238,7 @@ const styles = StyleSheet.create({
     //height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 16,
+
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
