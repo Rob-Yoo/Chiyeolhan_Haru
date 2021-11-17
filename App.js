@@ -39,7 +39,7 @@ const App = () => {
         if (geofenceData.length === 0) {
           await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
         }
-        console.log('loaded GeofenceData : ', geofenceData);
+        // console.log('loaded GeofenceData : ', geofenceData);
         await AsyncStorage.setItem(KEY_VALUE_INSTALLED, 'true');
       }
     } catch (e) {

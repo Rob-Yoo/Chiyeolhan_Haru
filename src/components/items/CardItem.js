@@ -25,7 +25,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
           finishTime <=
           new Date().getHours() * 60 + new Date().getMinutes() * 1
         ) {
-          console.log('clearIntervael');
+          // console.log('clearIntervael');
           clearInterval(intervalCallback);
         }
       }, 60000);

@@ -53,12 +53,45 @@ const loadSuccessSchedules = async () => {
             KEY_VALUE_SUCCESS,
             JSON.stringify(successSchedules),
           );
-          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+          // console.log('끝난 성공한 일정 사라짐: ', successSchedules);
         }
       }
     }
   } catch (e) {
     console.log('loadSuccessSchedules Error :', e);
+  }
+};
+
+export const checkNearByFinish = async () => {
+  try {
+    const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const todosRef = dbService.collection(`${UID}`);
+
+    if (nearBySchedules !== null) {
+      if (!nearBySchedules.includes(geofenceData[0])) {
+        nearBySchedules.unshift(geofenceData[0]);
+      }
+      const timeCheck = async (schedule) => {
+        let result = true;
+        const dbData = await todosRef.where('id', '==', schedule.id).get();
+
+        dbData.forEach((todo) => {
+          if (todo.data().isDone === false) {
+            result = false;
+          }
+        });
+        return result;
+      };
+
+      const isAllFinish = nearBySchedules.every(timeCheck);
+      if (isAllFinish) {
+        const successNumber = nearBySchedules.length;
+        await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
+      }
+    }
+  } catch {
+    console.log('checkNearByFinish Error :', e);
   }
 };
 
@@ -73,6 +106,7 @@ export const checkGeofenceSchedule = async () => {
     let isNeedSkip = false;
 
     await loadSuccessSchedules();
+    await checkNearByFinish();
 
     if (isStartTodo) {
       if (geofenceData) {
@@ -138,7 +172,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         cancelAllNotif(schedule.id);
       }
       await geofenceUpdate(geofenceData, 0);
-      console.log('nearBySchedules인 경우');
+      // console.log('nearBySchedules인 경우');
     } else {
       if (isEarly) {
         if (isChangeEarliest) {
@@ -162,7 +196,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
           cancelAllNotif(geofenceData[0].id);
         }
         await geofenceUpdate(geofenceData, 0);
-        console.log('nearBySchedule X isEarly인 경우');
+        // console.log('nearBySchedule X isEarly인 경우');
         // 현재 일정 이후의 일정이라도 추가한 일정이 nearBy일 수 있기 때문에 다시 지오펜스를 킨다.
       } else {
         if (progressing) {
@@ -204,17 +238,17 @@ export const geofenceScheduler = async (isChangeEarliest) => {
           if (isStartTodo) {
             await geofenceUpdate(geofenceData, 0);
           }
-          console.log('nearBySchedule X isEarly X Progressing인 경우');
+          // console.log('nearBySchedule X isEarly X Progressing인 경우');
         } else if (isChangeEarliest) {
           // 현재 진행중인 일정에 neartBySchedules가 없고 도착 상태도 아니고 제일 빠른 시간의 일정이 바뀌었다.
           if (isStartTodo) {
             await geofenceUpdate(geofenceData, 0);
           }
-          console.log('nearBySchedule X isEarly X isChangeEarliest인 경우');
+          // console.log('nearBySchedule X isEarly X isChangeEarliest인 경우');
         }
       }
     }
-    console.log('geofenceData : ', geofenceData);
+    // console.log('geofenceData : ', geofenceData);
   } catch (e) {
     console.log('geofenceScheduler Error :', e);
   }

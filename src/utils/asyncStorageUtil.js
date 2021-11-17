@@ -146,13 +146,13 @@ export const deleteTodayAsyncStorageData = async (id) => {
     if (successSchedules) {
       const newSuccess = successSchedules.filter((item) => item.id !== id);
       await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(newSuccess));
-      console.log('deleted Success Schedules : ', newSuccess);
+      // console.log('deleted Success Schedules : ', newSuccess);
     }
 
     cancelAllNotif(id); //삭제하려는 일정의 예약된 모든 알림 삭제
-    PushNotification.getScheduledLocalNotifications((notif) =>
-      console.log('예약된 알람 :', notif),
-    );
+    // PushNotification.getScheduledLocalNotifications((notif) =>
+    //   console.log('예약된 알람 :', notif),
+    // );
   } catch (e) {
     console.log('deleteTodayAsyncStorageData Error :', e);
   }
@@ -388,7 +388,7 @@ export const loadSuccessSchedules = async () => {
             KEY_VALUE_SUCCESS,
             JSON.stringify(successSchedules),
           );
-          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+          // console.log('끝난 성공한 일정 사라짐: ', successSchedules);
         }
       }
     }

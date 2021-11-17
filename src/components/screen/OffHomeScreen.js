@@ -37,7 +37,7 @@ const OffHome = ({ navigation, route }) => {
     const readyToHome = async () => {
       await getToDos();
       dispatch(init(fetchedToDo));
-      console.log(fetchedToDo);
+      // console.log(fetchedToDo);
       setLoading(false);
       SplashScreen.hideAsync();
       offlineAlert();

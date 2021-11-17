@@ -27,7 +27,10 @@ import {
   startDenyAlert,
   startAlert,
 } from 'utils/buttonAlertUtil';
-import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
+import {
+  checkGeofenceSchedule,
+  checkNearByFinish,
+} from 'utils/gfSchedulerUtil';
 import { cancelAllNotif } from 'utils/notificationUtil';
 
 import {
@@ -35,8 +38,8 @@ import {
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
+  SCREEN_HEIGHT,
 } from 'constant/const';
-import { SCREEN_HEIGHT } from '../../../constant/const';
 
 const handleSkip = async (isNeedSkip) => {
   try {
@@ -63,7 +66,7 @@ const handleSkip = async (isNeedSkip) => {
             // 현재시간과 가장 가까운 다음 일정이 없을 때
             skipNotifAlert();
           } else {
-            console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+            // console.log('넘어간 일정 객체 : ', geofenceData[idx]);
             skipNotifAlert(geofenceData[idx].title);
           }
           await geofenceUpdate(geofenceData, idx);

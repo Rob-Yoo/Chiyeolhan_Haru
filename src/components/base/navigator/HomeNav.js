@@ -84,7 +84,7 @@ const HomeNav = ({ navigation }) => {
       if (network === 'offline') {
         setNetwork('online');
       }
-      console.log('Online');
+      // console.log('Online');
     } catch (e) {
       console.log('_handleIsConnected Error :', e);
     }
@@ -94,7 +94,7 @@ const HomeNav = ({ navigation }) => {
     try {
       if (network === 'online') {
         setNetwork('offline');
-        console.log('Offline');
+        // console.log('Offline');
       }
     } catch (e) {
       console.log('_handleIsNotConnected Error :', e);
