@@ -24,19 +24,20 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalTopContainer: {
-    maxWidth: SCREEN_WIDTH,
-    borderRadius: 10,
+    width: SCREEN_WIDTH,
+    //maxWidth: SCREEN_WIDTH,
     backgroundColor: '#54BCB6',
     borderRadius: 50,
-    paddingHorizontal: 25,
+    paddingHorizontal: 38,
     height: SCREEN_HEIGHT > 668 ? '40%' : '40%',
   },
   modalTextView: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    //justifyContent: 'flex-end',
     marginTop: 21.5,
-    width: CONTAINER_WIDTH,
-    paddingHorizontal: SCREEN_HEIGHT > 668 ? null : 20,
+    //  width: CONTAINER_WIDTH,
+
+    //paddingHorizontal: SCREEN_HEIGHT > 668 ? null : 20,
   },
   modalTopText: {
     fontFamily: 'GodoB',
@@ -77,9 +78,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     color: '#FFFFFF',
     fontSize: fontPercentage(15),
-    marginLeft: 2,
-    marginRight: 10,
-    width: SCREEN_WIDTH * 0.33,
+    maxWidth: 147,
   },
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
@@ -123,12 +122,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 20,
-    marginRight: 10,
     paddingLeft: 5,
     fontSize: 12,
     paddingHorizontal: 2,
-    maxWidth: 145,
-    minWidth: 145,
+    maxWidth: 137,
+    //minWidth: 145,
   },
   modalInputTask: {
     width: CONTAINER_WIDTH * 0.7,

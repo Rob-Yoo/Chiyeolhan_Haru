@@ -69,8 +69,8 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
-      <View style={[card.card]} key={`CARD${id}`}>
+    <View style={{ flex: 1, flexDirection: 'row',justifyContent:'center', margin: 0 }}>
+      <View style={card.card} key={`CARD${id}`}>
         <View style={card.todomanBackgroundCircle}>
           <IconTaskToDoman name="icon-todo-man" size={20} color="#229892" />
         </View>
@@ -135,8 +135,12 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
             useNativeDriver
           />
         </View>
+        
       </View>
+       
+     
     </View>
+    
   );
 };
 
@@ -150,14 +154,14 @@ export const card = StyleSheet.create({
     paddingBottom: 15,
     borderRadius: 15,
     justifyContent: 'space-evenly',
-    backgroundColor: 'rgba(84,188,182,1.5)',
-    shadowColor: 'rgba(0,41,38,0.29)',
-    shadowOffset: {
-      width: 0,
-      height: 15,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 8,
+    backgroundColor: "#54bcb6",
+        shadowColor: 'rgba(0,41,38,0.29)',
+        shadowOffset: {
+          width: 0,
+          height: 9,
+        },
+        shadowOpacity: 0.9,
+        shadowRadius: 8,
   },
   todomanBackgroundCircle: {
     width: 32,

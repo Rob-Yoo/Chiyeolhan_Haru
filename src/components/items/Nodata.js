@@ -21,10 +21,14 @@ export const Nodata = () => {
           <View style={styles.statusbar} />
         </View>
 
-        <Text style={styles.nodataText}>일정을 기록해보세요</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('ScheduleToday')}>
-          <IconArrow name="icon-arrow" size={26} color="#229892" />
-        </TouchableOpacity>
+        <View style={{ alignItems: 'center', justifyContent: 'space-evenly' }}>
+          <Text style={styles.nodataText}>일정을 기록해보세요</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ScheduleToday')}
+          >
+            <IconArrow name="icon-arrow" size={24.4} color="#229892" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
   noDataCard: {
     //width: SCREEN_WIDTH * 0.5,
     width: 194,
-    maxHeight: 181,
+    maxHeight: 191,
     height: SCREEN_HEIGHT * 0.24,
     borderRadius: 20,
     // marginBottom: 30,
@@ -117,6 +121,7 @@ const styles = StyleSheet.create({
   nodataText: {
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 20,
+    fontSize: 17,
+    marginBottom: 10.6,
   },
 });

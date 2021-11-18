@@ -60,6 +60,7 @@ import {
   SCREEN_WIDTH,
 } from 'constant/const';
 import { TaskList } from '../items/TaskList';
+import { CONTAINER_WIDTH } from '../../constant/const';
 
 export const ToDoModal = ({
   modalHandler,
@@ -595,11 +596,11 @@ export const ToDoModal = ({
           >
             <View
               style={{
-                width: '100%',
+                //width: SCREEN_WIDTH,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                paddingHorizontal: 5,
                 backgroundColor: 'transparent',
+                // backgroundColor: 'green',
               }}
             >
               {isToday !== 'yesterday' && network !== 'offline' ? (
@@ -638,11 +639,7 @@ export const ToDoModal = ({
                     <TouchableOpacity>
                       <Text
                         onPress={handleSubmit(handleTodoSubmit)}
-                        style={[
-                          styles.modalTopText,
-                          { marginRight: SCREEN_WIDTH * 0.06 },
-                          //{ marginRight: 5 },
-                        ]}
+                        style={[styles.modalTopText]}
                       >
                         완료
                       </Text>
@@ -653,14 +650,7 @@ export const ToDoModal = ({
                     style={styles.modalTopText}
                     onPress={() => modalHandler()}
                   >
-                    <Text
-                      style={[
-                        styles.modalTopText,
-                        { marginRight: SCREEN_WIDTH * 0.06 },
-                      ]}
-                    >
-                      닫기
-                    </Text>
+                    <Text style={[styles.modalTopText]}>닫기</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -671,8 +661,7 @@ export const ToDoModal = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                paddingHorizontal: 2,
-                paddingRight: 23,
+                //backgroundColor: 'blue',
               }}
             >
               <ImageBackground
@@ -705,7 +694,7 @@ export const ToDoModal = ({
                   )}
                 </View>
               </ImageBackground>
-              <View>
+              <View style={{ width: 68.5 * 2 }}>
                 <Text style={styles.titleText}>제목</Text>
                 {network === 'offline' ||
                 (passModalData && passModalData.startDate < new Date()) ? (

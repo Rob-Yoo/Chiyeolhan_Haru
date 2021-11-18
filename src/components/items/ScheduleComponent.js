@@ -33,6 +33,7 @@ import {
 const BACKGROUND_COLOR = '#ECF5F471';
 const minutes45 = 2700000;
 const minutes40 = 2400000;
+const minutes30 = 1800000;
 const minutes25 = 1500000;
 const minutes20 = 1200000;
 const minutes15 = 900000;
@@ -45,12 +46,12 @@ const MyEventComponent = ({ event, position }) => {
     <View
       color={event.color}
       style={{
-        flexDirection: timeDiff <= minutes45 ? 'row' : null,
-        alignItems: timeDiff <= minutes40 ? 'center' : null,
+        flexDirection: timeDiff <= minutes15 ? 'row' : null,
+        alignItems: timeDiff <= minutes15 ? 'center' : null,
         justifyContent: 'flex-start',
         paddingVertical:
-          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : '6%',
-        paddingHorizontal: timeDiff <= minutes40 ? 0 : 15,
+          timeDiff <= minutes30 ? (timeDiff < minutes25 ? '1%' : SCREEN_HEIGHT * 0.001) : '6%',
+        paddingLeft: timeDiff <= minutes25 ? 0 : 15,
       }}
     >
       <Text
@@ -59,8 +60,8 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              timeDiff <= minutes15 ? fontPercentage(9) : fontPercentage(15),
-            marginBottom: timeDiff <= minutes40 ? 0 : 10,
+              timeDiff <= minutes20 ? fontPercentage(9) : fontPercentage(15),
+            marginBottom: timeDiff <= minutes20 ? 0 : timeDiff === minutes25 ? '2%' : SCREEN_HEIGHT * 0.004
           },
         ]}
       >
@@ -70,8 +71,8 @@ const MyEventComponent = ({ event, position }) => {
         style={{
           flexDirection: 'row',
           marginLeft:
-            (SCREEN_HEIGHT > 668 && timeDiff <= minutes25) ||
-            (SCREEN_HEIGHT < 668 && timeDiff <= minutes25)
+            (SCREEN_HEIGHT > 668 && timeDiff <= minutes20) ||
+            (SCREEN_HEIGHT < 668 && timeDiff <= minutes20)
               ? 3
               : 10,
         }}

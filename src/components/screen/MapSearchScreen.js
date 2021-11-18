@@ -48,6 +48,7 @@ export const MapSearch = ({
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
   };
+
   return (
     <View style={styles.mapSearchContainer}>
       <View
