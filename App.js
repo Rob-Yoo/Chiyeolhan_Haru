@@ -4,13 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
-import DeviceInfo from 'react-native-device-info';
-
 import store from 'redux/store';
 
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { getDataFromAsync, dbToAsyncStorage } from 'utils/asyncStorageUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   KEY_VALUE_INSTALLED,
@@ -39,11 +38,11 @@ const App = () => {
         if (geofenceData.length === 0) {
           await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
         }
-        console.log('loaded GeofenceData : ', geofenceData);
+        // console.log('loaded GeofenceData : ', geofenceData);
         await AsyncStorage.setItem(KEY_VALUE_INSTALLED, 'true');
       }
     } catch (e) {
-      console.log('loadSavedData Error : ', e);
+      errorNotifAlert(`loadSavedData Error : ${e}`);
     }
   };
 

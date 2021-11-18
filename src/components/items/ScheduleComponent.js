@@ -11,7 +11,7 @@ import IconQuestion from '#assets/icons/icon-question';
 
 import { fontPercentage } from 'utils/responsiveUtil';
 
-import { deleteToDoAlert } from 'utils/buttonAlertUtil';
+import { deleteToDoAlert, errorNotifAlert } from 'utils/buttonAlertUtil';
 import {
   deleteTomorrowAsyncStorageData,
   deleteTodayAsyncStorageData,
@@ -49,7 +49,7 @@ const MyEventComponent = ({ event, position }) => {
         alignItems: timeDiff <= minutes40 ? 'center' : null,
         justifyContent: 'flex-start',
         paddingVertical:
-          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : 15,
+          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : '6%',
         paddingHorizontal: timeDiff <= minutes40 ? 0 : 15,
       }}
     >
@@ -149,7 +149,7 @@ export const scrollRefresh = async (dispatch) => {
     dispatch(init(filterObj));
     return Promise.resolve('true');
   } catch (e) {
-    console.log('scrollRefresh Error :', e);
+    errorNotifAlert(`scrollRefresh Error : ${e}`);
   }
 };
 
@@ -165,7 +165,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const toggleAlert = () => {
     setIsVisibleAlert(!isVisibleAlert);
   };
-
+  //console.log(events);
   return (
     <>
       <WeekView
@@ -239,7 +239,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
                 await dispatch(deleteToDoDispatch(targetId));
               }
             } catch (e) {
-              console.log('long onPress delete Error', e);
+              errorNotifAlert(`long onPress delete Error : ${e}`);
             }
           }
         }}

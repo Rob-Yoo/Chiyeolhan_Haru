@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import ToDoModal from 'components/modal/ToDoModal';
@@ -9,7 +9,7 @@ import AddToDoIcon from '#assets/icons/icon-add-todo.js';
 import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { checkDayChange } from 'utils/asyncStorageUtil';
 import { addModifyBlockAlert } from 'utils/buttonAlertUtil';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 const ScheduleLayout = ({
   navigation,
@@ -24,7 +24,7 @@ const ScheduleLayout = ({
 
   const pressAddButton = async () => {
     await checkDayChange();
-    const block = await checkGeofenceSchedule();
+    const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
     } else {

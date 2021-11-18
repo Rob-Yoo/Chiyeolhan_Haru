@@ -10,7 +10,7 @@ import { HomeHeader } from 'components/items/HomeHeader';
 import HomeContent from 'components/items/HomeContent';
 
 import { getDate } from 'utils/timeUtil';
-import { offlineAlert } from 'utils/buttonAlertUtil';
+import { offlineAlert, errorNotifAlert } from 'utils/buttonAlertUtil';
 import { getDataFromAsync } from 'utils/asyncStorageUtil';
 
 import {
@@ -37,7 +37,7 @@ const OffHome = ({ navigation, route }) => {
     const readyToHome = async () => {
       await getToDos();
       dispatch(init(fetchedToDo));
-      console.log(fetchedToDo);
+      // console.log(fetchedToDo);
       setLoading(false);
       SplashScreen.hideAsync();
       offlineAlert();
@@ -72,7 +72,7 @@ const OffHome = ({ navigation, route }) => {
       );
       setFetchObj(rowObj);
     } catch (e) {
-      console.log('getToDos Error :', e);
+      errorNotifAlert(`getToDos Error : ${e}`);
     }
   };
   for (key in toDos) {

@@ -44,7 +44,7 @@ export const ProgressingBar = ({ startTime, finishTime }) => {
 
   updateWidth = (animationDuration) => {
     const newWidth = getProgressBarWidth(startTime, finishTime);
-    console.log('updateWidth', newWidth);
+    // console.log('updateWidth', newWidth);
 
     setcurrentWidth(newWidth);
   };

@@ -14,6 +14,7 @@ import {
   favoriteAlert,
   limitRequestAlert,
   requestDeniedAlert,
+  errorNotifAlert,
   deleteFavoriteAlert,
 } from 'utils/buttonAlertUtil';
 
@@ -96,7 +97,7 @@ const handleFavorite = async (locationData, setIsFavoriteColor) => {
       }
     }
   } catch (e) {
-    console.log('handleFavorite Error', e);
+    errorNotifAlert(`handleFavorite Error : ${e}`);
   }
 };
 
@@ -118,7 +119,7 @@ const CurrentMap = ({
         const searchedData = await getDataFromAsync(KEY_VALUE_SEARCHED);
         setSearchedList(searchedData);
       } catch (e) {
-        console.log('getSearchedList Error :', e);
+        errorNotifAlert(`getSearchedList Error : ${e}`);
       }
     };
     getSearchedList();
@@ -133,7 +134,7 @@ const CurrentMap = ({
       setIscurrentLocation(true);
       setResult({ latitude, longitude });
     } catch (e) {
-      console.log('handleFindCurrentLocation Error :', e);
+      errorNotifAlert(`handleFindCurrentLocation Error : ${e}`);
     }
   };
 
@@ -162,11 +163,11 @@ const CurrentMap = ({
           result = 'INVALID_REQUEST';
           break;
         default:
-          console.log(`Error ${status}`);
+          errorNotifAlert(`Error ${status}`);
       }
       return result;
     } catch (e) {
-      console.log('_handleCandidate Error : ', e);
+      errorNotifAlert(`_handleCandidate Error : ${e}`);
     }
   };
 
@@ -225,10 +226,10 @@ const CurrentMap = ({
           invalidRequestAlert();
           break;
         default:
-          console.log(`Error ${status}`);
+          errorNotifAlert(`Error ${status}`);
       }
     } catch (e) {
-      console.log('_handlePlacesAPI Error :', e);
+      errorNotifAlert(`_handlePlacesAPI Error : ${e}`);
     }
   };
   return (
@@ -337,7 +338,7 @@ const Map = ({
         setFind(true);
       }
     } catch (e) {
-      console.log('getLocation Error :', e);
+      errorNotifAlert(`getLocation Error : ${e}`);
     }
   };
 

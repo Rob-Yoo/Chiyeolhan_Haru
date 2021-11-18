@@ -12,7 +12,11 @@ import { edit, remove } from 'redux/store';
 
 import { ModalLayout } from 'components/items/layout/ModalLayout';
 
-import { deleteToDoTaskList, longTaskList } from 'utils/buttonAlertUtil';
+import {
+  deleteToDoTaskList,
+  longTaskList,
+  errorNotifAlert,
+} from 'utils/buttonAlertUtil';
 
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress, taskStyle } = props;
@@ -67,7 +71,7 @@ export const Task = (props) => {
                 handleDeleteTaskList(targetId, index);
             }
           } catch (e) {
-            console.log('task list delete error', e);
+            errorNotifAlert(`task list delete error : ${e}`);
           }
         }}
         onPress={() =>
@@ -85,13 +89,10 @@ export const Task = (props) => {
             flexWrap: 'wrap',
           }}
         >
-          <Text
-            style={[
-              styles.taskText,
-              { fontSize: taskText.length > 45 ? 13 : 17 },
-            ]}
-          >
-            {taskText}
+          <Text style={[styles.taskText, { fontSize: 17 }]}>
+            {taskText.length > 30
+              ? `${taskText.substring(0, 29)}...`
+              : taskText}
           </Text>
         </View>
       </TouchableHighlight>

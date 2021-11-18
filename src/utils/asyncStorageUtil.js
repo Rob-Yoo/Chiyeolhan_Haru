@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PushNotification from 'react-native-push-notification';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import { geofenceDataModel, todoAsyncModel } from 'model/dataModel';
@@ -13,6 +12,7 @@ import {
   getDate,
   getTimeDiff,
 } from 'utils/timeUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   UID,
@@ -36,7 +36,7 @@ const setTomorrowData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_TOMORROW_DATA, array);
   } catch (e) {
-    console.log('setTomorrowData Error :', e);
+    errorNotifAlert(`setTomorrowData Error : ${e}`);
   }
 };
 
@@ -44,7 +44,7 @@ const setGeofenceData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_GEOFENCE, array);
   } catch (e) {
-    console.log('setGeofenceData Error :', e);
+    errorNotifAlert(`setGeofenceData Error : ${e}`);
   }
 };
 
@@ -52,7 +52,7 @@ const setTodayData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_TODAY_DATA, array);
   } catch (e) {
-    console.log('setGeofenceData Error :', e);
+    errorNotifAlert(`setGeofenceData Error : ${e}`);
   }
 };
 
@@ -60,7 +60,7 @@ const setSearchedData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_SEARCHED, array);
   } catch (e) {
-    console.log('setSearchedData Error :', e);
+    errorNotifAlert(`setSearchedData Error : ${e}`);
   }
 };
 
@@ -68,7 +68,7 @@ const setProgressingSchedule = async (schedule) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_PROGRESSING, schedule);
   } catch (e) {
-    console.log('setSearchedData Error :', e);
+    errorNotifAlert(`setSearchedData Error : ${e}`);
   }
 };
 
@@ -76,7 +76,7 @@ export const setFavoriteData = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_FAVORITE, JSON.stringify(array));
   } catch (e) {
-    console.log('setFavoriteData Error :', e);
+    errorNotifAlert(`setFavoriteData Error : ${e}`);
   }
 };
 
@@ -89,7 +89,7 @@ export const getDataFromAsync = async (storageName) => {
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync Error in AsyncStorage:', e);
+    errorNotifAlert(`getDataFromAsync Error in AsyncStorage : ${e}`);
   }
 };
 
@@ -105,7 +105,7 @@ export const deleteTomorrowAsyncStorageData = async (id) => {
       JSON.stringify(newTomorrowData),
     );
   } catch (e) {
-    console.log('deleteTomorrowAsyncStorageData Error :', e);
+    errorNotifAlert(`deleteTomorrowAsyncStorageData Error : ${e}`);
   }
 };
 
@@ -126,7 +126,7 @@ export const deleteGeofenceAsyncStorageData = async (id) => {
       );
     }
   } catch (e) {
-    console.log('deleteGeofenceAsyncStorageData Error :', e);
+    errorNotifAlert(`deleteGeofenceAsyncStorageData Error : ${e}`);
   }
 };
 
@@ -146,15 +146,15 @@ export const deleteTodayAsyncStorageData = async (id) => {
     if (successSchedules) {
       const newSuccess = successSchedules.filter((item) => item.id !== id);
       await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(newSuccess));
-      console.log('deleted Success Schedules : ', newSuccess);
+      // console.log('deleted Success Schedules : ', newSuccess);
     }
 
     cancelAllNotif(id); //삭제하려는 일정의 예약된 모든 알림 삭제
-    PushNotification.getScheduledLocalNotifications((notif) =>
-      console.log('예약된 알람 :', notif),
-    );
+    // PushNotification.getScheduledLocalNotifications((notif) =>
+    //   console.log('예약된 알람 :', notif),
+    // );
   } catch (e) {
-    console.log('deleteTodayAsyncStorageData Error :', e);
+    errorNotifAlert(`deleteTodayAsyncStorageData Error : ${e}`);
   }
 };
 
@@ -170,7 +170,7 @@ const setTodayToDoArray = async (todayToDos) => {
     // console.log('todayToDoArray : ', todayToDoArray);
     await setTodayData(JSON.stringify(todayToDoArray));
   } catch (e) {
-    console.log('setTodayToDoArray Error :', e);
+    errorNotifAlert(`setTodayToDoArray Error : ${e}`);
   }
 };
 
@@ -197,7 +197,7 @@ const setGeofenceDataArray = async (todayToDos) => {
       await setProgressingSchedule(JSON.stringify(progressingSchedule));
     }
   } catch (e) {
-    console.log('setGeofenceDataArray Error :', e);
+    errorNotifAlert(`setGeofenceDataArray Error : ${e}`);
   }
 };
 
@@ -213,7 +213,7 @@ export const dbToAsyncStorage = async (isChangeEarliest = null) => {
       await geofenceScheduler(isChangeEarliest);
     }
   } catch (e) {
-    console.log('dbToAsyncStorage Error :', e);
+    errorNotifAlert(`dbToAsyncStorage Error : ${e}`);
   }
 };
 
@@ -231,7 +231,7 @@ export const dbToAsyncTomorrow = async () => {
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
   } catch (e) {
-    console.log('dbToAsyncTomorrow Error :', e);
+    errorNotifAlert(`dbToAsyncTomorrow Error : ${e}`);
   }
 };
 
@@ -248,7 +248,7 @@ export const saveSearchedData = async (searchedObject) => {
       await setSearchedData(JSON.stringify(newSearchedArray));
     }
   } catch (e) {
-    console.log('searchedHistory Error :', e);
+    errorNotifAlert(`searchedHistory Error : ${e}`);
   }
 };
 
@@ -264,7 +264,7 @@ export const deleteSearchedData = async (data, updateData = false) => {
     );
     return setData;
   } catch (e) {
-    console.log('deleteSearchedData Error :', e);
+    errorNotifAlert(`deleteSearchedData Error : ${e}`);
   }
 };
 
@@ -274,7 +274,7 @@ export const deleteAllSearchedData = async () => {
     const setData = await AsyncStorage.setItem(KEY_VALUE_SEARCHED, `[]`);
     return setData;
   } catch (e) {
-    console.log('deleteSearchedData Error :', e);
+    errorNotifAlert(`deleteSearchedData Error : ${e}`);
   }
 };
 
@@ -340,7 +340,7 @@ export const checkDayChange = async () => {
     }
     return false;
   } catch (e) {
-    console.log('checkDayChange Error :', e);
+    errorNotifAlert(`checkDayChange Error : ${e}`);
   }
 };
 
@@ -359,7 +359,7 @@ export const checkEarlistTodo = async (todoStartTime) => {
     }
     return true;
   } catch (e) {
-    console.log('checkEarlistTodo Error :', e);
+    errorNotifAlert(`checkEarlistTodo Error : ${e}`);
   }
 };
 
@@ -388,11 +388,11 @@ export const loadSuccessSchedules = async () => {
             KEY_VALUE_SUCCESS,
             JSON.stringify(successSchedules),
           );
-          console.log('끝난 성공한 일정 사라짐: ', successSchedules);
+          // console.log('끝난 성공한 일정 사라짐: ', successSchedules);
         }
       }
     }
   } catch (e) {
-    console.log('loadSuccessSchedules Error :', e);
+    errorNotifAlert(`loadSuccessSchedules Error : ${e}`);
   }
 };

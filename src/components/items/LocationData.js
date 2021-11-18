@@ -16,7 +16,14 @@ export const LocationData = ({
   return (
     <View style={styles.locationInfoCard}>
       <View style={{ flex: 4 }}>
-        <Text style={styles.locationTitle}>{location}</Text>
+        <Text
+          style={[
+            styles.locationTitle,
+            { fontSize: location.length > 12 ? 14 : 19 },
+          ]}
+        >
+          {location}
+        </Text>
         <View
           style={{
             flexDirection: 'row',
@@ -73,9 +80,10 @@ const styles = StyleSheet.create({
   },
   locationTitle: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: 19,
+
     color: '#000000',
     marginBottom: 7,
+    paddingRight: 10,
     letterSpacing: -0.29,
   },
   addressText: {

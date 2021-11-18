@@ -26,6 +26,7 @@ import {
   skipDenyAlert,
   startDenyAlert,
   startAlert,
+  errorNotifAlert,
 } from 'utils/buttonAlertUtil';
 import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { cancelAllNotif } from 'utils/notificationUtil';
@@ -35,8 +36,8 @@ import {
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
+  SCREEN_HEIGHT,
 } from 'constant/const';
-import { SCREEN_HEIGHT } from '../../../constant/const';
 
 const handleSkip = async (isNeedSkip) => {
   try {
@@ -63,13 +64,13 @@ const handleSkip = async (isNeedSkip) => {
             // 현재시간과 가장 가까운 다음 일정이 없을 때
             skipNotifAlert();
           } else {
-            console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+            // console.log('넘어간 일정 객체 : ', geofenceData[idx]);
             skipNotifAlert(geofenceData[idx].title);
           }
           await geofenceUpdate(geofenceData, idx);
         }
       } catch (e) {
-        console.log('skip Error : ', e);
+        errorNotifAlert(`skip Error : ${e}`);
       }
     };
 
@@ -95,13 +96,13 @@ const handleSkip = async (isNeedSkip) => {
     }
     return null;
   } catch (e) {
-    console.log('handleSkip Error :', e);
+    errorNotifAlert(`handleSkip Error : ${e}`);
   }
 };
 
 const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
   try {
-    const isNeedSkip = await checkGeofenceSchedule();
+    const isNeedSkip = await checkGeofenceSchedule(1);
 
     if (isNeedSkip) {
       Alert.alert(
@@ -129,7 +130,7 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
       skipDenyAlert();
     }
   } catch (e) {
-    console.log('skipNotifHandler Error : ', e);
+    errorNotifAlert(`skipNotifHandler Error : ${e}`);
   }
 };
 
@@ -148,7 +149,7 @@ const handleStart = async () => {
       startDenyAlert(2);
     }
   } catch (e) {
-    console.log('handleStart Error : ', e);
+    errorNotifAlert(`handleStart Error :  ${e}`);
   }
 };
 
@@ -310,7 +311,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingLeft: 30,
     paddingRight: 25,
-    paddingVertical: SCREEN_HEIGHT > 736 ? (4 * SCREEN_HEIGHT) / 180 : 10,
+    paddingVertical:
+      SCREEN_HEIGHT > 736
+        ? (4 * SCREEN_HEIGHT) / 180
+        : (4 * SCREEN_HEIGHT) / 190,
   },
   tabContainer: {
     width: '100%',
@@ -320,7 +324,6 @@ const styles = StyleSheet.create({
     alignItems: SCREEN_HEIGHT > 668 ? 'flex-end' : 'center',
     justifyContent: 'space-between',
     paddingLeft: 2,
-    paddingTop: 5,
   },
 
   tabUnderBar: {

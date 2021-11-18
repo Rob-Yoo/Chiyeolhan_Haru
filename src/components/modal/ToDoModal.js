@@ -43,7 +43,7 @@ import {
   alertStartTimeError,
   alertFinsihTimePicker,
   alertNotFillIn,
-  longTaskList,
+  errorNotifAlert,
   longTodoTitle,
   addModifyBlockAlert,
 } from 'utils/buttonAlertUtil';
@@ -249,7 +249,7 @@ export const ToDoModal = ({
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleAlert Error :', e);
+      errorNotifAlert(`handleAlert Error : ${e}`);
     }
   };
 
@@ -289,7 +289,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const block = await checkGeofenceSchedule();
+    const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -352,7 +352,7 @@ export const ToDoModal = ({
 
         await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
       } catch (e) {
-        console.log('toDoSumbit Error :', e);
+        errorNotifAlert(`toDoSumbit Error : ${e}`);
       }
     }
   };
@@ -362,7 +362,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const block = await checkGeofenceSchedule();
+    const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -402,7 +402,6 @@ export const ToDoModal = ({
                 KEY_VALUE_SUCCESS,
                 JSON.stringify(successSchedules),
               );
-              console.log('Updated successSchedules :', successSchedules);
             }
           }
         }
@@ -470,7 +469,7 @@ export const ToDoModal = ({
         }
         modalHandler();
       } catch (e) {
-        console.log('todoModal todoEdit Error', e);
+        errorNotifAlert(`todoModal todoEdit Error : ${e}`);
       }
     }
   };
@@ -641,8 +640,8 @@ export const ToDoModal = ({
                         onPress={handleSubmit(handleTodoSubmit)}
                         style={[
                           styles.modalTopText,
-                          // { marginRight: passModalData ? 0 : 25.4 },
-                          { marginRight: 5 },
+                          { marginRight: SCREEN_WIDTH * 0.06 },
+                          //{ marginRight: 5 },
                         ]}
                       >
                         완료
@@ -654,7 +653,12 @@ export const ToDoModal = ({
                     style={styles.modalTopText}
                     onPress={() => modalHandler()}
                   >
-                    <Text style={[styles.modalTopText, { marginRight: 5 }]}>
+                    <Text
+                      style={[
+                        styles.modalTopText,
+                        { marginRight: SCREEN_WIDTH * 0.06 },
+                      ]}
+                    >
                       닫기
                     </Text>
                   </TouchableOpacity>

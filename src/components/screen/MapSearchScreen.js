@@ -18,7 +18,7 @@ import {
   deleteAllSearchedData,
 } from 'utils/asyncStorageUtil';
 
-import { SCREEN_HEIGHT } from 'constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 export const MapSearch = ({
   _handlePlacesAPI,
@@ -137,14 +137,16 @@ export const MapSearch = ({
                           styles.searchedText,
                           {
                             maxHeight: 40,
-                            minWidth: 239.5,
-                            maxWidth: 230,
+                            maxWidth: SCREEN_WIDTH * 0.6,
+                            minWidth: '80%',
                           },
                         ]}
                       >
-                        {item.text}
+                        {item.text.length > 15
+                          ? `${item.text.substring(0, 14)}···`
+                          : item.text}
                       </Text>
-                      <Text style={{ marginTop: 4.5 }}>...</Text>
+
                       <Text
                         id={item.id}
                         style={[
@@ -237,6 +239,7 @@ const styles = StyleSheet.create({
     //height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 16,
+
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
@@ -245,6 +248,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   searcehdItem: {
+    //backgroundColor: 'red',
+    width: '100%',
     flexDirection: 'row',
     paddingVertical: 18,
     paddingHorizontal: 18,

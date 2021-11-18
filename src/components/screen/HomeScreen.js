@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  AppState,
-  ImageBackground,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, AppState, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
@@ -20,9 +14,11 @@ import { Loading } from 'components/screen/LoadingScreen';
 import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
-import DeviceInfo from 'react-native-device-info';
+import { checkNearByFinish } from 'utils/gfSchedulerUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
-import { UID, CONTAINER_HEIGHT, CONTAINER_WIDTH } from 'constant/const';
+import { UID, CONTAINER_WIDTH } from 'constant/const';
+
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
@@ -52,12 +48,13 @@ const Home = ({ navigation }) => {
       try {
         await BackgroundGeolocation.requestPermission();
         await loadSuccessSchedules();
+
         const isDaychange = await checkDayChange();
         if (isDaychange) {
           RNRestart.Restart();
         }
       } catch (e) {
-        console.log('requestPermission Deny:', e);
+        errorNotifAlert(`__handleAppStateChange : ${e}`);
       }
     }
     appState.current = nextAppState;
@@ -67,6 +64,7 @@ const Home = ({ navigation }) => {
     await getToDos();
     await checkDayChange();
     await loadSuccessSchedules();
+    await checkNearByFinish();
     await SplashScreen.hideAsync();
   };
 
@@ -93,7 +91,7 @@ const Home = ({ navigation }) => {
       setLoading(false);
       return;
     } catch (e) {
-      console.log('getToDos Error :', e);
+      errorNotifAlert(`getToDos Error : ${e}`);
     }
   };
 
