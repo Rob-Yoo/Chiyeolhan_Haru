@@ -51,7 +51,7 @@ const MyEventComponent = ({ event, position }) => {
         justifyContent: 'flex-start',
         paddingVertical:
           timeDiff <= minutes30 ? (timeDiff < minutes25 ? '1%' : SCREEN_HEIGHT * 0.001) : '6%',
-        paddingLeft: timeDiff <= minutes25 ? 0 : 15,
+        paddingHorizontal: timeDiff <= minutes25 ? 0 : 15,
       }}
     >
       <Text
@@ -60,8 +60,8 @@ const MyEventComponent = ({ event, position }) => {
           styles.description,
           {
             fontSize:
-              timeDiff <= minutes20 ? fontPercentage(9) : fontPercentage(15),
-            marginBottom: timeDiff <= minutes20 ? 0 : timeDiff === minutes25 ? '2%' : SCREEN_HEIGHT * 0.004
+              timeDiff <= minutes25 ? fontPercentage(9) : fontPercentage(15),
+            marginBottom: timeDiff <= minutes20 ? 0 : timeDiff <= minutes30 + 300000 ? '2%' : SCREEN_HEIGHT * 0.006
           },
         ]}
       >
@@ -71,8 +71,8 @@ const MyEventComponent = ({ event, position }) => {
         style={{
           flexDirection: 'row',
           marginLeft:
-            (SCREEN_HEIGHT > 668 && timeDiff <= minutes20) ||
-            (SCREEN_HEIGHT < 668 && timeDiff <= minutes20)
+            (SCREEN_HEIGHT > 668 && timeDiff <= minutes25) ||
+            (SCREEN_HEIGHT < 668 && timeDiff <= minutes25)
               ? 3
               : 10,
         }}

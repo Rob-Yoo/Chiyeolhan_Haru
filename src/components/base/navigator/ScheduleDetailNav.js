@@ -16,7 +16,7 @@ export const ScheduleDetail = ({ navigation }) => {
   return (
     <Fragment>
       <SafeAreaView
-        style={{ backgroundColor: '#fff', minHeight: SCREEN_HEIGHT * 0.02 }}
+        style={{ backgroundColor: '#fff', minHeight: SCREEN_HEIGHT * 0.04 }}
       />
       <SafeAreaView style={{ flex: 1, backgroundColor: '#ECF5F471' }}>
         <Tab.Navigator

@@ -140,11 +140,12 @@ export const MapSearch = ({
                             maxHeight: 40,
                             maxWidth: SCREEN_WIDTH * 0.6,
                             minWidth: '80%',
+                          
                           },
                         ]}
                       >
-                        {item.text.length > 15
-                          ? `${item.text.substring(0, 14)}···`
+                        {item.text.length > 14
+                          ? `${item.text.substring(0, 13)}···`
                           : item.text}
                       </Text>
 
