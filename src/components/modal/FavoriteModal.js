@@ -97,6 +97,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
             contentContainerStyle={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
+
               flexWrap: 'wrap',
               flexGrow: 1,
               paddingTop: 10,
@@ -161,6 +162,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
 const styles = StyleSheet.create({
   modalTopContainer: {
     paddingTop: 12,
+    paddingTop: '3%',
     paddingLeft: '16.8%',
   },
 
@@ -170,8 +172,8 @@ const styles = StyleSheet.create({
   },
   favoriteCard: {
     padding: 10,
-    height: SCREEN_WIDTH > 375 ? 136 : SCREEN_WIDTH * 0.32,
-    width: SCREEN_WIDTH > 375 ? 136 : SCREEN_WIDTH * 0.32,
+    height: SCREEN_WIDTH > 375 ? SCREEN_WIDTH * 0.35 : SCREEN_WIDTH * 0.35,
+    width: SCREEN_WIDTH > 375 ? SCREEN_WIDTH * 0.35 : SCREEN_WIDTH * 0.35,
     borderRadius: 20,
     shadowColor: '#0000001A',
     shadowOffset: {
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
     marginHorizontal: 11,
-    marginVertical: 12.5,
+    marginVertical: '4%',
   },
   buttonGoBack: {
     width: 35,
@@ -202,7 +204,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
     position: 'absolute',
-    top: SCREEN_HEIGHT * 0.0275,
+    //top: SCREEN_HEIGHT * 0.0275,
+    top: SCREEN_HEIGHT * 0.03,
     left: SCREEN_WIDTH * 0.06,
   },
 });

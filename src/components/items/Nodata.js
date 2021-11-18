@@ -46,13 +46,14 @@ const styles = StyleSheet.create({
   backgroundWhite: {
     position: 'absolute',
     width: 131.5 * 2,
-    height: SCREEN_HEIGHT > 668 ? '61.5%' : '70%',
-    top: SCREEN_HEIGHT > 668 ? 10 : 0,
+    // height: SCREEN_HEIGHT > 668 ? '61.5%' : '72%',
+    height: SCREEN_HEIGHT * 0.428,
+    top: SCREEN_HEIGHT > 668 ? 20 : 0,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 28,
     paddingVertical: 25,
-    paddingVertical: SCREEN_WIDTH * 0.0811,
+    paddingTop: SCREEN_WIDTH * 0.0611,
     backgroundColor: '#f7fbfa',
     shadowColor: 'rgba(0, 0, 0, 0.15)',
     shadowOffset: {
@@ -65,9 +66,11 @@ const styles = StyleSheet.create({
   noDataCard: {
     //width: SCREEN_WIDTH * 0.5,
     width: 194,
-    height: 181,
+    maxHeight: 181,
+    height: SCREEN_HEIGHT * 0.24,
     borderRadius: 20,
-    marginBottom: 30,
+    // marginBottom: 30,
+    marginBottom: SCREEN_HEIGHT * 0.03,
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingTop: 42.5,
@@ -115,6 +118,5 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
-    marginBottom: 10,
   },
 });

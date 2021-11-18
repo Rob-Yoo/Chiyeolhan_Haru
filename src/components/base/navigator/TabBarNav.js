@@ -313,7 +313,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingLeft: 30,
     paddingRight: 25,
-    paddingVertical: SCREEN_HEIGHT > 736 ? (4 * SCREEN_HEIGHT) / 180 : 10,
+    paddingVertical:
+      SCREEN_HEIGHT > 736
+        ? (4 * SCREEN_HEIGHT) / 180
+        : (4 * SCREEN_HEIGHT) / 190,
   },
   tabContainer: {
     width: '100%',
@@ -323,7 +326,6 @@ const styles = StyleSheet.create({
     alignItems: SCREEN_HEIGHT > 668 ? 'flex-end' : 'center',
     justifyContent: 'space-between',
     paddingLeft: 2,
-    paddingTop: 5,
   },
 
   tabUnderBar: {

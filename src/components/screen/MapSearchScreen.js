@@ -137,15 +137,16 @@ export const MapSearch = ({
                           styles.searchedText,
                           {
                             maxHeight: 40,
-                            minWidth: 260,
                             maxWidth: SCREEN_WIDTH * 0.6,
-                            // backgroundColor: 'red',
+                            minWidth: '80%',
                           },
                         ]}
                       >
-                        {item.text}
+                        {item.text.length > 15
+                          ? `${item.text.substring(0, 14)}···`
+                          : item.text}
                       </Text>
-                      <Text style={{ marginTop: 4.5 }}>...</Text>
+
                       <Text
                         id={item.id}
                         style={[
@@ -247,6 +248,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   searcehdItem: {
+    //backgroundColor: 'red',
+    width: '100%',
     flexDirection: 'row',
     paddingVertical: 18,
     paddingHorizontal: 18,

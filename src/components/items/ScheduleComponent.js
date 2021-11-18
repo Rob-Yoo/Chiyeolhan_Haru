@@ -49,7 +49,7 @@ const MyEventComponent = ({ event, position }) => {
         alignItems: timeDiff <= minutes40 ? 'center' : null,
         justifyContent: 'flex-start',
         paddingVertical:
-          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : 15,
+          timeDiff <= minutes40 ? (timeDiff < minutes15 ? 0 : 4) : '6%',
         paddingHorizontal: timeDiff <= minutes40 ? 0 : 15,
       }}
     >
@@ -165,7 +165,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const toggleAlert = () => {
     setIsVisibleAlert(!isVisibleAlert);
   };
-
+  console.log(events);
   return (
     <>
       <WeekView

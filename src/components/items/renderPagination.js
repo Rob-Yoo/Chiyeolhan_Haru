@@ -187,7 +187,7 @@ export const renderPagination = (index, total, context) => {
 const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
-    top: CONTAINER_HEIGHT * 0.49,
+    top: SCREEN_HEIGHT * 0.3,
     left: -SCREEN_WIDTH * 0.19,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,

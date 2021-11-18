@@ -7,6 +7,7 @@ import TabBar from 'components/base/navigator/TabBarNav';
 import ScheduleToday from 'components/screen/ScheduleTodayScreen';
 import ScheduleTomorrow from 'components/screen/ScheduleTomorrowScreen';
 import ScheduleYesterday from 'components/screen/ScheduleYesterdayScreen';
+import { SCREEN_HEIGHT } from '../../../constant/const';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -14,7 +15,9 @@ export const ScheduleDetail = ({ navigation }) => {
   const tabBar = useSelector((state) => state.tabBar);
   return (
     <Fragment>
-      <SafeAreaView style={{ backgroundColor: '#fff', minHeight: 40 }} />
+      <SafeAreaView
+        style={{ backgroundColor: '#fff', minHeight: SCREEN_HEIGHT * 0.02 }}
+      />
       <SafeAreaView style={{ flex: 1, backgroundColor: '#ECF5F471' }}>
         <Tab.Navigator
           initialRouteName="today"
