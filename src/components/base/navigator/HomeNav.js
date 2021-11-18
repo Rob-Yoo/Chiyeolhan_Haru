@@ -7,6 +7,8 @@ import OffHome from 'components/screen/OffHomeScreen';
 import { ScheduleDetail } from 'components/base/navigator/ScheduleDetailNav';
 import { Loading } from 'components/screen/LoadingScreen';
 
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
+
 export const Stack = createStackNavigator();
 
 const config = {
@@ -86,7 +88,7 @@ const HomeNav = ({ navigation }) => {
       }
       // console.log('Online');
     } catch (e) {
-      console.log('_handleIsConnected Error :', e);
+      errorNotifAlert(`_handleIsConnected Error : ${e}`);
     }
   };
 
@@ -97,7 +99,7 @@ const HomeNav = ({ navigation }) => {
         // console.log('Offline');
       }
     } catch (e) {
-      console.log('_handleIsNotConnected Error :', e);
+      errorNotifAlert(`_handleIsNotConnected Error : ${e}`);
     }
   };
 

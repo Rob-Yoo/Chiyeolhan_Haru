@@ -15,6 +15,7 @@ import IconSearchedLocation from '#assets/icons/icon-searched-location';
 import IconMinusCircle from '#assets/icons/icon-minus-circle';
 
 import { getDataFromAsync, setFavoriteData } from 'utils/asyncStorageUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   SCREEN_HEIGHT,
@@ -46,7 +47,7 @@ const getFavoriteAsync = async (setFavorite, setLoading) => {
     setFavorite(await getDataFromAsync(KEY_VALUE_FAVORITE));
     setLoading(true);
   } catch (e) {
-    console.log('getFavoriteError', e);
+    errorNotifAlert(`getFavoriteAync Error : ${e}`);
   }
 };
 

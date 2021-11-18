@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     fontSize: 12,
     paddingHorizontal: 2,
+    maxWidth: 145,
+    minWidth: 145,
   },
   modalInputTask: {
     width: CONTAINER_WIDTH * 0.7,

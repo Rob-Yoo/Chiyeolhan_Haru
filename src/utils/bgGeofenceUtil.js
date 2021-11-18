@@ -14,6 +14,7 @@ import {
   arriveEarlyNotification,
   failNotification,
   cancelAllNotif,
+  errorNotifAlert,
 } from 'utils/notificationUtil';
 
 import {
@@ -34,7 +35,7 @@ const getDataFromAsync = async (storageName) => {
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync in BgGeofence Error :', e);
+    errorNotifAlert(`getDataFromAsync in BgGeofence Error : ${e}`);
   }
 };
 
@@ -42,7 +43,7 @@ const setSuccessSchedule = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(array));
   } catch (e) {
-    console.log('setSuccessSchedule Error :', e);
+    errorNotifAlert(`setSuccessSchedule Error : ${e}`);
   }
 };
 
@@ -56,9 +57,9 @@ const addGeofence = async (latitude, longitude, data) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    // console.log('Adding Geofence Success!!', data[0].location);
+    console.log('Adding Geofence Success!!', data[0].location);
   } catch (e) {
-    console.log('addGeofence Error :', e);
+    errorNotifAlert(`addGeofence Error : ${e}`);
   }
 };
 
@@ -77,7 +78,7 @@ const addGeofenceTrigger = async () => {
       // console.log('stop geofence tracking');
     }
   } catch (error) {
-    'addGeofenceTrigger Error :', error;
+    errorNotifAlert(`addGeofenceTrigger Error : ${error}`);
   }
 };
 
@@ -108,7 +109,7 @@ export const geofenceUpdate = async (data, index = 1) => {
 
     await addGeofenceTrigger();
   } catch (e) {
-    console.log('geofenceUpdate Error :', e);
+    errorNotifAlert(`geofenceUpdate Error : ${e}`);
   }
 };
 
@@ -147,7 +148,7 @@ const findNearBy = async (data, currentTime) => {
           await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
         } catch (e) {
-          console.log('findNearBy Error :', e);
+          errorNotifAlert(`findNearBy Error : ${e}`);
         }
       }
     }
@@ -178,7 +179,7 @@ const saveSuccessSchedules = async (id, startTime, finishTime) => {
       }
     }
   } catch (e) {
-    console.log('saveSuccessSchedules Error :', e);
+    errorNotifAlert(`saveSuccessSchedules Error : ${e}`);
   }
 };
 
@@ -227,7 +228,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       data[0].finishTime,
     ); // 성공한 일정 저장
   } catch (e) {
-    console.log('enterAction Error :', e);
+    errorNotifAlert(`enterAction Error : ${e}`);
   }
 };
 
@@ -287,7 +288,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
       }
     }
   } catch (e) {
-    console.log('exitAction Error :', e);
+    errorNotifAlert(`exitAction Error : ${e}`);
   }
 };
 
@@ -308,7 +309,7 @@ export const subscribeOnGeofence = () => {
         }
       }
     } catch (e) {
-      console.log('subscribeOnGeofence Error :', e);
+      errorNotifAlert(`subscribeOnGeofence Error : ${e}`);
     }
   });
 };
@@ -330,6 +331,6 @@ export const initBgGeofence = async () => {
       startOnBoot: true,
     });
   } catch (e) {
-    console.log('initBgGeofence Error :', e);
+    errorNotifAlert(`initBgGeofence Error : ${e}`);
   }
 };

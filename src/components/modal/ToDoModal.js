@@ -43,7 +43,7 @@ import {
   alertStartTimeError,
   alertFinsihTimePicker,
   alertNotFillIn,
-  longTaskList,
+  errorNotifAlert,
   longTodoTitle,
   addModifyBlockAlert,
 } from 'utils/buttonAlertUtil';
@@ -249,7 +249,7 @@ export const ToDoModal = ({
         await toDoSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     } catch (e) {
-      console.log('handleAlert Error :', e);
+      errorNotifAlert(`handleAlert Error : ${e}`);
     }
   };
 
@@ -289,7 +289,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const block = await checkGeofenceSchedule();
+    const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -352,7 +352,7 @@ export const ToDoModal = ({
 
         await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
       } catch (e) {
-        console.log('toDoSumbit Error :', e);
+        errorNotifAlert(`toDoSumbit Error : ${e}`);
       }
     }
   };
@@ -362,7 +362,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    const block = await checkGeofenceSchedule();
+    const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -402,7 +402,6 @@ export const ToDoModal = ({
                 KEY_VALUE_SUCCESS,
                 JSON.stringify(successSchedules),
               );
-              console.log('Updated successSchedules :', successSchedules);
             }
           }
         }
@@ -470,7 +469,7 @@ export const ToDoModal = ({
         }
         modalHandler();
       } catch (e) {
-        console.log('todoModal todoEdit Error', e);
+        errorNotifAlert(`todoModal todoEdit Error : ${e}`);
       }
     }
   };

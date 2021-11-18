@@ -4,6 +4,7 @@ import { cancelAllNotif } from 'utils/notificationUtil';
 import { geofenceUpdate } from 'utils/bgGeofenceUtil';
 import { getCurrentTime } from 'utils/timeUtil';
 import { dbService } from 'utils/firebaseUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   UID,
@@ -25,7 +26,7 @@ const getDataFromAsync = async (storageName) => {
       return JSON.parse(item);
     }
   } catch (e) {
-    console.log('getDataFromAsync Error :', e);
+    errorNotifAlert(`getDataFromAsync Error : ${e}`);
   }
 };
 
@@ -58,7 +59,7 @@ const loadSuccessSchedules = async () => {
       }
     }
   } catch (e) {
-    console.log('loadSuccessSchedules Error :', e);
+    errorNotifAlert(`loadSuccessSchedules Error : ${e}`);
   }
 };
 
@@ -69,33 +70,36 @@ export const checkNearByFinish = async () => {
     const todosRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules !== null) {
+      let result = true;
+
       if (!nearBySchedules.includes(geofenceData[0])) {
         nearBySchedules.unshift(geofenceData[0]);
       }
-      const timeCheck = async (schedule) => {
-        let result = true;
-        const dbData = await todosRef.where('id', '==', schedule.id).get();
 
+      for (const schedule of nearBySchedules) {
+        const dbData = await todosRef.where('id', '==', schedule.id).get();
         dbData.forEach((todo) => {
+          console.log(todo.data().isDone);
           if (todo.data().isDone === false) {
             result = false;
           }
         });
-        return result;
-      };
+        if (!result) {
+          break;
+        }
+      }
 
-      const isAllFinish = nearBySchedules.every(timeCheck);
-      if (isAllFinish) {
+      if (result) {
         const successNumber = nearBySchedules.length;
         await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
       }
     }
   } catch {
-    console.log('checkNearByFinish Error :', e);
+    errorNotifAlert(`checkNearByFinish Error : ${e}`);
   }
 };
 
-export const checkGeofenceSchedule = async () => {
+export const checkGeofenceSchedule = async (flag) => {
   // 가장 최신의 지오펜스 일정 끝시간이 지났을 때 해당 일정이 성공한 일정 배열에 존재하는지 체크
   // 없으면 다음 일정으로 업데이트 해줘야한다.
   try {
@@ -106,7 +110,9 @@ export const checkGeofenceSchedule = async () => {
     let isNeedSkip = false;
 
     await loadSuccessSchedules();
-    await checkNearByFinish();
+    if (flag === 1) {
+      await checkNearByFinish();
+    }
 
     if (isStartTodo) {
       if (geofenceData) {
@@ -135,7 +141,7 @@ export const checkGeofenceSchedule = async () => {
     }
     return isNeedSkip;
   } catch (e) {
-    console.log('checkGeofenceSchedule Error :', e);
+    errorNotifAlert(`checkGeofenceSchedule Error : ${e}`);
   }
 };
 
@@ -250,6 +256,6 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     }
     // console.log('geofenceData : ', geofenceData);
   } catch (e) {
-    console.log('geofenceScheduler Error :', e);
+    errorNotifAlert(`geofenceScheduler Error : ${e}`);
   }
 };

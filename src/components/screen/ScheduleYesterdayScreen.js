@@ -5,6 +5,7 @@ import ScheduleLayout from 'components/items/layout/ScheduleLayout';
 import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
 import { makeScheduleDate } from 'utils/makeScheduleData';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 const ScheduleYesterday = ({ navigation }) => {
   const yesterDayData = [];
@@ -21,7 +22,7 @@ const ScheduleYesterday = ({ navigation }) => {
     try {
       setModalVisible(!isModalVisible);
     } catch (e) {
-      console.log('toggleModal Error :', e);
+      errorNotifAlert(`toggleModal Error : ${e}`);
     }
   };
 

@@ -8,6 +8,7 @@ import { getTimeDiff } from 'utils/timeUtil';
 import {
   alertStartTimePicker,
   alertFinsihTimePicker,
+  errorNotifAlert,
 } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 
@@ -117,7 +118,7 @@ export const TimePicker = ({
         handleConfirm(formatTime);
       }
     } catch (e) {
-      console.log('checkValidStartTime Error :', e);
+      errorNotifAlert(`checkValidStartTime Error : ${e}`);
     }
   };
 
@@ -135,7 +136,7 @@ export const TimePicker = ({
         alertFinsihTimePicker('시작 시간부터 설정해주세요.');
       }
     } catch (e) {
-      console.log('checkValidFinishTime Error :', e);
+      errorNotifAlert(`checkValidFinishTime Error : ${e}`);
     }
   };
 

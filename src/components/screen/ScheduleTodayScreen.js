@@ -7,6 +7,7 @@ import { ScheduleComponent } from 'components/items/ScheduleComponent';
 
 import { getDataFromAsync } from 'utils/asyncStorageUtil';
 import { makeScheduleDate } from 'utils/makeScheduleData';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import { KEY_VALUE_START_TIME, KEY_VALUE_SUCCESS } from 'constant/const';
 import { Keyboard } from 'react-native';
@@ -32,7 +33,7 @@ const ScheduleToday = ({ navigation, route }) => {
       setModalVisible(!isModalVisible);
       await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
     } catch (e) {
-      console.log('toggleModal Error :', e);
+      errorNotifAlert(`toggleModal Error : ${e}`);
     }
   };
 

@@ -26,11 +26,9 @@ import {
   skipDenyAlert,
   startDenyAlert,
   startAlert,
+  errorNotifAlert,
 } from 'utils/buttonAlertUtil';
-import {
-  checkGeofenceSchedule,
-  checkNearByFinish,
-} from 'utils/gfSchedulerUtil';
+import { checkGeofenceSchedule } from 'utils/gfSchedulerUtil';
 import { cancelAllNotif } from 'utils/notificationUtil';
 
 import {
@@ -72,7 +70,7 @@ const handleSkip = async (isNeedSkip) => {
           await geofenceUpdate(geofenceData, idx);
         }
       } catch (e) {
-        console.log('skip Error : ', e);
+        errorNotifAlert(`skip Error : ${e}`);
       }
     };
 
@@ -98,13 +96,13 @@ const handleSkip = async (isNeedSkip) => {
     }
     return null;
   } catch (e) {
-    console.log('handleSkip Error :', e);
+    errorNotifAlert(`handleSkip Error : ${e}`);
   }
 };
 
 const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
   try {
-    const isNeedSkip = await checkGeofenceSchedule();
+    const isNeedSkip = await checkGeofenceSchedule(1);
 
     if (isNeedSkip) {
       Alert.alert(
@@ -132,7 +130,7 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
       skipDenyAlert();
     }
   } catch (e) {
-    console.log('skipNotifHandler Error : ', e);
+    errorNotifAlert(`skipNotifHandler Error : ${e}`);
   }
 };
 
@@ -151,7 +149,7 @@ const handleStart = async () => {
       startDenyAlert(2);
     }
   } catch (e) {
-    console.log('handleStart Error : ', e);
+    errorNotifAlert(`handleStart Error :  ${e}`);
   }
 };
 

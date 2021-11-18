@@ -51,7 +51,7 @@ export const noDataAlert = () =>
 export const requestDeniedAlert = () =>
   Alert.alert(
     '검색 요청 권한이 없습니다.',
-    '앱을 재시작해주세요!',
+    '반복 시 관리자에게 알려주세요',
     [{ text: '확인' }],
     {
       cancelable: false,
@@ -60,16 +60,32 @@ export const requestDeniedAlert = () =>
 export const invalidRequestAlert = () =>
   Alert.alert(
     '유효하지 않은 요청입니다.',
-    '앱을 재시작해주세요!',
+    '반복 시 관리자에게 알려주세요',
     [{ text: '확인' }],
     {
       cancelable: false,
     },
   );
 export const limitRequestAlert = () =>
-  Alert.alert('검색 요청 횟수를 초과 하였습니다.', '', [{ text: '확인' }], {
-    cancelable: false,
-  });
+  Alert.alert(
+    '검색 요청 횟수를 초과 하였습니다.',
+    '반복 시 관리자에게 알려주세요',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+
+export const errorNotifAlert = (e) => {
+  Alert.alert(
+    'Error',
+    `${e}\n에러 반복 시 관리자에게 알려주세요`,
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
+};
 
 export const skipNotifAlert = (title = null) => {
   let msg1;
@@ -87,14 +103,9 @@ export const skipNotifAlert = (title = null) => {
 };
 
 export const skipDenyAlert = () =>
-  Alert.alert(
-    '스킵 버튼',
-    '일정이 진행 중일 때 눌러주세요!',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
+  Alert.alert('스킵 버튼', '스킵 가능한 일정이 없습니다', [{ text: '확인' }], {
+    cancelable: false,
+  });
 
 export const startBtnAlert = () =>
   Alert.alert('시작 버튼을 눌러주세요!', '', [{ text: '확인' }], {
@@ -159,7 +170,7 @@ export const startAlert = (geofenceUpdate, data) =>
               strtAlert(geofenceData[0].title);
             }
           } catch (e) {
-            console.log('startAlert Error : ', e);
+            errorNotifAlert(`startAlert Error :  ${e}`);
           }
         },
       },
@@ -230,7 +241,7 @@ export const deleteToDoAlert = async (id) =>
             try {
               resolve('true');
             } catch (e) {
-              console.log('deleteToDoAlert Error :', e);
+              errorNotifAlert(`deleteToDoAlert Error : ${e}`);
             }
           },
         },
@@ -255,7 +266,7 @@ export const deleteToDoTaskList = async () =>
             try {
               resolve('true');
             } catch (e) {
-              console.log('deleteToDoTask Error :', e);
+              errorNotifAlert(`deleteToDoTask Error : ${e}`);
             }
           },
         },
