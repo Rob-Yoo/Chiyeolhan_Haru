@@ -9,6 +9,7 @@ export const Loading = () => {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         justifyContent: 'center',
+        backgroundColor:'transparent'
       }}
     >
       <ActivityIndicator size="large" color="#229892" />

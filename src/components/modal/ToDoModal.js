@@ -20,6 +20,7 @@ import { todoDbModel } from 'model/dataModel';
 import Map from 'components/screen/MapScreen';
 import styles from 'components/modal/ToDoModalStyle';
 import { TimePicker } from 'components/items/TimePicker';
+import { Loading } from 'components/screen/LoadingScreen';
 import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
@@ -89,7 +90,7 @@ export const ToDoModal = ({
   const titleInputRef = useRef();
 
   const [prevTime, setPrevTime] = useState(null);
-
+  const [isLoading,isSetLoading] = useState(false);
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -290,6 +291,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
+    isSetLoading(true)
     const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
@@ -320,6 +322,7 @@ export const ToDoModal = ({
           taskList,
         );
         dispatch(create(newData));
+     
         await toDosUpdateDB(newData, id);
         if (isToday) {
           // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
@@ -349,7 +352,9 @@ export const ToDoModal = ({
         if (passModalData && passModalData.description === undefined) {
           navigateFavorite();
         }
+        isSetLoading(false)
         modalHandler();
+        
 
         await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
       } catch (e) {
@@ -363,6 +368,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
+    isSetLoading(true);
     const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
@@ -468,6 +474,7 @@ export const ToDoModal = ({
         } else {
           dbToAsyncTomorrow();
         }
+        isSetLoading(false)
         modalHandler();
       } catch (e) {
         errorNotifAlert(`todoModal todoEdit Error : ${e}`);
@@ -546,6 +553,7 @@ export const ToDoModal = ({
   }, [isModalVisible]);
 
   return (
+    <>
     <Modal
       navigation={navigation}
       isVisible={isModalVisible}
@@ -825,7 +833,11 @@ export const ToDoModal = ({
           locationDataHandler={(value) => getLocationData(value)}
         />
       </Modal>
+          {isLoading? <View style={{flex:1, opacity: 0.37,
+  backgroundColor: "#000000"}}><Loading/></View> :null  }
     </Modal>
+
+    </>
   );
 };
 
