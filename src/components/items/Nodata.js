@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   noDataCard: {
-    //width: SCREEN_WIDTH * 0.5,
+    // width: SCREEN_WIDTH * 0.49,
     width: 194,
-    maxHeight: 191,
+    height: 191,
     height: SCREEN_HEIGHT * 0.24,
     borderRadius: 20,
     // marginBottom: 30,

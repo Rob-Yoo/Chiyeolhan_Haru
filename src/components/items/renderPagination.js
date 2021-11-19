@@ -30,14 +30,14 @@ const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
   const [isVisible, setIsVisible] = useState(false);
-  const [taskTitle, setTaskTitle] = useState(null);
+  const [taskTitle, setTaskTitle] = useState('');
   const dispatch = useDispatch();
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
 
   const addTaskList = () => {
-    if (taskTitle === null) {
+    if (taskTitle === '') {
       toggleIsVisible();
       return;
     }

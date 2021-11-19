@@ -25,7 +25,7 @@ export const Task = (props) => {
   );
   const network = useSelector((state) => state.network);
   const [taskTitle, setTaskTitle] = useState(
-    targetId !== 0 ? todosSelector[index] : null,
+    targetId !== 0 ? todosSelector[index] : '',
   );
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
@@ -44,16 +44,11 @@ export const Task = (props) => {
     dispatch(remove({ targetId, index }));
   };
   const submitTask = () => {
-    if (taskTitle === null) {
-      toggleIsVisible();
-      return;
-    }
-
     if (taskTitle.length > 40) {
       longTaskList();
       return;
     }
-    if (taskTitle.length > 0 && taskTitle !== null)
+    if (taskTitle !== null && taskTitle.length > 0)
       editTaskList(targetId, taskTitle);
     else if (taskTitle.length === 0) {
       deleteTaskList(targetId, index);
