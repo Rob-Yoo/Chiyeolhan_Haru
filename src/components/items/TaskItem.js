@@ -44,6 +44,11 @@ export const Task = (props) => {
     dispatch(remove({ targetId, index }));
   };
   const submitTask = () => {
+    if (taskTitle === null) {
+      toggleIsVisible();
+      return;
+    }
+
     if (taskTitle.length > 40) {
       longTaskList();
       return;
@@ -59,7 +64,6 @@ export const Task = (props) => {
   const handleDeleteTaskList = () => {
     deleteTaskList(targetId, index);
   };
-
   return (
     <View style={styles.taskContainer}>
       <TouchableHighlight

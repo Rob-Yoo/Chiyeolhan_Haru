@@ -37,12 +37,16 @@ const Pagination = ({ taskList, targetId }) => {
   };
 
   const addTaskList = () => {
-    if (taskTitle.length > 40) {
+    if (taskTitle === null) {
+      toggleIsVisible();
+      return;
+    }
+    if (taskTitle && taskTitle.length > 40) {
       longTaskList();
       return;
     }
     toggleIsVisible();
-    if (taskTitle !== null && taskTitle.length > 0)
+    if (taskTitle && taskTitle.length > 0)
       dispatch(add({ targetId, taskTitle }));
     setTaskTitle(null);
   };
