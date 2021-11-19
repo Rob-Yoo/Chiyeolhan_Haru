@@ -21,17 +21,17 @@ import {
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress, taskStyle } = props;
   const todosSelector = useSelector(
-    (state) => targetId !== 0 && state.toDos[targetId]?.toDos,
+    (state) => state.toDos[targetId] && state.toDos[targetId]?.toDos,
   );
   const network = useSelector((state) => state.network);
   const [taskTitle, setTaskTitle] = useState(
-    targetId !== 0 ? todosSelector[index] : '',
+    todosSelector[index] && todosSelector[index] ? todosSelector[index] : '',
   );
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    todosSelector !== 0 && setTaskTitle(todosSelector[index]);
+    todosSelector && setTaskTitle(todosSelector[index]);
   }, [todosSelector]);
 
   const toggleIsVisible = () => {
@@ -44,15 +44,14 @@ export const Task = (props) => {
     dispatch(remove({ targetId, index }));
   };
   const submitTask = () => {
-    if (taskTitle.length > 40) {
+    if (taskTitle && taskTitle.length > 40) {
       longTaskList();
       return;
     }
-    if (taskTitle !== null && taskTitle.length > 0)
-      editTaskList(targetId, taskTitle);
+    if (taskTitle && taskTitle.length > 0) editTaskList(targetId, taskTitle);
     else if (taskTitle.length === 0) {
       deleteTaskList(targetId, index);
-      setTaskTitle(null);
+      setTaskTitle('');
     }
     toggleIsVisible();
   };

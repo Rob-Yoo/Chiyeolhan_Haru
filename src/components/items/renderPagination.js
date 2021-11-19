@@ -48,7 +48,7 @@ const Pagination = ({ taskList, targetId }) => {
     toggleIsVisible();
     if (taskTitle && taskTitle.length > 0)
       dispatch(add({ targetId, taskTitle }));
-    setTaskTitle(null);
+    setTaskTitle('');
   };
 
   const handlePaginationAddButton = () => {
