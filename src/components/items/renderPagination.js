@@ -36,7 +36,7 @@ const Pagination = ({ taskList, targetId }) => {
     setIsVisible(!isVisible);
   };
 
-  const addTaskList = () => {
+  const addTaskList = (targetId, taskTitle) => {
     if (taskTitle === '') {
       toggleIsVisible();
       return;
@@ -167,8 +167,8 @@ const Pagination = ({ taskList, targetId }) => {
           onChangeText={(text) => {
             setTaskTitle(text);
           }}
-          onSubmitEditing={() => {
-            addTaskList(targetId, taskTitle);
+          onSubmitEditing={(event) => {
+            addTaskList(targetId, event.nativeEvent.text);
           }}
           style={styles.modatalTask}
           returnKeyType="done"

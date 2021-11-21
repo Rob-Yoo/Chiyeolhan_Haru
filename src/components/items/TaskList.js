@@ -88,7 +88,6 @@ export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
             onSubmitEditing={(task) => {
               taskSubmit(task, taskList.length);
               setTask('');
-              //textInputRef.current?.focus();
             }}
             onFocus={(event) => {
               scrollToInput(ReactNative.findNodeHandle(event.target));

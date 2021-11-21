@@ -37,18 +37,21 @@ export const Task = (props) => {
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
-  const editTaskList = (targetId, taskTitle) => {
+  const editTaskList = (targetId, taskTitle, index) => {
+    console.log('editTaskList');
     dispatch(edit({ targetId, taskTitle, index }));
   };
   const deleteTaskList = (targetId, index) => {
     dispatch(remove({ targetId, index }));
   };
-  const submitTask = () => {
+  const submitTask = (taskTitle) => {
+    if (taskTitle === null) return;
     if (taskTitle && taskTitle.length > 40) {
       longTaskList();
       return;
     }
-    if (taskTitle && taskTitle.length > 0) editTaskList(targetId, taskTitle);
+    if (taskTitle && taskTitle.length > 0)
+      editTaskList(targetId, taskTitle, index);
     else if (taskTitle.length === 0) {
       deleteTaskList(targetId, index);
       setTaskTitle('');
@@ -105,8 +108,8 @@ export const Task = (props) => {
             setTaskTitle(text);
           }}
           value={taskTitle}
-          onSubmitEditing={() => {
-            submitTask();
+          onSubmitEditing={(event) => {
+            submitTask(event.nativeEvent.text);
           }}
           style={taskStyle}
           returnKeyType="done"
