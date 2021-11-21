@@ -70,14 +70,14 @@ export const MapSearch = ({
               }}
             />
             <TextInput
-              style={styles.searchInputViewInput}
+              style={[styles.searchInputViewInput]}
               ref={searchInput}
               placeholderTextColor="#A2A2A2"
               onTouchStart={() => {
                 !searchedHistoryVisible && setSearchedHistroyVisible(true);
               }}
               value={inputText}
-              placeholder=" 장소, 버스, 지하철, 주소 검색"
+              placeholder="장소, 버스, 지하철, 주소 검색"
               onChangeText={(text) => setText(text)}
               onSubmitEditing={() => {
                 _handlePlacesAPI(inputText);
@@ -122,13 +122,13 @@ export const MapSearch = ({
                         {item.type === 'location' ? (
                           <IconSearchedLocation
                             name="location"
-                            size={22}
+                            size={17}
                             color={'#575757'}
                           />
                         ) : (
                           <IconSearchedSearch
                             name="icon-searched-search"
-                            size={22}
+                            size={17}
                             color={'#575757'}
                           />
                         )}
@@ -137,15 +137,14 @@ export const MapSearch = ({
                         style={[
                           styles.searchedText,
                           {
-                            maxHeight: 40,
+                            maxHeight: 30,
                             maxWidth: SCREEN_WIDTH * 0.6,
                             minWidth: '80%',
-                          
                           },
                         ]}
                       >
-                        {item.text.length > 14
-                          ? `${item.text.substring(0, 13)}···`
+                        {item.text.length > 16
+                          ? `${item.text.substring(0, 15)}···`
                           : item.text}
                       </Text>
 
@@ -204,9 +203,9 @@ const styles = StyleSheet.create({
     height: 800,
     backgroundColor: '#fff',
   },
-  icon: { marginRight: 10, minWidth: 20 },
+  icon: { marginRight: 7, minWidth: 20 },
   searchedText: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '500',
   },
   searchedDeleteText: {
@@ -214,10 +213,10 @@ const styles = StyleSheet.create({
     color: '#A2A2A2',
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 16,
+    fontSize: 15,
     position: 'absolute',
     padding: 3,
-    top: 20,
+    top: 13,
     right: 10,
   },
   searchInputContainer: {
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   searchInputViewBackButton: {
-    width: '10%',
+    width: '9.5%',
     height: 30,
     paddingTop: 6,
     paddingHorizontal: 5,
@@ -241,11 +240,10 @@ const styles = StyleSheet.create({
     //height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 16,
-
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
-    fontSize: 20,
+    fontSize: 17,
     marginVertical: 25,
     textAlign: 'center',
   },
@@ -253,7 +251,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'red',
     width: '100%',
     flexDirection: 'row',
-    paddingVertical: 18,
+    paddingVertical: 14,
     paddingHorizontal: 18,
     borderBottomWidth: 1,
     borderBottomColor: '#707070',

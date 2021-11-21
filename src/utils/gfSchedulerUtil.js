@@ -79,7 +79,6 @@ export const checkNearByFinish = async () => {
       for (const schedule of nearBySchedules) {
         const dbData = await todosRef.where('id', '==', schedule.id).get();
         dbData.forEach((todo) => {
-          console.log(todo.data().isDone);
           if (todo.data().isDone === false) {
             result = false;
           }

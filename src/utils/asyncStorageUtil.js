@@ -332,7 +332,7 @@ export const checkDayChange = async () => {
 
       // 트래킹이 되고있는 일정이 남아있을 수 있기 때문에 멈춰준다.
       const geofences = await BackgroundGeolocation.getGeofences();
-      if (geofences.length !== 0) {
+      if (geofences.length > 0) {
         await BackgroundGeolocation.removeGeofence(`${UID}`);
         await BackgroundGeolocation.stop();
       }

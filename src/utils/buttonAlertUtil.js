@@ -280,6 +280,11 @@ export const longTodoTitle = () =>
     cancelable: false,
   });
 
+export const weakNetworkAlert = () =>
+  Alert.alert('인터넷 연결 상태가 좋지 않습니다.', '', [{ text: '확인' }], {
+    cancelable: false,
+  });
+
 export const longTaskList = () =>
   Alert.alert(
     `일정의 체크 리스트를 너무 길게 설정했습니다.\n(다음 체크리스트를 이용하세요.)`,

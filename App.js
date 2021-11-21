@@ -9,7 +9,7 @@ import store from 'redux/store';
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { getDataFromAsync, dbToAsyncStorage } from 'utils/asyncStorageUtil';
-import { errorNotifAlert } from 'utils/buttonAlertUtil';
+import { errorNotifAlert, weakNetworkAlert } from 'utils/buttonAlertUtil';
 
 import {
   KEY_VALUE_INSTALLED,
@@ -48,13 +48,16 @@ const App = () => {
 
   const prepare = async () => {
     try {
+      // let timer = setTimeout(() => {
+      //   weakNetworkAlert();
+      //   clearTimeout(timer);
+      // }, 3000);
       await SplashScreen.preventAutoHideAsync();
       await loadSavedData();
+      setAppIsReady(true);
     } catch (e) {
       console.warn(e);
       await SplashScreen.hideAsync();
-    } finally {
-      setAppIsReady(true);
     }
   };
 

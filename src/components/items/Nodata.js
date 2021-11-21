@@ -21,7 +21,13 @@ export const Nodata = () => {
           <View style={styles.statusbar} />
         </View>
 
-        <View style={{ alignItems: 'center', justifyContent: 'space-evenly' }}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            marginTop: -5,
+          }}
+        >
           <Text style={styles.nodataText}>일정을 기록해보세요</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('ScheduleToday')}
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 131.5 * 2,
     // height: SCREEN_HEIGHT > 668 ? '61.5%' : '72%',
-    height: SCREEN_HEIGHT * 0.428,
+    height: SCREEN_HEIGHT * 0.38,
     top: SCREEN_HEIGHT > 668 ? 20 : 0,
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
   noDataCard: {
     // width: SCREEN_WIDTH * 0.49,
     width: 194,
-    height: 191,
+    maxHeight: 191,
     height: SCREEN_HEIGHT * 0.24,
     borderRadius: 20,
     // marginBottom: 30,

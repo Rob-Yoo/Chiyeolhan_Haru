@@ -15,7 +15,7 @@ import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
 import { checkNearByFinish } from 'utils/gfSchedulerUtil';
-import { errorNotifAlert } from 'utils/buttonAlertUtil';
+import { errorNotifAlert, weakNetworkAlert } from 'utils/buttonAlertUtil';
 
 import { UID, CONTAINER_WIDTH } from 'constant/const';
 
@@ -24,12 +24,17 @@ const Home = ({ navigation }) => {
   const homeRender = useSelector((state) => state.homerender);
   const { YESTERDAY, TODAY } = getDate();
   const [isLoading, setLoading] = useState(true);
-
+  const toDos = useSelector((state) => state.toDos);
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
     AppState.addEventListener('change', __handleAppStateChange);
+
+    // let timer = setTimeout(() => {
+    //   weakNetworkAlert();
+    //   clearTimeout(timer);
+    // }, 3000);
     readyForHome();
     return () => {
       AppState.removeEventListener('change', __handleAppStateChange);
@@ -66,6 +71,18 @@ const Home = ({ navigation }) => {
     await loadSuccessSchedules();
     await checkNearByFinish();
     await SplashScreen.hideAsync();
+
+    // function sleep(ms) {
+    //   const wakeUpTime = Date.now() + ms;
+    //   while (Date.now() < wakeUpTime) {
+    //     if (toDos !== {}) {
+    //       SplashScreen.hideAsync();
+    //       return;
+    //     }
+    //   }
+    //   weakNetworkAlert();
+    // }
+    // sleep(5000);
   };
 
   const getToDos = async () => {

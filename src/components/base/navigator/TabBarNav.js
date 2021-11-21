@@ -140,7 +140,7 @@ const handleStart = async () => {
     const isDayChange = await getDataFromAsync(KEY_VALUE_DAY_CHANGE);
     if (isDayChange) {
       const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
-      if (geofenceData === null) {
+      if (geofenceData === null || geofenceData.length === 0) {
         startDenyAlert(1);
       } else {
         startAlert(geofenceUpdate, geofenceData);

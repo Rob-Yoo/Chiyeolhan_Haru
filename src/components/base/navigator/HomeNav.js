@@ -59,8 +59,9 @@ const OffHomeStack = ({ navigation }) => {
   );
 };
 
-const HomeNav = ({ navigation }) => {
+const HomeNav = () => {
   const [network, setNetwork] = useState('online');
+  //const [isNetwork, setIsNetwork] = useState(false);
   const [isNetwork, setIsNetwork] = useState(false);
 
   useEffect(() => {
@@ -113,7 +114,11 @@ const HomeNav = ({ navigation }) => {
       }}
     >
       {network === 'online' ? (
-        <Stack.Screen name="Home" component={HomeStack} />
+        <Stack.Screen
+          name="Home"
+          component={HomeStack}
+          //clearTimeout={clearTimeout}
+        />
       ) : (
         <Stack.Screen name="OffHome" component={OffHomeStack} />
       )}

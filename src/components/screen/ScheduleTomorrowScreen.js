@@ -34,11 +34,13 @@ const ScheduleTomorrow = ({ navigation }) => {
 
     if (!isStartTodo) {
       if (geofenceData !== null) {
-        const currentTime = getCurrentTime();
-        const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
-        if (timeDiff <= 15) {
-          // 첫 일정의 시작 시간의 15분 전부터 시작 버튼을 눌러달라고 알림창을 띄움
-          startBtnAlert();
+        if (geofenceData.lenght > 0) {
+          const currentTime = getCurrentTime();
+          const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+          if (timeDiff <= 15) {
+            // 첫 일정의 시작 시간의 15분 전부터 시작 버튼을 눌러달라고 알림창을 띄움
+            startBtnAlert();
+          }
         }
       }
     }

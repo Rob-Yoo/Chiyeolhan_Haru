@@ -10,7 +10,7 @@ export const AlertView = () => {
       style={{
         backgroundColor: '#fff',
         width: CONTAINER_WIDTH,
-        height: 170,
+        height: 250,
         position: 'absolute',
         right: 0,
         top: 30,
@@ -49,34 +49,20 @@ export const AlertView = () => {
         <Text style={styles.noticeText}>
           {`일정을 스킵할 때 눌러주세요.\n`}
 
-          <View>
+          <View style={{ maxWidth: '90%' }}>
             <Text
               style={[
                 styles.noticeText,
-                {
-                  fontSize: 10,
-                  color: '#BDBFBF',
-                  marginTop: 15,
-                },
+                styles.noticeDetailText,
+                { lineHeight: 12 },
               ]}
             >
-              {`일정 시간 내 목표 장소에 가지 않을 경우\n해당 일정을 스킵해주세요!\n `}
-            </Text>
-            <Text
-              style={[
-                styles.noticeText,
-                {
-                  fontSize: 10,
-                  color: '#BDBFBF',
-                  marginTop: -8,
-                },
-              ]}
-            >
-              {`* 버튼을 누르지 않으면 이후 일정들에서\n  사용자의 위치를 확인할 수 없습니다.`}
+              {`일정 시간 내 목표 장소에 가지 않을 경우 해당 일정을 스킵해주세요! 버튼을 누르지 않으면 이후 일정들에서 사용자의 위치를 확인할 수 없습니다.\n`}
             </Text>
           </View>
         </Text>
       </View>
+      {/* <Text style={styles.noticeText}> {`오늘을 꾹 눌러 보세요`}</Text> */}
     </View>
   );
 };
@@ -90,5 +76,10 @@ const styles = StyleSheet.create({
     fontFamily: 'GodoB',
     color: '#788382',
     fontSize: 13,
+  },
+  noticeDetailText: {
+    fontSize: 10,
+    color: '#BDBFBF',
+    marginTop: 8,
   },
 });
