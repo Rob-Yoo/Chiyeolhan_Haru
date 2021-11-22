@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: '#FFF',
     width: '75%',
-    //height: 74,
-    height: CONTAINER_WIDTH * 0.198,
+    height: 74,
+    //height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
     justifyContent: 'center',
     paddingHorizontal: 20,
