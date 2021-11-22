@@ -25,6 +25,7 @@ import { FavoriteModal } from 'components/modal/FavoriteModal';
 
 import IconQuestion from '#assets/icons/icon-question';
 import IconFavorite from '#assets/icons/icon-favorite';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 import { handleFilterData } from 'utils/handleFilterData';
 import {
@@ -90,7 +91,7 @@ export const ToDoModal = ({
   const titleInputRef = useRef();
 
   const [prevTime, setPrevTime] = useState(null);
-  const [isLoading,isSetLoading] = useState(false);
+  const [isLoading, isSetLoading] = useState(false);
   useEffect(() => {
     //수정시 넘겨온 데이터가 있을때
     if (network === 'offline' || passModalData?.startDate < new Date()) {
@@ -291,7 +292,7 @@ export const ToDoModal = ({
       modalHandler();
       return;
     }
-    isSetLoading(true)
+    isSetLoading(true);
     const block = await checkGeofenceSchedule(0);
     if (block == 1) {
       addModifyBlockAlert();
@@ -322,7 +323,7 @@ export const ToDoModal = ({
           taskList,
         );
         dispatch(create(newData));
-     
+
         await toDosUpdateDB(newData, id);
         if (isToday) {
           // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
@@ -352,9 +353,8 @@ export const ToDoModal = ({
         if (passModalData && passModalData.description === undefined) {
           navigateFavorite();
         }
-        isSetLoading(false)
+        isSetLoading(false);
         modalHandler();
-        
 
         await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
       } catch (e) {
@@ -474,7 +474,7 @@ export const ToDoModal = ({
         } else {
           dbToAsyncTomorrow();
         }
-        isSetLoading(false)
+        isSetLoading(false);
         modalHandler();
       } catch (e) {
         errorNotifAlert(`todoModal todoEdit Error : ${e}`);
@@ -554,289 +554,300 @@ export const ToDoModal = ({
 
   return (
     <>
-    <Modal
-      navigation={navigation}
-      isVisible={isModalVisible}
-      onModalWillHide={() => Keyboard.dismiss()}
-      onModalHide={() => clearData()}
-      animationIn="slideInUp"
-      animationOut="slideOutDown"
-      style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
-    >
-      <TouchableOpacity
-        style={{ height: '100%', position: 'absolute' }}
-        activeOpacity={1}
+      <Modal
+        navigation={navigation}
+        isVisible={isModalVisible}
+        onModalWillHide={() => Keyboard.dismiss()}
+        onModalHide={() => clearData()}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, margin: 0 }}
       >
         <TouchableOpacity
-          style={styles.background}
+          style={{ height: '100%', position: 'absolute' }}
           activeOpacity={1}
-          onPress={modalHandler}
-        />
-        <ImageBackground
-          source={{
-            uri: 'favoriteBackground',
-          }}
-          imageStyle={{
-            width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
-            borderTopLeftRadius: 50,
-            borderTopRightRadius: 50,
-          }}
-          style={[
-            styles.modalInputContainer,
-            {
-              marginTop:
-                SCREEN_HEIGHT < 668
-                  ? '30%'
-                  : isToday === 'yesterday'
-                  ? '45%'
-                  : '39%',
-            },
-          ]}
         >
-          <View
+          <TouchableOpacity
+            style={styles.background}
+            activeOpacity={1}
+            onPress={modalHandler}
+          />
+          <ImageBackground
+            source={{
+              uri: 'favoriteBackground',
+            }}
+            imageStyle={{
+              width: PixelRatio.roundToNearestPixel(SCREEN_WIDTH),
+              borderTopLeftRadius: 50,
+              borderTopRightRadius: 50,
+            }}
             style={[
-              styles.modalTopContainer,
+              styles.modalInputContainer,
               {
-                paddingTop:
-                  SCREEN_HEIGHT > 668 ? (isToday === 'yesterday' ? 0 : 20) : 0,
+                marginTop:
+                  SCREEN_HEIGHT < 668
+                    ? '30%'
+                    : isToday === 'yesterday'
+                    ? '45%'
+                    : '39%',
               },
             ]}
           >
             <View
-              style={{
-                //width: SCREEN_WIDTH,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                backgroundColor: 'transparent',
-                // backgroundColor: 'green',
-              }}
+              style={[
+                styles.modalTopContainer,
+                {
+                  paddingTop:
+                    SCREEN_HEIGHT > 668
+                      ? isToday === 'yesterday'
+                        ? 0
+                        : 20
+                      : 0,
+                },
+              ]}
             >
-              {isToday !== 'yesterday' && network !== 'offline' ? (
-                <TouchableOpacity
-                  style={styles.favoriteIconBackground}
-                  onPress={() =>
-                    toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
-                  }
-                >
-                  <IconFavorite
-                    name="icon-favorite"
-                    size={16}
-                    color={'#00A29A'}
-                  />
-                </TouchableOpacity>
-              ) : (
-                <View
-                  style={[
-                    styles.favoriteIconBackground,
-                    { backgroundColor: null },
-                  ]}
-                />
-              )}
-              <View style={styles.modalTextView}>
-                {canEdit ? (
-                  <>
-                    <TouchableOpacity>
-                      <Text
-                        onPress={modalHandler}
-                        style={[styles.modalTopText, { marginRight: 40 }]}
-                      >
-                        취소
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity>
-                      <Text
-                        onPress={handleSubmit(handleTodoSubmit)}
-                        style={[styles.modalTopText]}
-                      >
-                        완료
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.modalTopText}
-                    onPress={() => modalHandler()}
-                  >
-                    <Text style={[styles.modalTopText]}>닫기</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                //backgroundColor: 'blue',
-              }}
-            >
-              <ImageBackground
-                style={[styles.imageBackgroundMapStyle]}
-                source={{ uri: 'map' }}
+              <View
+                style={{
+                  //width: SCREEN_WIDTH,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  backgroundColor: 'transparent',
+                  // backgroundColor: 'green',
+                }}
               >
-                <View
-                  style={[
-                    styles.imageBackgroundStyle,
-                    {
-                      backgroundColor: locationName
-                        ? 'transparent'
-                        : 'rgba(0,0,0,0.3)',
-                      borderWidth: locationName ? 8 : null,
-                      borderColor: locationName ? '#EFEFEF' : null,
-                    },
-                  ]}
+                {isToday !== 'yesterday' && network !== 'offline' ? (
+                  <TouchableOpacity
+                    style={styles.favoriteIconBackground}
+                    onPress={() =>
+                      toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+                    }
+                  >
+                    <IconFavorite
+                      name="icon-favorite"
+                      size={16}
+                      color={'#00A29A'}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <View
+                    style={[
+                      styles.favoriteIconBackground,
+                      { backgroundColor: null },
+                    ]}
+                  />
+                )}
+                <View style={styles.modalTextView}>
+                  {canEdit ? (
+                    <>
+                      <TouchableOpacity>
+                        <Text
+                          onPress={modalHandler}
+                          style={[styles.modalTopText, { marginRight: 40 }]}
+                        >
+                          취소
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity>
+                        <Text
+                          onPress={handleSubmit(handleTodoSubmit)}
+                          style={[styles.modalTopText]}
+                        >
+                          완료
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.modalTopText}
+                      onPress={() => modalHandler()}
+                    >
+                      <Text style={[styles.modalTopText]}>닫기</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  //backgroundColor: 'blue',
+                }}
+              >
+                <ImageBackground
+                  style={[styles.imageBackgroundMapStyle, styles.radiusImage]}
+                  source={{ uri: 'map' }}
                 >
-                  {isToday === 'yesterday' ? null : (
-                    <IconQuestion
-                      name="icon-question"
-                      size={SCREEN_HEIGHT > 668 ? 100 : 70}
-                      color={locationName ? 'transparent' : '#FFFFFF'}
-                      onPress={() =>
-                        passModalData
-                          ? null
-                          : toggleIsVisible(mapIsVisible, setMapIsVisible)
+                  <View
+                    style={[
+                      styles.radiusImage,
+                      styles.imageBackgroundStyle,
+                      {
+                        backgroundColor: locationName
+                          ? 'transparent'
+                          : 'rgba(0,0,0,0.3)',
+                        borderWidth: locationName ? 8 : null,
+                        borderColor: locationName ? '#EFEFEF' : null,
+                      },
+                    ]}
+                  >
+                    {isToday === 'yesterday' ? null : (
+                      <IconQuestion
+                        name="icon-question"
+                        size={
+                          SCREEN_HEIGHT > 668
+                            ? fontPercentage(95)
+                            : fontPercentage(65)
+                        }
+                        color={locationName ? 'transparent' : '#FFFFFF'}
+                        onPress={() =>
+                          passModalData
+                            ? null
+                            : toggleIsVisible(mapIsVisible, setMapIsVisible)
+                        }
+                      />
+                    )}
+                  </View>
+                </ImageBackground>
+                <View style={{ width: 68.5 * 2, width: SCREEN_WIDTH * 0.34 }}>
+                  <Text style={styles.titleText}>제목</Text>
+                  {network === 'offline' ||
+                  (passModalData && passModalData.startDate < new Date()) ? (
+                    <View style={styles.modalInputTitle}>
+                      <Text
+                        style={[
+                          styles.titleText,
+                          { color: '#2D2E33', paddingVertical: 5 },
+                        ]}
+                      >
+                        {title}
+                      </Text>
+                    </View>
+                  ) : (
+                    <TextInput
+                      placeholder="제목을 입력해 주세요"
+                      style={styles.modalInputTitle}
+                      placeholderTextColor="#A2A2A2"
+                      value={title}
+                      ref={titleInputRef}
+                      onChange={(e) => handleChange(e)}
+                      onChangeText={
+                        title.length > 20
+                          ? () => longTodoTitle()
+                          : setValue('todoTitle', title)
                       }
                     />
                   )}
+                  <Text style={styles.titleText}>위치</Text>
+                  <Text style={[styles.modalLocationText]}>
+                    {locationName
+                      ? locationName.length > 20
+                        ? `${locationName.substring(0, 23)}...`
+                        : locationName
+                      : '물음표를 눌러주세요'}
+                  </Text>
                 </View>
-              </ImageBackground>
-              <View style={{ width: 68.5 * 2 }}>
-                <Text style={styles.titleText}>제목</Text>
-                {network === 'offline' ||
-                (passModalData && passModalData.startDate < new Date()) ? (
-                  <View style={styles.modalInputTitle}>
-                    <Text
-                      style={[
-                        styles.titleText,
-                        { color: '#2D2E33', paddingVertical: 5 },
-                      ]}
-                    >
-                      {title}
-                    </Text>
-                  </View>
-                ) : (
-                  <TextInput
-                    placeholder="제목을 입력해 주세요"
-                    style={styles.modalInputTitle}
-                    placeholderTextColor="#A2A2A2"
-                    value={title}
-                    ref={titleInputRef}
-                    onChange={(e) => handleChange(e)}
-                    onChangeText={
-                      title.length > 20
-                        ? () => longTodoTitle()
-                        : setValue('todoTitle', title)
-                    }
-                  />
-                )}
-                <Text style={styles.titleText}>위치</Text>
-                <Text style={[styles.modalLocationText]}>
-                  {locationName
-                    ? locationName.length > 20
-                      ? `${locationName.substring(0, 23)}...`
-                      : locationName
-                    : '물음표를 눌러주세요'}
+              </View>
+              <View style={styles.timePickerContainer}>
+                <TimePicker
+                  isStart={true}
+                  timeText={'시작'}
+                  pickerHandler={(text) => timeHandler(text, true)}
+                  isToday={isToday}
+                  timeDate={passModalData?.startDate}
+                  isOngoing={isOngoing}
+                  prevTime={prevTime}
+                />
+                <Text
+                  style={{
+                    fontFamily: 'NotoSansKR-Black',
+                    fontSize: 18,
+                    color: '#fff',
+                    paddingHorizontal: 9,
+                    marginRight: 1,
+                  }}
+                >
+                  {`   ~   `}
                 </Text>
+                <TimePicker
+                  isStart={false}
+                  timeText={'끝'}
+                  pickerHandler={(text) => timeHandler(text, false)}
+                  timeDate={passModalData?.endDate}
+                  isOngoing={isOngoing}
+                  prevTime={prevTime}
+                />
               </View>
             </View>
-            <View style={styles.timePickerContainer}>
-              <TimePicker
-                isStart={true}
-                timeText={'시작'}
-                pickerHandler={(text) => timeHandler(text, true)}
-                isToday={isToday}
-                timeDate={passModalData?.startDate}
-                isOngoing={isOngoing}
-                prevTime={prevTime}
-              />
-              <Text
-                style={{
-                  fontFamily: 'NotoSansKR-Black',
-                  fontSize: 18,
-                  color: '#fff',
-                  paddingHorizontal: 9,
-                  marginRight: 1,
-                }}
-              >
-                {`   ~   `}
-              </Text>
-              <TimePicker
-                isStart={false}
-                timeText={'끝'}
-                pickerHandler={(text) => timeHandler(text, false)}
-                timeDate={passModalData?.endDate}
-                isOngoing={isOngoing}
-                prevTime={prevTime}
+
+            <View style={styles.todoBottomContainer}>
+              <Text style={styles.taskTitle}>체크리스트</Text>
+
+              <TaskList
+                taskList={taskList}
+                setTaskList={setTaskList}
+                task={task}
+                taskSubmit={taskSubmit}
+                canEdit={canEdit}
               />
             </View>
+          </ImageBackground>
+        </TouchableOpacity>
+        {/* Map Modal*/}
+        <Modal
+          isVisible={mapIsVisible}
+          animationIn="slideInRight"
+          animationOut="slideOutRight"
+          style={{
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+            margin: 0,
+          }}
+          backdropOpacity={0.3}
+        >
+          <Map
+            modalHandler={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
+            navigation={navigation}
+            locationDataHandler={(value) => getLocationData(value)}
+            searchedList={searchedList}
+            setSearchedList={setSearchedList}
+          />
+        </Modal>
+
+        {/* Favorite Modal*/}
+        <Modal
+          isVisible={favoriteIsVisible}
+          animationIn="slideInRight"
+          animationOut="slideOutRight"
+          style={{
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+            margin: 0,
+          }}
+          backdropOpacity={0}
+        >
+          <TouchableOpacity
+            style={[styles.background, { opacity: 0 }]}
+            activeOpacity={0}
+            onPress={() =>
+              toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+            }
+          />
+          <FavoriteModal
+            modalHandler={() =>
+              toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
+            }
+            locationDataHandler={(value) => getLocationData(value)}
+          />
+        </Modal>
+        {isLoading ? (
+          <View style={{ flex: 1, opacity: 0.37, backgroundColor: '#000000' }}>
+            <Loading />
           </View>
-
-          <View style={styles.todoBottomContainer}>
-            <Text style={styles.taskTitle}>체크리스트</Text>
-
-            <TaskList
-              taskList={taskList}
-              setTaskList={setTaskList}
-              task={task}
-              taskSubmit={taskSubmit}
-              canEdit={canEdit}
-            />
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-      {/* Map Modal*/}
-      <Modal
-        isVisible={mapIsVisible}
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        style={{
-          width: SCREEN_WIDTH,
-          height: SCREEN_HEIGHT,
-          margin: 0,
-        }}
-        backdropOpacity={0.3}
-      >
-        <Map
-          modalHandler={() => toggleIsVisible(mapIsVisible, setMapIsVisible)}
-          navigation={navigation}
-          locationDataHandler={(value) => getLocationData(value)}
-          searchedList={searchedList}
-          setSearchedList={setSearchedList}
-        />
+        ) : null}
       </Modal>
-
-      {/* Favorite Modal*/}
-      <Modal
-        isVisible={favoriteIsVisible}
-        animationIn="slideInRight"
-        animationOut="slideOutRight"
-        style={{
-          width: SCREEN_WIDTH,
-          height: SCREEN_HEIGHT,
-          margin: 0,
-        }}
-        backdropOpacity={0}
-      >
-        <TouchableOpacity
-          style={[styles.background, { opacity: 0 }]}
-          activeOpacity={0}
-          onPress={() =>
-            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
-          }
-        />
-        <FavoriteModal
-          modalHandler={() =>
-            toggleIsVisible(favoriteIsVisible, setFavoriteIsVisible)
-          }
-          locationDataHandler={(value) => getLocationData(value)}
-        />
-      </Modal>
-          {isLoading? <View style={{flex:1, opacity: 0.37,
-  backgroundColor: "#000000"}}><Loading/></View> :null  }
-    </Modal>
-
     </>
   );
 };

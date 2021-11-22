@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   backgroundWhite: {
     position: 'absolute',
     width: 131.5 * 2,
+    width: SCREEN_WIDTH * 0.64,
     // height: SCREEN_HEIGHT > 668 ? '61.5%' : '72%',
     height: SCREEN_HEIGHT * 0.38,
     top: SCREEN_HEIGHT > 668 ? 20 : 0,
@@ -74,7 +75,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   noDataCard: {
-    // width: SCREEN_WIDTH * 0.49,
     width: 194,
     maxHeight: 191,
     height: SCREEN_HEIGHT * 0.24,

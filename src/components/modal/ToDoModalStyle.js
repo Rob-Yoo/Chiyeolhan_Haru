@@ -61,24 +61,24 @@ const styles = StyleSheet.create({
     paddingLeft: 1,
     marginLeft: 5.2,
   },
-  imageBackgroundMapStyle: {
+  radiusImage: {
     width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
     height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
-    borderRadius: 100,
+    borderRadius: 200,
+  },
+  imageBackgroundMapStyle: {
     marginRight: 20,
   },
   imageBackgroundStyle: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 200,
   },
   modalLocationText: {
     fontFamily: 'NotoSansKR-Bold',
     color: '#FFFFFF',
     fontSize: fontPercentage(15),
     maxWidth: 147,
+    maxWidth: SCREEN_WIDTH * 0.4,
   },
   //FavoriteModal Container 크기도 변경
   modalInputContainer: {
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingHorizontal: 2,
     maxWidth: 137,
+    maxWidth: SCREEN_WIDTH * 0.4,
     //minWidth: 145,
   },
   modalInputTask: {
