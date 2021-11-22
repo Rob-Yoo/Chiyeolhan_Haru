@@ -92,7 +92,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
             style={[
               card.cardTitle,
               {
-                fontSize: fontPercentage(25.4),
+                fontSize: 25.4,
                 maxHeight: 60,
               },
             ]}
@@ -111,7 +111,8 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
                   top: 10.5,
                   left: 14.7,
                   width: 2,
-                  height: fontPercentage(11.5),
+                  //height: fontPercentage(11.5),
+                  height: 11.5,
                   backgroundColor: '#00A29A',
                 }}
               />
@@ -138,6 +139,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
             unfilledColor={'#C4C4C4'}
             borderWidth={0}
             width={SCREEN_WIDTH * 0.58 * 0.745}
+            maxWidth={160}
             style={{ marginLeft: -3 }}
             useNativeDriver
           />
@@ -150,7 +152,10 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 export const card = StyleSheet.create({
   card: {
     flex: 1,
-    paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
+    // paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
+    paddingHorizontal: 18,
+    maxHeight: 182,
+    maxWidth: 194,
     marginHorizontal: 10,
     height: SCREEN_WIDTH * 0.485,
     paddingTop: 1.5,
@@ -184,13 +189,12 @@ export const card = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'NotoSansKR-Black',
-
     marginTop: 13,
     position: 'relative',
   },
   cardLocation: {
     fontFamily: 'NotoSansKR-Medium',
-    fontSize: fontPercentage(10.7),
+    fontSize: 10.7,
     fontWeight: '800',
     flexWrap: 'wrap',
     color: '#F4F4F4',
@@ -200,7 +204,7 @@ export const card = StyleSheet.create({
   },
   cardTime: {
     fontFamily: 'NotoSansKR-Bold',
-    fontSize: fontPercentage(10.5),
+    fontSize: 10.5,
     marginBottom: -5,
   },
 

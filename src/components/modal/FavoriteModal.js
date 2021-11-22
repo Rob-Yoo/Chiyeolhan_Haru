@@ -34,7 +34,7 @@ const defaultRender = (favoriteLength) => {
           name="icon-question"
           style={{ position: 'absolute' }}
           color={'#B1E4E2'}
-          size={80}
+          size={SCREEN_WIDTH * 0.185}
         />
       </View>,
     );
@@ -98,7 +98,6 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
             contentContainerStyle={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
-
               flexWrap: 'wrap',
               flexGrow: 1,
               paddingTop: 10,
@@ -121,7 +120,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
                       name="location"
                       style={{ position: 'absolute' }}
                       color={'#B1E4E2'}
-                      size={80}
+                      size={SCREEN_WIDTH * 0.185}
                     />
                     <Text
                       style={{

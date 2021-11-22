@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { fontPercentage } from 'utils/responsiveUtil';
+import { SCREEN_HEIGHT } from '../../constant/const';
 
 export const LocationData = ({
   locationData,
@@ -36,7 +37,7 @@ export const LocationData = ({
           <View
             style={{
               width: 2,
-              height: 16,
+              height: fontPercentage(15),
               marginHorizontal: 3,
               backgroundColor: '#C4C4C4',
             }}
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '90%',
-    height: 90,
+    height: SCREEN_HEIGHT * 0.112,
     backgroundColor: '#fff',
     borderRadius: 8,
     paddingHorizontal: 20,
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
   },
   locationTitle: {
     fontFamily: 'NotoSansKR-Bold',
-
     color: '#000000',
     marginBottom: 7,
     paddingRight: 10,
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     borderColor: '#C4C4C4',
     fontSize: fontPercentage(10),
     height: 16,
+    height: '50%',
     fontWeight: '600',
   },
 
@@ -109,13 +110,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 64,
-    height: 41,
+    width: '100%',
+    height: '64%',
     borderRadius: 9,
     backgroundColor: '#54BCB6',
   },
   locationFinText: {
     fontFamily: 'GodoB',
-    fontSize: 20,
+    fontSize: fontPercentage(20),
     color: '#FFFFFF',
   },
 });

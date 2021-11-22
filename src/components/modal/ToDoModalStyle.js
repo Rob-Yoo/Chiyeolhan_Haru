@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     marginLeft: 5.2,
   },
   radiusImage: {
-    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
-    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.365 : SCREEN_WIDTH * 0.29,
+    width: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
+    height: SCREEN_HEIGHT > 668 ? SCREEN_WIDTH * 0.36 : SCREEN_WIDTH * 0.29,
     borderRadius: 200,
   },
   imageBackgroundMapStyle: {

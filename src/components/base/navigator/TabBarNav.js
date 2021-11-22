@@ -37,6 +37,8 @@ import {
   KEY_VALUE_DAY_CHANGE,
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
+  CONTAINER_WIDTH,
+  CONTAINER_HEIGHT,
 } from 'constant/const';
 
 const handleSkip = async (isNeedSkip) => {
@@ -288,7 +290,7 @@ const TabBar = (props) => {
           >
             <IconHome
               name="icon-home"
-              size={(4 * SCREEN_WIDTH) / 90}
+              size={(4.8 * CONTAINER_WIDTH) / 90}
               style={[styles.navIcon]}
             />
           </TouchableOpacity>

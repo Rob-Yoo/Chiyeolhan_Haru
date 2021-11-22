@@ -24,8 +24,10 @@ import { getCurrentTime } from 'utils/timeUtil';
 import { longTaskList } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 import { passedTodoAlert } from '../../utils/buttonAlertUtil';
+import { CONTAINER_WIDTH } from '../../constant/const';
 
-const IconTaskListLeftSize = 90;
+const IconTaskListLeftSize = SCREEN_HEIGHT * 0.1; //90
+
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
     top: SCREEN_HEIGHT * 0.3,
     left: -SCREEN_WIDTH * 0.19,
     width: SCREEN_WIDTH,
+    // maxWidth: 0,
     height: SCREEN_HEIGHT,
     paddingBottom: 150,
   },
@@ -221,7 +224,8 @@ const styles = StyleSheet.create({
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 74,
+    //height: 74,
+    height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
     shadowColor: '#00000029',
     shadowOffset: {

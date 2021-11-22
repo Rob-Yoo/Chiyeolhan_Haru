@@ -17,6 +17,7 @@ import {
   deleteSearchedData,
   deleteAllSearchedData,
 } from 'utils/asyncStorageUtil';
+import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
@@ -122,13 +123,13 @@ export const MapSearch = ({
                         {item.type === 'location' ? (
                           <IconSearchedLocation
                             name="location"
-                            size={17}
+                            size={fontPercentage(17)}
                             color={'#575757'}
                           />
                         ) : (
                           <IconSearchedSearch
                             name="icon-searched-search"
-                            size={17}
+                            size={fontPercentage(17)}
                             color={'#575757'}
                           />
                         )}
@@ -137,7 +138,7 @@ export const MapSearch = ({
                         style={[
                           styles.searchedText,
                           {
-                            maxHeight: 30,
+                            //maxHeight: 30,
                             maxWidth: SCREEN_WIDTH * 0.6,
                             minWidth: '80%',
                           },
@@ -203,9 +204,9 @@ const styles = StyleSheet.create({
     height: 800,
     backgroundColor: '#fff',
   },
-  icon: { marginRight: 7, minWidth: 20 },
+  icon: { marginRight: 7, minWidth: '5%' },
   searchedText: {
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     fontWeight: '500',
   },
   searchedDeleteText: {
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     color: '#A2A2A2',
     borderWidth: 1,
     borderRadius: 5,
-    fontSize: 15,
+    fontSize: fontPercentage(15),
     position: 'absolute',
     padding: 3,
     top: 13,
@@ -231,7 +232,8 @@ const styles = StyleSheet.create({
   },
   searchInputViewBackButton: {
     width: '9.5%',
-    height: 30,
+    // height: 30,
+    height: '75%',
     paddingTop: 6,
     paddingHorizontal: 5,
   },
@@ -243,8 +245,8 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Regular',
   },
   searchedDeleteAllText: {
-    fontSize: 17,
-    marginVertical: 25,
+    fontSize: fontPercentage(17),
+    marginVertical: 20,
     textAlign: 'center',
   },
   searcehdItem: {

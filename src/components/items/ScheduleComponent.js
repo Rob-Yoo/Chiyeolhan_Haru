@@ -50,7 +50,11 @@ const MyEventComponent = ({ event, position }) => {
         alignItems: timeDiff <= minutes15 ? 'center' : null,
         justifyContent: 'flex-start',
         paddingVertical:
-          timeDiff <= minutes30 ? (timeDiff < minutes25 ? '1%' : SCREEN_HEIGHT * 0.001) : '6%',
+          timeDiff <= minutes30
+            ? timeDiff < minutes25
+              ? '1%'
+              : SCREEN_HEIGHT * 0.001
+            : '6%',
         paddingHorizontal: timeDiff <= minutes25 ? 0 : 15,
       }}
     >
@@ -61,7 +65,12 @@ const MyEventComponent = ({ event, position }) => {
           {
             fontSize:
               timeDiff <= minutes25 ? fontPercentage(9) : fontPercentage(15),
-            marginBottom: timeDiff <= minutes20 ? 0 : timeDiff <= minutes30 + 300000 ? '2%' : SCREEN_HEIGHT * 0.006
+            marginBottom:
+              timeDiff <= minutes20
+                ? 0
+                : timeDiff <= minutes30 + 300000
+                ? '2%'
+                : SCREEN_HEIGHT * 0.006,
           },
         ]}
       >
@@ -166,7 +175,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
   const toggleAlert = () => {
     setIsVisibleAlert(!isVisibleAlert);
   };
-  //console.log(events);
   return (
     <>
       <WeekView
@@ -181,14 +189,14 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         headerStyle={{
           color: BACKGROUND_COLOR,
           borderColor: BACKGROUND_COLOR,
-          paddingTop: 11,
+          paddingTop: '3.5%',
           justifyContent: 'flex-start',
-          alignItems: 'center',
+          marginLeft: '-10%',
         }}
         headerTextStyle={{
           fontSize: fontPercentage(9),
           letterSpacing: -0.5,
-          marginRight: '34.5%',
+          // marginRight: '30%',
           color: '#5e5e5e',
         }}
         hourTextStyle={{
@@ -201,6 +209,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
           left: 62,
+          right: -((CONTAINER_WIDTH * 0.5) / 2),
           borderRadius: 8,
         }}
         EventComponent={MyEventComponent}
@@ -247,7 +256,11 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
       />
       {network === 'online' && day === 'today' ? (
         <TouchableOpacity style={styles.alertButton} onPress={toggleAlert}>
-          <IconQuestion name="icon-question" size={7.6} color="#fff" />
+          <IconQuestion
+            name="icon-question"
+            size={fontPercentage(7.6)}
+            color="#fff"
+          />
           {isVisibleAlert ? <AlertView /> : null}
         </TouchableOpacity>
       ) : null}
@@ -268,9 +281,12 @@ const styles = StyleSheet.create({
   alertButton: {
     position: 'absolute',
     top: 10,
+    top: '1.4%',
     right: 30,
     width: 6.6 * 2,
     height: 6.6 * 2,
+    width: fontPercentage(13.2),
+    height: fontPercentage(13.2),
     backgroundColor: '#54BCB6',
     borderRadius: 50,
     justifyContent: 'center',
