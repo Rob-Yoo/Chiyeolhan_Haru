@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, TouchableOpacity, AppState } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { GOOGLE_PLACES_API_KEY } from '@env';
@@ -14,7 +14,9 @@ import {
   favoriteAlert,
   limitRequestAlert,
   requestDeniedAlert,
+  invalidRequestAlert,
   errorNotifAlert,
+  permissionDenyAlert,
   deleteFavoriteAlert,
 } from 'utils/buttonAlertUtil';
 
@@ -27,8 +29,6 @@ import {
 import { Loading } from './LoadingScreen';
 
 import IconFindCurrent from '#assets/icons/icon-find-current-location';
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
-import { invalidRequestAlert } from '../../utils/buttonAlertUtil';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -141,7 +141,7 @@ const CurrentMap = ({
   const _handleCandidate = async (text) => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&language=ko&components=country:kr&key=${GOOGLE_PLACES_API_KEY}`,
+        `${GOOGLE_API_URL}/autocomplete/json?input=${text}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
       );
       const data = await response.json();
       const status = data.status;
@@ -173,16 +173,14 @@ const CurrentMap = ({
 
   const _handlePlacesAPI = async (text) => {
     try {
-      //const place = text.replaceAll(' ', '%20');
       const result = await _handleCandidate(text);
       let status;
       let data;
 
       if (result.length > 16) {
         const response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result}&key=${GOOGLE_PLACES_API_KEY}`,
+          `${GOOGLE_API_URL}/details/json?place_id=${result}&key=${GOOGLE_PLACES_API_KEY}`,
         );
-        // ${GOOGLE_API_URL}?input=${text}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}
         data = await response.json();
         status = data.status;
       } else {
@@ -191,7 +189,7 @@ const CurrentMap = ({
 
       switch (status) {
         case 'OK':
-          const {
+          let {
             result: {
               name: location,
               formatted_address: address,
@@ -200,6 +198,34 @@ const CurrentMap = ({
               },
             },
           } = data;
+          const charCode = String.fromCharCode(8722);
+
+          if (location.includes(charCode)) {
+            const num1 = location.split(charCode)[0];
+            const num2 = location.split(charCode)[1];
+            if (parseInt(num1, 10) !== NaN && parseInt(num2, 10) !== NaN) {
+              const dong = data.result.address_components[1].short_name;
+              let cleanS1 = String.fromCharCode(location.charCodeAt(0) - 65248);
+              for (let i = 1; i < location.length; i++) {
+                if (location.charCodeAt(i) == 8722) {
+                  cleanS1 = cleanS1 + String.fromCharCode(45);
+                } else {
+                  cleanS1 =
+                    cleanS1 +
+                    String.fromCharCode(location.charCodeAt(i) - 65248);
+                }
+              }
+              location = `${dong} ` + cleanS1;
+            }
+          } else if (address.includes(text)) {
+            const s1 = data.result.address_components[0].short_name;
+            const s2 = data.result.address_components[1].short_name;
+            let cleanS1 = String.fromCharCode(s1.charCodeAt(0) - 65248);
+            for (let i = 1; i < s1.length; i++) {
+              cleanS1 = cleanS1 + String.fromCharCode(s1.charCodeAt(i) - 65248);
+            }
+            location = `${s2} ` + cleanS1;
+          }
           setResult({
             latitude,
             longitude,
@@ -310,22 +336,35 @@ const Map = ({
 }) => {
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
+  const appState = useRef(AppState.currentState);
 
   useEffect(() => {
-    const getLoctionTrigger = async () => {
-      await getLocation();
-    };
-    getLoctionTrigger();
+    AppState.addEventListener('change', __handleAppStateChange);
+    getLocation();
     return () => {
       setLocation(false);
+      AppState.removeEventListener('change', __handleAppStateChange);
     };
   }, []);
+
+  const __handleAppStateChange = async (nextAppState) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      if (!isFind) {
+        getLocation();
+      }
+    }
+    appState.current = nextAppState;
+  };
 
   const getLocation = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status != 'granted') {
+      if (status !== 'granted') {
         setFind(false);
+        permissionDenyAlert();
       } else {
         const locationData = await Location.getCurrentPositionAsync({
           accuracy: Location.Accuracy.Lowest,

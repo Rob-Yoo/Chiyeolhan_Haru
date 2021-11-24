@@ -10,7 +10,8 @@ import {
   isEarliestTime,
   getCurrentTime,
   getDate,
-  getTimeDiff,
+  getDiffMinutes,
+  stringTimeToTomorrowDate,
 } from 'utils/timeUtil';
 import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
@@ -226,6 +227,12 @@ export const dbToAsyncTomorrow = async () => {
     data.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
+      const timeDiff = getDiffMinutes(
+        stringTimeToTomorrowDate(todo.data().startTime).getTime() -
+          new Date().getTime(),
+      );
+      console.log(timeDiff);
+      startNotification(timeDiff, targetId); // 시작알림임
       obj[targetId] = todoAsyncModel(todo.data());
       tomorrowDataArray.push(obj);
     });
@@ -317,10 +324,17 @@ export const checkDayChange = async () => {
             JSON.stringify(geofenceData),
           );
         }
-
-        const currentTime = getCurrentTime();
+        //12시 15분껄만들고
+        //const currentTime = getCurrentTime();
         if (geofenceData.length > 0) {
-          const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+          for (const schedule of geofenceData) {
+            cancelAllNotif(schedule.id);
+          }
+          // const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+          const timeDiff = getDiffMinutes(
+            new Date() - stringTimeToTomorrowDate(geofenceData[0].startTime),
+          );
+
           startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
         }
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);

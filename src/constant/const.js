@@ -23,10 +23,8 @@ export const KEY_VALUE_YESTERDAY_DATA = 'yesterdayDataArray';
 export const UID = DeviceInfo.getUniqueId();
 
 // Google Place API
-export const GOOGLE_API_URL =
-  'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
-export const GOOGLE_PARARMS =
-  'inputtype=textquery&language=ko&fields=formatted_address,name,geometry';
+export const GOOGLE_API_URL = 'https://maps.googleapis.com/maps/api/place';
+export const GOOGLE_PARARMS = 'language=ko&components=country:kr';
 
 /*Layout */
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =

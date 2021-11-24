@@ -23,7 +23,6 @@ import { getCurrentTime } from 'utils/timeUtil';
 import { longTaskList } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
 import { passedTodoAlert } from '../../utils/buttonAlertUtil';
-import { CONTAINER_WIDTH } from '../../constant/const';
 
 const IconTaskListLeftSize = 90;
 const Pagination = ({ taskList, targetId }) => {
