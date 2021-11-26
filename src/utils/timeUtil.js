@@ -171,10 +171,13 @@ export const stringTimeToTomorrowDate = (string) => {
   );
 
   const tomorrow = new Date(now.setDate(now.getDate() + 1));
-  console.log('t', tomorrow.getHours(), tomorrow.getMinutes());
   return tomorrow;
 };
 
 export const getDiffMinutes = (timeDiff) => {
-  return Math.round(timeDiff / 1000 / 60);
+  if (timeDiff > 0) {
+    return Math.round(timeDiff / 1000 / 60);
+  } else {
+    return 0;
+  }
 };

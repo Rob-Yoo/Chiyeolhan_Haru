@@ -62,6 +62,19 @@ export const startNotification = (time, id) => {
   PushNotification.removeDeliveredNotifications([`${id}S`]);
 };
 
+export const tmwStartNotification = (time) => {
+  PushNotification.cancelLocalNotification('T');
+  PushNotification.localNotificationSchedule({
+    //... You can use all the options from localNotifications
+    id: `T`,
+    title: '치열한 하루🚨',
+    message: `시작 버튼 누르는 거 까먹지 마세요😄`, // (required)
+    date: new Date(Date.now() + 1000 * (time * 60) + 1000), // 시작 시간에 알림
+    allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+  });
+  PushNotification.removeDeliveredNotifications([`T`]);
+};
+
 export const cancelAllNotif = (id) => {
   PushNotification.cancelLocalNotification(`${id}E`); //arriveEarlyNotification 알림 사라짐
   PushNotification.cancelLocalNotification(`${id}F`); //Fail 알림 사라짐
