@@ -1,16 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import PushNotification from 'react-native-push-notification';
 
 import { geofenceDataModel, todoAsyncModel } from 'model/dataModel';
 
 import { geofenceScheduler } from 'utils/gfSchedulerUtil';
 import { dbService } from 'utils/firebaseUtil';
-import { cancelAllNotif, startNotification } from 'utils/notificationUtil';
+import {
+  cancelAllNotif,
+  startNotification,
+  tmwStartNotification,
+} from 'utils/notificationUtil';
 import {
   isEarliestTime,
   getCurrentTime,
   getDate,
-  getTimeDiff,
+  getDiffMinutes,
+  stringTimeToTomorrowDate,
 } from 'utils/timeUtil';
 import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
@@ -100,6 +106,9 @@ export const deleteTomorrowAsyncStorageData = async (id) => {
       const scheduleID = Object.keys(item);
       return item[scheduleID].id !== id;
     });
+    if (newTomorrowData.length === 0 || newTomorrowData === null) {
+      PushNotification.cancelLocalNotification('T');
+    }
     await AsyncStorage.setItem(
       KEY_VALUE_TOMORROW_DATA,
       JSON.stringify(newTomorrowData),
@@ -223,13 +232,25 @@ export const dbToAsyncTomorrow = async () => {
     const tomorrowDataArray = [];
     const todosRef = dbService.collection(`${UID}`);
     const data = await todosRef.where('date', '==', `${TOMORROW}`).get();
+    let n = 0;
+    let startTime;
     data.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
+      if (n === 0) {
+        startTime = todo.data().startTime;
+        n = n + 1;
+      }
       obj[targetId] = todoAsyncModel(todo.data());
       tomorrowDataArray.push(obj);
     });
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
+
+    const timeDiff = getDiffMinutes(
+      stringTimeToTomorrowDate(startTime).getTime() - new Date().getTime(),
+    );
+    console.log(timeDiff);
+    tmwStartNotification(timeDiff);
   } catch (e) {
     errorNotifAlert(`dbToAsyncTomorrow Error : ${e}`);
   }
@@ -317,10 +338,18 @@ export const checkDayChange = async () => {
             JSON.stringify(geofenceData),
           );
         }
-
+        //12시 15분껄만들고
         const currentTime = getCurrentTime();
         if (geofenceData.length > 0) {
+          for (const schedule of geofenceData) {
+            cancelAllNotif(schedule.id);
+          }
           const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
+          // const timeDiff = getDiffMinutes(
+          //   stringTimeToTomorrowDate(geofenceData[0].startTime) - new Date(),
+          // );
+          // console.log(timeDiff);
+
           startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
         }
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);

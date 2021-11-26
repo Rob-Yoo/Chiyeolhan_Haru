@@ -57,7 +57,7 @@ const addGeofence = async (latitude, longitude, data) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    console.log('Adding Geofence Success!!', data[0].location);
+    //console.log('Adding Geofence Success!!', data[0].location);
   } catch (e) {
     errorNotifAlert(`addGeofence Error : ${e}`);
   }
@@ -116,7 +116,6 @@ export const geofenceUpdate = async (data, index = 1) => {
 const findNearBy = async (data, currentTime) => {
   // 현재 일정 장소와 200m 이내에 있는 다음 일정 장소 찾기
   let nearBySchedules = [];
-  let idx = 0;
   const currentScheduleLocation = {
     lat: data[0].latitude,
     lon: data[0].longitude,
@@ -137,15 +136,18 @@ const findNearBy = async (data, currentTime) => {
         break;
       } else {
         try {
-          idx = idx + 1;
+          await saveSuccessSchedules(
+            nextSchedule.id,
+            nextSchedule.startTime,
+            nextSchedule.finishTime,
+          ); // 일단 성공한 일정으로 취급
+
           const timeDiff = getEarlyTimeDiff(
             nextSchedule.startTime,
             currentTime,
           );
           arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
-
           PushNotification.cancelLocalNotification(`${nextSchedule.id}F`); // failNotif 알림 취소
-          await saveSuccessSchedules(nextSchedule.id, nextSchedule.startTime); // 일단 성공한 일정으로 취급
           nearBySchedules.push(nextSchedule);
         } catch (e) {
           errorNotifAlert(`findNearBy Error : ${e}`);
@@ -159,7 +161,7 @@ const findNearBy = async (data, currentTime) => {
 const saveSuccessSchedules = async (id, startTime, finishTime) => {
   try {
     const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
-    if (successSchedules === null || successSchedules.length == 0) {
+    if (successSchedules === null || successSchedules.length === 0) {
       const schedule = [{ id, startTime, finishTime }];
       await setSuccessSchedule(schedule);
     } else {
@@ -185,21 +187,23 @@ const saveSuccessSchedules = async (id, startTime, finishTime) => {
 
 const enterAction = async (data, startTime, finishTime, currentTime) => {
   let isEarly = false;
+  const geofenceData = data[0];
 
   try {
     if (startTime <= currentTime && currentTime <= finishTime) {
       const timeDiff = getLateTimeDiff(startTime, currentTime);
+
       if (0 <= timeDiff && timeDiff <= 10) {
         // console.log('제 시간에 옴', currentTime);
-        notifHandler('ON_TIME', data[0]); // notifHandler 함수 안에서 fail 알림을 삭제함
+        notifHandler('ON_TIME', geofenceData); // notifHandler 함수 안에서 fail 알림을 삭제함
       } else {
         // console.log('늦게 옴', currentTime);
-        notifHandler('LATE', data[0]);
+        notifHandler('LATE', geofenceData);
       }
     } else if (startTime > currentTime) {
       const timeDiff = getEarlyTimeDiff(startTime, currentTime);
       // console.log('일찍 옴', currentTime);
-      notifHandler('EARLY', data[0], timeDiff);
+      notifHandler('EARLY', geofenceData, timeDiff);
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
     } else {
@@ -222,11 +226,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       // 일찍 온 것이라면 일단 성공한 일정으로 취급하고 완료 알림 예약
       // 시작시간보다 일찍 나갔다면 성공한 일정 배열에서 제외하고 모든 알림 삭제
     }
-    await saveSuccessSchedules(
-      data[0].id,
-      data[0].startTime,
-      data[0].finishTime,
-    ); // 성공한 일정 저장
+    await saveSuccessSchedules(geofenceData.id, startTime, finishTime); // 성공한 일정 저장
   } catch (e) {
     errorNotifAlert(`enterAction Error : ${e}`);
   }
@@ -236,15 +236,16 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
   try {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    const geofenceData = data[0];
 
-    if (nearBySchedules == null) {
+    if (nearBySchedules === null) {
       if (currentTime < startTime) {
         const timeDiff = getTimeDiff(currentTime, finishTime);
         // console.log('일정 시작 시간보다 전에 나감');
-        cancelAllNotif(data[0].id); //현재 일정의 예약된 모든 알림 삭제
-        failNotification(timeDiff, data[0].id); // 다시 해당 일정의 failNotification 알림 등록
+        cancelAllNotif(geofenceData.id); //현재 일정의 예약된 모든 알림 삭제
+        failNotification(timeDiff, geofenceData.id); // 다시 해당 일정의 failNotification 알림 등록
         successSchedules = successSchedules.filter(
-          (schedule) => schedule.id !== data[0].id,
+          (schedule) => schedule.id !== geofenceData.id,
         ); // 성공한 일정 배열에서 삭제
         await setSuccessSchedule(successSchedules);
         await AsyncStorage.removeItem(KEY_VALUE_EARLY);
@@ -253,8 +254,8 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         await geofenceUpdate(data);
       }
     } else {
-      if (!nearBySchedules.includes(data[0])) {
-        nearBySchedules.unshift(data[0]);
+      if (!nearBySchedules.includes(geofenceData)) {
+        nearBySchedules.unshift(geofenceData);
       }
       const exitTimeCheck = (schedule) => currentTime > schedule.startTime;
       const isAllFinish = nearBySchedules.every(exitTimeCheck);
@@ -299,13 +300,14 @@ export const subscribeOnGeofence = () => {
       if (data.length > 0) {
         const startTime = data[0].startTime;
         const finishTime = data[0].finishTime;
+        const currentTime = getCurrentTime();
 
         if (event.action == 'ENTER') {
-          await enterAction(data, startTime, finishTime, getCurrentTime());
+          await enterAction(data, startTime, finishTime, currentTime);
         }
 
         if (event.action == 'EXIT') {
-          await exitAction(data, startTime, finishTime, getCurrentTime());
+          await exitAction(data, startTime, finishTime, currentTime);
         }
       }
     } catch (e) {
@@ -316,8 +318,8 @@ export const subscribeOnGeofence = () => {
 
 export const initBgGeofence = async () => {
   try {
-    const state = await BackgroundGeolocation.ready({
-      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+    await BackgroundGeolocation.ready({
+      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION, // ios Only
       locationAuthorizationRequest: 'Always',
       locationAuthorizationAlert: {
         titleWhenNotEnabled: '위치 서비스 이용 제한',

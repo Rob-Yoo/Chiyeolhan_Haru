@@ -146,3 +146,38 @@ export const getDate = () => {
     TOMORROW,
   };
 };
+
+export const stringTimeToDate = (string) => {
+  const Hours = string.split(':')[0];
+  const Minute = string.split(':')[1];
+  return new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+    Hours,
+    Minute,
+  );
+};
+
+export const stringTimeToTomorrowDate = (string) => {
+  const Hours = string.split(':')[0];
+  const Minute = string.split(':')[1];
+  let now = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+    Hours,
+    Minute,
+  );
+
+  const tomorrow = new Date(now.setDate(now.getDate() + 1));
+  return tomorrow;
+};
+
+export const getDiffMinutes = (timeDiff) => {
+  if (timeDiff > 0) {
+    return Math.round(timeDiff / 1000 / 60);
+  } else {
+    return 0;
+  }
+};

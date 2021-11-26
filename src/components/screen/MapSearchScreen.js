@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   searchInputViewInput: {
-    width: '80%',
+    width: '83%',
     //height: SCREEN_HEIGHT * 0.07,
     borderRadius: 10,
     fontSize: 16,

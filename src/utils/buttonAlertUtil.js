@@ -1,4 +1,4 @@
-import { Alert, Keyboard } from 'react-native';
+import { Alert, Keyboard, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
@@ -173,6 +173,26 @@ export const startAlert = (geofenceUpdate, data) =>
             errorNotifAlert(`startAlert Error :  ${e}`);
           }
         },
+      },
+    ],
+    {
+      cancelable: false,
+    },
+  );
+
+export const permissionDenyAlert = () =>
+  Alert.alert(
+    `위치 서비스 이용 제한`,
+    `원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.`,
+    [
+      {
+        text: '설정',
+        onPress: () => {
+          Linking.openSettings();
+        },
+      },
+      {
+        text: '취소',
       },
     ],
     {

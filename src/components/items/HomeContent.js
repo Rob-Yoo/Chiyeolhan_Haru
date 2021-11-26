@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { useSelector } from 'react-redux';
 
 import { Nodata } from 'components/items//Nodata';
 import { Card } from 'components/items/CardItem';
@@ -9,7 +10,6 @@ import { renderPagination } from 'components/items/renderPagination';
 import { getCurrentTime, getDate } from 'utils/timeUtil';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
-import { useSelector } from 'react-redux';
 
 const makeToDoArr = (toDos) => {
   const { TODAY } = getDate();

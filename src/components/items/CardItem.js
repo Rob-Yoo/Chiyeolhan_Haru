@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, PixelRatio } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import IconTaskToDoman from '#assets/icons/icon-todo-man';
 
 import { getCurrentTime } from 'utils/timeUtil';
-import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_WIDTH } from 'constant/const';
 import * as Progress from 'react-native-progress';

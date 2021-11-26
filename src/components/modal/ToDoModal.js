@@ -49,7 +49,12 @@ import {
   longTodoTitle,
   addModifyBlockAlert,
 } from 'utils/buttonAlertUtil';
-import { getCurrentTime, getTimeDiff, getDate } from 'utils/timeUtil';
+import {
+  getCurrentTime,
+  getTimeDiff,
+  getDate,
+  stringTimeToDate,
+} from 'utils/timeUtil';
 import { toDosUpdateDB } from 'utils/databaseUtil';
 
 import {
@@ -62,7 +67,6 @@ import {
   SCREEN_WIDTH,
 } from 'constant/const';
 import { TaskList } from '../items/TaskList';
-import { CONTAINER_WIDTH } from '../../constant/const';
 
 export const ToDoModal = ({
   modalHandler,
@@ -391,7 +395,7 @@ export const ToDoModal = ({
             `${isToday ? TODAY : TOMORROW}` +
             `${todoStartTime}`;
           //newID 생성
-          if (successSchedules !== null) {
+          if (successSchedules !== null && successSchedules.length !== 0) {
             let idx = 0;
             let isNeedUpdate = false;
             for (const schedule of successSchedules) {
@@ -498,18 +502,6 @@ export const ToDoModal = ({
         ]);
       }
     }
-  };
-
-  const stringTimeToDate = (string) => {
-    const Hours = string.split(':')[0];
-    const Minute = string.split(':')[1];
-    return new Date(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      new Date().getDate(),
-      Hours,
-      Minute,
-    );
   };
 
   const timeHandler = async (text, isStart) => {

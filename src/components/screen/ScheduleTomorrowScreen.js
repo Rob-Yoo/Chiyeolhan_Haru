@@ -34,7 +34,7 @@ const ScheduleTomorrow = ({ navigation }) => {
 
     if (!isStartTodo) {
       if (geofenceData !== null) {
-        if (geofenceData.lenght > 0) {
+        if (geofenceData.length > 0) {
           const currentTime = getCurrentTime();
           const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
           if (timeDiff <= 15) {

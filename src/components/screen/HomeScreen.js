@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, AppState, StatusBar } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, StatusBar, AppState } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import * as SplashScreen from 'expo-splash-screen';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
-import * as SplashScreen from 'expo-splash-screen';
 
 import { init, setNetwork, setTabBar, setHomeRender } from 'redux/store';
 
@@ -15,7 +15,7 @@ import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
 import { checkNearByFinish } from 'utils/gfSchedulerUtil';
-import { errorNotifAlert, weakNetworkAlert } from 'utils/buttonAlertUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import { UID, CONTAINER_WIDTH } from 'constant/const';
 
@@ -30,7 +30,6 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
     AppState.addEventListener('change', __handleAppStateChange);
-
     // let timer = setTimeout(() => {
     //   weakNetworkAlert();
     //   clearTimeout(timer);
@@ -51,15 +50,17 @@ const Home = ({ navigation }) => {
       nextAppState === 'active'
     ) {
       try {
-        await BackgroundGeolocation.requestPermission();
-        await loadSuccessSchedules();
-
         const isDaychange = await checkDayChange();
         if (isDaychange) {
           RNRestart.Restart();
         }
+
+        await loadSuccessSchedules();
+        await checkNearByFinish();
+
+        await BackgroundGeolocation.requestPermission();
       } catch (e) {
-        errorNotifAlert(`__handleAppStateChange : ${e}`);
+        console.log('Request Deny : ', e);
       }
     }
     appState.current = nextAppState;
