@@ -395,7 +395,7 @@ export const ToDoModal = ({
             `${isToday ? TODAY : TOMORROW}` +
             `${todoStartTime}`;
           //newID 생성
-          if (successSchedules !== null) {
+          if (successSchedules !== null && successSchedules.length !== 0) {
             let idx = 0;
             let isNeedUpdate = false;
             for (const schedule of successSchedules) {

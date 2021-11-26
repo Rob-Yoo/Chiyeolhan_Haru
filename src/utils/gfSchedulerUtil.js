@@ -114,23 +114,21 @@ export const checkGeofenceSchedule = async (flag) => {
     }
 
     if (isStartTodo) {
-      if (geofenceData) {
+      if (geofenceData !== null) {
         if (geofenceData.length > 0) {
-          if (geofenceData[0].finishTime <= currentTime) {
-            const dbData = await todosRef
-              .where('id', '==', geofenceData[0].id)
-              .get();
+          const data = geofenceData[0];
+
+          if (data.finishTime <= currentTime) {
+            const dbData = await todosRef.where('id', '==', data.id).get();
             dbData.forEach((todo) => {
-              if (todo.data().isDone == false) {
+              if (todo.data().isDone === false) {
                 isNeedSkip = 1;
               }
             });
-          } else if (geofenceData[0].startTime <= currentTime) {
-            const dbData = await todosRef
-              .where('id', '==', geofenceData[0].id)
-              .get();
+          } else if (data.startTime <= currentTime) {
+            const dbData = await todosRef.where('id', '==', data.id).get();
             dbData.forEach((todo) => {
-              if (todo.data().isDone == false) {
+              if (todo.data().isDone === false) {
                 isNeedSkip = 2;
               }
             });
@@ -208,7 +206,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
           let addProgressing = false;
 
-          let isDone = true;
+          let isDone;
           let match;
           const dbData = await todosRef.where('id', '==', progressing.id).get();
 
@@ -216,16 +214,20 @@ export const geofenceScheduler = async (isChangeEarliest) => {
             isDone = schedule.data().isDone;
           });
 
-          if (!isDone) {
+          if (isDone === false) {
             if (successSchedules) {
               if (successSchedules.length > 0) {
                 match = successSchedules.find(
                   (schedule) => schedule.id === progressing.id,
                 );
-              }
-              if (match === undefined) {
+                if (match === undefined) {
+                  addProgressing = true;
+                }
+              } else {
                 addProgressing = true;
               }
+            } else {
+              addProgressing = true;
             }
           }
 

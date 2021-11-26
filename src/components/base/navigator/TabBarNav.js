@@ -38,7 +38,6 @@ import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
   CONTAINER_WIDTH,
-  CONTAINER_HEIGHT,
 } from 'constant/const';
 
 const handleSkip = async (isNeedSkip) => {
