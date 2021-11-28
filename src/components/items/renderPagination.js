@@ -13,18 +13,17 @@ import { add } from 'redux/store';
 
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, CONTAINER_WIDTH } from 'constant/const';
 
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/timeUtil';
-import { longTaskList } from 'utils/buttonAlertUtil';
+import { longTaskList, passedTodoAlert } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
-import { passedTodoAlert } from '../../utils/buttonAlertUtil';
 
-const IconTaskListLeftSize = 90;
+const IconTaskListLeftSize = 88;
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -94,22 +93,14 @@ const Pagination = ({ taskList, targetId }) => {
                       name="icon-tasklist-left"
                       size={IconTaskListLeftSize}
                       color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
-                        top: 2,
-                      }}
+                      style={styles.taskListIcon}
                     />
                   ) : (
                     <IconTaskListLeftFin
                       name="icon-tasklist-left-fin"
                       size={IconTaskListLeftSize}
                       color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
-                        top: 2,
-                      }}
+                      style={styles.taskListIcon}
                     />
                   )}
                   <Task
@@ -198,7 +189,7 @@ const styles = StyleSheet.create({
     paddingBottom: 150,
   },
   taskHeader: {
-    paddingHorizontal: 39,
+    paddingHorizontal: 35,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -217,11 +208,17 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
+  taskListIcon: {
+    position: 'absolute',
+    left: SCREEN_HEIGHT > 668 ? -13 : -10,
+    top: 1,
+  },
   /* TaskItem 의 task랑 같은 값. */
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 74,
+    maxHeight: 74,
+    height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
     shadowColor: '#00000029',
     shadowOffset: {

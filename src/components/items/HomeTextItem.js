@@ -7,7 +7,12 @@ const GREEN_COLOR = '#2A9C96';
 
 export const HomeTextItem = () => {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+      }}
+    >
       <View style={styles.homeHeaderRectangle} />
       <View>
         <Text
@@ -31,6 +36,6 @@ const styles = StyleSheet.create({
     //width: 5,
     height: '90%',
     backgroundColor: '#229892',
-    marginRight: '3%',
+    marginRight: '4%',
   },
 });

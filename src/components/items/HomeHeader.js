@@ -46,11 +46,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    //backgroundColor: 'red',
   },
   homeHeaderText: {
     flex: 0.7,
-    paddingLeft: 15,
-    marginLeft: 0,
+    //paddingLeft: 15,
+    marginLeft: -3,
     marginTop: 19,
   },
 });
