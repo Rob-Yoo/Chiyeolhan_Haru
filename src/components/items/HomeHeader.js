@@ -15,9 +15,9 @@ export const HomeHeader = ({ navigation }) => {
       </View>
       <View
         style={{
-          height: '25%',
+          height: '28%',
           justifyContent: 'flex-end',
-          marginTop: 19,
+          marginTop: 15,
         }}
       >
         <TouchableOpacity
@@ -26,11 +26,12 @@ export const HomeHeader = ({ navigation }) => {
             height: 50,
             justifyContent: 'flex-end',
             alignItems: 'flex-end',
+            marginRight: 5.2,
           }}
         >
           <IconGoToScheduleButton
             name="icon-go-to-schedule-button"
-            size={SCREEN_HEIGHT > 668 ? 32 : 35}
+            size={SCREEN_HEIGHT > 668 ? 30 : 35}
             color={'#229892'}
             onPress={goToScheduleToday}
           />
@@ -49,8 +50,8 @@ const styles = StyleSheet.create({
   },
   homeHeaderText: {
     flex: 0.7,
-    paddingLeft: 15,
-    marginLeft: 0,
-    marginTop: 19,
+    //paddingLeft: 15,
+    marginLeft: -3,
+    marginTop: 13,
   },
 });

@@ -13,18 +13,17 @@ import { add } from 'redux/store';
 
 import { Task } from 'components/items/TaskItem';
 import { ModalLayout } from 'components/items/layout/ModalLayout';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, CONTAINER_WIDTH } from 'constant/const';
 
 import IconTaskListAdd from '#assets/icons/icon-tasklist-add-button';
 import IconTaskListLeft from '#assets/icons/icon-tasklist-left';
 import IconTaskListLeftFin from '#assets/icons/icon-tasklist-left-fin';
 
 import { getCurrentTime } from 'utils/timeUtil';
-import { longTaskList } from 'utils/buttonAlertUtil';
+import { longTaskList, passedTodoAlert } from 'utils/buttonAlertUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
-import { passedTodoAlert } from '../../utils/buttonAlertUtil';
 
-const IconTaskListLeftSize = 90;
+const IconTaskListLeftSize = 88;
 const Pagination = ({ taskList, targetId }) => {
   const network = useSelector((state) => state.network);
   const toDos = useSelector((state) => state.toDos[targetId]);
@@ -63,17 +62,22 @@ const Pagination = ({ taskList, targetId }) => {
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
         <TouchableOpacity
-          style={{ flexDirection: 'row', alignItems: 'center' }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 12,
+          }}
           onPress={() => {
             handlePaginationAddButton();
           }}
         >
-          <Text style={styles.taskTitle}>체크 리스트</Text>
+          <Text style={styles.taskTitle}>체크리스트</Text>
           {network === 'offline' ? null : (
             <IconTaskListAdd
               name="icon-tasklist-add-button"
-              size={15}
+              size={16}
               color={'#229892'}
+              style={{ marginTop: 2, marginRight: -2 }}
             />
           )}
         </TouchableOpacity>
@@ -94,22 +98,14 @@ const Pagination = ({ taskList, targetId }) => {
                       name="icon-tasklist-left"
                       size={IconTaskListLeftSize}
                       color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
-                        top: 2,
-                      }}
+                      style={styles.taskListIcon}
                     />
                   ) : (
                     <IconTaskListLeftFin
                       name="icon-tasklist-left-fin"
                       size={IconTaskListLeftSize}
                       color="#707070"
-                      style={{
-                        position: 'absolute',
-                        left: SCREEN_HEIGHT > 668 ? -13 : -10,
-                        top: 2,
-                      }}
+                      style={styles.taskListIcon}
                     />
                   )}
                   <Task
@@ -191,14 +187,14 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: SCREEN_HEIGHT * 0.3,
-    left: -SCREEN_WIDTH * 0.19,
+    left: -SCREEN_WIDTH * 0.2,
     width: SCREEN_WIDTH,
     // maxWidth: 0,
     height: SCREEN_HEIGHT,
     paddingBottom: 150,
   },
   taskHeader: {
-    paddingHorizontal: 39,
+    paddingHorizontal: 35,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -209,7 +205,7 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: fontPercentage(16.5),
-    marginRight: 5,
+    marginRight: 12,
   },
   taskText: {
     maxWidth: '100%',
@@ -217,11 +213,18 @@ const styles = StyleSheet.create({
     fontFamily: 'NotoSansKR-Bold',
     fontSize: 20,
   },
+  taskListIcon: {
+    position: 'absolute',
+    left: SCREEN_HEIGHT > 668 ? -13 : -10,
+    top: 1,
+  },
   /* TaskItem 의 task랑 같은 값. */
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    height: 74,
+    maxWidth: 139.5 * 2,
+    maxHeight: 74,
+    height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
     shadowColor: '#00000029',
     shadowOffset: {

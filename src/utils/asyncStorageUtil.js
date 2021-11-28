@@ -341,9 +341,7 @@ export const checkDayChange = async () => {
         //12시 15분껄만들고
         const currentTime = getCurrentTime();
         if (geofenceData.length > 0) {
-          for (const schedule of geofenceData) {
-            cancelAllNotif(schedule.id);
-          }
+          PushNotification.cancelLocalNotification('T');
           const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
           // const timeDiff = getDiffMinutes(
           //   stringTimeToTomorrowDate(geofenceData[0].startTime) - new Date(),

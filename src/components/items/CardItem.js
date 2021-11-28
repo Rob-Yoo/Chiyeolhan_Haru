@@ -78,7 +78,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
     >
       <View style={card.card} key={`CARD${id}`}>
         <View style={card.todomanBackgroundCircle}>
-          <IconTaskToDoman name="icon-todo-man" size={20} color="#229892" />
+          <IconTaskToDoman name="icon-todo-man" size={18} color="#229892" />
         </View>
         <View
           style={{
@@ -138,7 +138,7 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
             unfilledColor={'#C4C4C4'}
             borderWidth={0}
             width={SCREEN_WIDTH * 0.58 * 0.745}
-            maxWidth={160}
+            maxWidth={181}
             style={{ marginLeft: -3 }}
             useNativeDriver
           />
@@ -151,15 +151,17 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
 export const card = StyleSheet.create({
   card: {
     flex: 1,
-    // paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
-    paddingHorizontal: 18,
-    maxHeight: 182,
-    maxWidth: 194,
+    //paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
+    paddingHorizontal: 20,
+    width: 194,
     marginHorizontal: 10,
-    height: SCREEN_WIDTH * 0.485,
-    paddingTop: 1.5,
+    // height: SCREEN_WIDTH * 0.485,
+    height: 191,
+    //maxHeight: 200,
+    //maxHeight: 191,
+    paddingTop: 3,
     paddingBottom: 15,
-    borderRadius: 15,
+    borderRadius: 16,
     justifyContent: 'space-evenly',
     backgroundColor: '#54bcb6',
     shadowColor: 'rgba(0,41,38,0.29)',
@@ -171,10 +173,10 @@ export const card = StyleSheet.create({
     shadowRadius: 8,
   },
   todomanBackgroundCircle: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     backgroundColor: '#ffffff',
-    borderRadius: 50,
+    borderRadius: 100,
     shadowColor: '#00000029',
     shadowOffset: {
       width: 0,
