@@ -11,16 +11,19 @@ export const HomeTextItem = () => {
       style={{
         flexDirection: 'row',
         alignItems: 'flex-end',
+        marginBottom: -7,
       }}
     >
       <View style={styles.homeHeaderRectangle} />
       <View>
         <Text
-          style={[styles.homeText, { color: GREEN_COLOR, marginBottom: -3 }]}
+          style={[styles.homeText, { color: GREEN_COLOR, marginBottom: -4.5 }]}
         >
           오늘도
         </Text>
-        <Text style={[styles.homeText]}>하루를 치열하게</Text>
+        <Text style={[styles.homeText, { marginBottom: -4 }]}>
+          하루를 치열하게
+        </Text>
       </View>
     </View>
   );
@@ -34,8 +37,9 @@ const styles = StyleSheet.create({
   homeHeaderRectangle: {
     width: CONTAINER_WIDTH * 0.014,
     //width: 5,
-    height: '90%',
+    height: '100%',
     backgroundColor: '#229892',
-    marginRight: '4%',
+    marginRight: '4.2%',
+    marginBottom: -2,
   },
 });

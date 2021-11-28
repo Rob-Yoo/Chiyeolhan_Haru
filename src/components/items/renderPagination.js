@@ -62,17 +62,22 @@ const Pagination = ({ taskList, targetId }) => {
     <View style={styles.paginationStyle}>
       <View style={styles.taskHeader}>
         <TouchableOpacity
-          style={{ flexDirection: 'row', alignItems: 'center' }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 12,
+          }}
           onPress={() => {
             handlePaginationAddButton();
           }}
         >
-          <Text style={styles.taskTitle}>체크 리스트</Text>
+          <Text style={styles.taskTitle}>체크리스트</Text>
           {network === 'offline' ? null : (
             <IconTaskListAdd
               name="icon-tasklist-add-button"
-              size={15}
+              size={16}
               color={'#229892'}
+              style={{ marginTop: 2, marginRight: -2 }}
             />
           )}
         </TouchableOpacity>
@@ -182,7 +187,7 @@ const styles = StyleSheet.create({
   paginationStyle: {
     position: 'absolute',
     top: SCREEN_HEIGHT * 0.3,
-    left: -SCREEN_WIDTH * 0.19,
+    left: -SCREEN_WIDTH * 0.2,
     width: SCREEN_WIDTH,
     // maxWidth: 0,
     height: SCREEN_HEIGHT,
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     color: '#229892',
     fontFamily: 'NotoSansKR-Bold',
     fontSize: fontPercentage(16.5),
-    marginRight: 5,
+    marginRight: 12,
   },
   taskText: {
     maxWidth: '100%',
@@ -217,6 +222,7 @@ const styles = StyleSheet.create({
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
+    maxWidth: 139.5 * 2,
     maxHeight: 74,
     height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
