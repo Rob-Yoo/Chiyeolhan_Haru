@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderColor: '#C4C4C4',
     fontSize: fontPercentage(10),
     height: 16,
-    height: '50%',
+
     fontWeight: '600',
   },
 
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 64,
     width: '100%',
-    height: '64%',
+    height: 41,
     borderRadius: 9,
     backgroundColor: '#54BCB6',
   },

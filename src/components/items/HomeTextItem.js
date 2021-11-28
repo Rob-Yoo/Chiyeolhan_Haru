@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { fontPercentage } from 'utils/responsiveUtil';
-import { CONTAINER_WIDTH } from '../../constant/const';
+import { CONTAINER_WIDTH } from 'constant/const';
 
 const GREEN_COLOR = '#2A9C96';
 

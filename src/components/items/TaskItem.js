@@ -17,7 +17,7 @@ import {
   longTaskList,
   errorNotifAlert,
 } from 'utils/buttonAlertUtil';
-import { CONTAINER_WIDTH } from '../../constant/const';
+import { CONTAINER_WIDTH } from 'constant/const';
 
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress, taskStyle } = props;
