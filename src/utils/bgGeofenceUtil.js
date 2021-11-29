@@ -16,6 +16,7 @@ import {
   cancelAllNotif,
   errorNotifAlert,
 } from 'utils/notificationUtil';
+import { geofenceAlert } from 'utils/buttonAlertUtil';
 
 import {
   UID,
@@ -63,7 +64,7 @@ const addGeofence = async (latitude, longitude, data) => {
   }
 };
 
-const addGeofenceTrigger = async () => {
+const addGeofenceTrigger = async (isChangeEarliest) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data.length > 0) {
@@ -71,6 +72,9 @@ const addGeofenceTrigger = async () => {
       const lng = data[0].longitude;
       await addGeofence(lat, lng, data);
       await BackgroundGeolocation.startGeofences();
+      if (isChangeEarliest) {
+        geofenceAlert(data[0].title);
+      }
     } else {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       // console.log('[removeGeofence] success');
@@ -82,7 +86,11 @@ const addGeofenceTrigger = async () => {
   }
 };
 
-export const geofenceUpdate = async (data, index = 1) => {
+export const geofenceUpdate = async (
+  data,
+  index = 1,
+  isChangeEarliest = false,
+) => {
   try {
     await BackgroundGeolocation.stop();
 
@@ -107,7 +115,7 @@ export const geofenceUpdate = async (data, index = 1) => {
       await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
     }
 
-    await addGeofenceTrigger();
+    await addGeofenceTrigger(isChangeEarliest);
   } catch (e) {
     errorNotifAlert(`geofenceUpdate Error : ${e}`);
   }

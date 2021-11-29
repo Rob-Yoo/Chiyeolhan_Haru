@@ -127,12 +127,21 @@ const strtAlert = (title = null) => {
     );
   } else {
     Alert.alert(
-      `일정이 없습니다\n일정을 더 추가해보세요!`,
-      '',
+      `시작 버튼`,
+      '시간이 지난 일정들만 있습니다.\n새로운 일정을 추가하고 시작 버튼 누르는 거 잊지 말아주세요!',
       [{ text: '확인' }],
       { cancelable: false },
     );
   }
+};
+
+export const geofenceAlert = (title) => {
+  Alert.alert(
+    `"${title}"`,
+    '해당 일정에 위치 서비스를 새로 제공합니다.',
+    [{ text: '확인' }],
+    { cancelable: false },
+  );
 };
 
 export const startAlert = (geofenceUpdate, data) =>
@@ -160,13 +169,13 @@ export const startAlert = (geofenceUpdate, data) =>
               KEY_VALUE_GEOFENCE,
               JSON.stringify(geofenceData),
             );
-            await geofenceUpdate(geofenceData, 0);
-            await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
-            await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
 
             if (geofenceData.length == 0) {
               strtAlert();
             } else {
+              await geofenceUpdate(geofenceData, 0);
+              await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
+              await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
               strtAlert(geofenceData[0].title);
             }
           } catch (e) {
