@@ -191,7 +191,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           borderColor: BACKGROUND_COLOR,
           paddingTop: '3.5%',
           justifyContent: 'flex-start',
-          marginLeft: '-10%',
+          marginLeft: '-11%',
         }}
         headerTextStyle={{
           fontSize: fontPercentage(9),

@@ -3,19 +3,20 @@ import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
-const NO_WIDTH_SPACE = '​';
 export const AlertView = () => {
+  console.log('!!');
   return (
     <View
       style={{
         backgroundColor: '#fff',
         width: CONTAINER_WIDTH,
-        height: 250,
+        height: 195,
         position: 'absolute',
-        right: 0,
+        right: '100%',
         top: 30,
         borderRadius: 10,
-        padding: 15,
+        paddingHorizontal: 12.8 * 2,
+        paddingVertical: 8 * 2,
         borderWidth: 2,
         borderColor: '#54BCB6',
       }}
@@ -30,7 +31,13 @@ export const AlertView = () => {
       >
         도움말
       </Text>
-      <View style={{ display: 'flex', flexDirection: 'row', marginBottom: 15 }}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginBottom: 15,
+        }}
+      >
         <IconHandleStart
           name="icon-handle-reset"
           color="#717171"
@@ -46,10 +53,10 @@ export const AlertView = () => {
           style={[{ width: 19, height: 19, marginRight: 15 }]}
           source={{ uri: 'iconHandleStart' }}
         />
-        <Text style={styles.noticeText}>
+        <Text style={[styles.noticeText, { marginBottom: 5 }]}>
           {`일정을 스킵할 때 눌러주세요.\n`}
 
-          <View style={{ maxWidth: '90%' }}>
+          <View style={{ maxWidth: '85%' }}>
             <Text
               style={[
                 styles.noticeText,
@@ -62,7 +69,11 @@ export const AlertView = () => {
           </View>
         </Text>
       </View>
-      {/* <Text style={styles.noticeText}> {`오늘을 꾹 눌러 보세요`}</Text> */}
+      <View>
+        <Text
+          style={[styles.noticeText, { fontSize: 11, marginLeft: 5 }]}
+        >{` 오늘을 꾸욱 눌러보세요! 어제가 나타날지도,,,?`}</Text>
+      </View>
     </View>
   );
 };
@@ -70,7 +81,6 @@ export const AlertView = () => {
 const styles = StyleSheet.create({
   hilighted: {
     backgroundColor: '#2DACA540',
-    //color: '#FECC02',
   },
   noticeText: {
     fontFamily: 'GodoB',
@@ -80,6 +90,6 @@ const styles = StyleSheet.create({
   noticeDetailText: {
     fontSize: 10,
     color: '#BDBFBF',
-    marginTop: 8,
+    marginTop: 12,
   },
 });
