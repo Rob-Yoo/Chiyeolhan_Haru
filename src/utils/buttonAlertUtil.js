@@ -138,7 +138,7 @@ const strtAlert = (title = null) => {
 export const geofenceAlert = (title) => {
   Alert.alert(
     `"${title}"`,
-    '해당 일정에 위치 서비스를 새로 제공합니다.',
+    '해당 일정에 위치 서비스를 제공합니다.',
     [{ text: '확인' }],
     { cancelable: false },
   );
