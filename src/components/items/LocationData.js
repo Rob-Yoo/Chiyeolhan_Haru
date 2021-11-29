@@ -13,7 +13,6 @@ export const LocationData = ({
     locationDataHandler(locationData);
     modalHandler();
   };
-  console.log();
   return (
     <View style={styles.locationInfoCard}>
       <View style={{ flex: 4 }}>

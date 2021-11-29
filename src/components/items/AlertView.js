@@ -4,13 +4,12 @@ import { CONTAINER_WIDTH } from 'react-native-week-view/src/utils';
 import IconHandleStart from '#assets/icons/icon-handle-start';
 
 export const AlertView = () => {
-  console.log('!!');
   return (
     <View
       style={{
         backgroundColor: '#fff',
         width: CONTAINER_WIDTH,
-        height: 195,
+        height: 190,
         position: 'absolute',
         right: '100%',
         top: 30,
@@ -48,31 +47,24 @@ export const AlertView = () => {
           {`오늘 스케줄을 시작할 때 눌러주세요.`}
         </Text>
       </View>
-      <View style={{ display: 'flex', flexDirection: 'row' }}>
+      <View style={{ display: 'flex', flexDirection: 'row', marginBottom: 5 }}>
         <ImageBackground
           style={[{ width: 19, height: 19, marginRight: 15 }]}
           source={{ uri: 'iconHandleStart' }}
         />
-        <Text style={[styles.noticeText, { marginBottom: 5 }]}>
-          {`일정을 스킵할 때 눌러주세요.\n`}
-
-          <View style={{ maxWidth: '85%' }}>
-            <Text
-              style={[
-                styles.noticeText,
-                styles.noticeDetailText,
-                { lineHeight: 12 },
-              ]}
-            >
-              {`일정 시간 내 목표 장소에 가지 않을 경우 해당 일정을 스킵해주세요! 버튼을 누르지 않으면 이후 일정들에서 사용자의 위치를 확인할 수 없습니다.\n`}
-            </Text>
-          </View>
+        <Text style={[styles.noticeText]}>
+          {`일정을 스킵할 때 눌러주세요.`}
+        </Text>
+      </View>
+      <View style={{ maxWidth: '100%', paddingLeft: 40 }}>
+        <Text style={[styles.noticeText, styles.noticeDetailText]}>
+          {`일정 시간 내 목표 장소에 가지 않을 경우 해당 일정을 스킵해주세요! 버튼을 누르지 않으면 이후 일정들에서 사용자의 위치를 확인할 수 없습니다.\n`}
         </Text>
       </View>
       <View>
         <Text
           style={[styles.noticeText, { fontSize: 11, marginLeft: 5 }]}
-        >{` 오늘을 꾸욱 눌러보세요! 어제가 나타날지도,,,?`}</Text>
+        >{`* 오늘을 꾸욱 눌러보세요! 어제가 나타날지도...?`}</Text>
       </View>
     </View>
   );
@@ -90,6 +82,6 @@ const styles = StyleSheet.create({
   noticeDetailText: {
     fontSize: 10,
     color: '#BDBFBF',
-    marginTop: 12,
+    // marginTop: 12,
   },
 });

@@ -29,6 +29,7 @@ import {
 import { Loading } from './LoadingScreen';
 
 import IconFindCurrent from '#assets/icons/icon-find-current-location';
+import { sqrt } from 'react-native-reanimated';
 
 const filterFavoriteReturnStarColor = async (latitude, longitude) => {
   const favoriteArray = await getDataFromAsync(KEY_VALUE_FAVORITE);
@@ -220,11 +221,20 @@ const CurrentMap = ({
           } else if (address.includes(text)) {
             const s1 = data.result.address_components[0].short_name;
             const s2 = data.result.address_components[1].short_name;
-            let cleanS1 = String.fromCharCode(s1.charCodeAt(0) - 65248);
-            for (let i = 1; i < s1.length; i++) {
-              cleanS1 = cleanS1 + String.fromCharCode(s1.charCodeAt(i) - 65248);
+
+            if (65297 <= s1.charCodeAt(0) && s1.charCodeAt(0) <= 65306) {
+              let cleanS1 = String.fromCharCode(s1.charCodeAt(0) - 65248);
+              for (let i = 1; i < s1.length; i++) {
+                cleanS1 =
+                  cleanS1 + String.fromCharCode(s1.charCodeAt(i) - 65248);
+              }
+              location = `${s2} ` + cleanS1;
+            } else {
+              location = `${s2} ` + s1;
             }
-            location = `${s2} ` + cleanS1;
+            if (s1 === s2) {
+              location = s1;
+            }
           }
           setResult({
             latitude,

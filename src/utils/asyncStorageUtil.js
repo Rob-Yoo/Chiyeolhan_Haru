@@ -250,7 +250,6 @@ export const dbToAsyncTomorrow = async () => {
     const timeDiff = getDiffMinutes(
       stringTimeToTomorrowDate(startTime).getTime() - new Date().getTime(),
     );
-    console.log(timeDiff);
     tmwStartNotification(timeDiff);
   } catch (e) {
     errorNotifAlert(`dbToAsyncTomorrow Error : ${e}`);
