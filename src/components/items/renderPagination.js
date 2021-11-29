@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   modatalTask: {
     backgroundColor: '#FFF',
     width: '75%',
-    maxWidth: 139.5 * 2,
+    maxWidth: SCREEN_HEIGHT > 1000 ? '90%' : 139.5 * 2,
     maxHeight: 74,
     height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,

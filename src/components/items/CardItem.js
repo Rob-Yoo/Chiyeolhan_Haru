@@ -154,6 +154,7 @@ export const card = StyleSheet.create({
     //paddingHorizontal: (262 * SCREEN_WIDTH) / 4850,
     paddingHorizontal: 20,
     width: 194,
+    maxWidth: 210,
     marginHorizontal: 10,
     // height: SCREEN_WIDTH * 0.485,
     height: 191,

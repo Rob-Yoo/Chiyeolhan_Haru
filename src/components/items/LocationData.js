@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { fontPercentage } from 'utils/responsiveUtil';
-import { SCREEN_HEIGHT } from '../../constant/const';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 export const LocationData = ({
   locationData,
@@ -13,7 +13,7 @@ export const LocationData = ({
     locationDataHandler(locationData);
     modalHandler();
   };
-
+  console.log();
   return (
     <View style={styles.locationInfoCard}>
       <View style={{ flex: 4 }}>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#C4C4C4',
     fontSize: fontPercentage(10),
-    height: 16,
+    height: SCREEN_HEIGHT > 1000 ? 30 : 16,
 
     fontWeight: '600',
   },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 64,
     width: '100%',
-    height: 41,
+    height: SCREEN_HEIGHT > 1000 ? 70 : 41,
     borderRadius: 9,
     backgroundColor: '#54BCB6',
   },

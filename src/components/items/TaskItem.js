@@ -17,7 +17,7 @@ import {
   longTaskList,
   errorNotifAlert,
 } from 'utils/buttonAlertUtil';
-import { CONTAINER_WIDTH } from 'constant/const';
+import { CONTAINER_WIDTH, SCREEN_HEIGHT } from 'constant/const';
 
 export const Task = (props) => {
   const { text: taskText, targetId, index, canPress, taskStyle } = props;
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: '#FFF',
     width: '75%',
-    maxWidth: 139.5 * 2,
+    maxWidth: SCREEN_HEIGHT > 1000 ? '90%' : 139.5 * 2,
     maxHeight: 74,
     height: CONTAINER_WIDTH * 0.198,
     borderRadius: 10,
