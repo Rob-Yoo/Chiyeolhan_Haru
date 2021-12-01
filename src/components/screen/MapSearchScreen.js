@@ -159,7 +159,7 @@ export const MapSearch = ({
                           },
                         ]}
                       >
-                        {item.location.length > 20
+                        {item?.location?.length > 20
                           ? `${item.location.substring(0, 19)}···`
                           : item.location}
                       </Text>

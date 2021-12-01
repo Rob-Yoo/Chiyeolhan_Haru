@@ -125,7 +125,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
                     <Text
                       style={{
                         fontFamily: 'notoSansKR-Bold',
-                        fontSize: item.location.length > 10 ? 18 : 23,
+                        fontSize: item?.location?.length > 10 ? 18 : 23,
                       }}
                     >
                       {item.location}

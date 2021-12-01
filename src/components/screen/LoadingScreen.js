@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constant/const';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 export const Loading = () => {
   return (
@@ -9,7 +9,7 @@ export const Loading = () => {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         justifyContent: 'center',
-        backgroundColor:'transparent'
+        backgroundColor: 'transparent',
       }}
     >
       <ActivityIndicator size="large" color="#229892" />

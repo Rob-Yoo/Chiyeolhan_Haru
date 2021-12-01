@@ -9,7 +9,7 @@ import styles from 'components/modal/ToDoModalStyle';
 import { fontPercentage } from 'utils/responsiveUtil';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SCREEN_HEIGHT } from '../../constant/const';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 export const TaskList = ({ taskList, taskSubmit, canEdit }) => {
   let scrollViewInnerRef = useRef();
