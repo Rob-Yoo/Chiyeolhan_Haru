@@ -7,7 +7,7 @@ import TabBar from 'components/base/navigator/TabBarNav';
 import ScheduleToday from 'components/screen/ScheduleTodayScreen';
 import ScheduleTomorrow from 'components/screen/ScheduleTomorrowScreen';
 import ScheduleYesterday from 'components/screen/ScheduleYesterdayScreen';
-import { SCREEN_HEIGHT } from '../../../constant/const';
+import { SCREEN_HEIGHT } from 'constant/const';
 
 const Tab = createMaterialTopTabNavigator();
 

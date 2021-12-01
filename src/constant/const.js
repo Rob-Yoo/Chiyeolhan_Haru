@@ -25,7 +25,8 @@ export const UID = DeviceInfo.getUniqueId();
 // Google Place API
 export const GOOGLE_API_URL = 'https://maps.googleapis.com/maps/api/place';
 export const GOOGLE_PARARMS = 'language=ko&components=country:kr';
-
+export const KAKAO_API_URL =
+  'https://dapi.kakao.com/v2/local/search/keyword.json';
 /*Layout */
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
   Dimensions.get('window');

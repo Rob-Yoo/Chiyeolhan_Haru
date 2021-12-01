@@ -28,19 +28,18 @@ export const MapSearch = ({
   setSearchedList,
   isFavoriteColor,
   handleFavorite,
-  isFind,
+  touchLocationData,
 }) => {
   const [findlocation, setFindlocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
-
   const toggleModal = () => {
     setSearchedHistroyVisible(!searchedHistoryVisible);
   };
 
   const deleteAllHistory = async () => {
-    await deleteAllSearchedData();
+    searchedList && (await deleteAllSearchedData());
     setSearchedList([]);
   };
 
@@ -48,6 +47,11 @@ export const MapSearch = ({
     const tempData = searchedList.filter((item) => item.id !== id);
     await deleteSearchedData(tempData);
     setSearchedList(tempData);
+  };
+
+  const handleSubmit = async (e) => {
+    const text = e.nativeEvent.text;
+    text && (await _handlePlacesAPI(text));
   };
 
   return (
@@ -80,11 +84,7 @@ export const MapSearch = ({
               value={inputText}
               placeholder="장소, 버스, 지하철, 주소 검색"
               onChangeText={(text) => setText(text)}
-              onSubmitEditing={() => {
-                _handlePlacesAPI(inputText);
-                setFindlocation(true);
-                toggleModal();
-              }}
+              onSubmitEditing={(e) => handleSubmit(e)}
             />
             {isFavoriteColor && (
               <IconStarBorder
@@ -112,60 +112,97 @@ export const MapSearch = ({
                     key={`${item.id}`}
                     activeOpacity={1}
                     onPress={() => {
-                      _handlePlacesAPI(item.text);
+                      touchLocationData(item);
+                      setFindlocation(true);
                       toggleModal();
-                      searchInput.current.placeholder = `${item.text}`;
-                      setText(item.text);
+                      searchInput.current.placeholder = `${item.location}`;
+                      setText(item.location);
                     }}
                   >
-                    <View style={styles.searcehdItem}>
-                      <Text style={styles.icon}>
-                        {item.type === 'location' ? (
-                          <IconSearchedLocation
-                            name="location"
-                            size={fontPercentage(17)}
-                            color={'#575757'}
-                          />
-                        ) : (
-                          <IconSearchedSearch
-                            name="icon-searched-search"
-                            size={fontPercentage(17)}
-                            color={'#575757'}
-                          />
-                        )}
-                      </Text>
+                    <View
+                      style={[
+                        styles.searcehdItem,
+                        {
+                          flexDirection:
+                            item.type === 'candidate' ? 'column' : 'row',
+                          paddingVertical: item.type === 'candidate' ? 12 : 14,
+                        },
+                      ]}
+                    >
+                      {item.type !== 'candidate' ? (
+                        <Text style={styles.icon}>
+                          {item.type === 'location' ? (
+                            <IconSearchedLocation
+                              name="location"
+                              size={fontPercentage(17)}
+                              color={'#575757'}
+                            />
+                          ) : (
+                            <IconSearchedSearch
+                              name="icon-searched-search"
+                              size={fontPercentage(17)}
+                              color={'#575757'}
+                            />
+                          )}
+                        </Text>
+                      ) : null}
                       <Text
                         style={[
                           styles.searchedText,
                           {
                             //maxHeight: 30,
-                            maxWidth: SCREEN_WIDTH * 0.6,
+                            maxWidth:
+                              item.type !== 'candidate'
+                                ? SCREEN_WIDTH * 0.6
+                                : null,
                             minWidth: '80%',
                           },
                         ]}
                       >
-                        {item.text.length > 16
-                          ? `${item.text.substring(0, 15)}···`
-                          : item.text}
+                        {item.location.length > 20
+                          ? `${item.location.substring(0, 19)}···`
+                          : item.location}
                       </Text>
 
-                      <Text
-                        id={item.id}
-                        style={[
-                          styles.searchedDeleteText,
-                          { backgroundColor: '#fff' },
-                        ]}
-                        onPress={() => deleteHistory(item.id)}
-                      >
-                        삭제
-                      </Text>
+                      {item.type !== 'candidate' ? (
+                        <Text
+                          id={item.id}
+                          style={[
+                            styles.searchedDeleteText,
+                            { backgroundColor: '#fff' },
+                          ]}
+                          onPress={() => deleteHistory(item.id)}
+                        >
+                          삭제
+                        </Text>
+                      ) : (
+                        item.road_address_name !== '' && (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 2,
+                            }}
+                          >
+                            <Text style={[styles.address]}>도로명</Text>
+                            <Text style={styles.roadAddress}>
+                              {item.road_address_name}
+                            </Text>
+                          </View>
+                        )
+                      )}
                     </View>
                   </TouchableOpacity>
                 );
               })}
               <Text
                 onPress={() => deleteAllHistory()}
-                style={styles.searchedDeleteAllText}
+                style={[
+                  styles.searchedDeleteAllText,
+                  {
+                    width:
+                      searchedList[0]?.type === 'candidate' ? 0 : 'inherit',
+                  },
+                ]}
               >
                 전체삭제
               </Text>
@@ -252,10 +289,26 @@ const styles = StyleSheet.create({
   searcehdItem: {
     //backgroundColor: 'red',
     width: '100%',
-    flexDirection: 'row',
-    paddingVertical: 14,
+
     paddingHorizontal: 18,
     borderBottomWidth: 1,
     borderBottomColor: '#707070',
+  },
+  address: {
+    fontFamily: 'NotoSansKR-Regular',
+    color: '#c4c4c4',
+    borderWidth: 1,
+    borderColor: '#c4c4c4',
+    fontSize: fontPercentage(10),
+    height: SCREEN_HEIGHT > 1000 ? 30 : 16,
+    fontWeight: '600',
+    marginLeft: 4,
+    marginRight: 5,
+    marginTop: 4,
+  },
+  roadAddress: {
+    fontFamily: 'NotoSansKR-Regular',
+    color: 'rgba(0, 0, 0, 0.73)',
+    marginTop: 1,
   },
 });

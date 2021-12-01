@@ -2,30 +2,47 @@ import { deleteSearchedData, saveSearchedData } from 'utils/asyncStorageUtil';
 
 //검색기록 async storage update
 export const handleFilterData = async (
-  text,
+  id,
+  location,
+  address,
+  longitude,
+  latitude,
   type,
   searchedList,
-  setSearchedList,
+  //setSearchedList,
 ) => {
   const updateData = {
-    id: Date.now(),
-    text,
+    id,
+    location,
+    address,
+    longitude,
+    latitude,
     type,
   };
 
   if (searchedList === null) {
-    setSearchedList([updateData]);
+    //setSearchedList([updateData]);
     await saveSearchedData(updateData);
   } else if (
-    searchedList.some((item) => item.text === text && item.type === type)
+    searchedList.some(
+      (item) =>
+        item.address === address &&
+        item.location === location &&
+        item.type === type,
+    )
   ) {
     const tempData = searchedList.filter(
-      (item) => !(item.text == text && item.type === type),
+      (item) =>
+        !(
+          item.address === address &&
+          item.location === location &&
+          item.type === type
+        ),
     );
-    setSearchedList([updateData, ...tempData]);
+    // setSearchedList([updateData, ...tempData]);
     await deleteSearchedData(tempData, updateData);
   } else {
-    setSearchedList([updateData, ...searchedList]);
+    //setSearchedList([updateData, ...searchedList]);
     await saveSearchedData(updateData);
   }
 };

@@ -66,7 +66,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from 'constant/const';
-import { TaskList } from '../items/TaskList';
+import { TaskList } from 'components/items/TaskList';
 
 export const ToDoModal = ({
   modalHandler,
@@ -348,10 +348,13 @@ export const ToDoModal = ({
         }
 
         await handleFilterData(
+          id,
           location,
+          address,
+          longitude,
+          latitude,
           'location',
           searchedList,
-          setSearchedList,
         );
 
         if (passModalData && passModalData.description === undefined) {

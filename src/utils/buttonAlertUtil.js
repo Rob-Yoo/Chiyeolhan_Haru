@@ -236,10 +236,15 @@ export const addModifyBlockAlert = () =>
     cancelable: false,
   });
 
-export const favoriteAlert = () =>
-  Alert.alert('즐겨찾기에 추가되었습니다.', '', [{ text: '확인' }], {
-    cancelable: false,
-  });
+export const favoriteAlert = (location) =>
+  Alert.alert(
+    `'${location}'`,
+    '즐겨찾기에 추가되었습니다.',
+    [{ text: '확인' }],
+    {
+      cancelable: false,
+    },
+  );
 
 export const deleteFavoriteAlert = () =>
   Alert.alert('즐겨찾기에서 삭제되었습니다.', '', [{ text: '확인' }], {
