@@ -194,18 +194,19 @@ export const MapSearch = ({
                   </TouchableOpacity>
                 );
               })}
-              <Text
-                onPress={() => deleteAllHistory()}
-                style={[
-                  styles.searchedDeleteAllText,
-                  {
-                    width:
-                      searchedList[0]?.type === 'candidate' ? 0 : 'inherit',
-                  },
-                ]}
-              >
-                전체삭제
-              </Text>
+              {searchedList && searchedList[0].type !== 'candidate' && (
+                <Text
+                  onPress={() => deleteAllHistory()}
+                  style={[
+                    styles.searchedDeleteAllText,
+                    {
+                      width: searchedList?.type === 'candidate' ? 0 : 'inherit',
+                    },
+                  ]}
+                >
+                  전체삭제
+                </Text>
+              )}
             </ScrollView>
           )}
         </View>
