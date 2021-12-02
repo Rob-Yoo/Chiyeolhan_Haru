@@ -48,7 +48,7 @@ const setSuccessSchedule = async (array) => {
   }
 };
 
-const addGeofence = async (latitude, longitude, data) => {
+const addGeofence = async (latitude, longitude, data = null) => {
   try {
     await BackgroundGeolocation.addGeofence({
       identifier: `${UID}`,
@@ -68,12 +68,13 @@ const addGeofenceTrigger = async (isChangeEarliest) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data.length > 0) {
-      const lat = data[0].latitude;
-      const lng = data[0].longitude;
+      const geofenceData = data[0];
+      const lat = geofenceData.latitude;
+      const lng = geofenceData.longitude;
       await addGeofence(lat, lng, data);
       await BackgroundGeolocation.startGeofences();
       if (isChangeEarliest) {
-        geofenceAlert(data[0].title);
+        geofenceAlert(geofenceData.title);
       }
     } else {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
@@ -124,9 +125,10 @@ export const geofenceUpdate = async (
 const findNearBy = async (data, currentTime) => {
   // 현재 일정 장소와 200m 이내에 있는 다음 일정 장소 찾기
   let nearBySchedules = [];
+  const geofenceData = data[0];
   const currentScheduleLocation = {
-    lat: data[0].latitude,
-    lon: data[0].longitude,
+    lat: geofenceData.latitude,
+    lon: geofenceData.longitude,
   };
   const nextSchedules = data.slice(1);
 
@@ -306,8 +308,9 @@ export const subscribeOnGeofence = () => {
     try {
       const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
       if (data.length > 0) {
-        const startTime = data[0].startTime;
-        const finishTime = data[0].finishTime;
+        const geofenceData = data[0];
+        const startTime = geofenceData.startTime;
+        const finishTime = geofenceData.finishTime;
         const currentTime = getCurrentTime();
 
         if (event.action == 'ENTER') {
@@ -332,8 +335,7 @@ export const initBgGeofence = async () => {
       locationAuthorizationAlert: {
         titleWhenNotEnabled: '위치 서비스 이용 제한',
         titleWhenOff: '위치 서비스 이용 제한',
-        instructions:
-          "원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.",
+        instructions: `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상"으로 설정해주세요.`,
         settingsButton: '설정',
         cancelButton: '취소',
       },

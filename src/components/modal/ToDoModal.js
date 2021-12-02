@@ -60,6 +60,7 @@ import { toDosUpdateDB } from 'utils/databaseUtil';
 import {
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_START_TIME,
+  KEY_VALUE_GEOFENCE,
   KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_START_TODO,
   KEY_VALUE_SUCCESS,
@@ -389,6 +390,8 @@ export const ToDoModal = ({
         let newID;
         let isStartTimeChange = false;
 
+        let isFirstScheduleEdit = false;
+
         if (startTime !== todoStartTime) {
           // 시작시간이 바뀌면
           isStartTimeChange = true;
@@ -423,6 +426,11 @@ export const ToDoModal = ({
         if (isStartTimeChange) {
           const { location, longitude, latitude, address } =
             locationData.location ? locationData : toDos[id];
+          const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+          const geofenceData = data[0];
+          if (geofenceData.id === id) {
+            isFirstScheduleEdit = true;
+          }
 
           dispatch(deleteToDoDispatch(id));
           cancelAllNotif(id); //수정하려는 일정의 예약된 모든 알림 삭제
@@ -454,8 +462,8 @@ export const ToDoModal = ({
         }
 
         const isChangeEarliest = isToday
-          ? await checkEarlistTodo(todoStartTime)
-          : true;
+          ? await checkEarlistTodo(todoStartTime, isFirstScheduleEdit)
+          : null;
         if (isToday) {
           await dbToAsyncStorage(isChangeEarliest);
 

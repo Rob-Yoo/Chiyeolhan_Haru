@@ -11,7 +11,11 @@ import IconQuestion from '#assets/icons/icon-question';
 
 import { fontPercentage } from 'utils/responsiveUtil';
 
-import { deleteToDoAlert, errorNotifAlert } from 'utils/buttonAlertUtil';
+import {
+  deleteToDoAlert,
+  errorNotifAlert,
+  geofenceAlert,
+} from 'utils/buttonAlertUtil';
 import {
   deleteTomorrowAsyncStorageData,
   deleteTodayAsyncStorageData,
@@ -239,6 +243,9 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
                   if (event.id == data[0].id) {
                     await geofenceUpdate(data);
                     await deleteTodayAsyncStorageData(targetId);
+                    if (data.length > 1) {
+                      geofenceAlert(data[1].title);
+                    }
                   } else {
                     await deleteGeofenceAsyncStorageData(targetId);
                     await deleteTodayAsyncStorageData(targetId);

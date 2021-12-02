@@ -16,20 +16,14 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chiyeolhan.chiyeolhan",
-      "config": {
-        "googleMapsApiKey": "AIzaSyCWOTj7ug0B_fVz31DslH2etH1zx3q9lpo"
-      }
+      "bundleIdentifier": "com.chiyeolhan.chiyeolhan"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.chiyeolhan.chiyeolhan",
-      "config": {
-        "googleMaps": { "apiKey": "AIzaSyCWOTj7ug0B_fVz31DslH2etH1zx3q9lpo" }
-      }
+      "package": "com.chiyeolhan.chiyeolhan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
