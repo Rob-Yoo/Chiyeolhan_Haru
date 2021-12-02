@@ -140,10 +140,9 @@ const CurrentMap = ({
   const getCandidate = (documents) => {
     setType('candidate');
     documents.map((data) => {
-      const { address_name, place_name, road_address_name, id, x, y } = data;
+      const { place_name, road_address_name, id, x, y } = data;
       candidate.push({
-        address: address_name,
-        road_address_name,
+        address: road_address_name,
         text: place_name,
         location: place_name,
         longitude: x * 1,

@@ -176,7 +176,7 @@ export const MapSearch = ({
                           삭제
                         </Text>
                       ) : (
-                        item.road_address_name !== '' && (
+                        item.address !== '' && (
                           <View
                             style={{
                               flexDirection: 'row',
@@ -185,7 +185,7 @@ export const MapSearch = ({
                           >
                             <Text style={[styles.address]}>도로명</Text>
                             <Text style={styles.roadAddress}>
-                              {item.road_address_name}
+                              {item.address}
                             </Text>
                           </View>
                         )
