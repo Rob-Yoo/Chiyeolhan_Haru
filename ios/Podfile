@@ -7,7 +7,6 @@ platform :ios, '12.0'
 target 'chiyeolhan' do
   use_unimodules!
 # @generated begin react-native-maps - expo prebuild (DO NOT MODIFY) sync-2f0a6817224f18601deb2879c9e783ba07387bc9
-  pod 'react-native-google-maps', path: '../node_modules/react-native-maps'
 # @generated end react-native-maps
   config = use_native_modules!
 
@@ -30,8 +29,6 @@ target 'chiyeolhan' do
     end
   end
 
-  pod 'GoogleMaps', '3.5.0'
-  pod 'Google-Maps-iOS-Utils'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
   pod 'react-native-restart', :path => '../node_modules/react-native-restart'

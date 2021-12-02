@@ -12,9 +12,6 @@ import { handleFilterData } from 'utils/handleFilterData';
 import {
   noDataAlert,
   favoriteAlert,
-  limitRequestAlert,
-  requestDeniedAlert,
-  invalidRequestAlert,
   errorNotifAlert,
   permissionDenyAlert,
   deleteFavoriteAlert,
@@ -114,6 +111,7 @@ const CurrentMap = ({
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
   const [isFavoriteColor, setIsFavoriteColor] = useState(null);
   const [candidateState, setCandidate] = useState(candidate);
+  const [type, setType] = useState('searched');
   useEffect(() => {
     const getSearchedList = async () => {
       try {
@@ -139,40 +137,8 @@ const CurrentMap = ({
     }
   };
 
-  // const _handleCandidate = async (text) => {
-  //   try {
-  //     const response = await fetch(
-  //       `${GOOGLE_API_URL}/autocomplete/json?input=${text}&${GOOGLE_PARARMS}&key=${GOOGLE_PLACES_API_KEY}`,
-  //     );
-  //     const data = await response.json();
-  //     const status = data.status;
-  //     let result;
-  //     switch (status) {
-  //       case 'OK':
-  //         result = data.predictions[0].place_id;
-  //         break;
-  //       case 'ZERO_RESULTS':
-  //         result = 'ZERO_RESULTS';
-  //         break;
-  //       case 'OVER_QUERY_LIMIT':
-  //         result = 'OVER_QUERY_LIMIT';
-  //         break;
-  //       case 'REQUEST_DENIED':
-  //         result = 'REQUEST_DENIED';
-  //         break;
-  //       case 'INVALID_REQUEST':
-  //         result = 'INVALID_REQUEST';
-  //         break;
-  //       default:
-  //         errorNotifAlert(`Error ${status}`);
-  //     }
-  //     return result;
-  //   } catch (e) {
-  //     errorNotifAlert(`_handleCandidate Error : ${e}`);
-  //   }
-  // };
-
   const getCandidate = (documents) => {
+    setType('candidate');
     documents.map((data) => {
       const { address_name, place_name, road_address_name, id, x, y } = data;
       candidate.push({
@@ -180,8 +146,8 @@ const CurrentMap = ({
         road_address_name,
         text: place_name,
         location: place_name,
-        longitude: x,
-        latitude: y,
+        longitude: x * 1,
+        latitude: y * 1,
         id,
         type: 'candidate',
       });
@@ -189,10 +155,13 @@ const CurrentMap = ({
   };
 
   const touchLocationData = async (locationData) => {
-    const { location, latitude, longitude, address, id } = locationData;
+    const { location, address, id } = locationData;
+    const latitude = locationData.latitude * 1; // string -> number
+    const longitude = locationData.longitude * 1;
+
     setLocationResult({
-      latitude: latitude * 1,
-      longitude: longitude * 1,
+      latitude,
+      longitude,
     });
     setIscurrentLocation(false);
     setLocationData({ location, latitude, longitude, address });
@@ -309,6 +278,7 @@ const CurrentMap = ({
         isFavoriteColor={isFavoriteColor}
         handleFavorite={() => handleFavorite(locationData, setIsFavoriteColor)}
         touchLocationData={(locationData) => touchLocationData(locationData)}
+        type={type}
       />
     </>
   );

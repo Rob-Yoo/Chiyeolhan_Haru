@@ -177,7 +177,6 @@ const setTodayToDoArray = async (todayToDos) => {
       obj[targetId] = todoAsyncModel(todo.data());
       todayToDoArray.push(obj);
     });
-    // console.log('todayToDoArray : ', todayToDoArray);
     await setTodayData(JSON.stringify(todayToDoArray));
   } catch (e) {
     errorNotifAlert(`setTodayToDoArray Error : ${e}`);
@@ -188,13 +187,19 @@ const setGeofenceDataArray = async (todayToDos) => {
   const geofenceDataArray = [];
   const currentTime = getCurrentTime();
   let progressingSchedule;
+  const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+
+  if (progressing) {
+    await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
+  }
 
   try {
     todayToDos.forEach((todo) => {
       if (
         todo.data().startTime <= currentTime &&
         currentTime < todo.data().finishTime &&
-        todo.data().isSkip === false
+        todo.data().isSkip === false &&
+        todo.data().isDone === false
       ) {
         progressingSchedule = geofenceDataModel(todo.data());
       }
@@ -235,6 +240,7 @@ export const dbToAsyncTomorrow = async () => {
     const data = await todosRef.where('date', '==', `${TOMORROW}`).get();
     let n = 0;
     let startTime;
+
     data.forEach((todo) => {
       const targetId = todo.data().id;
       const obj = {};
@@ -330,6 +336,7 @@ export const checkDayChange = async () => {
 
         const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
         const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+        const currentTime = getCurrentTime();
 
         if (progressing) {
           geofenceData.unshift(progressing);
@@ -339,16 +346,11 @@ export const checkDayChange = async () => {
           );
         }
         //12시 15분껄만들고
-        const currentTime = getCurrentTime();
         if (geofenceData.length > 0) {
+          const data = geofenceData[0];
+          const timeDiff = getTimeDiff(currentTime, data.startTime);
           PushNotification.cancelLocalNotification('T');
-          const timeDiff = getTimeDiff(currentTime, geofenceData[0].startTime);
-          // const timeDiff = getDiffMinutes(
-          //   stringTimeToTomorrowDate(geofenceData[0].startTime) - new Date(),
-          // );
-          // console.log(timeDiff);
-
-          startNotification(timeDiff, geofenceData[0].id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
+          startNotification(timeDiff, data.id); // 첫 일정에 시작 버튼 눌러달라는 알림 예약
         }
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
       }
@@ -371,13 +373,19 @@ export const checkDayChange = async () => {
   }
 };
 
-export const checkEarlistTodo = async (todoStartTime) => {
+export const checkEarlistTodo = async (
+  todoStartTime,
+  isFirstScheduleEdit = false,
+) => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data !== null) {
       if (data.length > 0) {
         const earliestTime = data[0].startTime;
-        if (isEarliestTime(earliestTime, todoStartTime)) {
+        if (
+          isEarliestTime(earliestTime, todoStartTime) ||
+          isFirstScheduleEdit
+        ) {
           return true;
         } else {
           return false;

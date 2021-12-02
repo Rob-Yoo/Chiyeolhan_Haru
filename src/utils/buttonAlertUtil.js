@@ -48,33 +48,6 @@ export const noDataAlert = () =>
   Alert.alert('검색 결과가 없습니다.', '', [{ text: '확인' }], {
     cancelable: false,
   });
-export const requestDeniedAlert = () =>
-  Alert.alert(
-    '검색 요청 권한이 없습니다.',
-    '반복 시 관리자에게 알려주세요',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
-export const invalidRequestAlert = () =>
-  Alert.alert(
-    '유효하지 않은 요청입니다.',
-    '반복 시 관리자에게 알려주세요',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
-export const limitRequestAlert = () =>
-  Alert.alert(
-    '검색 요청 횟수를 초과 하였습니다.',
-    '반복 시 관리자에게 알려주세요',
-    [{ text: '확인' }],
-    {
-      cancelable: false,
-    },
-  );
 
 export const errorNotifAlert = (e) => {
   Alert.alert(
@@ -192,7 +165,7 @@ export const startAlert = (geofenceUpdate, data) =>
 export const permissionDenyAlert = () =>
   Alert.alert(
     `위치 서비스 이용 제한`,
-    `원활한 서비스 제공을 위해 위치 서비스 이용에 대한 액세스 권한을 '항상'으로 설정해주세요.`,
+    `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상"으로 설정해주세요.`,
     [
       {
         text: '설정',
@@ -311,11 +284,6 @@ export const deleteToDoTaskList = async () =>
 
 export const longTodoTitle = () =>
   Alert.alert('일정의 제목을 너무 길게 설정했습니다.', '', [{ text: '확인' }], {
-    cancelable: false,
-  });
-
-export const weakNetworkAlert = () =>
-  Alert.alert('인터넷 연결 상태가 좋지 않습니다.', '', [{ text: '확인' }], {
     cancelable: false,
   });
 

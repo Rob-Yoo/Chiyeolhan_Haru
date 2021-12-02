@@ -9,7 +9,7 @@ import store from 'redux/store';
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { getDataFromAsync, dbToAsyncStorage } from 'utils/asyncStorageUtil';
-import { errorNotifAlert, weakNetworkAlert } from 'utils/buttonAlertUtil';
+import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   KEY_VALUE_INSTALLED,

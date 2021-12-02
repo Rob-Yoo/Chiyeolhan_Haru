@@ -29,6 +29,7 @@ export const MapSearch = ({
   isFavoriteColor,
   handleFavorite,
   touchLocationData,
+  type,
 }) => {
   const [findlocation, setFindlocation] = useState(false);
   const [inputText, setText] = useState(null);
@@ -37,7 +38,6 @@ export const MapSearch = ({
   const toggleModal = () => {
     setSearchedHistroyVisible(!searchedHistoryVisible);
   };
-
   const deleteAllHistory = async () => {
     searchedList && (await deleteAllSearchedData());
     setSearchedList([]);
@@ -194,8 +194,9 @@ export const MapSearch = ({
                   </TouchableOpacity>
                 );
               })}
-              {searchedList && searchedList[0].type !== 'candidate' && (
+              {type === 'searched' && (
                 <Text
+                  key={type}
                   onPress={() => deleteAllHistory()}
                   style={[
                     styles.searchedDeleteAllText,
