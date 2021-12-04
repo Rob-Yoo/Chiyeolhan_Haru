@@ -54,12 +54,12 @@ static void InitializeFlipper(UIApplication *application) {
   
   NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.js" fallbackResource:nil];
 
-    RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
+  RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:jsCodeLocation
                                                 moduleProvider:nil
                                                  launchOptions:launchOptions];
-    #if RCT_DEV
-     [bridge moduleForClass:[RCTDevLoadingView class]];
-    #endif
+  #if RCT_DEV
+    [bridge moduleForClass:[RCTDevLoadingView class]];
+  #endif
   
   self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
   self.launchOptions = launchOptions;

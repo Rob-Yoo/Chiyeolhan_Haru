@@ -204,7 +204,7 @@ const CurrentMap = ({
       }
       return candidate;
     } catch (e) {
-      errorNotifAlert(`_handlePlacesAPI Error : ${e}`);
+      errorNotifAlert('인터넷 연결이 좋지 못합니다.');
     }
   };
 

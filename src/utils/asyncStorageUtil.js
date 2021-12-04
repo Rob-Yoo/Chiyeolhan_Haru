@@ -228,6 +228,9 @@ export const dbToAsyncStorage = async (isChangeEarliest = null) => {
     if (isChangeEarliest !== null) {
       await geofenceScheduler(isChangeEarliest);
     }
+    PushNotification.getScheduledLocalNotifications((notif) =>
+      console.log('예약된 알람 :', notif),
+    );
   } catch (e) {
     errorNotifAlert(`dbToAsyncStorage Error : ${e}`);
   }

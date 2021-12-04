@@ -238,6 +238,9 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       // 시작시간보다 일찍 나갔다면 성공한 일정 배열에서 제외하고 모든 알림 삭제
     }
     await saveSuccessSchedules(geofenceData.id, startTime, finishTime); // 성공한 일정 저장
+    PushNotification.getScheduledLocalNotifications((notif) =>
+      console.log('예약된 알람 :', notif),
+    );
   } catch (e) {
     errorNotifAlert(`enterAction Error : ${e}`);
   }
@@ -299,6 +302,9 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
         await setSuccessSchedule(successSchedules);
       }
     }
+    PushNotification.getScheduledLocalNotifications((notif) =>
+      console.log('예약된 알람 :', notif),
+    );
   } catch (e) {
     errorNotifAlert(`exitAction Error : ${e}`);
   }

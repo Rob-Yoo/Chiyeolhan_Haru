@@ -5794,6 +5794,11 @@ react-native-modal@^12.1.0:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
+react-native-networking-patch@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-networking-patch/-/react-native-networking-patch-1.1.6.tgz#c061346d2b3f1bc45164e37da9830e824ff79eaf"
+  integrity sha512-FzcrAXOTVK53rh0GeTd4gFtewTb7aFp/gJjTLnmUvr4d1/RpBudTgR1rjgCKLNch2Odi/f6cIvphuIiMlkJn0Q==
+
 react-native-progress@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-5.0.0.tgz#f5ac6ceaeee27f184c660b00f29419e82a9d0ab0"

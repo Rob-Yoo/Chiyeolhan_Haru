@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Networking } from 'react-native';
 import { registerRootComponent } from 'expo';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
@@ -20,6 +20,7 @@ PushNotification.configure({
   requestPermissions: Platform.OS === 'ios',
 });
 
+Networking.setTimeout(3000);
 subscribeOnGeofence();
 initBgGeofence();
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, StatusBar, AppState } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  StatusBar,
+  AppState,
+  Networking,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen';
 import BackgroundGeolocation from 'react-native-background-geolocation';
@@ -67,23 +73,15 @@ const Home = ({ navigation }) => {
   };
 
   const readyForHome = async () => {
-    await getToDos();
-    await checkDayChange();
-    await loadSuccessSchedules();
-    await checkNearByFinish();
-    await SplashScreen.hideAsync();
-
-    // function sleep(ms) {
-    //   const wakeUpTime = Date.now() + ms;
-    //   while (Date.now() < wakeUpTime) {
-    //     if (toDos !== {}) {
-    //       SplashScreen.hideAsync();
-    //       return;
-    //     }
-    //   }
-    //   weakNetworkAlert();
-    // }
-    // sleep(5000);
+    try {
+      await getToDos();
+      await checkDayChange();
+      await loadSuccessSchedules();
+      await checkNearByFinish();
+      await SplashScreen.hideAsync();
+    } catch (e) {
+      errorNotifAlert(`readyForHome Error : ${e}`);
+    }
   };
 
   const getToDos = async () => {

@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import PushNotification from 'react-native-push-notification';
 
 import { setTabBar, skip } from 'redux/store';
 
@@ -120,6 +121,9 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
               } else {
                 await scrollRefresh(dispatch);
               }
+              PushNotification.getScheduledLocalNotifications((notif) =>
+                console.log('예약된 알람 :', notif),
+              );
             },
           },
         ],
