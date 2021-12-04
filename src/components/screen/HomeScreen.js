@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  AppState,
-  Networking,
-} from 'react-native';
+import { View, StyleSheet, StatusBar, AppState } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen';
 import BackgroundGeolocation from 'react-native-background-geolocation';
@@ -36,10 +30,6 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
     AppState.addEventListener('change', __handleAppStateChange);
-    // let timer = setTimeout(() => {
-    //   weakNetworkAlert();
-    //   clearTimeout(timer);
-    // }, 3000);
     readyForHome();
     return () => {
       AppState.removeEventListener('change', __handleAppStateChange);
@@ -60,7 +50,6 @@ const Home = ({ navigation }) => {
         if (isDaychange) {
           RNRestart.Restart();
         }
-
         await loadSuccessSchedules();
         await checkNearByFinish();
 
@@ -80,7 +69,7 @@ const Home = ({ navigation }) => {
       await checkNearByFinish();
       await SplashScreen.hideAsync();
     } catch (e) {
-      errorNotifAlert(`readyForHome Error : ${e}`);
+      // errorNotifAlert(`readyForHome Error : ${e}`);
     }
   };
 

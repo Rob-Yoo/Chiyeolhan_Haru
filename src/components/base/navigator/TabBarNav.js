@@ -104,7 +104,7 @@ const handleSkip = async (isNeedSkip) => {
 
 const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
   try {
-    const isNeedSkip = await checkGeofenceSchedule(1);
+    const isNeedSkip = await checkGeofenceSchedule();
 
     if (isNeedSkip) {
       Alert.alert(
@@ -121,9 +121,9 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
               } else {
                 await scrollRefresh(dispatch);
               }
-              PushNotification.getScheduledLocalNotifications((notif) =>
-                console.log('예약된 알람 :', notif),
-              );
+              // PushNotification.getScheduledLocalNotifications((notif) =>
+              //   console.log('예약된 알람 :', notif),
+              // );
             },
           },
         ],

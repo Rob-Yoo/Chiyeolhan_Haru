@@ -47,7 +47,7 @@ const ScheduleTomorrow = ({ navigation }) => {
   };
 
   const alertSkipBtn = async () => {
-    const isNeedSkip = await checkGeofenceSchedule(1);
+    const isNeedSkip = await checkGeofenceSchedule();
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
 
     if (isStartTodo) {

@@ -20,7 +20,7 @@ import toDoReducer, { updateIsDone } from 'redux/store';
 const getDataFromAsync = async (storageName) => {
   try {
     const item = await AsyncStorage.getItem(storageName);
-    if (item == null) {
+    if (item === null) {
       return null;
     } else {
       return JSON.parse(item);
@@ -30,7 +30,7 @@ const getDataFromAsync = async (storageName) => {
   }
 };
 
-const loadSuccessSchedules = async () => {
+const loadSuccessSchedules = async (flag) => {
   try {
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     let isNeedUpdate = false;
@@ -70,27 +70,25 @@ export const checkNearByFinish = async () => {
     const todosRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules !== null) {
-      let result = true;
+      if (nearBySchedules.length > 0) {
+        let result = true;
 
-      if (!nearBySchedules.includes(geofenceData[0])) {
-        nearBySchedules.unshift(geofenceData[0]);
-      }
-
-      for (const schedule of nearBySchedules) {
-        const dbData = await todosRef.where('id', '==', schedule.id).get();
-        dbData.forEach((todo) => {
-          if (todo.data().isDone === false) {
-            result = false;
+        for (const schedule of nearBySchedules) {
+          const dbData = await todosRef.where('id', '==', schedule.id).get();
+          dbData.forEach((todo) => {
+            if (todo.data().isDone === false) {
+              result = false;
+            }
+          });
+          if (!result) {
+            break;
           }
-        });
-        if (!result) {
-          break;
         }
-      }
 
-      if (result) {
-        const successNumber = nearBySchedules.length;
-        await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
+        if (result) {
+          const successNumber = nearBySchedules.length;
+          await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
+        }
       }
     }
   } catch {
@@ -98,21 +96,18 @@ export const checkNearByFinish = async () => {
   }
 };
 
-export const checkGeofenceSchedule = async (flag) => {
+export const checkGeofenceSchedule = async () => {
   // 가장 최신의 지오펜스 일정 끝시간이 지났을 때 해당 일정이 성공한 일정 배열에 존재하는지 체크
   // 없으면 다음 일정으로 업데이트 해줘야한다.
   try {
-    const currentTime = getCurrentTime();
+    await loadSuccessSchedules();
+    await checkNearByFinish();
+
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
-    const todosRef = dbService.collection(`${UID}`);
+    const currentTime = getCurrentTime();
     let isNeedSkip = false;
-
-    await loadSuccessSchedules();
-
-    if (flag === 1) {
-      await checkNearByFinish();
-    }
+    const todosRef = dbService.collection(`${UID}`);
 
     if (isStartTodo) {
       if (geofenceData !== null) {
@@ -151,7 +146,6 @@ export const geofenceScheduler = async (isChangeEarliest) => {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
-    const todosRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules) {
       // 일정이 현재 진행 중이라면 새로운 일정을 추가를 하면 현재 진행 중인 일정이 GEOFENCE 배열에서 사라진다.
@@ -164,13 +158,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
             JSON.stringify(geofenceData),
           );
         }
-        //추가 되기전 가장 최신 일정의 각 예약된 알림들을 모두 취소한다.
-        cancelAllNotif(geofenceData[1].id);
-      } else if (progressing == null) {
-        // 현재 일정이 진행 중이 아니고 EARLY로 들어온 것만 인식된 상황이라면 각 예약된 알림들을 모두 취소한다.
-        cancelAllNotif(geofenceData[0].id);
       }
-
       for (const schedule of nearBySchedules) {
         //nearBy 일정들의 각 예약된 알림들을 모두 취소한다.
         cancelAllNotif(schedule.id);
@@ -186,10 +174,8 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         if (isChangeEarliest) {
           if (progressing) {
             // progressing인 일정을 추가 할 경우 geofence 배열에 넣어줘야한다.
-            if (geofenceData.length > 2) {
-              // 추가 하기 전 가장 최신 일정의 알림 삭제
-              cancelAllNotif(geofenceData[1].id);
-            }
+            // 추가 하기 전 가장 최신 일정의 알림 삭제
+            cancelAllNotif(geofenceData[0].id);
             geofenceData.unshift(progressing);
             await AsyncStorage.setItem(
               KEY_VALUE_GEOFENCE,
@@ -211,44 +197,16 @@ export const geofenceScheduler = async (isChangeEarliest) => {
       } else {
         if (progressing) {
           // 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우
-          let addProgressing = false;
+          // 아래와 같이 하는 이유는 새로운 일정을 생성하면 geofenceArray에다 DB에서 아직 시작시간이 지나지 않은 일정들만 가져온다.
+          // 이런 이유 떄문에 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우에는 현재 일정이 사라져버린다.
+          // 따라서 이를 방지하기 위해 현재 시간이 일정의 시작시간과 끝시간 사이인 일정, 즉 현재 진행중인 일정을 progressing이라고 정의한다.
+          // 이 progressing을 geofenceArray의 가장 처음으로 들어가게 해준다.
+          geofenceData.unshift(progressing);
+          await AsyncStorage.setItem(
+            KEY_VALUE_GEOFENCE,
+            JSON.stringify(geofenceData),
+          );
 
-          let isDone;
-          let match;
-          const dbData = await todosRef.where('id', '==', progressing.id).get();
-
-          dbData.forEach((schedule) => {
-            isDone = schedule.data().isDone;
-          });
-
-          if (isDone === false) {
-            if (successSchedules) {
-              if (successSchedules.length > 0) {
-                match = successSchedules.find(
-                  (schedule) => schedule.id === progressing.id,
-                );
-                if (match === undefined) {
-                  addProgressing = true;
-                }
-              } else {
-                addProgressing = true;
-              }
-            } else {
-              addProgressing = true;
-            }
-          }
-
-          if (addProgressing) {
-            // 아래와 같이 하는 이유는 새로운 일정을 생성하면 geofenceArray에다 DB에서 아직 시작시간이 지나지 않은 일정들만 가져온다.
-            // 이런 이유 떄문에 현재 일정 시작 시간이 지났는데 아직 안들어와서 새로운 일정을 추가한 경우에는 현재 일정이 사라져버린다.
-            // 따라서 이를 방지하기 위해 현재 시간이 일정의 시작시간과 끝시간 사이인 일정, 즉 현재 진행중인 일정을 progressing이라고 정의한다.
-            // 이 progressing을 geofenceArray의 가장 처음으로 들어가게 해준다.
-            geofenceData.unshift(progressing);
-            await AsyncStorage.setItem(
-              KEY_VALUE_GEOFENCE,
-              JSON.stringify(geofenceData),
-            );
-          }
           if (isStartTodo) {
             if (isChangeEarliest) {
               await geofenceUpdate(geofenceData, 0, isChangeEarliest);

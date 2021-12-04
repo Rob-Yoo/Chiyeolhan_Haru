@@ -298,7 +298,7 @@ export const ToDoModal = ({
       return;
     }
     isSetLoading(true);
-    const block = await checkGeofenceSchedule(0);
+    const block = await checkGeofenceSchedule();
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -377,7 +377,7 @@ export const ToDoModal = ({
       return;
     }
     isSetLoading(true);
-    const block = await checkGeofenceSchedule(0);
+    const block = await checkGeofenceSchedule();
     if (block == 1) {
       addModifyBlockAlert();
     } else {

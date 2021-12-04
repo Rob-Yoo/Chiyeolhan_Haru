@@ -28,6 +28,7 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_TOMORROW_DATA,
   KEY_VALUE_NEAR_BY,
+  KEY_VALUE_INSTALLED,
   KEY_VALUE_TODAY_DATA,
   KEY_VALUE_YESTERDAY_DATA,
   KEY_VALUE_PROGRESSING,
@@ -228,9 +229,9 @@ export const dbToAsyncStorage = async (isChangeEarliest = null) => {
     if (isChangeEarliest !== null) {
       await geofenceScheduler(isChangeEarliest);
     }
-    PushNotification.getScheduledLocalNotifications((notif) =>
-      console.log('예약된 알람 :', notif),
-    );
+    // PushNotification.getScheduledLocalNotifications((notif) =>
+    //   console.log('예약된 알람 :', notif),
+    // );
   } catch (e) {
     errorNotifAlert(`dbToAsyncStorage Error : ${e}`);
   }
@@ -319,6 +320,8 @@ export const checkDayChange = async () => {
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
       await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
     } else if (today !== TODAY) {
+      await loadSuccessSchedules(true);
+
       const tomorrowData = await AsyncStorage.getItem(KEY_VALUE_TOMORROW_DATA);
       const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
 
@@ -402,7 +405,7 @@ export const checkEarlistTodo = async (
   }
 };
 
-export const loadSuccessSchedules = async () => {
+export const loadSuccessSchedules = async (flag = false) => {
   try {
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     let isNeedUpdate = false;
@@ -412,7 +415,7 @@ export const loadSuccessSchedules = async () => {
     if (successSchedules !== null) {
       if (successSchedules.length > 0) {
         for (const schedule of successSchedules) {
-          if (schedule.startTime <= currentTime) {
+          if (schedule.startTime <= currentTime || flag) {
             await todosRef.doc(`${schedule.id}`).update({ isDone: true });
             //리덕스 업데이트
             toDoReducer.dispatch(updateIsDone(schedule.id));
@@ -433,5 +436,31 @@ export const loadSuccessSchedules = async () => {
     }
   } catch (e) {
     errorNotifAlert(`loadSuccessSchedules Error : ${e}`);
+  }
+};
+
+export const loadSavedData = async () => {
+  try {
+    const installed = await getDataFromAsync(KEY_VALUE_INSTALLED);
+
+    if (!installed) {
+      await dbToAsyncStorage();
+      const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+      const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+      if (progressing) {
+        geofenceData.unshift(progressing);
+        await AsyncStorage.setItem(
+          KEY_VALUE_GEOFENCE,
+          JSON.stringify(geofenceData),
+        );
+      }
+      if (geofenceData.length === 0) {
+        await AsyncStorage.removeItem(KEY_VALUE_GEOFENCE);
+      }
+      // console.log('loaded GeofenceData : ', geofenceData);
+      await AsyncStorage.setItem(KEY_VALUE_INSTALLED, 'true');
+    }
+  } catch (e) {
+    errorNotifAlert(`loadSavedData Error : ${e}`);
   }
 };
