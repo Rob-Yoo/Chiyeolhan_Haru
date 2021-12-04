@@ -186,14 +186,15 @@ const setTodayToDoArray = async (todayToDos) => {
 const setGeofenceDataArray = async (todayToDos) => {
   const geofenceDataArray = [];
   const currentTime = getCurrentTime();
-  let progressingSchedule;
-  const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
-
-  if (progressing) {
-    await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
-  }
+  let progressingSchedule = null;
 
   try {
+    const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
+
+    if (progressing) {
+      await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
+    }
+
     todayToDos.forEach((todo) => {
       if (
         todo.data().startTime <= currentTime &&
@@ -319,6 +320,9 @@ export const checkDayChange = async () => {
       const todayData = await AsyncStorage.getItem(KEY_VALUE_TODAY_DATA);
 
       await AsyncStorage.setItem(KEY_VALUE_TODAY, TODAY); // TODAY 어싱크에 바뀐 오늘날짜를 저장
+      await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
+      await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
+      await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'false'); // 날짜가 바뀌면 바뀐 일정들이 아직 시작이 안됬으므로 false로 바꿔준다.
 
       if (todayData === null) {
         await AsyncStorage.removeItem(KEY_VALUE_YESTERDAY_DATA);
@@ -345,7 +349,7 @@ export const checkDayChange = async () => {
             JSON.stringify(geofenceData),
           );
         }
-        //12시 15분껄만들고
+
         if (geofenceData.length > 0) {
           const data = geofenceData[0];
           const timeDiff = getTimeDiff(currentTime, data.startTime);
@@ -355,9 +359,6 @@ export const checkDayChange = async () => {
         await AsyncStorage.removeItem(KEY_VALUE_TOMORROW_DATA);
       }
       // 성공한 일정 배열을 초기화해준다.
-      await AsyncStorage.setItem(KEY_VALUE_SUCCESS, '[]');
-      await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'true');
-      await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'false'); // 날짜가 바뀌면 바뀐 일정들이 아직 시작이 안됬으므로 false로 바꿔준다.
 
       // 트래킹이 되고있는 일정이 남아있을 수 있기 때문에 멈춰준다.
       const geofences = await BackgroundGeolocation.getGeofences();

@@ -109,6 +109,7 @@ export const checkGeofenceSchedule = async (flag) => {
     let isNeedSkip = false;
 
     await loadSuccessSchedules();
+
     if (flag === 1) {
       await checkNearByFinish();
     }

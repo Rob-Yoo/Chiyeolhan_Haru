@@ -58,7 +58,8 @@ const addGeofence = async (latitude, longitude, data = null) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    //console.log('Adding Geofence Success!!', data[0].location);
+    console.log('Adding Geofence Success!!', data[0]);
+    console.log(data);
   } catch (e) {
     errorNotifAlert(`addGeofence Error : ${e}`);
   }
@@ -80,7 +81,7 @@ const addGeofenceTrigger = async (isChangeEarliest) => {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       // console.log('[removeGeofence] success');
       await BackgroundGeolocation.stop();
-      // console.log('stop geofence tracking');
+      console.log('stop geofence tracking');
     }
   } catch (error) {
     errorNotifAlert(`addGeofenceTrigger Error : ${error}`);
@@ -204,15 +205,15 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       const timeDiff = getLateTimeDiff(startTime, currentTime);
 
       if (0 <= timeDiff && timeDiff <= 10) {
-        // console.log('제 시간에 옴', currentTime);
+        console.log('제 시간에 옴', currentTime);
         notifHandler('ON_TIME', geofenceData); // notifHandler 함수 안에서 fail 알림을 삭제함
       } else {
-        // console.log('늦게 옴', currentTime);
+        console.log('늦게 옴', currentTime);
         notifHandler('LATE', geofenceData);
       }
     } else if (startTime > currentTime) {
       const timeDiff = getEarlyTimeDiff(startTime, currentTime);
-      // console.log('일찍 옴', currentTime);
+      console.log('일찍 옴', currentTime);
       notifHandler('EARLY', geofenceData, timeDiff);
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;
@@ -251,7 +252,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
     if (nearBySchedules === null) {
       if (currentTime < startTime) {
         const timeDiff = getTimeDiff(currentTime, finishTime);
-        // console.log('일정 시작 시간보다 전에 나감');
+        console.log('일정 시작 시간보다 전에 나감');
         cancelAllNotif(geofenceData.id); //현재 일정의 예약된 모든 알림 삭제
         failNotification(timeDiff, geofenceData.id); // 다시 해당 일정의 failNotification 알림 등록
         successSchedules = successSchedules.filter(

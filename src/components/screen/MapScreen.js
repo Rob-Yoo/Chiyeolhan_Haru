@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { KAKAO_REST_API_KEY } from '@env';
 
 import { MapSearch } from 'components/screen/MapSearchScreen';
+import { Loading } from 'components/screen/LoadingScreen';
 import { LocationData } from 'components/items/LocationData';
 
 import { getDataFromAsync, setFavoriteData } from 'utils/asyncStorageUtil';
@@ -22,7 +23,6 @@ import {
   KEY_VALUE_SEARCHED,
   KEY_VALUE_FAVORITE,
 } from 'constant/const';
-import { Loading } from './LoadingScreen';
 
 import IconFindCurrent from '#assets/icons/icon-find-current-location';
 
