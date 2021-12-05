@@ -11,9 +11,10 @@ import * as Progress from 'react-native-progress';
 export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   const [width, setWidth] = useState(0);
   useEffect(() => {
+    let intervalCallback;
     if (finishTime > getCurrentTime() && startTime <= getCurrentTime()) {
       getProgressBarWidth();
-      let intervalCallback = setInterval(() => {
+      intervalCallback = setInterval(() => {
         if (isDone === false) {
           setWidth(0);
           clearInterval(intervalCallback);
@@ -24,13 +25,13 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
           finishTime <=
           new Date().getHours() * 60 + new Date().getMinutes() * 1
         ) {
-          // console.log('clearIntervael');
           clearInterval(intervalCallback);
         }
       }, 60000);
     } else {
       getProgressBarWidth();
     }
+    return () => clearInterval(intervalCallback);
   }, [isDone]);
 
   const stringToNumberTime = (time) => {
@@ -40,7 +41,6 @@ export const Card = ({ text, finishTime, startTime, location, id, isDone }) => {
   };
 
   const getProgressBarWidth = () => {
-    //console.log('getProgress');
     if (isDone === false) return;
     if (typeof startTime === 'string') {
       startTime = stringToNumberTime(startTime);

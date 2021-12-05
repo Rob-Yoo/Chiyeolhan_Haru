@@ -109,7 +109,7 @@ export const MapSearch = ({
               {searchedList?.map((item) => {
                 return (
                   <TouchableOpacity
-                    key={`${item.id}`}
+                    key={item.id + item.type}
                     activeOpacity={1}
                     onPress={() => {
                       touchLocationData(item);
