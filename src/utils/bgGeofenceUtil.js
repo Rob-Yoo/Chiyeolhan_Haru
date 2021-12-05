@@ -14,9 +14,8 @@ import {
   arriveEarlyNotification,
   failNotification,
   cancelAllNotif,
-  errorNotifAlert,
 } from 'utils/notificationUtil';
-import { geofenceAlert } from 'utils/buttonAlertUtil';
+import { geofenceAlert, errorNotifAlert } from 'utils/buttonAlertUtil';
 
 import {
   UID,
@@ -43,7 +42,7 @@ const getDataFromAsync = async (storageName) => {
 const setSuccessSchedule = async (array) => {
   try {
     await AsyncStorage.setItem(KEY_VALUE_SUCCESS, JSON.stringify(array));
-    console.log('-----successSchedules: ', array);
+    // console.log('-----successSchedules: ', array);
   } catch (e) {
     errorNotifAlert(`setSuccessSchedule Error : ${e}`);
   }
@@ -59,7 +58,7 @@ const addGeofence = async (latitude, longitude, data = null) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    // console.log('Adding Geofence Success!!', data[0]);
+    console.log('Adding Geofence Success!!', data[0]);
     // console.log('geofencdeData :', data);
   } catch (e) {
     errorNotifAlert(`addGeofence Error : ${e}`);
@@ -82,7 +81,7 @@ const addGeofenceTrigger = async (isChangeEarliest) => {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       // console.log('[removeGeofence] success');
       await BackgroundGeolocation.stop();
-      // console.log('stop geofence tracking');
+      console.log('stop geofence tracking');
     }
   } catch (error) {
     errorNotifAlert(`addGeofenceTrigger Error : ${error}`);
@@ -311,7 +310,7 @@ const exitAction = async (data, startTime, finishTime, currentTime) => {
   }
 };
 
-export const subscribeOnGeofence = () => {
+const subscribeOnGeofence = () => {
   BackgroundGeolocation.onGeofence(async (event) => {
     try {
       const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
@@ -337,20 +336,21 @@ export const subscribeOnGeofence = () => {
 
 export const initBgGeofence = async () => {
   try {
-    const state = await BackgroundGeolocation.ready({
+    subscribeOnGeofence();
+    await BackgroundGeolocation.ready({
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION, // ios Only
       locationAuthorizationRequest: 'Always',
       locationAuthorizationAlert: {
         titleWhenNotEnabled: '위치 서비스 이용 제한',
         titleWhenOff: '위치 서비스 이용 제한',
-        instructions: `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상"으로 설정해주세요.`,
+        instructions: `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상 허용"으로 설정해주세요.`,
         settingsButton: '설정',
         cancelButton: '취소',
       },
       stopOnTerminate: false,
       startOnBoot: true,
     });
-    return state.didLaunchInBackground;
+    // return state.didLaunchInBackground;
   } catch (e) {
     errorNotifAlert(`initBgGeofence Error : ${e}`);
   }

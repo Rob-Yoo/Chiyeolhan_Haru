@@ -8,22 +8,19 @@ import store from 'redux/store';
 import HomeNav from 'components/base/navigator/HomeNav';
 
 import { loadSavedData } from 'utils/asyncStorageUtil';
-import { initBgGeofence } from 'utils/bgGeofenceUtil';
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
 
   const prepare = async () => {
     try {
-      const isBackground = await initBgGeofence();
-      if (!isBackground) {
-        await SplashScreen.preventAutoHideAsync();
-      }
+      await SplashScreen.preventAutoHideAsync();
+    } catch (e) {
+      // console.warn(e);
+      // await SplashScreen.hideAsync();
+    } finally {
       await loadSavedData();
       setAppIsReady(true);
-    } catch (e) {
-      console.warn(e);
-      await SplashScreen.hideAsync();
     }
   };
 

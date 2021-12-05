@@ -22,9 +22,8 @@ import { UID, CONTAINER_WIDTH } from 'constant/const';
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const homeRender = useSelector((state) => state.homerender);
-  const { YESTERDAY, TODAY } = getDate();
+  const { YESTERDAY } = getDate();
   const [isLoading, setLoading] = useState(true);
-  const toDos = useSelector((state) => state.toDos);
   const appState = useRef(AppState.currentState);
 
   useEffect(() => {
@@ -54,9 +53,7 @@ const Home = ({ navigation }) => {
         await checkNearByFinish();
 
         await BackgroundGeolocation.requestPermission();
-      } catch (e) {
-        console.log('Request Deny : ', e);
-      }
+      } catch (e) {}
     }
     appState.current = nextAppState;
   };

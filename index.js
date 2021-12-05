@@ -3,7 +3,7 @@ import { registerRootComponent } from 'expo';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 
-import { subscribeOnGeofence } from 'utils/bgGeofenceUtil';
+import { initBgGeofence } from 'utils/bgGeofenceUtil';
 
 import App from './App';
 
@@ -21,7 +21,7 @@ PushNotification.configure({
 });
 
 Networking.setTimeout(3000);
-subscribeOnGeofence();
+initBgGeofence();
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately

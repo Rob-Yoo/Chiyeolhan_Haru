@@ -30,7 +30,7 @@ const getDataFromAsync = async (storageName) => {
   }
 };
 
-const loadSuccessSchedules = async (flag) => {
+const loadSuccessSchedules = async () => {
   try {
     let successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     let isNeedUpdate = false;
@@ -67,6 +67,7 @@ export const checkNearByFinish = async () => {
   try {
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
+    const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const todosRef = dbService.collection(`${UID}`);
 
     if (nearBySchedules !== null) {
@@ -90,8 +91,26 @@ export const checkNearByFinish = async () => {
           await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
         }
       }
+    } else if (isEarly) {
+      if (geofenceData.length > 0) {
+        const data = geofenceData[0];
+        const currentTime = getCurrentTime();
+        let isNeedUpdate = false;
+
+        if (data.startTime <= currentTime) {
+          const dbData = await todosRef.where('id', '==', data.id).get();
+          dbData.forEach((todo) => {
+            if (todo.data().isDone === true) {
+              isNeedUpdate = true;
+            }
+          });
+          if (isNeedUpdate) {
+            await geofenceUpdate(geofenceData);
+          }
+        }
+      }
     }
-  } catch {
+  } catch (e) {
     errorNotifAlert(`checkNearByFinish Error : ${e}`);
   }
 };
@@ -140,7 +159,6 @@ export const checkGeofenceSchedule = async () => {
 
 export const geofenceScheduler = async (isChangeEarliest) => {
   try {
-    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
     const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
