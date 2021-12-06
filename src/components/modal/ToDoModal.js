@@ -341,6 +341,7 @@ export const ToDoModal = ({
           // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
           // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
           const isChangeEarliest = await checkEarlistTodo(startTime);
+          await dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
 
           if (isStartTodo) {
             // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
@@ -351,8 +352,6 @@ export const ToDoModal = ({
             const timeDiff = getTimeDiff(currentTime, startTime);
             startNotification(timeDiff, id);
           }
-
-          await dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
         } else {
           await dbToAsyncTomorrow();
         }
@@ -475,6 +474,7 @@ export const ToDoModal = ({
           : null;
         if (isToday) {
           const currentTime = getCurrentTime();
+          await dbToAsyncStorage(isChangeEarliest);
 
           if (isStartTodo) {
             // 시작 버튼이 눌렀을 경우에만 실패 알림 예약
@@ -493,7 +493,6 @@ export const ToDoModal = ({
               startNotification(timeDiff, id);
             }
           }
-          await dbToAsyncStorage(isChangeEarliest);
         } else {
           await dbToAsyncTomorrow();
         }

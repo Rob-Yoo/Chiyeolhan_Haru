@@ -81,7 +81,7 @@ const addGeofenceTrigger = async (isChangeEarliest) => {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       // console.log('[removeGeofence] success');
       await BackgroundGeolocation.stop();
-      // console.log('stop geofence tracking');
+      console.log('stop geofence tracking');
     }
   } catch (error) {
     errorNotifAlert(`addGeofenceTrigger Error : ${error}`);

@@ -253,7 +253,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
                 } else if (day === 'tomorrow') {
                   await deleteTomorrowAsyncStorageData(targetId);
                 }
-                await dispatch(deleteToDoDispatch(targetId));
+                dispatch(deleteToDoDispatch(targetId));
               }
             } catch (e) {
               errorNotifAlert(`long onPress delete Error : ${e}`);
