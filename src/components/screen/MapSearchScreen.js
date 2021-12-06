@@ -31,7 +31,7 @@ export const MapSearch = ({
   touchLocationData,
   type,
 }) => {
-  const [findlocation, setFindlocation] = useState(false);
+  const [findlocation, setFindLocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
@@ -92,7 +92,7 @@ export const MapSearch = ({
                 size={23}
                 color={isFavoriteColor}
                 style={{ width: '10%' }}
-                onPress={() => handleFavorite()}
+                onPress={async () => await handleFavorite()}
               />
             )}
           </View>
@@ -111,9 +111,9 @@ export const MapSearch = ({
                   <TouchableOpacity
                     key={item.id + item.type}
                     activeOpacity={1}
-                    onPress={() => {
-                      touchLocationData(item);
-                      setFindlocation(true);
+                    onPress={async () => {
+                      await touchLocationData(item);
+                      setFindLocation(true);
                       toggleModal();
                       searchInput.current.placeholder = `${item.location}`;
                       setText(item.location);
@@ -171,7 +171,7 @@ export const MapSearch = ({
                             styles.searchedDeleteText,
                             { backgroundColor: '#fff' },
                           ]}
-                          onPress={() => deleteHistory(item.id)}
+                          onPress={async () => await deleteHistory(item.id)}
                         >
                           삭제
                         </Text>
@@ -197,7 +197,7 @@ export const MapSearch = ({
               {type === 'searched' && (
                 <Text
                   key={type}
-                  onPress={() => deleteAllHistory()}
+                  onPress={async () => await deleteAllHistory()}
                   style={[
                     styles.searchedDeleteAllText,
                     {

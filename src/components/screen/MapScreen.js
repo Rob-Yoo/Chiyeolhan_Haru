@@ -112,17 +112,19 @@ const CurrentMap = ({
   const [isFavoriteColor, setIsFavoriteColor] = useState(null);
   const [candidateState, setCandidate] = useState(candidate);
   const [type, setType] = useState('searched');
+
   useEffect(() => {
-    const getSearchedList = async () => {
-      try {
-        const searchedData = await getDataFromAsync(KEY_VALUE_SEARCHED);
-        setSearchedList(searchedData);
-      } catch (e) {
-        errorNotifAlert(`getSearchedList Error : ${e}`);
-      }
-    };
     getSearchedList();
   }, []);
+
+  const getSearchedList = async () => {
+    try {
+      const searchedData = await getDataFromAsync(KEY_VALUE_SEARCHED);
+      setSearchedList(searchedData);
+    } catch (e) {
+      errorNotifAlert(`getSearchedList Error : ${e}`);
+    }
+  };
 
   const handleFindCurrentLocation = async () => {
     try {
@@ -245,7 +247,7 @@ const CurrentMap = ({
           },
           shadowOpacity: 0.5,
         }}
-        onPress={() => handleFindCurrentLocation()}
+        onPress={async () => await handleFindCurrentLocation()}
       >
         <IconFindCurrent
           name="icon-find-current-location"
@@ -275,8 +277,12 @@ const CurrentMap = ({
           candidateState.length !== 0 ? setCandidate : setSearchedList
         }
         isFavoriteColor={isFavoriteColor}
-        handleFavorite={() => handleFavorite(locationData, setIsFavoriteColor)}
-        touchLocationData={(locationData) => touchLocationData(locationData)}
+        handleFavorite={async () =>
+          await handleFavorite(locationData, setIsFavoriteColor)
+        }
+        touchLocationData={async (locationData) =>
+          await touchLocationData(locationData)
+        }
         type={type}
       />
     </>
@@ -309,7 +315,7 @@ const Map = ({
       nextAppState === 'active'
     ) {
       if (!isFind) {
-        getLocation();
+        await getLocation();
       }
     }
     appState.current = nextAppState;

@@ -65,10 +65,10 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
     modalHandler();
   };
 
-  const deleteFavorite = (item) => {
+  const deleteFavorite = async (item) => {
     const filterData = favorite.filter((v) => v.address !== item.address);
     setFavorite(filterData);
-    setFavoriteData(filterData);
+    await setFavoriteData(filterData);
   };
 
   if (!loading) {
@@ -132,7 +132,7 @@ export const FavoriteModal = ({ modalHandler, locationDataHandler }) => {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => deleteFavorite(item)}
+                    onPress={async () => await deleteFavorite(item)}
                     style={{ position: 'absolute', top: 10, right: 10 }}
                   >
                     <IconMinusCircle

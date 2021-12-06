@@ -58,7 +58,7 @@ const addGeofence = async (latitude, longitude, data = null) => {
       notifyOnEntry: true,
       notifyOnExit: true,
     });
-    console.log('Adding Geofence Success!!', data[0]);
+    // console.log('Adding Geofence Success!!', data[0]);
     // console.log('geofencdeData :', data);
   } catch (e) {
     errorNotifAlert(`addGeofence Error : ${e}`);
@@ -81,7 +81,7 @@ const addGeofenceTrigger = async (isChangeEarliest) => {
       await BackgroundGeolocation.removeGeofence(`${UID}`);
       // console.log('[removeGeofence] success');
       await BackgroundGeolocation.stop();
-      console.log('stop geofence tracking');
+      // console.log('stop geofence tracking');
     }
   } catch (error) {
     errorNotifAlert(`addGeofenceTrigger Error : ${error}`);
@@ -216,7 +216,7 @@ const enterAction = async (data, startTime, finishTime, currentTime) => {
       }
     } else if (startTime > currentTime) {
       const timeDiff = getEarlyTimeDiff(startTime, currentTime);
-      console.log('일찍 옴', currentTime);
+      // console.log('일찍 옴', currentTime);
       notifHandler('EARLY', geofenceData, timeDiff);
       await AsyncStorage.setItem(KEY_VALUE_EARLY, 'true');
       isEarly = true;

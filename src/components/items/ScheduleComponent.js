@@ -221,9 +221,9 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         isRefreshing={isRefreshing}
         scrollToTimeNow={day === 'today' ? true : false}
         network={network}
-        scrollRefresh={() => scrollRefresh(dispatch)}
+        scrollRefresh={async () => await scrollRefresh(dispatch)}
         onEventPress={async (event) => {
-          passToModalData(event);
+          await passToModalData(event);
         }}
         onEventLongPress={async (event) => {
           const targetId = event.id;

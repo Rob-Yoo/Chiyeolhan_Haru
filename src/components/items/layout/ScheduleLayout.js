@@ -28,7 +28,7 @@ const ScheduleLayout = ({
     if (block == 1) {
       addModifyBlockAlert();
     } else {
-      handleModal();
+      await handleModal();
     }
   };
 
@@ -49,7 +49,7 @@ const ScheduleLayout = ({
       {network === 'online' ? (
         <ToDoModal
           navigation={navigation}
-          modalHandler={handleModal}
+          modalHandler={async () => await handleModal()}
           passModalData={passModalData}
           setPassModalData={setPassModalData}
           isModalVisible={isModalVisible}
@@ -60,7 +60,6 @@ const ScheduleLayout = ({
   );
 };
 
-export default ScheduleLayout;
 const styles = StyleSheet.create({
   addToDoButton: {
     justifyContent: 'center',
@@ -81,3 +80,5 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
 });
+
+export default ScheduleLayout;

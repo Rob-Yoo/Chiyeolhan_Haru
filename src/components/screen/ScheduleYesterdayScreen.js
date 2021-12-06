@@ -14,10 +14,11 @@ const ScheduleYesterday = ({ navigation }) => {
   const [passModalData, setPassModalData] = useState(undefined);
   const network = useSelector((state) => state.network);
 
-  const passToModalData = (event) => {
+  const passToModalData = async (event) => {
     setPassModalData(event);
-    toggleModal();
+    await toggleModal();
   };
+
   const toggleModal = async () => {
     try {
       setModalVisible(!isModalVisible);
@@ -32,7 +33,7 @@ const ScheduleYesterday = ({ navigation }) => {
     <>
       <ScheduleLayout
         isToday={'yesterday'}
-        handleModal={() => toggleModal()}
+        handleModal={async () => await toggleModal()}
         isModalVisible={isModalVisible}
         passModalData={passModalData}
         setPassModalData={setPassModalData}
@@ -41,7 +42,7 @@ const ScheduleYesterday = ({ navigation }) => {
         <ScheduleComponent
           day={'yesterday'}
           events={yesterDayData}
-          handleModal={toggleModal}
+          handleModal={async () => await toggleModal()}
           passToModalData={passToModalData}
         />
       </ScheduleLayout>

@@ -48,9 +48,9 @@ export const failNotification = (time, id) => {
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications([`${id}F`]);
-  PushNotification.getScheduledLocalNotifications((notif) =>
-    console.log('예약된 알람 :', notif),
-  );
+  // PushNotification.getScheduledLocalNotifications((notif) =>
+  //   console.log('failNotification :', notif),
+  // );
 };
 
 export const startNotification = (time, id) => {
@@ -82,9 +82,9 @@ export const cancelAllNotif = (id) => {
   PushNotification.cancelLocalNotification(`${id}E`); //arriveEarlyNotification 알림 사라짐
   PushNotification.cancelLocalNotification(`${id}F`); //Fail 알림 사라짐
   PushNotification.cancelLocalNotification(`${id}S`); //startNotif 알림 사라짐
-  PushNotification.getScheduledLocalNotifications((notif) =>
-    console.log('예약된 알람 :', notif),
-  );
+  // PushNotification.getScheduledLocalNotifications((notif) =>
+  //   console.log('cancelAllNotif :', notif),
+  // );
 };
 
 export const submitAllFailNotif = (geofenceData) => {
@@ -120,7 +120,7 @@ export const notifHandler = (arriveType, schedule, timeDiff = 0) => {
     default:
       console.log('Notif Flag Missing');
   }
-  PushNotification.getScheduledLocalNotifications((notif) =>
-    console.log('예약된 알람 :', notif),
-  );
+  // PushNotification.getScheduledLocalNotifications((notif) =>
+  //   console.log('notifHandler :', notif),
+  // );
 };

@@ -39,7 +39,7 @@ const OffHome = ({ navigation, route }) => {
       dispatch(init(fetchedToDo));
       // console.log(fetchedToDo);
       setLoading(false);
-      SplashScreen.hideAsync();
+      await SplashScreen.hideAsync();
       offlineAlert();
     };
 

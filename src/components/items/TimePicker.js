@@ -109,13 +109,13 @@ export const TimePicker = ({
       if (isToday) {
         if (currentTime <= formatTime) {
           await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
-          handleConfirm(formatTime);
+          await handleConfirm(formatTime);
         } else {
           alertStartTimePicker();
         }
       } else {
         await AsyncStorage.setItem(KEY_VALUE_START_TIME, formatTime);
-        handleConfirm(formatTime);
+        await handleConfirm(formatTime);
       }
     } catch (e) {
       errorNotifAlert(`checkValidStartTime Error : ${e}`);
@@ -128,7 +128,7 @@ export const TimePicker = ({
       if (startTime != null) {
         const timeDiff = getTimeDiff(startTime, formatTime);
         if (timeDiff >= 5) {
-          handleConfirm(formatTime);
+          await handleConfirm(formatTime);
         } else {
           alertFinsihTimePicker('시작 시간 이후로 설정해주세요.');
         }
@@ -156,8 +156,8 @@ export const TimePicker = ({
       await checkValidFinishTime(formatTime);
     }
   };
-  useEffect(() => {
-    setLowTime(timeDate);
+
+  const pickerTrigger = async () => {
     if (timeDate) {
       const hour =
         timeDate.getHours() < 10
@@ -168,8 +168,13 @@ export const TimePicker = ({
           ? `0${timeDate.getMinutes()}`
           : timeDate.getMinutes();
       setTime(`${hour}:${minute}`);
-      pickerHandler(`${hour}:${minute}`);
+      await pickerHandler(`${hour}:${minute}`);
     }
+  };
+
+  useEffect(() => {
+    setLowTime(timeDate);
+    pickerTrigger();
   }, []);
 
   useEffect(() => {
@@ -179,9 +184,9 @@ export const TimePicker = ({
     }
   }, [prevTime]);
 
-  const handleConfirm = (formatTime) => {
+  const handleConfirm = async (formatTime) => {
     setTime(formatTime);
-    pickerHandler(formatTime);
+    await pickerHandler(formatTime);
     hideTimePicker();
   };
 

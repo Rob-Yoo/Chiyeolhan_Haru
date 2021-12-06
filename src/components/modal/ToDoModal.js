@@ -168,7 +168,7 @@ export const ToDoModal = ({
     todoTitle,
   }) => {
     if (isToday && todoStartTime < getCurrentTime()) {
-      modalHandler();
+      await modalHandler();
       alertStartTimeError();
       return;
     }
@@ -183,13 +183,17 @@ export const ToDoModal = ({
     } else {
       if (!passModalData?.description && isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(오늘)
-        handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+        await handleTodayTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
       } else if (!passModalData?.description && !isToday) {
         //모달에 데이터가 없을때, 즉 일정을 새로 추가할때(내일)
-        handleTomorrowTodoSubmit(todoStartTime, todoFinishTime, todoTitle);
+        await handleTomorrowTodoSubmit(
+          todoStartTime,
+          todoFinishTime,
+          todoTitle,
+        );
       } else if (passModalData?.description) {
         //모달에 데이터가 있을때, 즉 일정을 수정할때
-        handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
+        await handleEditSubmit(todoStartTime, todoFinishTime, todoTitle);
       }
     }
   };
@@ -204,7 +208,7 @@ export const ToDoModal = ({
       //modalHandler();
       return;
     }
-    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+    await handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
   const handleTomorrowTodoSubmit = async (
@@ -212,20 +216,20 @@ export const ToDoModal = ({
     todoFinishTime,
     todoTitle,
   ) => {
-    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+    await handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
   const handleEditSubmit = async (todoStartTime, todoFinishTime, todoTitle) => {
     if (!passModalData && getCurrentTime() > todoStartTime) {
       alertStartTimeError();
-      modalHandler();
+      await modalHandler();
       return;
     }
     if (todoStartTime >= todoFinishTime) {
       alertFinsihTimePicker('잘못된 시간 설정입니다.');
       return;
     }
-    handleAlert(todoStartTime, todoFinishTime, todoTitle);
+    await handleAlert(todoStartTime, todoFinishTime, todoTitle);
   };
 
   const handleAlert = async (todoStartTime, todoFinishTime, todoTitle) => {
@@ -234,7 +238,7 @@ export const ToDoModal = ({
         ? await getDataFromAsync(KEY_VALUE_TODAY_DATA)
         : await getDataFromAsync(KEY_VALUE_TOMORROW_DATA);
       let isNeedAlert = false;
-      if (toDoArray != null) {
+      if (toDoArray !== null) {
         if (toDoArray.length > 0) {
           // 추가하려는 일정이 시간표에 있는 일정들과 겹치는 지 검사
           isNeedAlert = checkValidSubmit(
@@ -294,11 +298,13 @@ export const ToDoModal = ({
 
   const toDoSubmit = async (startTime, finishTime, title) => {
     if (network === 'offline') {
-      modalHandler();
+      await modalHandler();
       return;
     }
     isSetLoading(true);
+
     const block = await checkGeofenceSchedule();
+
     if (block == 1) {
       addModifyBlockAlert();
     } else {
@@ -330,11 +336,12 @@ export const ToDoModal = ({
         dispatch(create(newData));
 
         await toDosUpdateDB(newData, id);
+
         if (isToday) {
           // 지금 추가하려는 일정이 제일 이른 시간이 아니라면 addGeofence를 하지 않게 하기 위해
           // 지금 추가하려는 일정의 시작 시간이 제일 이른 시간대인지 아닌지 isChangeEarliest로 판단하게 한다.
           const isChangeEarliest = await checkEarlistTodo(startTime);
-          dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
+
           if (isStartTodo) {
             // 일정 시작 버튼이 눌렸을 때만 실패 알림 예약
             const timeDiff = getTimeDiff(currentTime, finishTime);
@@ -344,8 +351,10 @@ export const ToDoModal = ({
             const timeDiff = getTimeDiff(currentTime, startTime);
             startNotification(timeDiff, id);
           }
+
+          await dbToAsyncStorage(isChangeEarliest); //isChangeEarliest가 true이면 addGeofence, 아니면 안함
         } else {
-          dbToAsyncTomorrow();
+          await dbToAsyncTomorrow();
         }
 
         await handleFilterData(
@@ -362,7 +371,7 @@ export const ToDoModal = ({
           navigateFavorite();
         }
         isSetLoading(false);
-        modalHandler();
+        await modalHandler();
 
         await AsyncStorage.removeItem(KEY_VALUE_START_TIME);
       } catch (e) {
@@ -373,7 +382,7 @@ export const ToDoModal = ({
 
   const toDoEdit = async (todoStartTime, todoFinishTime, todoTitle) => {
     if (network === 'offline') {
-      modalHandler();
+      await modalHandler();
       return;
     }
     isSetLoading(true);
@@ -424,9 +433,9 @@ export const ToDoModal = ({
         }
 
         if (isStartTimeChange) {
+          const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
           const { location, longitude, latitude, address } =
             locationData.location ? locationData : toDos[id];
-          const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
           const geofenceData = data[0];
           if (geofenceData.id === id) {
             isFirstScheduleEdit = true;
@@ -465,8 +474,6 @@ export const ToDoModal = ({
           ? await checkEarlistTodo(todoStartTime, isFirstScheduleEdit)
           : null;
         if (isToday) {
-          await dbToAsyncStorage(isChangeEarliest);
-
           const currentTime = getCurrentTime();
 
           if (isStartTodo) {
@@ -486,11 +493,12 @@ export const ToDoModal = ({
               startNotification(timeDiff, id);
             }
           }
+          await dbToAsyncStorage(isChangeEarliest);
         } else {
-          dbToAsyncTomorrow();
+          await dbToAsyncTomorrow();
         }
         isSetLoading(false);
-        modalHandler();
+        await modalHandler();
       } catch (e) {
         errorNotifAlert(`todoModal todoEdit Error : ${e}`);
       }
@@ -573,7 +581,7 @@ export const ToDoModal = ({
           <TouchableOpacity
             style={styles.background}
             activeOpacity={1}
-            onPress={modalHandler}
+            onPress={async () => await modalHandler()}
           />
           <ImageBackground
             source={{
@@ -644,7 +652,7 @@ export const ToDoModal = ({
                     <>
                       <TouchableOpacity>
                         <Text
-                          onPress={modalHandler}
+                          onPress={async () => await modalHandler()}
                           style={[styles.modalTopText, { marginRight: 40 }]}
                         >
                           취소
@@ -653,7 +661,9 @@ export const ToDoModal = ({
 
                       <TouchableOpacity>
                         <Text
-                          onPress={handleSubmit(handleTodoSubmit)}
+                          onPress={handleSubmit(
+                            async (data) => await handleTodoSubmit(data),
+                          )}
                           style={[styles.modalTopText]}
                         >
                           완료
@@ -663,7 +673,7 @@ export const ToDoModal = ({
                   ) : (
                     <TouchableOpacity
                       style={styles.modalTopText}
-                      onPress={() => modalHandler()}
+                      onPress={async () => await modalHandler()}
                     >
                       <Text style={[styles.modalTopText]}>닫기</Text>
                     </TouchableOpacity>
@@ -757,7 +767,7 @@ export const ToDoModal = ({
                 <TimePicker
                   isStart={true}
                   timeText={'시작'}
-                  pickerHandler={(text) => timeHandler(text, true)}
+                  pickerHandler={async (text) => await timeHandler(text, true)}
                   isToday={isToday}
                   timeDate={passModalData?.startDate}
                   isOngoing={isOngoing}
@@ -777,7 +787,7 @@ export const ToDoModal = ({
                 <TimePicker
                   isStart={false}
                   timeText={'끝'}
-                  pickerHandler={(text) => timeHandler(text, false)}
+                  pickerHandler={async (text) => await timeHandler(text, false)}
                   timeDate={passModalData?.endDate}
                   isOngoing={isOngoing}
                   prevTime={prevTime}

@@ -23,10 +23,22 @@ const ScheduleToday = ({ navigation, route }) => {
   let waitings = [];
   const [waitingList, setWaitingList] = useState([]);
 
-  const passToModalData = (event) => {
-    setPassModalData(event);
-    toggleModal();
+  useEffect(() => {
+    getWaitingEvent();
+  }, []);
+
+  const getWaitingEvent = async () => {
+    const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
+    successSchedules &&
+      successSchedules.map((schedule) => waitings.push(schedule.id));
+    waitings.length !== 0 && setWaitingList(waitings);
   };
+
+  const passToModalData = async (event) => {
+    setPassModalData(event);
+    await toggleModal();
+  };
+
   const toggleModal = async () => {
     try {
       Keyboard.dismiss();
@@ -37,15 +49,6 @@ const ScheduleToday = ({ navigation, route }) => {
     }
   };
 
-  useEffect(() => {
-    const getWaitingEvent = async () => {
-      const successSchedules = await getDataFromAsync(KEY_VALUE_SUCCESS);
-      successSchedules &&
-        successSchedules.map((schedule) => waitings.push(schedule.id));
-      waitings.length !== 0 && setWaitingList(waitings);
-    };
-    getWaitingEvent();
-  }, []);
   if (route.skipID !== undefined) {
     dispatch(skip(skipID));
   }
@@ -55,7 +58,7 @@ const ScheduleToday = ({ navigation, route }) => {
     <>
       <ScheduleLayout
         isToday={true}
-        handleModal={() => toggleModal()}
+        handleModal={async () => await toggleModal()}
         isModalVisible={isModalVisible}
         passModalData={passModalData}
         setPassModalData={setPassModalData}
@@ -64,7 +67,7 @@ const ScheduleToday = ({ navigation, route }) => {
         <ScheduleComponent
           day={'today'}
           events={todayData}
-          handleModal={toggleModal}
+          handleModal={async () => await toggleModal()}
           passToModalData={passToModalData}
         />
       </ScheduleLayout>

@@ -28,6 +28,19 @@ const ScheduleTomorrow = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [passModalData, setPassModalData] = useState(undefined);
 
+  useEffect(() => {
+    alertBtnTrigger();
+    return async () => {
+      const isDaychange = await checkDayChange();
+      if (isDaychange) RNRestart.Restart();
+    };
+  }, []);
+
+  const alertBtnTrigger = async () => {
+    await alertStartBtn();
+    await alertSkipBtn();
+  };
+
   const alertStartBtn = async () => {
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const isStartTodo = await getDataFromAsync(KEY_VALUE_START_TODO);
@@ -57,18 +70,9 @@ const ScheduleTomorrow = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    alertStartBtn();
-    alertSkipBtn();
-    return async () => {
-      const isDaychange = await checkDayChange();
-      if (isDaychange) RNRestart.Restart();
-    };
-  }, []);
-
-  const passToModalData = (event) => {
+  const passToModalData = async (event) => {
     setPassModalData(event);
-    toggleModal();
+    await toggleModal();
   };
   const toggleModal = async () => {
     try {
@@ -85,7 +89,7 @@ const ScheduleTomorrow = ({ navigation }) => {
     <>
       <ScheduleLayout
         isToday={false}
-        handleModal={() => toggleModal()}
+        handleModal={async () => await toggleModal()}
         isModalVisible={isModalVisible}
         passModalData={passModalData}
         setPassModalData={setPassModalData}
@@ -94,7 +98,7 @@ const ScheduleTomorrow = ({ navigation }) => {
         <ScheduleComponent
           day={'tomorrow'}
           events={tmorrowData}
-          handleModal={toggleModal}
+          handleModal={async () => await toggleModal()}
           passToModalData={passToModalData}
         />
       </ScheduleLayout>

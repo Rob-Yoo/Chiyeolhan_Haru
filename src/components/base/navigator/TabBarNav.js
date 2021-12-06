@@ -8,7 +8,6 @@ import {
   ImageBackground,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import PushNotification from 'react-native-push-notification';
 
 import { setTabBar, skip } from 'redux/store';
 
@@ -41,59 +40,62 @@ import {
   CONTAINER_WIDTH,
 } from 'constant/const';
 
-const handleSkip = async (isNeedSkip) => {
+const skipSchedule = async () => {
   try {
-    // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
     const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     const currentTime = getCurrentTime();
     let idx = 0;
 
-    const skip = async () => {
-      try {
-        if (geofenceData.length == 1) {
-          // 현재 일정이 마지막일 때
-          await geofenceUpdate(geofenceData);
-          skipNotifAlert();
-        } else {
-          for (const data of geofenceData) {
-            if (data.finishTime > currentTime) {
-              break;
-            }
-            cancelAllNotif(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
-            idx += 1;
-          }
-          if (geofenceData.length === idx) {
-            // 현재시간과 가장 가까운 다음 일정이 없을 때
-            skipNotifAlert();
-          } else {
-            // console.log('넘어간 일정 객체 : ', geofenceData[idx]);
-            skipNotifAlert(geofenceData[idx].title);
-          }
-          await geofenceUpdate(geofenceData, idx);
+    if (geofenceData.length == 1) {
+      // 현재 일정이 마지막일 때
+      await geofenceUpdate(geofenceData);
+      skipNotifAlert();
+    } else {
+      for (const data of geofenceData) {
+        if (data.finishTime > currentTime) {
+          break;
         }
-      } catch (e) {
-        errorNotifAlert(`skip Error : ${e}`);
+        cancelAllNotif(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
+        idx += 1;
       }
-    };
+      if (geofenceData.length === idx) {
+        // 현재시간과 가장 가까운 다음 일정이 없을 때
+        skipNotifAlert();
+      } else {
+        // console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+        skipNotifAlert(geofenceData[idx].title);
+      }
+      await geofenceUpdate(geofenceData, idx);
+    }
+  } catch (e) {
+    errorNotifAlert(`skipSchedule Error : ${e}`);
+  }
+};
+
+const handleSkip = async (isNeedSkip) => {
+  try {
+    // 지오펜스 일정 중 트래킹이 안된 일정이 있는 경우 현재 시간과 가장 가까운 일정으로 넘어간다.
+    const geofenceData = await getDataFromAsync(KEY_VALUE_GEOFENCE);
 
     if (isNeedSkip == 1) {
-      await skip();
+      await skipSchedule();
     } else if (isNeedSkip == 2) {
       const todosRef = dbService.collection(`${UID}`);
+      const id = geofenceData[0].id;
 
       if (geofenceData.length == 1) {
         // 현재 일정이 마지막일 때
-        cancelAllNotif(geofenceData[0].id);
+        cancelAllNotif(id);
         await geofenceUpdate(geofenceData);
-        await todosRef.doc(`${geofenceData[0].id}`).update({ isSkip: true });
+        await todosRef.doc(`${id}`).update({ isSkip: true });
         skipNotifAlert();
-        return geofenceData[0].id;
+        return id;
       } else {
-        cancelAllNotif(geofenceData[0].id);
+        cancelAllNotif(id);
         await geofenceUpdate(geofenceData);
-        await todosRef.doc(`${geofenceData[0].id}`).update({ isSkip: true });
+        await todosRef.doc(`${id}`).update({ isSkip: true });
         skipNotifAlert(geofenceData[1].title);
-        return geofenceData[0].id;
+        return id;
       }
     }
     return null;
@@ -121,9 +123,6 @@ const skipNotifHandler = async (storeSkipUpdate, dispatch) => {
               } else {
                 await scrollRefresh(dispatch);
               }
-              // PushNotification.getScheduledLocalNotifications((notif) =>
-              //   console.log('예약된 알람 :', notif),
-              // );
             },
           },
         ],
