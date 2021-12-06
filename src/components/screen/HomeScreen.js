@@ -60,13 +60,14 @@ const Home = ({ navigation }) => {
 
   const readyForHome = async () => {
     try {
-      await getToDos();
-      await checkDayChange();
       await loadSuccessSchedules();
+      await checkDayChange();
+      await getToDos();
       await checkNearByFinish();
-      await SplashScreen.hideAsync();
     } catch (e) {
-      // errorNotifAlert(`readyForHome Error : ${e}`);
+      errorNotifAlert(`readyForHome Error : ${e}`);
+    } finally {
+      await SplashScreen.hideAsync();
     }
   };
 
