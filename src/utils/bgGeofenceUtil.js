@@ -2,6 +2,7 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotification from 'react-native-push-notification';
 import getDistance from 'haversine-distance';
+import * as Location from 'expo-location';
 
 import {
   getEarlyTimeDiff,
@@ -15,10 +16,13 @@ import {
   failNotification,
   cancelAllNotif,
 } from 'utils/notificationUtil';
-import { geofenceAlert, errorNotifAlert } from 'utils/buttonAlertUtil';
+import {
+  geofenceAlert,
+  errorNotifAlert,
+  permissionDenyAlert,
+} from 'utils/buttonAlertUtil';
 
 import {
-  UID,
   KEY_VALUE_GEOFENCE,
   KEY_VALUE_NEAR_BY,
   KEY_VALUE_EARLY,
@@ -48,10 +52,10 @@ const setSuccessSchedule = async (array) => {
   }
 };
 
-const addGeofence = async (latitude, longitude, data = null) => {
+const addGeofence = async (latitude, longitude, data = null, id) => {
   try {
     await BackgroundGeolocation.addGeofence({
-      identifier: `${UID}`,
+      identifier: `${id}`,
       radius: 200,
       latitude,
       longitude,
@@ -65,22 +69,27 @@ const addGeofence = async (latitude, longitude, data = null) => {
   }
 };
 
-const addGeofenceTrigger = async (isChangeEarliest) => {
+const addGeofenceTrigger = async (isChangeEarliest, identifier = 'G') => {
   try {
     const data = await getDataFromAsync(KEY_VALUE_GEOFENCE);
     if (data.length > 0) {
       const geofenceData = data[0];
       const lat = geofenceData.latitude;
       const lng = geofenceData.longitude;
-      await addGeofence(lat, lng, data);
-      await BackgroundGeolocation.startGeofences();
+      await addGeofence(lat, lng, data, identifier);
+      // await BackgroundGeolocation.startGeofences();
       if (isChangeEarliest) {
         geofenceAlert(geofenceData.title);
       }
     } else {
-      await BackgroundGeolocation.removeGeofence(`${UID}`);
+      const geofences = await BackgroundGeolocation.getGeofences();
+      if (geofences.length > 0) {
+        for (const geofence of geofences) {
+          await BackgroundGeolocation.removeGeofence(`${geofence.identifier}`);
+        }
+      }
       // console.log('[removeGeofence] success');
-      await BackgroundGeolocation.stop();
+      // await BackgroundGeolocation.stop();
       console.log('stop geofence tracking');
     }
   } catch (error) {
@@ -92,10 +101,10 @@ export const geofenceUpdate = async (
   data,
   index = 1,
   isChangeEarliest = false,
+  isNearBy = false,
 ) => {
   try {
-    await BackgroundGeolocation.stop();
-
+    // await BackgroundGeolocation.stop();
     const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const nearBySchedules = await getDataFromAsync(KEY_VALUE_NEAR_BY);
     const progressing = await getDataFromAsync(KEY_VALUE_PROGRESSING);
@@ -116,10 +125,68 @@ export const geofenceUpdate = async (
     if (progressing) {
       await AsyncStorage.removeItem(KEY_VALUE_PROGRESSING);
     }
+    await checkIdentifierChange(isNearBy);
 
-    await addGeofenceTrigger(isChangeEarliest);
+    if (isNearBy) {
+      await addGeofenceTrigger(isChangeEarliest, 'NG');
+    } else {
+      await addGeofenceTrigger(isChangeEarliest);
+    }
   } catch (e) {
     errorNotifAlert(`geofenceUpdate Error : ${e}`);
+  }
+};
+
+const checkIdentifierChange = async (isNearBy) => {
+  const geofences = await BackgroundGeolocation.getGeofences();
+  if (geofences.length === 1) {
+    let newID = 'G';
+    const oldID = geofences[0].identifier;
+
+    if (isNearBy) {
+      newID = 'NG';
+    }
+
+    if (oldID !== newID) {
+      await BackgroundGeolocation.removeGeofence(`${oldID}`);
+    }
+  }
+};
+
+export const checkNearBy = async (geofenceData) => {
+  try {
+    const result = await Location.getLastKnownPositionAsync();
+    const {
+      coords: { latitude, longitude },
+    } = result;
+    const currentLocation = {
+      latitude,
+      longitude,
+    };
+    const scheduleLocation = {
+      latitude: geofenceData.latitude,
+      longitude: geofenceData.longitude,
+    };
+    const distance = getDistance(currentLocation, scheduleLocation);
+    if (distance <= 200) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    permissionDenyAlert();
+  }
+};
+
+export const enterGeofenceTrigger = async (geofenceDataArray, geofenceData) => {
+  try {
+    if (geofenceDataArray.length > 0) {
+      const startTime = geofenceData.startTime;
+      const finishTime = geofenceData.finishTime;
+      const currentTime = getCurrentTime();
+      await enterAction(geofenceDataArray, startTime, finishTime, currentTime);
+    }
+  } catch (e) {
+    errorNotifAlert(`enterGeofenceTrigger Error : ${e}`);
   }
 };
 
@@ -199,7 +266,7 @@ const saveSuccessSchedules = async (id, startTime, finishTime) => {
   }
 };
 
-const enterAction = async (data, startTime, finishTime, currentTime) => {
+export const enterAction = async (data, startTime, finishTime, currentTime) => {
   let isEarly = false;
   const geofenceData = data[0];
 
@@ -320,7 +387,7 @@ const subscribeOnGeofence = () => {
         const finishTime = geofenceData.finishTime;
         const currentTime = getCurrentTime();
 
-        if (event.action == 'ENTER') {
+        if (event.action == 'ENTER' && event.identifier == 'G') {
           await enterAction(data, startTime, finishTime, currentTime);
         }
 
@@ -350,7 +417,6 @@ export const initBgGeofence = async () => {
       stopOnTerminate: false,
       startOnBoot: true,
     });
-    // return state.didLaunchInBackground;
   } catch (e) {
     errorNotifAlert(`initBgGeofence Error : ${e}`);
   }

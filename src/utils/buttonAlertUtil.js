@@ -1,5 +1,6 @@
 import { Alert, Keyboard, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import {
   submitAllFailNotif,
@@ -117,7 +118,12 @@ export const geofenceAlert = (title) => {
   );
 };
 
-export const startAlert = (geofenceUpdate, data) =>
+export const startAlert = (
+  geofenceUpdate,
+  checkNearBy,
+  enterGeofenceTrigger,
+  data,
+) =>
   Alert.alert(
     `치열한 하루를 시작해볼까요?`,
     '',
@@ -146,7 +152,15 @@ export const startAlert = (geofenceUpdate, data) =>
             if (geofenceData.length == 0) {
               strtAlert();
             } else {
-              await geofenceUpdate(geofenceData, 0);
+              await BackgroundGeolocation.startGeofences();
+              const data = geofenceData[0];
+              const isNearBy = await checkNearBy(data);
+              if (isNearBy) {
+                await geofenceUpdate(geofenceData, 0, false, isNearBy);
+                await enterGeofenceTrigger(geofenceData, data);
+              } else {
+                await geofenceUpdate(geofenceData, 0);
+              }
               await AsyncStorage.setItem(KEY_VALUE_START_TODO, 'true');
               await AsyncStorage.setItem(KEY_VALUE_DAY_CHANGE, 'false');
               strtAlert(geofenceData[0].title);
