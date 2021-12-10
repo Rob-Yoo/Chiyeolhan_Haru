@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { Text, View, ActivityIndicator } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
 
 export const Loading = () => {

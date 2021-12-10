@@ -20,7 +20,11 @@ import { fontPercentage } from 'utils/responsiveUtil';
 import { getCurrentTime } from 'utils/timeUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { checkDayChange, getDataFromAsync } from 'utils/asyncStorageUtil';
-import { geofenceUpdate } from 'utils/bgGeofenceUtil';
+import {
+  geofenceUpdate,
+  checkNearBy,
+  enterGeofenceTrigger,
+} from 'utils/bgGeofenceUtil';
 import {
   skipNotifAlert,
   skipDenyAlert,
@@ -55,17 +59,24 @@ const skipSchedule = async () => {
         if (data.finishTime > currentTime) {
           break;
         }
-        cancelAllNotif(data.id); // 넘어간 일정들에 예약된 알림 모두 취소
         idx += 1;
       }
       if (geofenceData.length === idx) {
         // 현재시간과 가장 가까운 다음 일정이 없을 때
+        await geofenceUpdate(geofenceData, idx);
         skipNotifAlert();
-      } else {
+      } else if (geofenceData.length > idx) {
         // console.log('넘어간 일정 객체 : ', geofenceData[idx]);
+        const nextSchedule = geofenceData[idx];
+        const isNearBy = await checkNearBy(nextSchedule);
+        if (isNearBy) {
+          await geofenceUpdate(geofenceData, idx, false, isNearBy); // 성공한 개수 만큼 async storage에서 지움
+          await enterGeofenceTrigger(geofenceData.slice(idx), nextSchedule);
+        } else {
+          await geofenceUpdate(geofenceData, idx); // 성공한 개수 만큼 async storage에서 지움
+        }
         skipNotifAlert(geofenceData[idx].title);
       }
-      await geofenceUpdate(geofenceData, idx);
     }
   } catch (e) {
     errorNotifAlert(`skipSchedule Error : ${e}`);
@@ -92,9 +103,16 @@ const handleSkip = async (isNeedSkip) => {
         return id;
       } else {
         cancelAllNotif(id);
-        await geofenceUpdate(geofenceData);
+        const nextSchedule = geofenceData[1];
+        const isNearBy = await checkNearBy(nextSchedule);
+        if (isNearBy) {
+          await geofenceUpdate(geofenceData, 1, false, isNearBy);
+          await enterGeofenceTrigger(geofenceData.slice(1), nextSchedule);
+        } else {
+          await geofenceUpdate(geofenceData);
+        }
         await todosRef.doc(`${id}`).update({ isSkip: true });
-        skipNotifAlert(geofenceData[1].title);
+        skipNotifAlert(nextSchedule.title);
         return id;
       }
     }
@@ -147,7 +165,12 @@ const handleStart = async () => {
       if (geofenceData === null || geofenceData.length === 0) {
         startDenyAlert(1);
       } else {
-        startAlert(geofenceUpdate, geofenceData);
+        startAlert(
+          geofenceUpdate,
+          checkNearBy,
+          enterGeofenceTrigger,
+          geofenceData,
+        );
       }
     } else {
       startDenyAlert(2);

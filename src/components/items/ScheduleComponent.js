@@ -25,7 +25,11 @@ import {
 } from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getCurrentTime, getDate } from 'utils/timeUtil';
-import { geofenceUpdate } from 'utils/bgGeofenceUtil';
+import {
+  geofenceUpdate,
+  enterGeofenceTrigger,
+  checkNearBy,
+} from 'utils/bgGeofenceUtil';
 
 import {
   KEY_VALUE_GEOFENCE,
@@ -241,11 +245,20 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
               if ((await deleteToDoAlert(event)) === 'true') {
                 if (day === 'today') {
                   if (event.id == data[0].id) {
-                    await geofenceUpdate(data);
-                    await deleteTodayAsyncStorageData(targetId);
                     if (data.length > 1) {
+                      const nextSchedule = data[1];
+                      const isNearBy = await checkNearBy(nextSchedule);
+                      if (isNearBy) {
+                        await geofenceUpdate(data, 1, false, isNearBy);
+                        await enterGeofenceTrigger(data.slice(1), nextSchedule);
+                      } else {
+                        await geofenceUpdate(data);
+                      }
                       geofenceAlert(data[1].title);
+                    } else {
+                      await geofenceUpdate(data);
                     }
+                    await deleteTodayAsyncStorageData(targetId);
                   } else {
                     await deleteGeofenceAsyncStorageData(targetId);
                     await deleteTodayAsyncStorageData(targetId);
