@@ -20,6 +20,7 @@ import {
 import { fontPercentage } from 'utils/responsiveUtil';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
+import { handleFilterData } from '../../utils/handleFilterData';
 
 export const MapSearch = ({
   _handlePlacesAPI,
@@ -29,13 +30,14 @@ export const MapSearch = ({
   isFavoriteColor,
   handleFavorite,
   touchLocationData,
-  type,
+  screenType,
 }) => {
   const [findlocation, setFindLocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
   const toggleModal = () => {
+    console.log('없어져라');
     setSearchedHistroyVisible(!searchedHistoryVisible);
   };
   const deleteAllHistory = async () => {
@@ -52,6 +54,8 @@ export const MapSearch = ({
   const handleSubmit = async (e) => {
     const text = e.nativeEvent.text;
     text && (await _handlePlacesAPI(text));
+    //검색기록 저장 해줘야됨
+    handleFilterData(new Date(), text, '', '', '', 'search', searchedList);
   };
 
   return (
@@ -113,10 +117,21 @@ export const MapSearch = ({
                     activeOpacity={1}
                     onPress={async () => {
                       await touchLocationData(item);
-                      setFindLocation(true);
-                      toggleModal();
-                      searchInput.current.placeholder = `${item.location}`;
-                      setText(item.location);
+                      if (item.type === 'search') {
+                        console.log('search');
+                        //toggleModal();
+                        //modalHandler();
+                      }
+                      if (
+                        item.type === 'location' ||
+                        screenType === 'candidate'
+                      ) {
+                        console.log('location');
+                        toggleModal();
+                        setFindLocation(true);
+                        searchInput.current.placeholder = `${item.location}`;
+                        setText(item.location);
+                      }
                     }}
                   >
                     <View
@@ -194,9 +209,9 @@ export const MapSearch = ({
                   </TouchableOpacity>
                 );
               })}
-              {type === 'searched' && (
+              {screenType === 'searched' && (
                 <Text
-                  key={type}
+                  key={screenType}
                   onPress={async () => await deleteAllHistory()}
                   style={[
                     styles.searchedDeleteAllText,

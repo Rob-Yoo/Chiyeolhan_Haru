@@ -356,15 +356,15 @@ export const ToDoModal = ({
           await dbToAsyncTomorrow();
         }
 
-        await handleFilterData(
-          id,
-          location,
-          address,
-          longitude,
-          latitude,
-          'location',
-          searchedList,
-        );
+        // await handleFilterData(
+        //   id,
+        //   location,
+        //   address,
+        //   longitude,
+        //   latitude,
+        //   'location',
+        //   searchedList,
+        // );
 
         if (passModalData && passModalData.description === undefined) {
           navigateFavorite();
