@@ -11,7 +11,6 @@ export const handleFilterData = async (
   searchedList,
   //setSearchedList,
 ) => {
-  console.log('handleFilter');
   const updateData = {
     id,
     location,

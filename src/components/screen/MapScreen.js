@@ -143,15 +143,17 @@ const CurrentMap = ({
     setScreenType('candidate');
     documents.map((data) => {
       const { place_name, road_address_name, id, x, y } = data;
-      candidate.push({
-        address: road_address_name,
-        text: place_name,
-        location: place_name,
-        longitude: x * 1,
-        latitude: y * 1,
-        id,
-        type: 'candidate',
-      });
+      if (road_address_name) {
+        candidate.push({
+          address: road_address_name,
+          text: place_name,
+          location: place_name,
+          longitude: x * 1,
+          latitude: y * 1,
+          id,
+          type: 'candidate',
+        });
+      }
     });
   };
 
@@ -163,7 +165,6 @@ const CurrentMap = ({
 
     if (type === 'search') {
       _handlePlacesAPI(location);
-
       return;
     }
 
@@ -292,6 +293,7 @@ const CurrentMap = ({
           await touchLocationData(locationData)
         }
         screenType={screenType}
+        setScreenType={setScreenType}
       />
     </>
   );

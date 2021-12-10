@@ -31,13 +31,13 @@ export const MapSearch = ({
   handleFavorite,
   touchLocationData,
   screenType,
+  setScreenType,
 }) => {
   const [findlocation, setFindLocation] = useState(false);
   const [inputText, setText] = useState(null);
   const [searchedHistoryVisible, setSearchedHistroyVisible] = useState(null);
   const searchInput = useRef('');
   const toggleModal = () => {
-    console.log('없어져라');
     setSearchedHistroyVisible(!searchedHistoryVisible);
   };
   const deleteAllHistory = async () => {
@@ -118,7 +118,7 @@ export const MapSearch = ({
                     onPress={async () => {
                       await touchLocationData(item);
                       if (item.type === 'search') {
-                        console.log('search');
+                        //setScreenType('searchScreen');
                         //toggleModal();
                         //modalHandler();
                       }
@@ -126,7 +126,6 @@ export const MapSearch = ({
                         item.type === 'location' ||
                         screenType === 'candidate'
                       ) {
-                        console.log('location');
                         toggleModal();
                         setFindLocation(true);
                         searchInput.current.placeholder = `${item.location}`;
@@ -209,7 +208,7 @@ export const MapSearch = ({
                   </TouchableOpacity>
                 );
               })}
-              {screenType === 'searched' && (
+              {screenType === 'searchScreen' && (
                 <Text
                   key={screenType}
                   onPress={async () => await deleteAllHistory()}
