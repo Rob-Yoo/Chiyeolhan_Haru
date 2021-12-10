@@ -72,9 +72,8 @@ export const toDosSlice = createSlice({
     },
     //isDone 업데이트
     updateIsDone: (state, action) => {
-      // console.log('updateIsdone');
       const targetId = action.payload;
-      state[targetId].isDone = true;
+      if (state[targetId]) state[targetId].isDone = true;
     },
   },
 });

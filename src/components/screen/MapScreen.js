@@ -111,7 +111,7 @@ const CurrentMap = ({
   const [isCurrentLocation, setIscurrentLocation] = useState(true);
   const [isFavoriteColor, setIsFavoriteColor] = useState(null);
   const [candidateState, setCandidate] = useState(candidate);
-  const [type, setType] = useState('searched');
+  const [screenType, setScreenType] = useState('searchScreen');
 
   useEffect(() => {
     getSearchedList();
@@ -140,7 +140,7 @@ const CurrentMap = ({
   };
 
   const getCandidate = (documents) => {
-    setType('candidate');
+    setScreenType('candidate');
     documents.map((data) => {
       const { place_name, road_address_name, id, x, y } = data;
       candidate.push({
@@ -156,10 +156,28 @@ const CurrentMap = ({
   };
 
   const touchLocationData = async (locationData) => {
-    const { location, address, id } = locationData;
+    const { location, address, id, type } = locationData;
+    console.log(locationData);
+
+    //검색기록 필터
+
+    if (type === 'search') {
+      _handlePlacesAPI(location);
+
+      return;
+    }
+
     const latitude = locationData.latitude * 1; // string -> number
     const longitude = locationData.longitude * 1;
-
+    await handleFilterData(
+      id,
+      location,
+      address,
+      longitude,
+      latitude,
+      'location',
+      searchedList,
+    );
     setLocationResult({
       latitude,
       longitude,
@@ -169,16 +187,6 @@ const CurrentMap = ({
     // 필터 돌려서 즐겨찾기 색 넘겨주는 함수
     setIsFavoriteColor(
       await filterFavoriteReturnStarColor(latitude, longitude),
-    );
-    //검색기록 필터
-    await handleFilterData(
-      id,
-      location,
-      address,
-      longitude,
-      latitude,
-      'search',
-      searchedList,
     );
   };
 
@@ -283,7 +291,7 @@ const CurrentMap = ({
         touchLocationData={async (locationData) =>
           await touchLocationData(locationData)
         }
-        type={type}
+        screenType={screenType}
       />
     </>
   );
