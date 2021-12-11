@@ -23,6 +23,7 @@
 		619297F28E614273ADFCC33C /* icon-searched-search.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3A489EA565346379F1CA0B2 /* icon-searched-search.ttf */; };
 		619E43ACBB804ED7866B1B62 /* GodoM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7E193CD990B845B0B820EBFB /* GodoM.otf */; };
 		6B1C0775977A43BE8293FF7A /* icon-handle-reset2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67D18208922D41E4BA40D83F /* icon-handle-reset2.ttf */; };
+		80A8B5382764D728005450F7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		84C6BE9FE443426BA9B398B0 /* icon-favorite.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17A686E5291B441392442ED3 /* icon-favorite.ttf */; };
 		89B107F4C79D42FFB5D0E9D0 /* icon-find-current-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 970CBDA560A14BFD96DA4EA6 /* icon-find-current-location.ttf */; };
 		8DC1141C8E2044D380163A88 /* icon-searched-location.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC17A96DE3F94175A81529DE /* icon-searched-location.ttf */; };
@@ -368,6 +369,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80A8B5382764D728005450F7 /* main.jsbundle in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
@@ -544,7 +546,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNYS89PM8L;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
@@ -628,7 +629,6 @@
 				CODE_SIGN_ENTITLEMENTS = chiyeolhan/chiyeolhan.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNYS89PM8L;
-				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -732,7 +732,6 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -791,7 +790,6 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
