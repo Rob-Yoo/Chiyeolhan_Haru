@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -18,9 +18,9 @@ import {
   deleteAllSearchedData,
 } from 'utils/asyncStorageUtil';
 import { fontPercentage } from 'utils/responsiveUtil';
+import { handleFilterData } from 'utils/handleFilterData';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from 'constant/const';
-import { handleFilterData } from '../../utils/handleFilterData';
 
 export const MapSearch = ({
   _handlePlacesAPI,
@@ -32,6 +32,7 @@ export const MapSearch = ({
   touchLocationData,
   screenType,
   setScreenType,
+  getSearchedList,
 }) => {
   const [findlocation, setFindLocation] = useState(false);
   const [inputText, setText] = useState(null);
@@ -53,9 +54,23 @@ export const MapSearch = ({
 
   const handleSubmit = async (e) => {
     const text = e.nativeEvent.text;
-    text && (await _handlePlacesAPI(text));
-    //검색기록 저장 해줘야됨
-    handleFilterData(new Date(), text, '', '', '', 'search', searchedList);
+    if (text.length > 0) {
+      await _handlePlacesAPI(text);
+      handleFilterData(new Date(), text, '', '', '', 'search', searchedList);
+    }
+  };
+
+  const handleBackButton = async () => {
+    if (screenType !== 'searchScreen') {
+      await getSearchedList();
+      setScreenType('searchScreen');
+    }
+    if (screenType === 'candidate') {
+      setSearchedList('');
+    }
+    searchedHistoryVisible
+      ? screenType === 'searchScreen' && toggleModal()
+      : modalHandler();
   };
 
   return (
@@ -74,8 +89,8 @@ export const MapSearch = ({
               name="icon-go-back-button"
               size={18}
               style={styles.searchInputViewBackButton}
-              onPress={() => {
-                searchedHistoryVisible ? toggleModal() : modalHandler();
+              onPress={async () => {
+                handleBackButton();
               }}
             />
             <TextInput
@@ -117,11 +132,7 @@ export const MapSearch = ({
                     activeOpacity={1}
                     onPress={async () => {
                       await touchLocationData(item);
-                      if (item.type === 'search') {
-                        //setScreenType('searchScreen');
-                        //toggleModal();
-                        //modalHandler();
-                      }
+                      if (item.type === 'search') setText(item.location);
                       if (
                         item.type === 'location' ||
                         screenType === 'candidate'
