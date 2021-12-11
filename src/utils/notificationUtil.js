@@ -3,6 +3,7 @@ import PushNotification from 'react-native-push-notification';
 import { getTimeDiff, getCurrentTime } from 'utils/timeUtil';
 
 export const arriveOnTimeNotification = (schedule) => {
+  PushNotification.cancelLocalNotification(`${schedule.id}F`);
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
     id: 'ON_TIME',
@@ -14,7 +15,8 @@ export const arriveOnTimeNotification = (schedule) => {
   PushNotification.removeDeliveredNotifications(['ON_TIME']);
 };
 
-export const arriveLateNotification = () => {
+export const arriveLateNotification = (schedule) => {
+  PushNotification.cancelLocalNotification(`${schedule.id}F`);
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
     id: 'LATE',
@@ -27,6 +29,7 @@ export const arriveLateNotification = () => {
 };
 
 export const arriveEarlyNotification = (time, schedule) => {
+  PushNotification.cancelLocalNotification(`${schedule.id}F`);
   PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
     id: `${schedule.id}E`,
@@ -106,15 +109,12 @@ export const removeAllStartNotif = (geofenceData) => {
 export const notifHandler = (arriveType, schedule, timeDiff = 0) => {
   switch (arriveType) {
     case 'ON_TIME':
-      PushNotification.cancelLocalNotification(`${schedule.id}F`);
       arriveOnTimeNotification(schedule);
       break;
     case 'LATE':
-      PushNotification.cancelLocalNotification(`${schedule.id}F`);
-      arriveLateNotification();
+      arriveLateNotification(schedule);
       break;
     case 'EARLY':
-      PushNotification.cancelLocalNotification(`${schedule.id}F`);
       arriveEarlyNotification(timeDiff, schedule);
       break;
     default:
