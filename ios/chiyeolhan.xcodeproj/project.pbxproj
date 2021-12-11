@@ -544,7 +544,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNYS89PM8L;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=*]" = "";
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
@@ -628,7 +628,7 @@
 				CODE_SIGN_ENTITLEMENTS = chiyeolhan/chiyeolhan.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNYS89PM8L;
-				"EXCLUDED_ARCHS[sdk=*]" = "";
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",

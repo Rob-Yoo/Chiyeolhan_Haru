@@ -74,6 +74,10 @@ export const checkNearByFinish = async () => {
     const isEarly = await getDataFromAsync(KEY_VALUE_EARLY);
     const todosRef = dbService.collection(`${UID}`);
 
+    if (geofenceData === null) {
+      return;
+    }
+
     if (nearBySchedules !== null) {
       if (nearBySchedules.length > 0) {
         let result = true;

@@ -9,6 +9,7 @@ export const KEY_VALUE_EARLY = 'isEarly';
 export const KEY_VALUE_START_TIME = 'startTimePicker';
 export const KEY_VALUE_PROGRESSING = 'progressingSchedule';
 export const KEY_VALUE_INSTALLED = 'isInstalled';
+export const KEY_VALUE_LAUNCH_BG = 'didLaunchInBackGround';
 
 export const KEY_VALUE_GEOFENCE = 'geofenceDataArray';
 export const KEY_VALUE_SUCCESS = 'geofenceSuccessArray';

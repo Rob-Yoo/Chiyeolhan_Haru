@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, StatusBar, AppState } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import RNRestart from 'react-native-restart';
@@ -11,13 +12,17 @@ import HomeContent from 'components/items/HomeContent';
 import { HomeHeader } from 'components/items/HomeHeader';
 import { Loading } from 'components/screen/LoadingScreen';
 
-import { checkDayChange, loadSuccessSchedules } from 'utils/asyncStorageUtil';
+import {
+  checkDayChange,
+  loadSuccessSchedules,
+  getDataFromAsync,
+} from 'utils/asyncStorageUtil';
 import { dbService } from 'utils/firebaseUtil';
 import { getDate } from 'utils/timeUtil';
 import { checkNearByFinish } from 'utils/gfSchedulerUtil';
 import { errorNotifAlert } from 'utils/buttonAlertUtil';
 
-import { UID, CONTAINER_WIDTH } from 'constant/const';
+import { UID, CONTAINER_WIDTH, KEY_VALUE_LAUNCH_BG } from 'constant/const';
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -49,6 +54,16 @@ const Home = ({ navigation }) => {
         if (isDaychange) {
           RNRestart.Restart();
         }
+
+        const didLaunchInBackGround = await getDataFromAsync(
+          KEY_VALUE_LAUNCH_BG,
+        );
+
+        if (didLaunchInBackGround) {
+          await AsyncStorage.setItem(KEY_VALUE_LAUNCH_BG, 'false');
+          RNRestart.Restart();
+        }
+
         await loadSuccessSchedules();
         await checkNearByFinish();
 

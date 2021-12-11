@@ -28,6 +28,7 @@ import {
   KEY_VALUE_EARLY,
   KEY_VALUE_PROGRESSING,
   KEY_VALUE_SUCCESS,
+  KEY_VALUE_LAUNCH_BG,
 } from 'constant/const';
 
 const getDataFromAsync = async (storageName) => {
@@ -40,6 +41,14 @@ const getDataFromAsync = async (storageName) => {
     }
   } catch (e) {
     errorNotifAlert(`getDataFromAsync in BgGeofence Error : ${e}`);
+  }
+};
+
+const setDidLaunchInBackGround = async () => {
+  try {
+    await AsyncStorage.setItem(KEY_VALUE_LAUNCH_BG, 'true');
+  } catch (e) {
+    errorNotifAlert(`setDidLaunchBackGround Error : ${e}`);
   }
 };
 
@@ -404,7 +413,7 @@ const subscribeOnGeofence = () => {
 export const initBgGeofence = async () => {
   try {
     subscribeOnGeofence();
-    await BackgroundGeolocation.ready({
+    const status = await BackgroundGeolocation.ready({
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_NAVIGATION, // ios Only
       locationAuthorizationRequest: 'Always',
       locationAuthorizationAlert: {
@@ -417,6 +426,14 @@ export const initBgGeofence = async () => {
       stopOnTerminate: false,
       startOnBoot: true,
     });
+    if (status.didLaunchInBackground === true) {
+      const flag = await getDataFromAsync(KEY_VALUE_LAUNCH_BG);
+      if (flag === false) {
+        await AsyncStorage.removeItem(KEY_VALUE_LAUNCH_BG);
+      } else {
+        await setDidLaunchInBackGround();
+      }
+    }
   } catch (e) {
     errorNotifAlert(`initBgGeofence Error : ${e}`);
   }
