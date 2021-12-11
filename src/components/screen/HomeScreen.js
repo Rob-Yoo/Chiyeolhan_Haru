@@ -60,8 +60,8 @@ const Home = ({ navigation }) => {
 
   const readyForHome = async () => {
     try {
-      await loadSuccessSchedules();
       await checkDayChange();
+      await loadSuccessSchedules();
       await getToDos();
       await checkNearByFinish();
     } catch (e) {

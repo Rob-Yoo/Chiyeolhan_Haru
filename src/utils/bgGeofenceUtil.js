@@ -90,7 +90,7 @@ const addGeofenceTrigger = async (isChangeEarliest, identifier = 'G') => {
       }
       // console.log('[removeGeofence] success');
       // await BackgroundGeolocation.stop();
-      console.log('stop geofence tracking');
+      // console.log('stop geofence tracking');
     }
   } catch (error) {
     errorNotifAlert(`addGeofenceTrigger Error : ${error}`);
@@ -224,8 +224,8 @@ const findNearBy = async (data, currentTime) => {
             nextSchedule.startTime,
             currentTime,
           );
-          arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
           PushNotification.cancelLocalNotification(`${nextSchedule.id}F`); // failNotif 알림 취소
+          arriveEarlyNotification(timeDiff, nextSchedule); // 각 일정들마다 도착 알림 예약
           nearBySchedules.push(nextSchedule);
         } catch (e) {
           errorNotifAlert(`findNearBy Error : ${e}`);

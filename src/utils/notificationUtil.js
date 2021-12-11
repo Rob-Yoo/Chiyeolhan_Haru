@@ -106,16 +106,16 @@ export const removeAllStartNotif = (geofenceData) => {
 export const notifHandler = (arriveType, schedule, timeDiff = 0) => {
   switch (arriveType) {
     case 'ON_TIME':
-      arriveOnTimeNotification(schedule);
       PushNotification.cancelLocalNotification(`${schedule.id}F`);
+      arriveOnTimeNotification(schedule);
       break;
     case 'LATE':
-      arriveLateNotification();
       PushNotification.cancelLocalNotification(`${schedule.id}F`);
+      arriveLateNotification();
       break;
     case 'EARLY':
-      arriveEarlyNotification(timeDiff, schedule);
       PushNotification.cancelLocalNotification(`${schedule.id}F`);
+      arriveEarlyNotification(timeDiff, schedule);
       break;
     default:
       console.log('Notif Flag Missing');

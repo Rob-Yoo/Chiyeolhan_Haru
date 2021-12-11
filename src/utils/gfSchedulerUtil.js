@@ -109,8 +109,8 @@ export const checkNearByFinish = async () => {
             } else {
               await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
             }
-          } else {
-            await geofenceUpdate(geofenceData, successNumber); // 성공한 개수 만큼 async storage에서 지움
+          } else if (geofenceData.length === successNumber) {
+            await geofenceUpdate(geofenceData, successNumber);
           }
         }
       }
@@ -255,12 +255,12 @@ export const geofenceScheduler = async (isChangeEarliest) => {
             await geofenceUpdate(geofenceDataArray, 0, true, isNearBy);
           }
         } else {
-          const geofencdeData = geofenceDataArray[0];
-          cancelAllNotif(geofencdeData.id);
-          const isNearBy = await checkNearBy(geofencdeData);
+          const geofenceData = geofenceDataArray[0];
+          cancelAllNotif(geofenceData.id);
+          const isNearBy = await checkNearBy(geofenceData);
           if (isNearBy) {
             await geofenceUpdate(geofenceDataArray, 0, false, isNearBy);
-            await enterGeofenceTrigger(geofenceDataArray, geofencdeData);
+            await enterGeofenceTrigger(geofenceDataArray, geofenceData);
           } else {
             await geofenceUpdate(geofenceDataArray, 0, false, isNearBy);
           }
@@ -282,8 +282,8 @@ export const geofenceScheduler = async (isChangeEarliest) => {
           );
 
           if (isStartTodo) {
-            const geofencdeData = geofenceDataArray[0];
-            const isNearBy = await checkNearBy(geofencdeData);
+            const geofenceData = geofenceDataArray[0];
+            const isNearBy = await checkNearBy(geofenceData);
             if (isNearBy) {
               await geofenceUpdate(
                 geofenceDataArray,
@@ -291,7 +291,7 @@ export const geofenceScheduler = async (isChangeEarliest) => {
                 isChangeEarliest,
                 isNearBy,
               );
-              await enterGeofenceTrigger(geofenceDataArray, geofencdeData);
+              await enterGeofenceTrigger(geofenceDataArray, geofenceData);
             } else {
               await geofenceUpdate(
                 geofenceDataArray,
@@ -305,11 +305,11 @@ export const geofenceScheduler = async (isChangeEarliest) => {
         } else if (isChangeEarliest) {
           // 현재 진행중인 일정에 neartBySchedules가 없고 도착 상태도 아니고 제일 빠른 시간의 일정이 바뀌었다.
           if (isStartTodo) {
-            const geofencdeData = geofenceDataArray[0];
-            const isNearBy = await checkNearBy(geofencdeData);
+            const geofenceData = geofenceDataArray[0];
+            const isNearBy = await checkNearBy(geofenceData);
             if (isNearBy) {
               await geofenceUpdate(geofenceDataArray, 0, true, isNearBy);
-              await enterGeofenceTrigger(geofenceDataArray, geofencdeData);
+              await enterGeofenceTrigger(geofenceDataArray, geofenceData);
             } else {
               await geofenceUpdate(geofenceDataArray, 0, true, isNearBy);
             }
