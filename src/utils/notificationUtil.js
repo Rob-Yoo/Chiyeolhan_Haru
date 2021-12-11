@@ -51,9 +51,6 @@ export const failNotification = (time, id) => {
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
   });
   PushNotification.removeDeliveredNotifications([`${id}F`]);
-  // PushNotification.getScheduledLocalNotifications((notif) =>
-  //   console.log('failNotification :', notif),
-  // );
 };
 
 export const startNotification = (time, id) => {
