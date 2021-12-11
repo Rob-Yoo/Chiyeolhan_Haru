@@ -50,17 +50,17 @@ const Home = ({ navigation }) => {
       nextAppState === 'active'
     ) {
       try {
-        const isDaychange = await checkDayChange();
-        if (isDaychange) {
-          RNRestart.Restart();
-        }
-
         const didLaunchInBackGround = await getDataFromAsync(
           KEY_VALUE_LAUNCH_BG,
         );
+        const isDaychange = await checkDayChange();
 
         if (didLaunchInBackGround) {
           await AsyncStorage.setItem(KEY_VALUE_LAUNCH_BG, 'false');
+          RNRestart.Restart();
+        }
+
+        if (isDaychange) {
           RNRestart.Restart();
         }
 
