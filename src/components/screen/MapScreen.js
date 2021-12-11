@@ -159,12 +159,18 @@ const CurrentMap = ({
 
   const touchLocationData = async (locationData) => {
     const { location, address, id, type } = locationData;
-    console.log(locationData);
-
-    //검색기록 필터
 
     if (type === 'search') {
       _handlePlacesAPI(location);
+      await handleFilterData(
+        new Date(),
+        location,
+        '',
+        '',
+        '',
+        'search',
+        searchedList,
+      );
       return;
     }
 
@@ -185,10 +191,15 @@ const CurrentMap = ({
     });
     setIscurrentLocation(false);
     setLocationData({ location, latitude, longitude, address });
-    // 필터 돌려서 즐겨찾기 색 넘겨주는 함수
+    //즐겨찾기 색 넘겨주는 함수
     setIsFavoriteColor(
       await filterFavoriteReturnStarColor(latitude, longitude),
     );
+
+    //검색기록스크린으로 변경
+    setScreenType('searchScreen');
+    setCandidate('');
+    await getSearchedList();
   };
 
   const _handlePlacesAPI = async (text) => {
@@ -207,7 +218,6 @@ const CurrentMap = ({
       }
 
       getCandidate(data.documents);
-      //setSearchedList(candidate);
       setCandidate(candidate);
       if (candidate.length === 0) {
         noDataAlert();
@@ -294,6 +304,7 @@ const CurrentMap = ({
         }
         screenType={screenType}
         setScreenType={setScreenType}
+        getSearchedList={getSearchedList}
       />
     </>
   );
