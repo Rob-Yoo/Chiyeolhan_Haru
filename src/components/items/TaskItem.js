@@ -46,7 +46,7 @@ export const Task = (props) => {
   };
   const submitTask = (taskTitle) => {
     if (taskTitle === null) return;
-    if (taskTitle && taskTitle.length > 40) {
+    if (taskTitle && taskTitle.length > 35) {
       longTaskList();
       return;
     }
@@ -61,6 +61,7 @@ export const Task = (props) => {
   const handleDeleteTaskList = () => {
     deleteTaskList(targetId, index);
   };
+
   return (
     <View style={styles.taskContainer}>
       <TouchableHighlight
@@ -90,10 +91,13 @@ export const Task = (props) => {
             flexWrap: 'wrap',
           }}
         >
-          <Text style={[styles.taskText, { fontSize: 17 }]}>
-            {taskText.length > 30
-              ? `${taskText.substring(0, 29)}...`
-              : taskText}
+          <Text
+            style={[
+              styles.taskText,
+              { fontSize: taskText.length > 15 ? 14 : 17 },
+            ]}
+          >
+            {taskText}
           </Text>
         </View>
       </TouchableHighlight>

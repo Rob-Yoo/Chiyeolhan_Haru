@@ -36,9 +36,10 @@ export const LocationData = ({
           <View
             style={{
               width: 2,
-              height: fontPercentage(15),
+              height: fontPercentage(16),
               marginHorizontal: 3,
               backgroundColor: '#C4C4C4',
+              marginTop: 0.5,
             }}
           />
           <Text style={styles.addressText}>{address}</Text>

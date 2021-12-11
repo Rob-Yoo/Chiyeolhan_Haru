@@ -39,7 +39,7 @@ const Pagination = ({ taskList, targetId }) => {
       toggleIsVisible();
       return;
     }
-    if (taskTitle && taskTitle.length > 40) {
+    if (taskTitle && taskTitle.length > 35) {
       longTaskList();
       return;
     }
