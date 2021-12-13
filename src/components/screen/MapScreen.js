@@ -105,6 +105,7 @@ const CurrentMap = ({
   searchedList,
   setSearchedList,
 }) => {
+  console.log('currentMap');
   let candidate = [];
   const [locationData, setLocationData] = useState(null);
   const [locationResult, setLocationResult] = useState(location);
@@ -317,6 +318,7 @@ const Map = ({
   setSearchedList,
   navigation,
 }) => {
+  console.log('Map');
   const [isFind, setFind] = useState(false);
   const [location, setLocation] = useState({});
   const appState = useRef(AppState.currentState);
@@ -347,7 +349,10 @@ const Map = ({
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setFind(false);
-        permissionDenyAlert();
+        const res = await permissionDenyAlert();
+        if (res) {
+          modalHandler();
+        }
       } else {
         const locationData = await Location.getCurrentPositionAsync({
           accuracy: Location.Accuracy.Lowest,

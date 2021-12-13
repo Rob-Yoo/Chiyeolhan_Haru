@@ -176,25 +176,34 @@ export const startAlert = (
     },
   );
 
-export const permissionDenyAlert = () =>
-  Alert.alert(
-    `위치 서비스 이용 제한`,
-    `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상"으로 설정해주세요.`,
-    [
-      {
-        text: '설정',
-        onPress: () => {
-          Linking.openSettings();
+export const permissionDenyAlert = (resolve, reject) =>
+  new Promise((resolve) => {
+    Alert.alert(
+      `위치 서비스 이용 제한`,
+      `앱을 사용하고 있지 않아도 목표 장소에 왔는지 알 수 있게 "항상"으로 설정해주세요.`,
+      [
+        {
+          text: '설정',
+          onPress: () => {
+            Linking.openSettings();
+          },
         },
-      },
+        {
+          text: '취소',
+          onPress: async () => {
+            try {
+              resolve(true);
+            } catch (e) {
+              errorNotifAlert(`permissionDenyAlert Error: ${e}`);
+            }
+          },
+        },
+      ],
       {
-        text: '취소',
+        cancelable: false,
       },
-    ],
-    {
-      cancelable: false,
-    },
-  );
+    );
+  });
 
 export const startDenyAlert = (type) => {
   if (type == 1) {
