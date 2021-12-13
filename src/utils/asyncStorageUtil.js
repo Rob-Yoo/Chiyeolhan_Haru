@@ -256,6 +256,7 @@ export const dbToAsyncTomorrow = async () => {
       obj[targetId] = todoAsyncModel(todo.data());
       tomorrowDataArray.push(obj);
     });
+    // console.log(tomorrowDataArray);
     await setTomorrowData(JSON.stringify(tomorrowDataArray));
 
     const timeDiff = getDiffMinutes(

@@ -401,7 +401,7 @@ export const ToDoModal = ({
 
         let isFirstScheduleEdit = false;
 
-        if (startTime !== todoStartTime) {
+        if (startTime !== todoStartTime && isToday) {
           // 시작시간이 바뀌면
           isStartTimeChange = true;
           const date = new Date();
