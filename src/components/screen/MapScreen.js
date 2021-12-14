@@ -344,24 +344,15 @@ const Map = ({
 
   const getLocation = async () => {
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setFind(false);
-        const res = await permissionDenyAlert();
-        if (res) {
-          modalHandler();
-        }
-      } else {
-        const locationData = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.Lowest,
-        });
-        const curretLocation = {
-          latitude: locationData.coords.latitude,
-          longitude: locationData.coords.longitude,
-        };
-        setLocation(curretLocation);
-        setFind(true);
-      }
+      const locationData = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Lowest,
+      });
+      const curretLocation = {
+        latitude: locationData.coords.latitude,
+        longitude: locationData.coords.longitude,
+      };
+      setLocation(curretLocation);
+      setFind(true);
     } catch (e) {
       errorNotifAlert(`getLocation Error : ${e}`);
     }

@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import * as Location from 'expo-location';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -68,6 +69,7 @@ import {
   SCREEN_WIDTH,
 } from 'constant/const';
 import { TaskList } from 'components/items/TaskList';
+import { permissionDenyAlert } from '../../utils/buttonAlertUtil';
 
 export const ToDoModal = ({
   modalHandler,
@@ -559,6 +561,18 @@ export const ToDoModal = ({
       setValue('todoFinishTime', newTime);
     }
   };
+
+  const openMapModal = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        if (await permissionDenyAlert()) return;
+      }
+      toggleIsVisible(mapIsVisible, setMapIsVisible);
+    } catch (e) {
+      errorNotifAlert(`openMapModal Error : ${e}`);
+    }
+  };
   useEffect(() => {
     isModalVisible && titleInputRef?.current?.focus();
   }, [isModalVisible]);
@@ -715,11 +729,7 @@ export const ToDoModal = ({
                             : fontPercentage(65)
                         }
                         color={locationName ? 'transparent' : '#FFFFFF'}
-                        onPress={() =>
-                          passModalData
-                            ? null
-                            : toggleIsVisible(mapIsVisible, setMapIsVisible)
-                        }
+                        onPress={() => (passModalData ? null : openMapModal())}
                       />
                     )}
                   </View>
