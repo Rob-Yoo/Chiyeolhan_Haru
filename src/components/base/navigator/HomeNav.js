@@ -114,11 +114,7 @@ const HomeNav = () => {
       }}
     >
       {network === 'online' ? (
-        <Stack.Screen
-          name="Home"
-          component={HomeStack}
-          //clearTimeout={clearTimeout}
-        />
+        <Stack.Screen name="Home" component={HomeStack} />
       ) : (
         <Stack.Screen name="OffHome" component={OffHomeStack} />
       )}
