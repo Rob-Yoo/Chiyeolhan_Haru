@@ -204,7 +204,6 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
         headerTextStyle={{
           fontSize: fontPercentage(9),
           letterSpacing: -0.5,
-          // marginRight: '30%',
           color: '#5e5e5e',
         }}
         hourTextStyle={{
@@ -212,7 +211,7 @@ export const ScheduleComponent = ({ events, day, passToModalData }) => {
           fontFamily: 'NotoSansKR-Regular',
           fontSize: fontPercentage(8),
         }}
-        formatDateHeader={'M월 DD일'}
+        formatDateHeader={'M월 D일'}
         eventContainerStyle={{
           maxWidth: CONTAINER_WIDTH * 0.5,
           minHeight: SCREEN_HEIGHT > 668 ? 18 : 14,
